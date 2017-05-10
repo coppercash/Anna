@@ -15,3 +15,6 @@ FOUNDATION_EXPORT double AnnaVersionNumber;
 FOUNDATION_EXPORT const unsigned char AnnaVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Anna/PublicHeader.h>
+#import <Anna/ANAManager.h>
+#import <Anna/ANARegister.h>
+#import <Anna/ANAInvocationContext.h>

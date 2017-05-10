@@ -7,11 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57D01EC76231C5F76F002185 /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
+		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
+		BE249DC91ECFDCAA002AB3C9 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE249DC81ECFDCAA002AB3C9 /* Point.swift */; };
+		BE249DCB1ECFF232002AB3C9 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE249DCA1ECFF232002AB3C9 /* Builder.swift */; };
+		BE6D9A841EDEFD5C00FFAA90 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE87DA801EAB608700DA81EB /* Anna.framework */; };
 		BE87DA9B1EAB6C3800DA81EB /* PointMatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9A1EAB6C3800DA81EB /* PointMatchingTests.m */; };
 		BE87DA9D1EAB6FFE00DA81EB /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9C1EAB6FFE00DA81EB /* Register.swift */; };
 		BE87DA9F1EAB715900DA81EB /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9E1EAB715900DA81EB /* Manager.swift */; };
+		BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE98B1421EC274A000978728 /* PointMatchingTests.swift */; };
+		BEAAB5901EC12A1A00C0EBF9 /* ANARegister.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB58F1EC12A1A00C0EBF9 /* ANARegister.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BEAAB5931EC12BA900C0EBF9 /* ANAPointBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB5911EC12BA900C0EBF9 /* ANAPointBuilder.h */; };
+		BEAAB5941EC12BA900C0EBF9 /* ANAPointBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAAB5921EC12BA900C0EBF9 /* ANAPointBuilder.m */; };
+		BEAAB59C1EC135FC00C0EBF9 /* ANAInvocationContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB59A1EC135FC00C0EBF9 /* ANAInvocationContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BEAAB59D1EC135FC00C0EBF9 /* ANAInvocationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAAB59B1EC135FC00C0EBF9 /* ANAInvocationContext.m */; };
+		BED726111EC3CC0D00F6139E /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED726101EC3CC0D00F6139E /* Tracker.swift */; };
+		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BEDB99ED1EBE8DBA006637DC /* ANAManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDB99EB1EBE8DBA006637DC /* ANAManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +39,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		29FF85741F8DD26AC94AFBC3 /* Pods-Anna_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.release.xcconfig"; sourceTree = "<group>"; };
+		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		BE249DC81ECFDCAA002AB3C9 /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		BE249DCA1ECFF232002AB3C9 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
+		BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
 		BE87DA801EAB608700DA81EB /* Anna.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Anna.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE87DA831EAB608700DA81EB /* Anna.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Anna.h; sourceTree = "<group>"; };
 		BE87DA841EAB608700DA81EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -34,6 +57,15 @@
 		BE87DA9A1EAB6C3800DA81EB /* PointMatchingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointMatchingTests.m; sourceTree = "<group>"; };
 		BE87DA9C1EAB6FFE00DA81EB /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		BE87DA9E1EAB715900DA81EB /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		BE98B1421EC274A000978728 /* PointMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointMatchingTests.swift; sourceTree = "<group>"; };
+		BEAAB58F1EC12A1A00C0EBF9 /* ANARegister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANARegister.h; sourceTree = "<group>"; };
+		BEAAB5911EC12BA900C0EBF9 /* ANAPointBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAPointBuilder.h; sourceTree = "<group>"; };
+		BEAAB5921EC12BA900C0EBF9 /* ANAPointBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAPointBuilder.m; sourceTree = "<group>"; };
+		BEAAB59A1EC135FC00C0EBF9 /* ANAInvocationContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAInvocationContext.h; sourceTree = "<group>"; };
+		BEAAB59B1EC135FC00C0EBF9 /* ANAInvocationContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAInvocationContext.m; sourceTree = "<group>"; };
+		BED726101EC3CC0D00F6139E /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		BEDB99EA1EBE8DBA006637DC /* ANAManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAManager.h; sourceTree = "<group>"; };
+		BEDB99EB1EBE8DBA006637DC /* ANAManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57D01EC76231C5F76F002185 /* Pods_Anna_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,12 +82,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */,
+				B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4531771AA090ADCF6D936D6D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */,
+				2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		99ACB2654502D3AB72EE245D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				29FF85741F8DD26AC94AFBC3 /* Pods-Anna_iOS.debug.xcconfig */,
+				4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */,
+				592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */,
+				780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		BE87DA741EAB606A00DA81EB = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +116,8 @@
 				BE87DA821EAB608700DA81EB /* Anna_iOS */,
 				BE87DA8E1EAB615D00DA81EB /* Anna_iOS_Tests */,
 				BE87DA811EAB608700DA81EB /* Products */,
+				99ACB2654502D3AB72EE245D /* Pods */,
+				4531771AA090ADCF6D936D6D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,7 +136,11 @@
 				BE87DA831EAB608700DA81EB /* Anna.h */,
 				BE87DA841EAB608700DA81EB /* Info.plist */,
 				BE87DA9C1EAB6FFE00DA81EB /* Register.swift */,
+				BED726101EC3CC0D00F6139E /* Tracker.swift */,
 				BE87DA9E1EAB715900DA81EB /* Manager.swift */,
+				BE249DC81ECFDCAA002AB3C9 /* Point.swift */,
+				BE249DCA1ECFF232002AB3C9 /* Builder.swift */,
+				BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */,
 			);
 			path = Anna_iOS;
 			sourceTree = "<group>";
@@ -90,6 +150,7 @@
 			children = (
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
 				BE87DA9A1EAB6C3800DA81EB /* PointMatchingTests.m */,
+				BE98B1421EC274A000978728 /* PointMatchingTests.swift */,
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 			);
 			path = Anna_iOS_Tests;
@@ -98,8 +159,23 @@
 		BE87DA981EAB62A100DA81EB /* Anna */ = {
 			isa = PBXGroup;
 			children = (
+				BEDB99E91EBE8DA1006637DC /* ObjC */,
 			);
 			path = Anna;
+			sourceTree = "<group>";
+		};
+		BEDB99E91EBE8DA1006637DC /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				BEDB99EA1EBE8DBA006637DC /* ANAManager.h */,
+				BEDB99EB1EBE8DBA006637DC /* ANAManager.m */,
+				BEAAB58F1EC12A1A00C0EBF9 /* ANARegister.h */,
+				BEAAB5911EC12BA900C0EBF9 /* ANAPointBuilder.h */,
+				BEAAB5921EC12BA900C0EBF9 /* ANAPointBuilder.m */,
+				BEAAB59A1EC135FC00C0EBF9 /* ANAInvocationContext.h */,
+				BEAAB59B1EC135FC00C0EBF9 /* ANAInvocationContext.m */,
+			);
+			path = ObjC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -109,7 +185,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEAAB5931EC12BA900C0EBF9 /* ANAPointBuilder.h in Headers */,
 				BE87DA851EAB608700DA81EB /* Anna.h in Headers */,
+				BEAAB59C1EC135FC00C0EBF9 /* ANAInvocationContext.h in Headers */,
+				BEAAB5901EC12A1A00C0EBF9 /* ANARegister.h in Headers */,
+				BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,10 +200,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE87DA861EAB608700DA81EB /* Build configuration list for PBXNativeTarget "Anna_iOS" */;
 			buildPhases = (
+				8FE117F669E63E43E5394798 /* [CP] Check Pods Manifest.lock */,
 				BE87DA7B1EAB608700DA81EB /* Sources */,
 				BE87DA7C1EAB608700DA81EB /* Frameworks */,
 				BE87DA7D1EAB608700DA81EB /* Headers */,
 				BE87DA7E1EAB608700DA81EB /* Resources */,
+				109B5BA73FB4F6BCBB1A026A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -138,9 +220,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE87DA951EAB615D00DA81EB /* Build configuration list for PBXNativeTarget "Anna_iOS_Tests" */;
 			buildPhases = (
+				6610C4B070587EE079603EE4 /* [CP] Check Pods Manifest.lock */,
 				BE87DA891EAB615C00DA81EB /* Sources */,
 				BE87DA8A1EAB615C00DA81EB /* Frameworks */,
 				BE87DA8B1EAB615C00DA81EB /* Resources */,
+				9249D5954B2E3FE0BB9D4FAD /* [CP] Embed Pods Frameworks */,
+				CB5ECD57CE02264F2B4584FA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -208,13 +293,98 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		109B5BA73FB4F6BCBB1A026A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6610C4B070587EE079603EE4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8FE117F669E63E43E5394798 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		9249D5954B2E3FE0BB9D4FAD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CB5ECD57CE02264F2B4584FA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BE87DA7B1EAB608700DA81EB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BED726111EC3CC0D00F6139E /* Tracker.swift in Sources */,
 				BE87DA9D1EAB6FFE00DA81EB /* Register.swift in Sources */,
+				BEAAB59D1EC135FC00C0EBF9 /* ANAInvocationContext.m in Sources */,
+				BE6D9A841EDEFD5C00FFAA90 /* Buildup.swift in Sources */,
+				BEAAB5941EC12BA900C0EBF9 /* ANAPointBuilder.m in Sources */,
+				BE249DC91ECFDCAA002AB3C9 /* Point.swift in Sources */,
 				BE87DA9F1EAB715900DA81EB /* Manager.swift in Sources */,
+				BEDB99ED1EBE8DBA006637DC /* ANAManager.m in Sources */,
+				BE249DCB1ECFF232002AB3C9 /* Builder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE87DA9B1EAB6C3800DA81EB /* PointMatchingTests.m in Sources */,
+				BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +422,7 @@
 		};
 		BE87DA871EAB608700DA81EB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 29FF85741F8DD26AC94AFBC3 /* Pods-Anna_iOS.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -316,6 +488,7 @@
 		};
 		BE87DA881EAB608700DA81EB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -374,6 +547,7 @@
 		};
 		BE87DA961EAB615D00DA81EB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -430,6 +604,7 @@
 		};
 		BE87DA971EAB615D00DA81EB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -496,6 +671,7 @@
 				BE87DA881EAB608700DA81EB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BE87DA951EAB615D00DA81EB /* Build configuration list for PBXNativeTarget "Anna_iOS_Tests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +680,7 @@
 				BE87DA971EAB615D00DA81EB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

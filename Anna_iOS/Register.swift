@@ -8,8 +8,11 @@
 
 import Foundation
 
-@objc(ANARegistrar) public protocol Registrar {
+public protocol Registrar {
+    @discardableResult
+    func point(_ :PointBuilding) ->Self
 }
 
-@objc(ANARegistrant) public protocol Registrant {
+public protocol Registrant {
+    static func registerPoints(with registrar :Registrar)
 }

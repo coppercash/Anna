@@ -8,17 +8,68 @@
 
 #import <XCTest/XCTest.h>
 #import <Anna/Anna.h>
+#import <extobjc/EXTobjc.h>
 
-@interface Target : NSObject
+#define anat ana
+
+@interface ANATTarget : NSObject
+@property (strong, nonatomic, readonly) ANAManager *analyzer;
+- (instancetype)initWithAnalyzer:(ANAManager *)analyzer;
+- (void)functionOne;
 @end
 
-@implementation Target
+@implementation ANATTarget
 
+- (instancetype)initWithAnalyzer:(ANAManager *)analyzer {
+    if (self = [super init]) {
+        _analyzer = analyzer;
+    }
+    return self;
+}
 
+- (void)functionOne {
+    self.anat.analyze();
+}
+
++ (void)registerPointsWithRegistrar:(id<ANARegistrar>)_ {
+    _
+    .point(^(id<ANAPointBuilder> _) { _
+        .selector(@checkselector0([self new], functionOne))
+        .set(@"data", @"function_one_point_data");
+    });
+}
+
+@end
+
+@class ANATPoint;
+@interface ANATTracker : NSObject
+@property (readonly, nonatomic) ANATPoint *lastPoint;
+@end
+
+@implementation ANATTracker
+@end
+
+@interface ANATManager : ANAManager
+@property (strong, nonatomic, readonly) ANATTracker *defaultTracker;
+- (instancetype)initWithDefaultTracker:(ANATTracker *)tracker;
+@end
+
+@implementation ANATManager
+
+- (instancetype)initWithDefaultTracker:(ANATTracker *)tracker {
+    if (self = [super init]) {
+        _defaultTracker = tracker;
+    }
+    return self;
+}
+
+@end
+
+@interface ANATPoint : NSObject
+@property (readonly, strong, nonatomic) id data;
 @end
 
 @interface PointMatchingTests : XCTestCase
-
 @end
 
 @implementation PointMatchingTests
@@ -33,17 +84,17 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-    ANAManager *manager = [[ANAManager alloc] init];
-}
-
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (void)test_pointUserInfo {
+    ANATTracker *tracker = [[ANATTracker alloc] init];
+    ANATManager *manager = [[ANATManager alloc] initWithDefaultTracker:tracker];
+    ANATTarget *target = [[ANATTarget alloc] initWithAnalyzer:manager];
+    [target functionOne];
+    ANATPoint *lastPoint = tracker.lastPoint;
+    XCTAssertEqual(lastPoint.data, @"function_one_point_data");
 }
 
 @end
+
+/* TODO
+ Test multiple trackers, setting with a collection can be overridden
+ */

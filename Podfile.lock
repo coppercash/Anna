@@ -1,0 +1,12 @@
+PODS:
+  - extobjc (0.0.1)
+
+DEPENDENCIES:
+  - extobjc (~> 0.0)
+
+SPEC CHECKSUMS:
+  extobjc: a55d2f1212ce1cdac4c88bd19594a15c15bab5dc
+
+PODFILE CHECKSUM: 6eb8f78e6ef1f48e8bbdbb7f13d3881c99b6def4
+
+COCOAPODS: 1.2.0
