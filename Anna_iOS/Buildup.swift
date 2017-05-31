@@ -9,8 +9,9 @@
 import Foundation
 
 enum BuilderError : Error {
-    case missingProperty
+    case missedProperty(name :String, result :String)
 }
+// TODO: missingProperty with more detail
 
 // Why Builder is needed?
 //   + We need to cast to some type responds to build
@@ -75,6 +76,8 @@ public class ArrayBuilder<Element>
             
             guard index < self.buffer.count else { return nil }
             let element :Type = self.buffer[index] as! Type
+            
+            index += 1
             return element
         }
     }
@@ -115,12 +118,15 @@ public class DictionaryBuilder<Key, Value>
         return value
     }
     
-    subscript(key :Key) ->Value? {
-        return buffer[key]
-    }
-    
     func dictionary() throws ->Dictionary<Key, Value> {
         return buffer
+    }
+}
+
+extension DictionaryBuilder {
+    subscript(key :Key) ->Value? {
+        get { return buffer[key] }
+        set { self.buffer[key] = newValue }
     }
 }
 

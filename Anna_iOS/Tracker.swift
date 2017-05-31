@@ -8,10 +8,17 @@
 
 import Foundation
 
-protocol Trackable {
+public protocol
+Trackable {
     
 }
 
-protocol Tracker {
-    func receive(event :Event, with point :Point, dispatchedBy manager :Manager)
+public protocol
+Tracker {
+    func
+        receive(
+        event :Event,
+        with point :Point,
+        dispatchedBy manager :Manager
+    )
 }

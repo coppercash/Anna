@@ -14,7 +14,7 @@
 		BE6D9A841EDEFD5C00FFAA90 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE87DA801EAB608700DA81EB /* Anna.framework */; };
-		BE87DA9B1EAB6C3800DA81EB /* PointMatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9A1EAB6C3800DA81EB /* PointMatchingTests.m */; };
+		BE87DA9B1EAB6C3800DA81EB /* ANATPointMatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */; };
 		BE87DA9D1EAB6FFE00DA81EB /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9C1EAB6FFE00DA81EB /* Register.swift */; };
 		BE87DA9F1EAB715900DA81EB /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9E1EAB715900DA81EB /* Manager.swift */; };
 		BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE98B1421EC274A000978728 /* PointMatchingTests.swift */; };
@@ -54,7 +54,7 @@
 		BE87DA8D1EAB615C00DA81EB /* Anna_iOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Anna_iOS_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE87DA911EAB615D00DA81EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Anna_iOS_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
-		BE87DA9A1EAB6C3800DA81EB /* PointMatchingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointMatchingTests.m; sourceTree = "<group>"; };
+		BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATPointMatchingTests.m; sourceTree = "<group>"; };
 		BE87DA9C1EAB6FFE00DA81EB /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		BE87DA9E1EAB715900DA81EB /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		BE98B1421EC274A000978728 /* PointMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointMatchingTests.swift; sourceTree = "<group>"; };
@@ -149,7 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
-				BE87DA9A1EAB6C3800DA81EB /* PointMatchingTests.m */,
+				BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */,
 				BE98B1421EC274A000978728 /* PointMatchingTests.swift */,
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 			);
@@ -392,7 +392,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE87DA9B1EAB6C3800DA81EB /* PointMatchingTests.m in Sources */,
+				BE87DA9B1EAB6C3800DA81EB /* ANATPointMatchingTests.m in Sources */,
 				BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

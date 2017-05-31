@@ -8,19 +8,21 @@
 
 import Foundation
 
-class Point {
-    let cls :String
-    let method :String
-    let trackers :[Tracker]! = nil
-    let payload :Any? = nil
+public class
+Point {
+    let
+    trackers :[Tracker]
+    public let
+    payload :Any?
     
-    init(class cls :String, method :String) {
-        self.cls = cls
-        self.method = method
+    public
+    init(trackers :[Tracker], payload :Any?) {
+        self.trackers = trackers
+        self.payload = payload
     }
     
     func isMatched(with event :Event) ->Bool {
-        return false
+        return true
     }
 }
 

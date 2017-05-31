@@ -13,6 +13,9 @@ class ClassPointSetBuilder {
     typealias Buffer = DictionaryBuilder<String, Any>
     let buffer = Buffer()
     
+    required
+    init() {}
+    
     typealias Points = ArrayBuilder<Point>
     @discardableResult
     func point(_ building :PointBuilding) ->Self {
@@ -22,19 +25,32 @@ class ClassPointSetBuilder {
     }
     
     func pointSet() throws ->ClassPointSet {
-        guard
-            let points = buffer["points"] as? ArrayBuilder<Point>
+        guard let
+            points = self["points"] as? ArrayBuilder<Point>
             else {
-                throw BuilderError.missingProperty
+                throw BuilderError.missedProperty(
+                    name: "points",
+                    result: String(describing: Result.self)
+                )
         }
         
-        var pointsByMethod = [String:[Point]]()
+        var
+        pointsByMethod = [String:[Point]]()
         for point :PointBuilder in points.elements() {
-            guard let method = point["method"] as? String else { continue }
-            if pointsByMethod[method] == nil {
-                pointsByMethod[method] = [Point]()
+            guard let
+                method = point["method"] as? String
+                else {
+                    throw BuilderError.missedProperty(
+                        name: "points.method",
+                        result: String(describing: Result.self)
+                    )
             }
-            pointsByMethod[method]!.append(try point.point())
+            point["defaults"] = self["pointDefaults"]
+            let
+            builtPoint = try point.point()
+            
+            if pointsByMethod[method] == nil { pointsByMethod[method] = [Point]() }
+            pointsByMethod[method]!.append(builtPoint)
         }
         
         var pointSets = [String:MethodPointSet]()
@@ -46,36 +62,69 @@ class ClassPointSetBuilder {
     }
 }
 
-public class PointBuilder {
+extension
+ClassPointSetBuilder {
+    subscript(key :String) ->Any? {
+        get { return self.buffer[key] }
+        set { self.buffer[key] = newValue }
+    }
+}
+
+extension
+ClassPointSetBuilder : Builder {
+    typealias Result = ClassPointSet
+    func build() throws -> ClassPointSet { return try pointSet() }
+    func _build() throws -> Any { return try build() }
+}
+
+public class
+PointBuilder {
     
-    let buffer = DictionaryBuilder<String, Any>()
+    let
+    buffer = DictionaryBuilder<String, Any>()
     
-    required
-    public init() {}
+    required public
+    init() {}
     
-    @discardableResult
-    func method(_ name :String) ->Self {
+    @discardableResult public func
+        method(_ name :String) ->Self {
         buffer.set(#function, name)
         return self
     }
     
-    @discardableResult
-    func set(_ key :String, _ value :Any) ->Self {
+    @discardableResult public func
+        set(_ key :String, _ value :Any) ->Self {
         buffer.set(key, value)
         return self
     }
     
-    subscript(key :String) ->Any? {
-        return buffer[key]
+    func
+        point() throws ->Point {
+        let
+        dictionary = try buffer.build(),
+        defaults = dictionary["defaults"] as? PointDefaults
+        guard let
+            trackers = (dictionary["trackers"] as? [Tracker]) ?? defaults?.trackers
+            else {
+                throw BuilderError.missedProperty(
+                    name: "trackers",
+                    result: String(describing: Result.self)
+                )
+        }
+        let payload = try self.payload(from: dictionary)
+        return Point(trackers: trackers, payload: payload)
     }
     
-    func point() throws ->Point {
-        let dictionary = try buffer.build()
-        guard
-            let cls = dictionary["class"] as? String,
-            let method = dictionary["method"] as? String
-            else { throw BuilderError.missingProperty }
-        return Point(class: cls, method: method)
+    internal func
+        payload(from buffer:[String:Any]) throws ->[String:Any]? {
+        return buffer
+    }
+}
+
+extension PointBuilder {
+    subscript(key :String) ->Any? {
+        get { return buffer[key] }
+        set { buffer[key] = newValue }
     }
 }
 

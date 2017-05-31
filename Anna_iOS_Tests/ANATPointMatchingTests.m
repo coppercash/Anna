@@ -69,10 +69,10 @@
 @property (readonly, strong, nonatomic) id data;
 @end
 
-@interface PointMatchingTests : XCTestCase
+@interface ANATPointMatchingTests : XCTestCase
 @end
 
-@implementation PointMatchingTests
+@implementation ANATPointMatchingTests
 
 - (void)setUp {
     [super setUp];
@@ -90,7 +90,7 @@
     ANATTarget *target = [[ANATTarget alloc] initWithAnalyzer:manager];
     [target functionOne];
     ANATPoint *lastPoint = tracker.lastPoint;
-    XCTAssertEqual(lastPoint.data, @"function_one_point_data");
+    XCTAssertEqualObjects(lastPoint.data, @"function_one_point_data");
 }
 
 @end

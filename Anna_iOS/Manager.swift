@@ -8,20 +8,27 @@
 
 import Foundation
 
-public class Manager {
-    let points :PointSet = PointSet()
-    let queue :DispatchQueue = DispatchQueue(label: "Anna")
+open class
+Manager {
+    let
+    points :PointSet = PointSet(),
+    queue :DispatchQueue = DispatchQueue(label: "Anna")
+    public weak var
+    defaultsProvider :DefaultsProvider? = nil
+    
+    public
+    init() {}
     
     func receive(_ event :Event) {
         queue.async {
-            self.dispatch(event)
+            try! self.dispatch(event)
         }
     }
     
-    func dispatch(_ event :Event) {
+    func dispatch(_ event :Event) throws {
         // Try to load points if they have not been loaded
         //
-        loadPoints(for: event.cls)
+        try loadPoints(for: event.cls)
         
         // Find point
         //
@@ -43,13 +50,23 @@ public class Manager {
         }
     }
     
-    func loadPoints(for cls :Registrant.Type) {
-        let name = String(describing: type(of: cls))
-        guard points.pointSet(for: name) == nil else { return }
-        let registrar = ClassPointSetBuilder()
-        let pointSet = try! registrar.pointSet()
+    func loadPoints(for cls :Registrant.Type) throws {
+        let name :String
+        let registrar :ClassPointSetBuilder
+        let pointSet :ClassPointSet
+        var current :ClassPointSet!
         
-        var current :ClassPointSet! = pointSet
+        name = String(describing: cls)
+        guard
+            points.pointSet(for: name) == nil
+            else { return }
+        
+        registrar = ClassPointSetBuilder()
+        registrar["pointDefaults"] = defaultsProvider?.point
+        cls.registerPoints(with: registrar)
+        pointSet = try registrar.pointSet()
+        
+        current = pointSet
         while current != nil {
             points.set(pointSet, for: name)
             current = current.superClassPointSet
@@ -59,19 +76,28 @@ public class Manager {
     static let shared = Manager()
 }
 
-extension ClassPointSetBuilder : Registrar {}
-
-protocol Analyzable : Registrant {
-    var ana :InvocationContext { get }
+public typealias
+    PointDefaults = Point
+public protocol
+DefaultsProvider : class {
+    var point :PointDefaults? { get }
 }
 
-extension Analyzable {
+extension ClassPointSetBuilder : Registrar {}
+
+public protocol Analyzable : Registrant {
+    var ana :InvocationContext { get }
+    var analysisManager :Manager { get }
+}
+
+public extension Analyzable {
     var ana :InvocationContext {
         return InvocationContext(target: self)
     }
 }
 
-class InvocationContext {
+public class
+InvocationContext {
     typealias Target = Analyzable
     let target :Target
     init(target :Target) {
@@ -79,7 +105,8 @@ class InvocationContext {
     }
     
     var event :Event? = nil
-    func analyze(method :String = #function) {
+    public func
+        analyze(method :String = #function) {
         let event :Event! = self.event ??
             Event(class: type(of: target),
                   method: method)
@@ -87,11 +114,12 @@ class InvocationContext {
     }
     
     var manager :Manager {
-        return Manager.shared
+        return target.analysisManager
     }
 }
 
-class Event {
+public class
+Event {
     typealias Class = Registrant.Type
     let cls :Class
     
