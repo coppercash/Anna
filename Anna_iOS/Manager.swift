@@ -98,37 +98,35 @@ public extension Analyzable {
 
 public class
 InvocationContext {
-    typealias Target = Analyzable
-    let target :Target
+    typealias
+        Target = Analyzable
+    let
+    target :Target
     init(target :Target) {
         self.target = target
     }
     
-    var event :Event? = nil
+    var
+    event :EventBuilder? = nil
+    public func
+        event(building :EventBuilding) ->Self {
+        let
+        builder = EventBuilder()
+        building(builder)
+        event = builder
+        return self
+    }
+    
     public func
         analyze(method :String = #function) {
-        let event :Event! = self.event ??
-            Event(class: type(of: target),
-                  method: method)
-        manager.receive(event)
+        let
+        event = self.event ?? EventBuilder()
+        event["class"] = type(of: target)
+        event["method"] = method
+        manager.receive(try! event.event())
     }
     
     var manager :Manager {
         return target.analysisManager
     }
-}
-
-public class
-Event {
-    typealias Class = Registrant.Type
-    let cls :Class
-    
-    typealias Method = String
-    let method :String
-    
-    init(class cls :Class, method :Method) {
-        self.cls = cls
-        self.method = method
-    }
-    let payload :Any? = nil
 }

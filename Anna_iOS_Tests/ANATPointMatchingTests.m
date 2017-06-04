@@ -84,7 +84,7 @@
     [super tearDown];
 }
 
-- (void)test_pointUserInfo {
+- (void)off_test_pointUserInfo {
     ANATTracker *tracker = [[ANATTracker alloc] init];
     ANATManager *manager = [[ANATManager alloc] initWithDefaultTracker:tracker];
     ANATTarget *target = [[ANATTarget alloc] initWithAnalyzer:manager];

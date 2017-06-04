@@ -25,8 +25,22 @@ class Target : Anna.Analyzable {
         self.anat.analyze()
     }
     
+    func functionContainsTwoPoints(index :Int) {
+        self.anat.event{ $0.set("index", index) }.analyze()
+    }
+    
     class func registerPoints(with registrar :Registrar) {
         registrar
+            .point { $0
+                .method("functionContainsTwoPoints(index)")
+                .set("data", "function_contains_two_points_index_zero")
+                .when("index", equal: 0)
+            }
+            .point { $0
+                .method("functionContainsTwoPoints(index)")
+                .set("data", "function_contains_two_points_index_one")
+                .when("index", equal: 1)
+            }
             .point { $0
                 .method("functionOne()")
                 .set("data", "function_one_point_data")
@@ -90,6 +104,32 @@ class PointMatchingTests: XCTestCase {
         let
         payload = lastPoint?.payload as? Dictionary<String, Any>
         XCTAssertEqual(payload?["data"] as? String, "function_one_point_data")
+    }
+    
+    func test_twoPointsContainedInOneMethod() {
+        let
+        xpt = expectation(description: #function)
+        var
+        points = [Point]()
+        let tracker = Tracker { (event, point) in
+            points.append(point)
+            if points.count >= 2 { xpt.fulfill() }
+        }
+        let
+        manager = Manager(defaultTracker: tracker)
+        let
+        target = Target(analyzer: manager)
+        
+        target.functionContainsTwoPoints(index: 0)
+        target.functionContainsTwoPoints(index: 1)
+        waitForExpectations(timeout: 0.1)
+        
+        let
+        payload0 = points[0].payload as? Dictionary<String, Any>
+        XCTAssertEqual(payload0?["data"] as? String, "function_contains_two_points_index_zero")
+        let
+        payload1 = points[1].payload as? Dictionary<String, Any>
+        XCTAssertEqual(payload1?["data"] as? String, "function_contains_two_points_index_one")
     }
 }
 

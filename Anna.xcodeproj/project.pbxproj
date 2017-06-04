@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		57D01EC76231C5F76F002185 /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
+		BE083B471EE598AB00E834D6 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE083B461EE598AB00E834D6 /* Event.swift */; };
+		BE083B491EE59D4A00E834D6 /* ClassPointSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE083B481EE59D4A00E834D6 /* ClassPointSet.swift */; };
+		BE083B4B1EE5A09500E834D6 /* Predicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE083B4A1EE5A09500E834D6 /* Predicate.swift */; };
 		BE249DC91ECFDCAA002AB3C9 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE249DC81ECFDCAA002AB3C9 /* Point.swift */; };
 		BE249DCB1ECFF232002AB3C9 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE249DCA1ECFF232002AB3C9 /* Builder.swift */; };
 		BE6D9A841EDEFD5C00FFAA90 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */; };
@@ -45,6 +48,9 @@
 		4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		BE083B461EE598AB00E834D6 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		BE083B481EE59D4A00E834D6 /* ClassPointSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassPointSet.swift; sourceTree = "<group>"; };
+		BE083B4A1EE5A09500E834D6 /* Predicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Predicate.swift; sourceTree = "<group>"; };
 		BE249DC81ECFDCAA002AB3C9 /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		BE249DCA1ECFF232002AB3C9 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
@@ -139,7 +145,10 @@
 				BED726101EC3CC0D00F6139E /* Tracker.swift */,
 				BE87DA9E1EAB715900DA81EB /* Manager.swift */,
 				BE249DC81ECFDCAA002AB3C9 /* Point.swift */,
+				BE083B481EE59D4A00E834D6 /* ClassPointSet.swift */,
 				BE249DCA1ECFF232002AB3C9 /* Builder.swift */,
+				BE083B4A1EE5A09500E834D6 /* Predicate.swift */,
+				BE083B461EE598AB00E834D6 /* Event.swift */,
 				BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */,
 			);
 			path = Anna_iOS;
@@ -383,7 +392,10 @@
 				BEAAB5941EC12BA900C0EBF9 /* ANAPointBuilder.m in Sources */,
 				BE249DC91ECFDCAA002AB3C9 /* Point.swift in Sources */,
 				BE87DA9F1EAB715900DA81EB /* Manager.swift in Sources */,
+				BE083B4B1EE5A09500E834D6 /* Predicate.swift in Sources */,
+				BE083B491EE59D4A00E834D6 /* ClassPointSet.swift in Sources */,
 				BEDB99ED1EBE8DBA006637DC /* ANAManager.m in Sources */,
+				BE083B471EE598AB00E834D6 /* Event.swift in Sources */,
 				BE249DCB1ECFF232002AB3C9 /* Builder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
