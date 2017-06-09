@@ -15,7 +15,7 @@ public protocol Predicate {
     key :Key { get }
     
     func
-        evaluate(with object :Any) ->Bool
+        evaluate(with object :Any?) ->Bool
 }
 
 class EqualPredicate<Value> : Predicate where Value : Equatable {
@@ -30,10 +30,12 @@ class EqualPredicate<Value> : Predicate where Value : Equatable {
     }
     
     public func
-        evaluate(with object: Any) -> Bool {
+        evaluate(with object: Any?) -> Bool {
         guard let
-            object = object as? Value
+            nonNil = object,
+            let
+            cast = nonNil as? Value
             else { return false }
-        return object == expectedValue
+        return cast == expectedValue
     }
 }

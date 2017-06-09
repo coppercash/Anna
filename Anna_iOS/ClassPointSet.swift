@@ -18,7 +18,7 @@ class MethodPointSet {
     func points(match event :Event) ->[Point] {
         var points = [Point]()
         for point in self.points {
-            guard point.isMatched(with: event) else { continue }
+            guard point.matches(event) else { continue }
             points.append(point)
         }
         return points

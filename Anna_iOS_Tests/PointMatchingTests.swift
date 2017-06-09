@@ -32,12 +32,12 @@ class Target : Anna.Analyzable {
     class func registerPoints(with registrar :Registrar) {
         registrar
             .point { $0
-                .method("functionContainsTwoPoints(index)")
+                .method("functionContainsTwoPoints(index:)")
                 .set("data", "function_contains_two_points_index_zero")
                 .when("index", equal: 0)
             }
             .point { $0
-                .method("functionContainsTwoPoints(index)")
+                .method("functionContainsTwoPoints(index:)")
                 .set("data", "function_contains_two_points_index_one")
                 .when("index", equal: 1)
             }
@@ -79,7 +79,7 @@ class Manager : Anna.Manager, Anna.DefaultsProvider {
     }
     
     public var point: Anna.PointDefaults? {
-        return Point(trackers:[self.defaultTracker], payload: nil)
+        return Point(trackers:[self.defaultTracker], predicates: nil, payload: nil)
     }
 }
 

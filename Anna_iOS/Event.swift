@@ -10,17 +10,29 @@ import Foundation
 
 public class
 Event {
-    typealias Class = Registrant.Type
-    let cls :Class
+    typealias
+        Class = Registrant.Type
+    let
+    cls :Class
     
-    typealias Method = String
-    let method :String
+    typealias
+        Method = String
+    let
+    method :String
     
     init(class cls :Class, method :Method) {
         self.cls = cls
         self.method = method
     }
-    let payload :Any? = nil
+    
+    func
+        object(to predicate :Predicate) ->Any? {
+        guard let
+            dictionary = payload as? Dictionary<String, Any>
+            else { return nil }
+        return dictionary[predicate.key]
+    }
+    var payload :Any? = nil
 }
 
 public class
@@ -41,14 +53,18 @@ EventBuilder {
         event() throws ->Event {
         let
         dictionary = try buffer.build()
+        
         guard let
             cls = dictionary["class"] as? Registrant.Type
-            else { throw BuilderError.missedProperty( name: "class", result: String(describing: Result.self)) }
+            else { throw BuilderError.missedProperty(name: "class", result: String(describing: Result.self)) }
         guard let
             method = dictionary["method"] as? String
-            else { throw BuilderError.missedProperty( name: "method", result: String(describing: Result.self)) }
+            else { throw BuilderError.missedProperty(name: "method", result: String(describing: Result.self)) }
         
-        return Event(class: cls, method: method)
+        let
+        event = Event(class: cls, method: method)
+        event.payload = dictionary
+        return event
     }
 }
 public typealias

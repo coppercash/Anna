@@ -53,11 +53,11 @@ public class ArrayBuilder<Element>
         var array = [Element]()
         array.reserveCapacity(buffer.count)
         for item in buffer {
-            if let element = item as? Element {
+            if let builder = item as? _Builder {
+                let element = try builder._build() as! Element
                 array.append(element)
             }
-            else if let builder = item as? _Builder {
-                let element = try builder._build() as! Element
+            else if let element = item as? Element {
                 array.append(element)
             }
         }
@@ -102,7 +102,7 @@ public class DictionaryBuilder<Key, Value>
     required
     public init() {}
 
-    var buffer = Dictionary<Key, Value>()
+    var buffer = Dictionary<Key, Any>()
     
     @discardableResult
     func set(_ key :Key, _ value :Value) ->Self {
@@ -119,12 +119,26 @@ public class DictionaryBuilder<Key, Value>
     }
     
     func dictionary() throws ->Dictionary<Key, Value> {
-        return buffer
+        var
+        dictionary = [Key:Value]()
+        for (key, value) in buffer {
+            if let
+                builder = value as? _Builder {
+                let
+                value = try builder._build() as! Value
+                dictionary[key] = value
+            }
+            else if let
+                value = value as? Value {
+                dictionary[key] = value
+            }
+        }
+        return dictionary
     }
 }
 
 extension DictionaryBuilder {
-    subscript(key :Key) ->Value? {
+    subscript(key :Key) ->Any? {
         get { return buffer[key] }
         set { self.buffer[key] = newValue }
     }
