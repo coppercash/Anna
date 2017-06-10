@@ -49,12 +49,12 @@ class PointMatchingTests: AnnaTestCase {
                 registrar
                     .point { $0
                         .method("functionContainsTwoPoints(index:)")
-                        .set("data", "function_contains_two_points_index_zero")
+                        .set("data", "42")
                         .when("index", equal: 0)
                     }
                     .point { $0
                         .method("functionContainsTwoPoints(index:)")
-                        .set("data", "function_contains_two_points_index_one")
+                        .set("data", "24")
                         .when("index", equal: 1)
                 }
             }
@@ -69,10 +69,10 @@ class PointMatchingTests: AnnaTestCase {
         
         let
         payload0 = receivedPoints[0].payload as? Dictionary<String, Any>
-        XCTAssertEqual(payload0?["data"] as? String, "function_contains_two_points_index_zero")
+        XCTAssertEqual(payload0?["data"] as? String, "42")
         let
         payload1 = receivedPoints[1].payload as? Dictionary<String, Any>
-        XCTAssertEqual(payload1?["data"] as? String, "function_contains_two_points_index_one")
+        XCTAssertEqual(payload1?["data"] as? String, "24")
     }
 }
 
