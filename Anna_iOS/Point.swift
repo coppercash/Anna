@@ -76,19 +76,17 @@ PointBuilder {
         point() throws ->Point {
         let
         dictionary = try buffer.build(),
-        defaults = dictionary["defaults"] as? PointDefaults
-        
-        guard let
-            trackers = (dictionary["trackers"] as? [Tracker]) ?? defaults?.trackers
-            else {
-                throw BuilderError.missedProperty(
-                    name: "trackers",
-                    result: String(describing: Result.self)
-                )
-        }
-        
-        let
-            predicates = (dictionary["predicates"] as? [Predicate]) ?? defaults?.predicates
+        defaults = dictionary["defaults"] as? PointDefaults,
+        trackers = try requiredProperty(
+            from: dictionary,
+            for: "trackers",
+            default: defaults?.trackers
+        ),
+        predicates = property(
+            from: dictionary,
+            for: "predicates",
+            default: defaults?.predicates
+        )
         
         let
         payload = try self.payload(from: dictionary)
@@ -105,7 +103,7 @@ PointBuilder {
     }
 }
 
-extension PointBuilder {
+extension PointBuilder : StringAnySubscriptable {
     subscript(key :String) ->Any? {
         get { return buffer[key] }
         set { buffer[key] = newValue }
@@ -113,7 +111,7 @@ extension PointBuilder {
 }
 
 extension
-PointBuilder : Builder {
+PointBuilder : StringAnyDictionaryBufferringBuilder {
     typealias
         Result = Point
     func

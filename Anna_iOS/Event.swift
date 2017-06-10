@@ -52,14 +52,14 @@ EventBuilder {
     func
         event() throws ->Event {
         let
-        dictionary = try buffer.build()
-        
-        guard let
-            cls = dictionary["class"] as? Registrant.Type
-            else { throw BuilderError.missedProperty(name: "class", result: String(describing: Result.self)) }
-        guard let
-            method = dictionary["method"] as? String
-            else { throw BuilderError.missedProperty(name: "method", result: String(describing: Result.self)) }
+        dictionary = try buffer.build(),
+        cls :Event.Class = try requiredProperty(
+            from: dictionary,
+            for: "class"),
+        method :Event.Method = try requiredProperty(
+            from: dictionary,
+            for: "method"
+        )
         
         let
         event = Event(class: cls, method: method)
@@ -79,7 +79,7 @@ EventBuilder {
 }
 
 extension
-EventBuilder : Builder {
+EventBuilder : StringAnyDictionaryBufferringBuilder {
     typealias Result = Event
     func build() throws -> Event { return try event() }
     func _build() throws -> Any { return try build() }

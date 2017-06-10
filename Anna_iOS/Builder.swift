@@ -8,62 +8,8 @@
 
 import Foundation
 
-class ClassPointSetBuilder {
-
-    typealias Buffer = DictionaryBuilder<String, Any>
-    let buffer = Buffer()
-    
-    required
-    init() {}
-    
-    typealias Points = ArrayBuilder<Point>
-    @discardableResult
-    func point(_ building :PointBuilding) ->Self {
-        let points = buffer.get("points", Points())
-        points.add(building)
-        return self
-    }
-    
-    func pointSet() throws ->ClassPointSet {
-        guard let
-            points = self["points"] as? ArrayBuilder<Point>
-            else {
-                throw BuilderError.missedProperty(
-                    name: "points",
-                    result: String(describing: Result.self)
-                )
-        }
-        
-        var
-        pointsByMethod = [String:[Point]]()
-        for point :PointBuilder in points.elements() {
-            guard let
-                method = point["method"] as? String
-                else {
-                    throw BuilderError.missedProperty(
-                        name: "points.method",
-                        result: String(describing: Result.self)
-                    )
-            }
-            point["defaults"] = self["pointDefaults"]
-            let
-            builtPoint = try point.point()
-            
-            if pointsByMethod[method] == nil { pointsByMethod[method] = [Point]() }
-            pointsByMethod[method]!.append(builtPoint)
-        }
-        
-        var pointSets = [String:MethodPointSet]()
-        for (method, points) in pointsByMethod {
-            pointSets[method] = MethodPointSet(points: points) 
-        }
-        
-        return ClassPointSet(pointSetsByMethod: pointSets)
-    }
-}
-
 extension
-ClassPointSetBuilder {
+ClassPointSetBuilder : StringAnySubscriptable {
     subscript(key :String) ->Any? {
         get { return self.buffer[key] }
         set { self.buffer[key] = newValue }
@@ -77,3 +23,95 @@ ClassPointSetBuilder : Builder {
     func _build() throws -> Any { return try build() }
 }
 
+extension
+ClassPointSetBuilder : StringAnyDictionaryBufferringBuilder {}
+
+
+protocol
+StringAnySubscriptable {
+    subscript(key :String) ->Any? { get }
+}
+
+protocol
+StringAnyDictionaryBufferringBuilder : Builder {
+    func
+        property<Value>(
+        from dictionary :Dictionary<String, Any>,
+        for key :String,
+        default :Value
+        ) ->Value
+    func
+        property<Value>(
+        from dictionary :StringAnySubscriptable,
+        for key :String,
+        default :Value
+        ) ->Value
+    func
+        requiredProperty<Value>(
+        from dictionary :StringAnySubscriptable,
+        for key :String,
+        default :Value?,
+        propertyPrefix :String?
+        ) throws ->Value
+    func
+        requiredProperty<Value>(
+        from dictionary :Dictionary<String, Any>,
+        for key :String,
+        default :Value?,
+        propertyPrefix :String?
+        ) throws ->Value
+}
+
+extension
+StringAnyDictionaryBufferringBuilder {
+    func
+        property<Value>(
+        from dictionary :StringAnySubscriptable,
+        for key :String,
+        default dft:Value
+        ) ->Value {
+       return (dictionary[key] as? Value) ?? dft
+    }
+    func
+        property<Value>(
+        from dictionary :Dictionary<String, Any>,
+        for key :String,
+        default dft:Value
+        ) ->Value {
+       return (dictionary[key] as? Value) ?? dft
+    }
+    func
+        requiredProperty<Value>(
+        from dictionary :StringAnySubscriptable,
+        for key :String,
+        default dft:Value? = nil,
+        propertyPrefix :String? = nil
+        ) throws ->Value {
+        guard let
+            property = (dictionary[key] as? Value) ?? dft
+            else {
+                throw BuilderError.missedProperty(
+                    name: propertyPrefix == nil ? key : "\(propertyPrefix).\(key)",
+                    result: String(describing: Result.self)
+                )
+        }
+        return property
+    }
+    func
+        requiredProperty<Value>(
+        from dictionary :Dictionary<String, Any>,
+        for key :String,
+        default dft:Value? = nil,
+        propertyPrefix :String? = nil
+        ) throws ->Value {
+        guard let
+            property = (dictionary[key] as? Value) ?? dft
+            else {
+                throw BuilderError.missedProperty(
+                    name: propertyPrefix == nil ? key : "\(propertyPrefix).\(key)",
+                    result: String(describing: Result.self)
+                )
+        }
+        return property
+    }
+}

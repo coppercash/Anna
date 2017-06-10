@@ -8,23 +8,6 @@
 
 import Foundation
 
-class MethodPointSet {
-    
-    init(points :[Point]) {
-        self.points = points
-    }
-    
-    let points :[Point]
-    func points(match event :Event) ->[Point] {
-        var points = [Point]()
-        for point in self.points {
-            guard point.matches(event) else { continue }
-            points.append(point)
-        }
-        return points
-    }
-}
-
 class ClassPointSet {
     
     let superClassPointSet :ClassPointSet? = nil
@@ -42,44 +25,51 @@ class ClassPointSet {
     }
 }
 
-/*
- self.class | self.method | super.class | super.method | expected | search
- 0            0             0             0              -
- 0            0             0             1              -
- 0            0             1             0              nothing
- 0            0             1             1              in super   self, super
- 0            1             0             0              -
- 0            1             0             1              -
- 0            1             1             0              -
- 0            1             1             1              -
- 1            0             0             0              nothing    self
- 1            0             0             1              -
- 1            0             1             0              nothing    self, super
- 1            0             1             1              in super   self, super
- 1            1             0             0              in self    self
- 1            1             0             1              -
- 1            1             1             0              in self    self
- 1            1             1             1              in both    self, super
- */
-class PointSet {
-    func points(match event :Event) ->[Point]? {
-        var current :ClassPointSet! = pointSet(for: String(describing: event.cls))
-        guard current != nil else { return nil }
-        var points = [Point]()
-        while current != nil {
-            if let matched = current.points(match: event) {
-                points.append(contentsOf: matched)
-            }
-            current = current.superClassPointSet
-        }
-        return points
+class ClassPointSetBuilder {
+
+    typealias Buffer = DictionaryBuilder<String, Any>
+    let buffer = Buffer()
+    
+    required
+    init() {}
+    
+    typealias Points = ArrayBuilder<Point>
+    @discardableResult
+    func point(_ building :PointBuilding) ->Self {
+        let points = buffer.get("points", Points())
+        points.add(building)
+        return self
     }
     
-    var pointSetsByClass :[String:ClassPointSet] = [String:ClassPointSet]()
-    func pointSet(for cls :String) ->ClassPointSet? {
-       return pointSetsByClass[cls]
-    }
-    func set(_ pointSet :ClassPointSet, for cls :String) {
-        pointSetsByClass[cls] = pointSet
+    func pointSet() throws ->ClassPointSet {
+        let
+        points :ArrayBuilder<Point> = try requiredProperty(
+            from: self,
+            for: "points"
+        )
+        
+        var
+        pointsByMethod = [String:[Point]]()
+        for point :PointBuilder in points.elements() {
+            let
+            method :String = try requiredProperty(
+                from: point,
+                for: "method",
+                propertyPrefix: "points"
+            )
+            point["defaults"] = self["pointDefaults"]
+            let
+            builtPoint = try point.point()
+            
+            if pointsByMethod[method] == nil { pointsByMethod[method] = [Point]() }
+            pointsByMethod[method]!.append(builtPoint)
+        }
+        
+        var pointSets = [String:MethodPointSet]()
+        for (method, points) in pointsByMethod {
+            pointSets[method] = MethodPointSet(points: points) 
+        }
+        
+        return ClassPointSet(pointSetsByMethod: pointSets)
     }
 }
