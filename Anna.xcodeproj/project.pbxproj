@@ -9,30 +9,30 @@
 /* Begin PBXBuildFile section */
 		57D01EC76231C5F76F002185 /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
-		BE083B471EE598AB00E834D6 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE083B461EE598AB00E834D6 /* Event.swift */; };
-		BE083B491EE59D4A00E834D6 /* ClassPointSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE083B481EE59D4A00E834D6 /* ClassPointSet.swift */; };
-		BE083B4B1EE5A09500E834D6 /* Predicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE083B4A1EE5A09500E834D6 /* Predicate.swift */; };
-		BE249DC91ECFDCAA002AB3C9 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE249DC81ECFDCAA002AB3C9 /* Point.swift */; };
-		BE249DCB1ECFF232002AB3C9 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE249DCA1ECFF232002AB3C9 /* Builder.swift */; };
-		BE6D9A841EDEFD5C00FFAA90 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */; };
-		BE80F3261EEBA651000B0E15 /* PointSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3251EEBA651000B0E15 /* PointSet.swift */; };
-		BE80F3281EEBA669000B0E15 /* MethodPointSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3271EEBA669000B0E15 /* MethodPointSet.swift */; };
 		BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */; };
-		BE80F32C1EEBD6DC000B0E15 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F32B1EEBD6DC000B0E15 /* Type.swift */; };
-		BE80F32E1EEBF003000B0E15 /* Sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F32D1EEBF003000B0E15 /* Sender.swift */; };
-		BE80F3301EEBF05A000B0E15 /* Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F32F1EEBF05A000B0E15 /* Prefix.swift */; };
+		BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3471EEBF486000B0E15 /* Builder.swift */; };
+		BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3481EEBF486000B0E15 /* Buildup.swift */; };
+		BE80F3591EEBF486000B0E15 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3491EEBF486000B0E15 /* Event.swift */; };
+		BE80F35A1EEBF486000B0E15 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34A1EEBF486000B0E15 /* Manager.swift */; };
+		BE80F35B1EEBF486000B0E15 /* ClassPointSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34C1EEBF486000B0E15 /* ClassPointSet.swift */; };
+		BE80F35C1EEBF486000B0E15 /* MethodPointSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34D1EEBF486000B0E15 /* MethodPointSet.swift */; };
+		BE80F35D1EEBF486000B0E15 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34E1EEBF486000B0E15 /* Point.swift */; };
+		BE80F35E1EEBF486000B0E15 /* PointSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34F1EEBF486000B0E15 /* PointSet.swift */; };
+		BE80F35F1EEBF486000B0E15 /* Predicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3511EEBF486000B0E15 /* Predicate.swift */; };
+		BE80F3601EEBF486000B0E15 /* Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3521EEBF486000B0E15 /* Prefix.swift */; };
+		BE80F3611EEBF486000B0E15 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3531EEBF486000B0E15 /* Register.swift */; };
+		BE80F3621EEBF486000B0E15 /* Sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3541EEBF486000B0E15 /* Sender.swift */; };
+		BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3551EEBF486000B0E15 /* Tracker.swift */; };
+		BE80F3641EEBF486000B0E15 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3561EEBF486000B0E15 /* Type.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE87DA801EAB608700DA81EB /* Anna.framework */; };
 		BE87DA9B1EAB6C3800DA81EB /* ANATPointMatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */; };
-		BE87DA9D1EAB6FFE00DA81EB /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9C1EAB6FFE00DA81EB /* Register.swift */; };
-		BE87DA9F1EAB715900DA81EB /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9E1EAB715900DA81EB /* Manager.swift */; };
 		BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE98B1421EC274A000978728 /* PointMatchingTests.swift */; };
 		BEAAB5901EC12A1A00C0EBF9 /* ANARegister.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB58F1EC12A1A00C0EBF9 /* ANARegister.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEAAB5931EC12BA900C0EBF9 /* ANAPointBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB5911EC12BA900C0EBF9 /* ANAPointBuilder.h */; };
 		BEAAB5941EC12BA900C0EBF9 /* ANAPointBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAAB5921EC12BA900C0EBF9 /* ANAPointBuilder.m */; };
 		BEAAB59C1EC135FC00C0EBF9 /* ANAInvocationContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB59A1EC135FC00C0EBF9 /* ANAInvocationContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEAAB59D1EC135FC00C0EBF9 /* ANAInvocationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAAB59B1EC135FC00C0EBF9 /* ANAInvocationContext.m */; };
-		BED726111EC3CC0D00F6139E /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED726101EC3CC0D00F6139E /* Tracker.swift */; };
 		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEDB99ED1EBE8DBA006637DC /* ANAManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDB99EB1EBE8DBA006637DC /* ANAManager.m */; };
 /* End PBXBuildFile section */
@@ -54,18 +54,21 @@
 		4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		BE083B461EE598AB00E834D6 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		BE083B481EE59D4A00E834D6 /* ClassPointSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassPointSet.swift; sourceTree = "<group>"; };
-		BE083B4A1EE5A09500E834D6 /* Predicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Predicate.swift; sourceTree = "<group>"; };
-		BE249DC81ECFDCAA002AB3C9 /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
-		BE249DCA1ECFF232002AB3C9 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
-		BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
-		BE80F3251EEBA651000B0E15 /* PointSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointSet.swift; sourceTree = "<group>"; };
-		BE80F3271EEBA669000B0E15 /* MethodPointSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MethodPointSet.swift; sourceTree = "<group>"; };
 		BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnaTestCase.swift; sourceTree = "<group>"; };
-		BE80F32B1EEBD6DC000B0E15 /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
-		BE80F32D1EEBF003000B0E15 /* Sender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sender.swift; sourceTree = "<group>"; };
-		BE80F32F1EEBF05A000B0E15 /* Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefix.swift; sourceTree = "<group>"; };
+		BE80F3471EEBF486000B0E15 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
+		BE80F3481EEBF486000B0E15 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
+		BE80F3491EEBF486000B0E15 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		BE80F34A1EEBF486000B0E15 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		BE80F34C1EEBF486000B0E15 /* ClassPointSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassPointSet.swift; sourceTree = "<group>"; };
+		BE80F34D1EEBF486000B0E15 /* MethodPointSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MethodPointSet.swift; sourceTree = "<group>"; };
+		BE80F34E1EEBF486000B0E15 /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		BE80F34F1EEBF486000B0E15 /* PointSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointSet.swift; sourceTree = "<group>"; };
+		BE80F3511EEBF486000B0E15 /* Predicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Predicate.swift; sourceTree = "<group>"; };
+		BE80F3521EEBF486000B0E15 /* Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefix.swift; sourceTree = "<group>"; };
+		BE80F3531EEBF486000B0E15 /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
+		BE80F3541EEBF486000B0E15 /* Sender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sender.swift; sourceTree = "<group>"; };
+		BE80F3551EEBF486000B0E15 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		BE80F3561EEBF486000B0E15 /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		BE87DA801EAB608700DA81EB /* Anna.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Anna.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE87DA831EAB608700DA81EB /* Anna.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Anna.h; sourceTree = "<group>"; };
 		BE87DA841EAB608700DA81EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -73,15 +76,12 @@
 		BE87DA911EAB615D00DA81EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Anna_iOS_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATPointMatchingTests.m; sourceTree = "<group>"; };
-		BE87DA9C1EAB6FFE00DA81EB /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
-		BE87DA9E1EAB715900DA81EB /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		BE98B1421EC274A000978728 /* PointMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointMatchingTests.swift; sourceTree = "<group>"; };
 		BEAAB58F1EC12A1A00C0EBF9 /* ANARegister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANARegister.h; sourceTree = "<group>"; };
 		BEAAB5911EC12BA900C0EBF9 /* ANAPointBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAPointBuilder.h; sourceTree = "<group>"; };
 		BEAAB5921EC12BA900C0EBF9 /* ANAPointBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAPointBuilder.m; sourceTree = "<group>"; };
 		BEAAB59A1EC135FC00C0EBF9 /* ANAInvocationContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAInvocationContext.h; sourceTree = "<group>"; };
 		BEAAB59B1EC135FC00C0EBF9 /* ANAInvocationContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAInvocationContext.m; sourceTree = "<group>"; };
-		BED726101EC3CC0D00F6139E /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		BEDB99EA1EBE8DBA006637DC /* ANAManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAManager.h; sourceTree = "<group>"; };
 		BEDB99EB1EBE8DBA006637DC /* ANAManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,6 +127,25 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		BE80F34B1EEBF486000B0E15 /* Point */ = {
+			isa = PBXGroup;
+			children = (
+				BE80F34C1EEBF486000B0E15 /* ClassPointSet.swift */,
+				BE80F34D1EEBF486000B0E15 /* MethodPointSet.swift */,
+				BE80F34E1EEBF486000B0E15 /* Point.swift */,
+				BE80F34F1EEBF486000B0E15 /* PointSet.swift */,
+			);
+			path = Point;
+			sourceTree = "<group>";
+		};
+		BE80F3501EEBF486000B0E15 /* Predicate */ = {
+			isa = PBXGroup;
+			children = (
+				BE80F3511EEBF486000B0E15 /* Predicate.swift */,
+			);
+			path = Predicate;
+			sourceTree = "<group>";
+		};
 		BE87DA741EAB606A00DA81EB = {
 			isa = PBXGroup;
 			children = (
@@ -153,20 +172,6 @@
 			children = (
 				BE87DA831EAB608700DA81EB /* Anna.h */,
 				BE87DA841EAB608700DA81EB /* Info.plist */,
-				BE80F32B1EEBD6DC000B0E15 /* Type.swift */,
-				BE87DA9C1EAB6FFE00DA81EB /* Register.swift */,
-				BED726101EC3CC0D00F6139E /* Tracker.swift */,
-				BE80F32D1EEBF003000B0E15 /* Sender.swift */,
-				BE87DA9E1EAB715900DA81EB /* Manager.swift */,
-				BE80F32F1EEBF05A000B0E15 /* Prefix.swift */,
-				BE249DC81ECFDCAA002AB3C9 /* Point.swift */,
-				BE80F3271EEBA669000B0E15 /* MethodPointSet.swift */,
-				BE083B481EE59D4A00E834D6 /* ClassPointSet.swift */,
-				BE80F3251EEBA651000B0E15 /* PointSet.swift */,
-				BE249DCA1ECFF232002AB3C9 /* Builder.swift */,
-				BE083B4A1EE5A09500E834D6 /* Predicate.swift */,
-				BE083B461EE598AB00E834D6 /* Event.swift */,
-				BE6D9A831EDEFD5C00FFAA90 /* Buildup.swift */,
 			);
 			path = Anna_iOS;
 			sourceTree = "<group>";
@@ -186,6 +191,17 @@
 		BE87DA981EAB62A100DA81EB /* Anna */ = {
 			isa = PBXGroup;
 			children = (
+				BE80F3471EEBF486000B0E15 /* Builder.swift */,
+				BE80F3481EEBF486000B0E15 /* Buildup.swift */,
+				BE80F3491EEBF486000B0E15 /* Event.swift */,
+				BE80F34A1EEBF486000B0E15 /* Manager.swift */,
+				BE80F3521EEBF486000B0E15 /* Prefix.swift */,
+				BE80F3531EEBF486000B0E15 /* Register.swift */,
+				BE80F3541EEBF486000B0E15 /* Sender.swift */,
+				BE80F3551EEBF486000B0E15 /* Tracker.swift */,
+				BE80F3561EEBF486000B0E15 /* Type.swift */,
+				BE80F34B1EEBF486000B0E15 /* Point */,
+				BE80F3501EEBF486000B0E15 /* Predicate */,
 				BEDB99E91EBE8DA1006637DC /* ObjC */,
 			);
 			path = Anna;
@@ -403,23 +419,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BED726111EC3CC0D00F6139E /* Tracker.swift in Sources */,
-				BE87DA9D1EAB6FFE00DA81EB /* Register.swift in Sources */,
+				BE80F35F1EEBF486000B0E15 /* Predicate.swift in Sources */,
+				BE80F35C1EEBF486000B0E15 /* MethodPointSet.swift in Sources */,
 				BEAAB59D1EC135FC00C0EBF9 /* ANAInvocationContext.m in Sources */,
-				BE80F3261EEBA651000B0E15 /* PointSet.swift in Sources */,
-				BE6D9A841EDEFD5C00FFAA90 /* Buildup.swift in Sources */,
-				BE80F32C1EEBD6DC000B0E15 /* Type.swift in Sources */,
+				BE80F35A1EEBF486000B0E15 /* Manager.swift in Sources */,
+				BE80F3591EEBF486000B0E15 /* Event.swift in Sources */,
+				BE80F35D1EEBF486000B0E15 /* Point.swift in Sources */,
+				BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */,
+				BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */,
 				BEAAB5941EC12BA900C0EBF9 /* ANAPointBuilder.m in Sources */,
-				BE249DC91ECFDCAA002AB3C9 /* Point.swift in Sources */,
-				BE80F32E1EEBF003000B0E15 /* Sender.swift in Sources */,
-				BE87DA9F1EAB715900DA81EB /* Manager.swift in Sources */,
-				BE083B4B1EE5A09500E834D6 /* Predicate.swift in Sources */,
-				BE083B491EE59D4A00E834D6 /* ClassPointSet.swift in Sources */,
+				BE80F3621EEBF486000B0E15 /* Sender.swift in Sources */,
+				BE80F35E1EEBF486000B0E15 /* PointSet.swift in Sources */,
+				BE80F3641EEBF486000B0E15 /* Type.swift in Sources */,
+				BE80F3611EEBF486000B0E15 /* Register.swift in Sources */,
 				BEDB99ED1EBE8DBA006637DC /* ANAManager.m in Sources */,
-				BE083B471EE598AB00E834D6 /* Event.swift in Sources */,
-				BE80F3281EEBA669000B0E15 /* MethodPointSet.swift in Sources */,
-				BE80F3301EEBF05A000B0E15 /* Prefix.swift in Sources */,
-				BE249DCB1ECFF232002AB3C9 /* Builder.swift in Sources */,
+				BE80F35B1EEBF486000B0E15 /* ClassPointSet.swift in Sources */,
+				BE80F3601EEBF486000B0E15 /* Prefix.swift in Sources */,
+				BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

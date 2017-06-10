@@ -32,7 +32,7 @@ EasyPrefix {
     }
     
     public typealias
-        Method = StaticString
+        Method = String
     public func
         analyze(method :Method = #function) {
         let
