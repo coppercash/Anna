@@ -11,18 +11,20 @@ import Anna
 
 class
 AnnaTestCase : XCTestCase {
+    typealias
+        Manager = EasyManager
     var
-    manager :Anna.Manager! = nil,
+    manager :Manager! = nil,
     expectations :[XCTestExpectation]! = nil,
-    receivedPoints :[Anna.Point]! = nil,
-    receivedEvents :[Anna.Event]! = nil
+    receivedPoints :[Manager.Point]! = nil,
+    receivedEvents :[Manager.Event]! = nil
     override func
         setUp() {
         super.setUp()
-        receivedEvents = Array<Anna.Event>()
-        receivedPoints = Array<Anna.Point>()
+        receivedEvents = Array<Manager.Event>()
+        receivedPoints = Array<Manager.Point>()
         expectations = [XCTestExpectation]()
-        manager = Anna.Manager()
+        manager = Manager()
         manager.defaultsProvider = self
     }
     override func
@@ -47,10 +49,10 @@ AnnaTestCase : XCTestCase {
 }
 
 extension
-AnnaTestCase : Anna.DefaultsProvider {
+AnnaTestCase : Anna.EasyDefaultsProvider {
     public var
-    point: Anna.PointDefaults? {
-        return Point(
+    point: Anna.EasyDefaultsProvider.PointDefaults? {
+        return EasyPointDefaults(
             trackers: [self],
             predicates: nil,
             payload: nil
@@ -59,12 +61,12 @@ AnnaTestCase : Anna.DefaultsProvider {
 }
 
 extension
-AnnaTestCase : Anna.Tracker {
+AnnaTestCase : EasyTracker {
     func
-        receive(
-        event: Anna.Event,
-        with point: Anna.Point,
-        dispatchedBy manager: Anna.Manager
+        receiveAnalysisEvent(
+        _ event: EasyTracker.Event,
+        with point: EasyTracker.Point,
+        dispatchedBy manager: EasyTracker.Manager
         ) {
         receivedEvents.append(event)
         receivedPoints.append(point)
@@ -73,17 +75,19 @@ AnnaTestCase : Anna.Tracker {
 }
 
 class
-Analyzable : Anna.Analyzable {
+Analyzable : EasyAnalyzable {
+    typealias
+        Analyzer = EasyManager
     let
-    analyzer :Anna.Manager
-    init(_ analyzer :Anna.Manager) {
+    analyzer :Analyzer
+    init(_ analyzer :Analyzer) {
         self.analyzer = analyzer
     }
     var
-    analysisManager: Anna.Manager {
+    analysisManager: EasySender.Manager {
         return self.analyzer
     }
     class func
-        registerPoints(with registrar :Registrar) {}
+        registerAnalysisPoints(with registrar :EasyRegistrant.Registrar) {}
 }
 

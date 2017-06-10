@@ -8,13 +8,17 @@
 
 import Foundation
 
-class MethodPointSet {
+class EasyMethodPointSet {
     
     init(points :[Point]) {
         self.points = points
     }
     
+    typealias
+        Point = EasyPoint
     let points :[Point]
+    typealias
+        Event = EasyEvent
     func points(match event :Event) ->[Point] {
         var points = [Point]()
         for point in self.points {

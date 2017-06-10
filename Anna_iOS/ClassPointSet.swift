@@ -8,13 +8,21 @@
 
 import Foundation
 
-class ClassPointSet {
+class
+EasyClassPointSet {
     
-    let superClassPointSet :ClassPointSet? = nil
+    let superClassPointSet :EasyClassPointSet? = nil
+    
+    typealias
+        MethodPointSet = EasyMethodPointSet
     init(pointSetsByMethod :[String:MethodPointSet]) {
         self.pointSetsByMethod = pointSetsByMethod
     }
     
+    typealias
+        Event = EasyEvent
+    typealias
+        Point = EasyPoint
     func points(match event :Event) ->[Point]? {
         return pointSet(for: event.method)?.points(match: event)
     }
@@ -25,25 +33,37 @@ class ClassPointSet {
     }
 }
 
-class ClassPointSetBuilder {
+class
+EasyClassPointSetBuilder {
 
-    typealias Buffer = DictionaryBuilder<String, Any>
-    let buffer = Buffer()
+    typealias
+        Buffer = DictionaryBuilder<String, Any>
+    let
+    buffer = Buffer()
     
     required
     init() {}
     
-    typealias Points = ArrayBuilder<Point>
+    typealias
+        Point = EasyPoint
+    typealias
+        PointBuilder = EasyPointBuilder
+    typealias
+        Points = ArrayBuilder<Point>
     @discardableResult
-    func point(_ building :PointBuilding) ->Self {
+    func point(_ building :PointBuilder.Buildup) ->Self {
         let points = buffer.get("points", Points())
         points.add(building)
         return self
     }
     
+    typealias
+        ClassPointSet = EasyClassPointSet
+    typealias
+        MethodPointSet = EasyMethodPointSet
     func pointSet() throws ->ClassPointSet {
         let
-        points :ArrayBuilder<Point> = try requiredProperty(
+        points :Points = try requiredProperty(
             from: self,
             for: "points"
         )
@@ -73,3 +93,24 @@ class ClassPointSetBuilder {
         return ClassPointSet(pointSetsByMethod: pointSets)
     }
 }
+
+
+extension
+EasyClassPointSetBuilder : StringAnySubscriptable {
+    subscript(key :String) ->Any? {
+        get { return self.buffer[key] }
+        set { self.buffer[key] = newValue }
+    }
+}
+
+extension
+EasyClassPointSetBuilder : Builder {
+    typealias Result = ClassPointSet
+    func build() throws -> ClassPointSet { return try pointSet() }
+    func _build() throws -> Any { return try build() }
+}
+
+extension
+EasyClassPointSetBuilder : StringAnyDictionaryBufferringBuilder {}
+
+

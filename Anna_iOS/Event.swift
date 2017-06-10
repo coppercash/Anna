@@ -9,7 +9,9 @@
 import Foundation
 
 public class
-Event {
+EasyEvent {
+    typealias
+        Registrant = EasyRegistrant
     typealias
         Class = Registrant.Type
     let
@@ -36,7 +38,7 @@ Event {
 }
 
 public class
-EventBuilder {
+EasyEventBuilder {
     let
     buffer = DictionaryBuilder<String, Any>()
     
@@ -49,6 +51,8 @@ EventBuilder {
         return self
     }
     
+    typealias
+        Event = EasyEvent
     func
         event() throws ->Event {
         let
@@ -66,12 +70,13 @@ EventBuilder {
         event.payload = dictionary
         return event
     }
+    
+    typealias
+        Buildup = (EasyEventBuilder)->Void
 }
-public typealias
-EventBuilding = (EventBuilder)->Void
 
 extension
-EventBuilder {
+EasyEventBuilder {
     subscript(key :String) ->Any? {
         get { return buffer[key] }
         set { buffer[key] = newValue }
@@ -79,7 +84,7 @@ EventBuilder {
 }
 
 extension
-EventBuilder : StringAnyDictionaryBufferringBuilder {
+EasyEventBuilder : StringAnyDictionaryBufferringBuilder {
     typealias Result = Event
     func build() throws -> Event { return try event() }
     func _build() throws -> Any { return try build() }

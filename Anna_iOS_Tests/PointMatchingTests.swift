@@ -18,7 +18,7 @@ class PointMatchingTests: AnnaTestCase {
             func
                 call() { self.ana.analyze() }
             override class func
-                registerPoints(with registrar :Registrar) {
+                registerAnalysisPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -45,7 +45,7 @@ class PointMatchingTests: AnnaTestCase {
                 self.ana.event{ $0.set("index", index) }.analyze()
             }
             override class func
-                registerPoints(with registrar :Registrar) {
+                registerAnalysisPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
                         .method("functionContainsTwoPoints(index:)")

@@ -9,22 +9,34 @@
 import Foundation
 
 open class
-Manager {
+EasyManager {
+    
+    typealias
+        PointSet = EasyPointSet
     let
-    points :PointSet = PointSet(),
+    points :PointSet = PointSet()
+    
+    let
     queue :DispatchQueue = DispatchQueue(label: "Anna")
+    
+    public typealias
+        DefaultsProvider = EasyDefaultsProvider
     public weak var
     defaultsProvider :DefaultsProvider? = nil
     
     public
     init() {}
     
+    public typealias
+        Event = EasyEvent
     func receive(_ event :Event) {
         queue.async {
             try! self.dispatch(event)
         }
     }
     
+    public typealias
+        Point = EasyPoint
     func dispatch(_ event :Event) throws {
         // Try to load points if they have not been loaded
         //
@@ -46,10 +58,20 @@ Manager {
         // Dispatch the event with point to every tracker tracks the point
         //
         for tracker in point.trackers {
-            tracker.receive(event: event, with: point, dispatchedBy: self)
+            tracker.receiveAnalysisEvent(
+                event,
+                with: point,
+                dispatchedBy: self
+            )
         }
     }
     
+    typealias
+        Registrant = EasyRegistrant
+    typealias
+        ClassPointSetBuilder = EasyClassPointSetBuilder
+    typealias
+        ClassPointSet = EasyClassPointSet
     func loadPoints(for cls :Registrant.Type) throws {
         let name :String
         let registrar :ClassPointSetBuilder
@@ -63,7 +85,7 @@ Manager {
         
         registrar = ClassPointSetBuilder()
         registrar["pointDefaults"] = defaultsProvider?.point
-        cls.registerPoints(with: registrar)
+        cls.registerAnalysisPoints(with: registrar)
         pointSet = try registrar.pointSet()
         
         current = pointSet
@@ -73,60 +95,17 @@ Manager {
         }
     }
     
-    static let shared = Manager()
 }
+extension EasyClassPointSetBuilder : EasyRegistrar {}
 
 public typealias
-    PointDefaults = Point
+    EasyPointDefaults = EasyPoint
 public protocol
-DefaultsProvider : class {
+EasyDefaultsProvider : class {
+    typealias
+        PointDefaults = EasyPointDefaults 
     var point :PointDefaults? { get }
 }
 
-extension ClassPointSetBuilder : Registrar {}
-
-public protocol Analyzable : Registrant {
-    var ana :InvocationContext { get }
-    var analysisManager :Manager { get }
-}
-
-public extension Analyzable {
-    var ana :InvocationContext {
-        return InvocationContext(target: self)
-    }
-}
-
-public class
-InvocationContext {
-    typealias
-        Target = Analyzable
-    let
-    target :Target
-    init(target :Target) {
-        self.target = target
-    }
-    
-    var
-    event :EventBuilder? = nil
-    public func
-        event(building :EventBuilding) ->Self {
-        let
-        builder = EventBuilder()
-        building(builder)
-        event = builder
-        return self
-    }
-    
-    public func
-        analyze(method :String = #function) {
-        let
-        event = self.event ?? EventBuilder()
-        event["class"] = type(of: target)
-        event["method"] = method
-        manager.receive(try! event.event())
-    }
-    
-    var manager :Manager {
-        return target.analysisManager
-    }
-}
+public protocol
+EasyAnalyzable : EasySender, EasyRegistrant {}

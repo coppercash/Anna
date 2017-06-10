@@ -27,7 +27,13 @@ import Foundation
  1            1             1             0              in self    self
  1            1             1             1              in both    self, super
  */
-class PointSet {
+class EasyPointSet {
+    typealias
+        Event = EasyEvent
+    typealias
+        Point = EasyPoint
+    typealias
+        ClassPointSet = EasyClassPointSet
     func points(match event :Event) ->[Point]? {
         var current :ClassPointSet! = pointSet(for: String(describing: event.cls))
         guard current != nil else { return nil }

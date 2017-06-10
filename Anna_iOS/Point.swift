@@ -9,7 +9,9 @@
 import Foundation
 
 public class
-Point {
+EasyPoint {
+    public typealias
+        Tracker = EasyTracker
     let
     trackers :[Tracker],
     predicates :[Predicate]?
@@ -23,6 +25,8 @@ Point {
         self.payload = payload
     }
     
+    typealias
+        Event = EasyEvent
     func matches(_ event :Event) ->Bool {
         guard let
             predicates = self.predicates
@@ -39,7 +43,7 @@ Point {
 }
 
 public class
-PointBuilder {
+EasyPointBuilder {
     
     let
     buffer = DictionaryBuilder<String, Any>()
@@ -72,6 +76,10 @@ PointBuilder {
         return self
     }
     
+    typealias
+        Point = EasyPoint
+    typealias
+        PointDefaults = Point
     func
         point() throws ->Point {
         let
@@ -101,9 +109,13 @@ PointBuilder {
         payload(from buffer:[String:Any]) throws ->[String:Any]? {
         return buffer
     }
+    
+    typealias
+        Buildup = (EasyPointBuilder)->Void
 }
 
-extension PointBuilder : StringAnySubscriptable {
+extension
+EasyPointBuilder : StringAnySubscriptable {
     subscript(key :String) ->Any? {
         get { return buffer[key] }
         set { buffer[key] = newValue }
@@ -111,7 +123,7 @@ extension PointBuilder : StringAnySubscriptable {
 }
 
 extension
-PointBuilder : StringAnyDictionaryBufferringBuilder {
+EasyPointBuilder : StringAnyDictionaryBufferringBuilder {
     typealias
         Result = Point
     func
@@ -119,6 +131,3 @@ PointBuilder : StringAnyDictionaryBufferringBuilder {
     func
         _build() throws -> Any { return try build() }
 }
-
-public typealias
-    PointBuilding = (PointBuilder)->Void

@@ -8,16 +8,24 @@
 
 import Foundation
 
+/*
 public protocol
 Trackable {
     
 }
+ */
 
 public protocol
-Tracker {
+EasyTracker {
+    typealias
+        Event = EasyEvent
+    typealias
+        Point = EasyPoint
+    typealias
+        Manager = EasyManager
     func
-        receive(
-        event :Event,
+        receiveAnalysisEvent(
+        _ event :Event,
         with point :Point,
         dispatchedBy manager :Manager
     )

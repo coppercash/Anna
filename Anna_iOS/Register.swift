@@ -8,11 +8,18 @@
 
 import Foundation
 
-public protocol Registrar {
+public protocol
+EasyRegistrar {
+    typealias
+        PointBuilder = EasyPointBuilder
     @discardableResult
-    func point(_ :PointBuilding) ->Self
+    func point(_ :PointBuilder.Buildup) ->Self
 }
 
-public protocol Registrant {
-    static func registerPoints(with registrar :Registrar)
+public protocol
+EasyRegistrant {
+    typealias
+        Registrar = EasyRegistrar
+    static func
+        registerAnalysisPoints(with registrar :Registrar)
 }

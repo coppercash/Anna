@@ -8,25 +8,6 @@
 
 import Foundation
 
-extension
-ClassPointSetBuilder : StringAnySubscriptable {
-    subscript(key :String) ->Any? {
-        get { return self.buffer[key] }
-        set { self.buffer[key] = newValue }
-    }
-}
-
-extension
-ClassPointSetBuilder : Builder {
-    typealias Result = ClassPointSet
-    func build() throws -> ClassPointSet { return try pointSet() }
-    func _build() throws -> Any { return try build() }
-}
-
-extension
-ClassPointSetBuilder : StringAnyDictionaryBufferringBuilder {}
-
-
 protocol
 StringAnySubscriptable {
     subscript(key :String) ->Any? { get }
