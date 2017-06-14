@@ -9,25 +9,57 @@
 import Foundation
 
 public class
-EasyPoint {
-    public typealias
-        Tracker = EasyTracker
+EasyPoint : EasyBasePoint {
+    typealias
+        Child = EasyPoint
     let
-    trackers :[Tracker],
-    predicates :[Predicate]?
-    public let
-    payload :Any?
+    children :[Child]?
+    typealias
+        Parent = EasyPayloadNode
+    weak var
+    parent :Parent!
     
-    public
-    init(trackers :[Tracker], predicates :[Predicate]?, payload :Any?) {
-        self.trackers = trackers
+    init(
+        trackers :[Tracker]?,
+        payload :Payload?,
+        predicates :[Predicate]?,
+        children :[Child]?,
+        parent :Parent? = nil
+        ) {
         self.predicates = predicates
-        self.payload = payload
+        self.parent = parent
+        self.children = children
+        super.init(trackers: trackers, payload: payload);
     }
     
     typealias
-        Event = EasyEvent
-    func matches(_ event :Event) ->Bool {
+        Predicate = Anna.Predicate
+    let
+    predicates :[Predicate]?
+}
+
+extension
+EasyPoint : EasyEventMatching {
+    func points(match event :Event) ->[Point]? {
+        guard
+            matches(event)
+            else { return nil }
+        guard
+            let children = self.children,
+            children.count > 0
+            else { return [self] }
+        var
+        points = Array<EasyEventMatching.Point>()
+        for child in children {
+            guard
+                let childPoints = child.points(match: event)
+                else { continue }
+            points.append(contentsOf: childPoints)
+        }
+        return points
+    }
+    
+    func matches(_ event :EasyEventMatching.Event) ->Bool {
         guard let
             predicates = self.predicates
             else { return true }
@@ -42,26 +74,32 @@ EasyPoint {
     }
 }
 
+extension
+EasyPoint : EasyPayloadNode {
+    public var
+    parentNode: EasyPayloadNode? {
+        return parent
+    }
+}
+
 public class
-EasyPointBuilder {
+EasyPointBuilder : EasyBasePointBuilder<EasyPoint> {
     
-    let
-    buffer = DictionaryBuilder<String, Any>()
+    // MARK:- Children
     
-    required public
-    init() {}
-    
-    @discardableResult public func
-        method(_ name :String) ->Self {
-        buffer.set(#function, name)
+    typealias
+        Child = EasyPointBuilder
+    typealias
+        ChildPoints = ArrayBuilder<Child.Result>
+    @discardableResult func
+        point(_ buildup :Child.Buildup) ->Self {
+        let
+        points = buffer.get("children", ChildPoints())
+        points.add(buildup)
         return self
     }
     
-    @discardableResult public func
-        set(_ key :String, _ value :Any) ->Self {
-        buffer.set(key, value)
-        return self
-    }
+    // MARK:- Predicates
     
     typealias
     Predicates = ArrayBuilder<Predicate>
@@ -76,58 +114,31 @@ EasyPointBuilder {
         return self
     }
     
+    // MARK:- Build
+    
     typealias
         Point = EasyPoint
-    typealias
-        PointDefaults = Point
-    func
-        point() throws ->Point {
+    override func
+        point() throws -> Point {
         let
         dictionary = try buffer.build(),
-        defaults = dictionary["defaults"] as? PointDefaults,
-        trackers = try requiredProperty(
-            from: dictionary,
-            for: "trackers",
-            default: defaults?.trackers
-        ),
-        predicates = property(
-            from: dictionary,
-            for: "predicates",
-            default: defaults?.predicates
+        trackers = dictionary["trackers"] as? [Point.Tracker],
+        payload = try self.payload(from: dictionary),
+        predicates = dictionary["predicates"] as? [Point.Predicate],
+        children = dictionary["children"] as? [Point.Child],
+        point = Point(
+            trackers: trackers,
+            payload: payload,
+            predicates: predicates,
+            children: children
         )
         
-        let
-        payload = try self.payload(from: dictionary)
-        return Point(
-            trackers: trackers,
-            predicates: predicates,
-            payload: payload
-        )
+        if let children = children {
+            for child in children {
+                child.parent = point
+            }
+        }
+        
+        return point
     }
-    
-    internal func
-        payload(from buffer:[String:Any]) throws ->[String:Any]? {
-        return buffer
-    }
-    
-    typealias
-        Buildup = (EasyPointBuilder)->Void
-}
-
-extension
-EasyPointBuilder : StringAnySubscriptable {
-    subscript(key :String) ->Any? {
-        get { return buffer[key] }
-        set { buffer[key] = newValue }
-    }
-}
-
-extension
-EasyPointBuilder : StringAnyDictionaryBufferringBuilder {
-    typealias
-        Result = Point
-    func
-        build() throws -> Point { return try point() }
-    func
-        _build() throws -> Any { return try build() }
 }

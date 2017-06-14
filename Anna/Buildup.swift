@@ -21,9 +21,13 @@ protocol _Builder {
 }
 
 protocol Builder : _Builder {
-    associatedtype Result
+    associatedtype
+    Result
+    typealias
+        Buildup = (Self)->Void
     init()
-    func build() throws ->Result
+    func
+        build() throws ->Result
 }
 
 public class ArrayBuilder<Element>
@@ -40,11 +44,11 @@ public class ArrayBuilder<Element>
     }
 
     @discardableResult
-    func add<ElementBuilder>(_ building :(ElementBuilder)->Void) ->Self
+    func add<ElementBuilder>(_ buildup :ElementBuilder.Buildup) ->Self
         where ElementBuilder : Builder, ElementBuilder.Result == Element
     {
         let builder = ElementBuilder()
-        building(builder)
+        buildup(builder)
         buffer.append(builder)
         return self
     }
@@ -82,10 +86,14 @@ public class ArrayBuilder<Element>
         }
     }
     
+    var count :Int {
+        return buffer.count
+    }
 }
 
 extension ArrayBuilder : Builder {
-    typealias Result = [Element]
+    typealias
+        Result = [Element]
     
     func build() throws ->Result {
         return try array()

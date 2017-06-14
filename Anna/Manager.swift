@@ -11,10 +11,10 @@ import Foundation
 open class
 EasyManager {
     
-    typealias
-        PointSet = EasyPointSet
+    public typealias
+        Root = EasyRootPoint
     let
-    points :PointSet = PointSet()
+    root :Root
     
     let
     queue :DispatchQueue = DispatchQueue(label: "Anna")
@@ -25,7 +25,9 @@ EasyManager {
     defaultsProvider :DefaultsProvider? = nil
     
     public
-    init() {}
+    init(root :Root) {
+        self.root = root
+    }
     
     public typealias
         Event = EasyEvent
@@ -44,7 +46,7 @@ EasyManager {
         
         // Find point
         //
-        let points :[Point]! = self.points.points(match: event)
+        let points :[Point]! = self.root.points(match: event)
         assert(
             points != nil && points.count == 1,
             "Exactly one point is expected to be matched, " +
@@ -57,46 +59,41 @@ EasyManager {
         
         // Dispatch the event with point to every tracker tracks the point
         //
-        for tracker in point.trackers {
-            tracker.receiveAnalysisEvent(
-                event,
-                with: point,
-                dispatchedBy: self
-            )
-        }
+//        for tracker in point.trackers {
+//            tracker.receiveAnalysisEvent(
+//                event,
+//                with: point,
+//                dispatchedBy: self
+//            )
+//        }
     }
     
     typealias
         Registrant = EasyRegistrant
     typealias
-        ClassPointSetBuilder = EasyClassPointSetBuilder
-    typealias
-        ClassPointSet = EasyClassPointSet
+        ClassPointBuilder = EasyClassPointBuilder
     func loadPoints(for cls :Registrant.Type) throws {
-        let name :String
-        let registrar :ClassPointSetBuilder
-        let pointSet :ClassPointSet
-        var current :ClassPointSet!
-        
-        name = String(describing: cls)
         guard
-            points.pointSet(for: name) == nil
+            root.classPoint(for: cls) == nil
             else { return }
         
-        registrar = ClassPointSetBuilder()
-        registrar["pointDefaults"] = defaultsProvider?.point
-        cls.registerAnalysisPoints(with: registrar)
-        pointSet = try registrar.pointSet()
+        let builder :ClassPointBuilder
+        builder = ClassPointBuilder()
+        cls.registerAnalysisPoints(with: builder)
+        let point :ClassPointBuilder.Result
+        point = try builder.point()
         
-        current = pointSet
+        var current :ClassPointBuilder.Result!
+        current = point
         while current != nil {
-            points.set(pointSet, for: name)
-            current = current.superClassPointSet
+            root.setClassPoint(point, for: cls)
+//            current = current.superClassPointSet
         }
     }
     
 }
-extension EasyClassPointSetBuilder : EasyRegistrar {}
+extension
+EasyClassPointBuilder : EasyRegistrar {}
 
 public typealias
     EasyPointDefaults = EasyPoint

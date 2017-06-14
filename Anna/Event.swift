@@ -57,13 +57,8 @@ EasyEventBuilder {
         event() throws ->Event {
         let
         dictionary = try buffer.build(),
-        cls :Event.Class = try requiredProperty(
-            from: dictionary,
-            for: "class"),
-        method :Event.Method = try requiredProperty(
-            from: dictionary,
-            for: "method"
-        )
+        cls :Event.Class = try dictionary.required("class", for: self),
+        method :Event.Method = try dictionary.required("method", for: self)
         
         let
         event = Event(class: cls, method: method)
@@ -82,10 +77,11 @@ EasyEventBuilder {
         set { buffer[key] = newValue }
     }
 }
-
+/*
 extension
 EasyEventBuilder : StringAnyDictionaryBufferringBuilder {
     typealias Result = Event
     func build() throws -> Event { return try event() }
     func _build() throws -> Any { return try build() }
 }
+ */

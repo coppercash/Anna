@@ -37,6 +37,10 @@ class PointMatchingTests: AnnaTestCase {
         XCTAssertEqual(payload?["data"] as? String, "42")
     }
     
+    func test_missmatch() {
+        
+    }
+    
     func test_twoPointsContainedInOneMethod() {
         class
         Object : Analyzable {
@@ -49,13 +53,14 @@ class PointMatchingTests: AnnaTestCase {
                 registrar
                     .point { $0
                         .method("functionContainsTwoPoints(index:)")
-                        .set("data", "42")
-                        .when("index", equal: 0)
-                    }
-                    .point { $0
-                        .method("functionContainsTwoPoints(index:)")
-                        .set("data", "24")
-                        .when("index", equal: 1)
+                        .point { $0
+                            .when("index", equal: 0)
+                            .set("data", "42")
+                        }
+                        .point { $0
+                            .when("index", equal: 1)
+                            .set("data", "42")
+                        }
                 }
             }
         }

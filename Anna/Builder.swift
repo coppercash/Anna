@@ -12,7 +12,7 @@ protocol
 StringAnySubscriptable {
     subscript(key :String) ->Any? { get }
 }
-
+/*
 protocol
 StringAnyDictionaryBufferringBuilder : Builder {
     func
@@ -94,5 +94,61 @@ StringAnyDictionaryBufferringBuilder {
                 )
         }
         return property
+    }
+}
+*/
+extension
+    Dictionary
+    where
+    Key == String,
+    Value == Any
+{
+    func
+        required<Property, Builder>(_ key :String, for builder :Builder) throws ->Property {
+        guard let value = self[key] as? Property else {
+            throw BuilderError.missedProperty(name: key, result: String(describing: type(of: builder)))
+        }
+        return value
+    }
+}
+
+extension
+    StringAnySubscriptable
+{
+    func
+        required<Property, Builder>(_ key :String, for builder :Builder) throws ->Property {
+        guard let value = self[key] as? Property else {
+            throw BuilderError.missedProperty(name: key, result: String(describing: type(of: builder)))
+        }
+        return value
+    }
+}
+
+extension
+    DictionaryBuilder
+    where
+    Key == String,
+    Value == Any
+{
+    func removeProperty<Property>(forKey key :Key) ->Property? {
+        return buffer.removeValue(forKey: key) as? Property 
+    }
+}
+
+extension Dictionary {
+    mutating func merge(with dictionary: Dictionary) {
+        dictionary.forEach { updateValue($1, forKey: $0) }
+    }
+    
+    func merged(with another: Dictionary) ->Dictionary {
+        var merged = self
+        merged.merge(with: another)
+        return merged
+    }
+}
+
+extension Array {
+    func merged(with another: Array) ->Array {
+        return self + another
     }
 }
