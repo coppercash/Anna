@@ -54,6 +54,6 @@ protocol TRegistrar {
 protocol TRegistrant {
     associatedtype
         Registrar : TRegistrar
-    static func registerAnalysisPoints(with registrar :Registrar)
+    static func registerAnalyticsPoints(with registrar :Registrar)
 }
  */

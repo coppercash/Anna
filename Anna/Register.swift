@@ -21,5 +21,5 @@ EasyRegistrant {
     typealias
         Registrar = EasyRegistrar
     static func
-        registerAnalysisPoints(with registrar :Registrar)
+        registerAnalyticsPoints(with registrar :Registrar)
 }

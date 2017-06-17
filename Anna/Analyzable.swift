@@ -13,7 +13,7 @@ EasyAnalyzable : EasyRegistrant {
     typealias
         Manager = EasyManager
     var
-    analysisManager :Manager { get }
+    analyticsManager :Manager { get }
     typealias
         Prefix = EasyPrefix
     var

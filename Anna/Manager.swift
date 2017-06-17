@@ -97,7 +97,7 @@ EasyManager {
             else { return }
         let
         builder = ClassPointBuilder()
-        cls.registerAnalysisPoints(with: builder)
+        cls.registerAnalyticsPoints(with: builder)
         let
         point = try builder.point()
         point.parent = root

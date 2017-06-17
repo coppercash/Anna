@@ -80,10 +80,10 @@ Analyzable : EasyAnalyzable {
         self.analyzer = analyzer
     }
     var
-    analysisManager: EasyAnalyzable.Manager {
+    analyticsManager: EasyAnalyzable.Manager {
         return self.analyzer
     }
     class func
-        registerAnalysisPoints(with registrar :EasyRegistrant.Registrar) {}
+        registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {}
 }
 

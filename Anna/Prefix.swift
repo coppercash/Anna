@@ -46,6 +46,6 @@ EasyPrefix {
         Manager = EasyManager
     var
     manager :Manager {
-        return target.analysisManager
+        return target.analyticsManager
     }
 }
