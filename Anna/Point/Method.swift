@@ -32,22 +32,6 @@ EasyMethodPoint : EasyBasePoint {
         self.children = children
         super.init(trackers: trackers, payload: payload);
     }
-    
-    /*
-    typealias
-        Point = EasyPoint
-    let points :[Point]
-    typealias
-        Event = EasyEvent
-    func points(match event :Event) ->[Point] {
-        var points = [Point]()
-        for point in self.points {
-            guard point.matches(event) else { continue }
-            points.append(point)
-        }
-        return points
-    }
- */
 }
 
 extension

@@ -8,13 +8,6 @@
 
 import Foundation
 
-/*
-public protocol
-Trackable {
-    
-}
- */
-
 public protocol
 EasyTracker {
     typealias

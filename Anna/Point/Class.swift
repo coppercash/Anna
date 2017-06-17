@@ -35,25 +35,6 @@ EasyClassPoint : EasyBasePoint {
         self.superClassPoint = superClassPoint
         super.init(trackers: trackers, payload: payload);
     }
-//    
-//    typealias
-//        MethodPointSet = EasyMethodPointSet
-//    init(pointSetsByMethod :[String:MethodPointSet]) {
-//        self.pointSetsByMethod = pointSetsByMethod
-//    }
-//    
-//    typealias
-//        Event = EasyEvent
-//    typealias
-//        Point = EasyPoint
-//    func points(match event :Event) ->[Point]? {
-//        return pointSet(for: event.method)?.points(match: event)
-//    }
-//    
-//    let pointSetsByMethod :[String:MethodPointSet]
-//    func pointSet(for method :String) ->MethodPointSet? {
-//       return pointSetsByMethod[method]
-//    }
 }
 
 extension
@@ -98,14 +79,6 @@ EasyClassPoint : EasyEventMatching {
         }
         return points
     }
-    
-//    var pointSetsByClass :[String:ClassPointSet] = [String:ClassPointSet]()
-//    func pointSet(for cls :String) ->ClassPointSet? {
-//       return pointSetsByClass[cls]
-//    }
-//    func set(_ pointSet :ClassPointSet, for cls :String) {
-//        pointSetsByClass[cls] = pointSet
-//    }
 }
 
 class
@@ -176,24 +149,3 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint> {
         return childrenByMethod
     }
 }
-
-/*
-extension
-EasyClassPointBuilder : StringAnySubscriptable {
-    subscript(key :String) ->Any? {
-        get { return self.buffer[key] }
-        set { self.buffer[key] = newValue }
-    }
-}
-
-extension
-EasyClassPointBuilder : Builder {
-    typealias Result = ClassPointSet
-    func build() throws -> ClassPointSet { return try pointSet() }
-    func _build() throws -> Any { return try build() }
-}
-
-extension
-EasyClassPointBuilder : StringAnyDictionaryBufferringBuilder {}
-*/
- 

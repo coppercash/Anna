@@ -113,7 +113,7 @@ where
 }
 
 extension
-EasyBasePointBuilder : StringAnySubscriptable {
+EasyBasePointBuilder : BuilderPropertyBuffer {
     subscript(key :String) ->Any? {
         get { return buffer[key] }
         set { buffer[key] = newValue }
@@ -129,8 +129,3 @@ EasyBasePointBuilder : Builder {
     public func
         _build() throws -> Any { return try build() }
 }
-
-/*
-extension
-EasyBasePointBuilder : StringAnyDictionaryBufferringBuilder {}
- */

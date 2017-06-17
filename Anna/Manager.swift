@@ -84,21 +84,15 @@ EasyManager {
             root.classPoint(for: cls) == nil
             else { return }
         
-        let builder :ClassPointBuilder
+        let
         builder = ClassPointBuilder()
         cls.registerAnalysisPoints(with: builder)
-        let point :ClassPointBuilder.Result
+        let
         point = try builder.point()
-        
-        var current :ClassPointBuilder.Result!
-        current = point
-        while current != nil {
-            root.setClassPoint(point, for: cls)
-//            current = current.superClassPointSet
-        }
+        root.setClassPoint(point, for: cls)
     }
-    
 }
+
 extension
 EasyClassPointBuilder : EasyRegistrar {}
 

@@ -9,7 +9,7 @@
 import Foundation
 
 protocol
-StringAnySubscriptable {
+BuilderPropertyBuffer {
     associatedtype
     PropertyKey
     associatedtype
@@ -24,7 +24,7 @@ StringAnySubscriptable {
 }
 
 extension
-    StringAnySubscriptable
+    BuilderPropertyBuffer
 {
     func
         required<Property, Builder>(
@@ -42,7 +42,7 @@ extension
 }
 
 extension
-    Dictionary : StringAnySubscriptable {
+    Dictionary : BuilderPropertyBuffer {
     typealias
         PropertyKey = Key
     typealias
@@ -50,7 +50,7 @@ extension
 }
 
 extension
-    DictionaryBuilder : StringAnySubscriptable
+    DictionaryBuilder : BuilderPropertyBuffer
 {
     typealias
         PropertyKey = Key

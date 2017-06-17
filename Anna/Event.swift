@@ -77,11 +77,3 @@ EasyEventBuilder {
         set { buffer[key] = newValue }
     }
 }
-/*
-extension
-EasyEventBuilder : StringAnyDictionaryBufferringBuilder {
-    typealias Result = Event
-    func build() throws -> Event { return try event() }
-    func _build() throws -> Any { return try build() }
-}
- */
