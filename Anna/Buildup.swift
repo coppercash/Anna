@@ -153,8 +153,8 @@ public class DictionaryBuilder<Key, Value>
 }
 
 extension DictionaryBuilder {
-    subscript(key :Key) ->Any? {
-        get { return buffer[key] }
+    subscript(key :Key) ->Value? {
+        get { return buffer[key] as? Value }
         set { self.buffer[key] = newValue }
     }
 }
