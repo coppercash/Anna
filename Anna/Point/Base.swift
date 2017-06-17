@@ -14,15 +14,20 @@ EasyPayloadCarrier : class {
         Payload = Dictionary<String, Any>
     var
     payload :Payload? { get }
+}
+
+protocol
+EasyTrackerCarrier {
     typealias
         Tracker = EasyTracker
     var
     trackers :[Tracker]? { get }
 }
 
-public protocol
-EasyPayloadNode : EasyPayloadCarrier {
+protocol
+EasyPayloadNode : EasyPayloadCarrier, EasyTrackerCarrier {
     var parentNode :EasyPayloadNode? { get }
+    func merged(with another :EasyPayloadNode) ->EasyPayloadNode
 }
 
 protocol
@@ -53,6 +58,20 @@ EasyBasePoint : EasyPayloadCarrier {
         self.trackers = trackers
         self.payload = payload
     }
+    
+    func
+        merged(with another: EasyPayloadNode) -> EasyPayloadNode {
+        let
+        payload = another.payload == nil ?
+            self.payload :
+            self.payload?.merged(with: another.payload!)
+        return EasyPoint(
+            trackers: nil,
+            payload: payload,
+            predicates: nil,
+            children: nil
+        )
+    }
 }
 
 enum EasyBasePointBuilderError : Error {
@@ -80,7 +99,7 @@ where
         return self
     }
     
-    // MARK:- Result
+    // MARK:- Build
     
     func
         point() throws ->Point {
@@ -103,11 +122,11 @@ EasyBasePointBuilder : StringAnySubscriptable {
 
 extension
 EasyBasePointBuilder : Builder {
-    typealias
+    public typealias
         Result = Point
-    func
+    public func
         build() throws -> Point { return try point() }
-    func
+    public func
         _build() throws -> Any { return try build() }
 }
 

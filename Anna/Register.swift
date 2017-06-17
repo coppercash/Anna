@@ -12,8 +12,8 @@ public protocol
 EasyRegistrar {
     typealias
         PointBuilder = EasyMethodPointBuilder
-    @discardableResult
-    func point(_ :PointBuilder.Buildup) ->Self
+    @discardableResult func
+        point(_ :PointBuilder.Buildup) ->Self
 }
 
 public protocol

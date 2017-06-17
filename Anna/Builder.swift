@@ -10,7 +10,11 @@ import Foundation
 
 protocol
 StringAnySubscriptable {
-    subscript(key :String) ->Any? { get }
+    associatedtype
+        Key : Hashable
+    associatedtype
+    Value
+subscript(key :Key) ->Value? { get }
 }
 /*
 protocol
@@ -97,16 +101,20 @@ StringAnyDictionaryBufferringBuilder {
     }
 }
 */
+
 extension
-    Dictionary
-    where
-    Key == String,
-    Value == Any
+    Dictionary : StringAnySubscriptable
 {
     func
-        required<Property, Builder>(_ key :String, for builder :Builder) throws ->Property {
+        required<Property, Builder>(
+        _ key :Key,
+        for builder :Builder
+        ) throws ->Property {
         guard let value = self[key] as? Property else {
-            throw BuilderError.missedProperty(name: key, result: String(describing: type(of: builder)))
+            throw BuilderError.missedProperty(
+                name: "\(key)",
+                result: String(describing: type(of: builder)
+            ))
         }
         return value
     }
@@ -116,19 +124,22 @@ extension
     StringAnySubscriptable
 {
     func
-        required<Property, Builder>(_ key :String, for builder :Builder) throws ->Property {
+        required<Property, Builder>(
+        _ key :Key,
+        for builder :Builder
+        ) throws ->Property {
         guard let value = self[key] as? Property else {
-            throw BuilderError.missedProperty(name: key, result: String(describing: type(of: builder)))
+            throw BuilderError.missedProperty(
+                name: "\(key)",
+                result: String(describing: type(of: builder)
+            ))
         }
         return value
     }
 }
 
 extension
-    DictionaryBuilder
-    where
-    Key == String,
-    Value == Any
+DictionaryBuilder 
 {
     func removeProperty<Property>(forKey key :Key) ->Property? {
         return buffer.removeValue(forKey: key) as? Property 

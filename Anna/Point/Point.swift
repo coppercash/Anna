@@ -40,7 +40,8 @@ EasyPoint : EasyBasePoint {
 
 extension
 EasyPoint : EasyEventMatching {
-    func points(match event :Event) ->[Point]? {
+    internal func
+        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
         guard
             matches(event)
             else { return nil }
@@ -76,9 +77,23 @@ EasyPoint : EasyEventMatching {
 
 extension
 EasyPoint : EasyPayloadNode {
-    public var
+    var
     parentNode: EasyPayloadNode? {
         return parent
+    }
+}
+
+extension
+EasyPoint {
+    func
+        mergedToRoot() throws ->EasyPayloadNode {
+        var
+        merged :EasyPayloadNode = self
+        while let
+            parent = merged.parentNode {
+                merged = parent.merged(with: merged)
+        }
+        return merged
     }
 }
 
@@ -87,11 +102,11 @@ EasyPointBuilder : EasyBasePointBuilder<EasyPoint> {
     
     // MARK:- Children
     
-    typealias
+    public typealias
         Child = EasyPointBuilder
     typealias
         ChildPoints = ArrayBuilder<Child.Result>
-    @discardableResult func
+    @discardableResult public func
         point(_ buildup :Child.Buildup) ->Self {
         let
         points = buffer.get("children", ChildPoints())

@@ -59,13 +59,20 @@ EasyManager {
         
         // Dispatch the event with point to every tracker tracks the point
         //
-//        for tracker in point.trackers {
-//            tracker.receiveAnalysisEvent(
-//                event,
-//                with: point,
-//                dispatchedBy: self
-//            )
-//        }
+        let merged = try point.mergedToRoot()
+        guard
+            let trackers = merged.trackers
+            else {
+                // TODO: throw
+                return
+        }
+        for tracker in trackers {
+            tracker.receiveAnalysisEvent(
+                event,
+                with: merged,
+                dispatchedBy: self
+            )
+        }
     }
     
     typealias

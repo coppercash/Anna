@@ -66,7 +66,7 @@ EasyEventBuilder {
         return event
     }
     
-    typealias
+    public typealias
         Buildup = (EasyEventBuilder)->Void
 }
 

@@ -16,11 +16,14 @@ enum BuilderError : Error {
 // Why Builder is needed?
 //   + We need to cast to some type responds to build
 
-protocol _Builder {
-    func _build() throws ->Any
+public protocol
+_Builder {
+    func
+        _build() throws ->Any
 }
 
-protocol Builder : _Builder {
+public protocol
+Builder : _Builder {
     associatedtype
     Result
     typealias
@@ -30,7 +33,8 @@ protocol Builder : _Builder {
         build() throws ->Result
 }
 
-public class ArrayBuilder<Element>
+public
+class ArrayBuilder<Element>
 {
     var buffer = Array<Any>()
     
@@ -44,7 +48,7 @@ public class ArrayBuilder<Element>
     }
 
     @discardableResult
-    func add<ElementBuilder>(_ buildup :ElementBuilder.Buildup) ->Self
+    func add<ElementBuilder>(_ buildup :(ElementBuilder)->Void) ->Self
         where ElementBuilder : Builder, ElementBuilder.Result == Element
     {
         let builder = ElementBuilder()
@@ -91,15 +95,18 @@ public class ArrayBuilder<Element>
     }
 }
 
-extension ArrayBuilder : Builder {
-    typealias
+extension
+ArrayBuilder : Builder {
+    public typealias
         Result = [Element]
     
-    func build() throws ->Result {
+    public func
+        build() throws ->Result {
         return try array()
     }
     
-    func _build() throws -> Any {
+    public func
+        _build() throws -> Any {
         return try build()
     }
 }
@@ -153,13 +160,16 @@ extension DictionaryBuilder {
 }
 
 extension DictionaryBuilder : Builder {
-    typealias Result = Dictionary<Key, Value>
+    public typealias
+        Result = Dictionary<Key, Value>
     
-    func build() throws -> Dictionary<Key, Value> {
+    public func
+        build() throws -> Dictionary<Key, Value> {
         return try dictionary()
     }
     
-    func _build() throws -> Any {
+    public func
+        _build() throws -> Any {
         return try build()
     }
 }

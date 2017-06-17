@@ -84,12 +84,10 @@ EasyClassPoint :  EasyPayloadNode {
  */
 extension
 EasyClassPoint : EasyEventMatching {
-    typealias
-        MatchedPoint = EasyPoint
-    func
-        points(match event :Event) ->[MatchedPoint]? {
+    internal func
+        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
         var
-        points = [MatchedPoint]()
+        points = Array<EasyEventMatching.Point>()
         var
         current :EasyClassPoint! = self
         while current != nil {
@@ -135,7 +133,6 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint> {
         MethodPoint = EasyMethodPoint
     override func
         point() throws ->Point {
-        
         let
         childrenByMethod = try self.childrenByMethod(from: buffer),
         dictionary = try buffer.build(),

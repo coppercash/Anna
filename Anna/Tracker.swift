@@ -20,7 +20,7 @@ EasyTracker {
     typealias
         Event = EasyEvent
     typealias
-        Point = EasyPoint
+        Point = EasyPayloadCarrier
     typealias
         Manager = EasyManager
     func

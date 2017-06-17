@@ -27,15 +27,11 @@
 		BE80F3641EEBF486000B0E15 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3561EEBF486000B0E15 /* Type.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE87DA801EAB608700DA81EB /* Anna.framework */; };
-		BE87DA9B1EAB6C3800DA81EB /* ANATPointMatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */; };
 		BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE98B1421EC274A000978728 /* PointMatchingTests.swift */; };
 		BEAAB5901EC12A1A00C0EBF9 /* ANARegister.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB58F1EC12A1A00C0EBF9 /* ANARegister.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEAAB5931EC12BA900C0EBF9 /* ANAPointBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB5911EC12BA900C0EBF9 /* ANAPointBuilder.h */; };
-		BEAAB5941EC12BA900C0EBF9 /* ANAPointBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAAB5921EC12BA900C0EBF9 /* ANAPointBuilder.m */; };
 		BEAAB59C1EC135FC00C0EBF9 /* ANAInvocationContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB59A1EC135FC00C0EBF9 /* ANAInvocationContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BEAAB59D1EC135FC00C0EBF9 /* ANAInvocationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAAB59B1EC135FC00C0EBF9 /* ANAInvocationContext.m */; };
 		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BEDB99ED1EBE8DBA006637DC /* ANAManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDB99EB1EBE8DBA006637DC /* ANAManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -425,18 +421,15 @@
 				3D646E071EF20A3B00D39AF7 /* Manager.swift in Sources */,
 				BE80F35F1EEBF486000B0E15 /* Predicate.swift in Sources */,
 				BE80F35C1EEBF486000B0E15 /* Method.swift in Sources */,
-				BEAAB59D1EC135FC00C0EBF9 /* ANAInvocationContext.m in Sources */,
 				BE80F3591EEBF486000B0E15 /* Event.swift in Sources */,
 				BE80F35D1EEBF486000B0E15 /* Point.swift in Sources */,
 				3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */,
 				BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */,
 				BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */,
-				BEAAB5941EC12BA900C0EBF9 /* ANAPointBuilder.m in Sources */,
 				BE80F3621EEBF486000B0E15 /* Sender.swift in Sources */,
 				BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */,
 				BE80F3641EEBF486000B0E15 /* Type.swift in Sources */,
 				BE80F3611EEBF486000B0E15 /* Register.swift in Sources */,
-				BEDB99ED1EBE8DBA006637DC /* ANAManager.m in Sources */,
 				BE80F35B1EEBF486000B0E15 /* Class.swift in Sources */,
 				BE80F3601EEBF486000B0E15 /* Prefix.swift in Sources */,
 				BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */,
@@ -448,7 +441,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */,
-				BE87DA9B1EAB6C3800DA81EB /* ANATPointMatchingTests.m in Sources */,
 				BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

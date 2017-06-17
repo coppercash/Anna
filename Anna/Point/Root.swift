@@ -27,7 +27,7 @@ EasyRootPoint : EasyBasePoint {
 
 extension
 EasyRootPoint : EasyPayloadNode {
-    public var
+    var
     parentNode: EasyPayloadNode? {
         return nil
     }
