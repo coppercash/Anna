@@ -9,11 +9,9 @@
 import Foundation
 
 public class
-EasyEvent {
+EasyEventSeed {
     typealias
-        Registrant = EasyRegistrant
-    typealias
-        Class = Registrant.Type
+        Class = EasyAnalyzable.Type
     let
     cls :Class
     
@@ -22,23 +20,77 @@ EasyEvent {
     let
     method :String
     
-    init(class cls :Class, method :Method) {
+    init(
+        class cls :Class,
+        method :Method,
+        payload :Payload? = nil
+        ) {
         self.cls = cls
         self.method = method
+        self.payload = payload
     }
+    
+    public typealias
+        Payload = Dictionary<String, Any>
+    public let
+    payload :Payload?
     
     func
         object(to predicate :Predicate) ->Any? {
         guard let
-            dictionary = payload as? Dictionary<String, Any>
+            objects = payload
             else { return nil }
-        return dictionary[predicate.key]
+        return objects[predicate.key]
     }
-    var payload :Any? = nil
+}
+
+enum
+EventError : Error {
+   case unloadedEvent
+}
+
+public class
+EasyEvent {
+    typealias
+        Payload = Dictionary<String, Any>
+    let
+    payload :Payload
+    init(payload :Payload) {
+        self.payload = payload
+    }
+    
+    public
+    subscript(key :String) ->Any? {
+        return payload[key]
+    }
+    
+    convenience
+    init(seed :EasyEventSeed, point :EasyPayloadNode) throws {
+        guard seed.payload != nil ||
+            point.payload != nil
+            else { throw EventError.unloadedEvent }
+        let payload :Payload
+        if let points = point.payload {
+            if let seeds = seed.payload {
+                payload = points.merged(with: seeds)
+            }
+            else {
+                payload = points
+            }
+        }
+        else {
+            payload = seed.payload!
+        }
+        self.init(payload: payload)
+    }
 }
 
 public class
 EasyEventBuilder {
+    var
+    cls :Result.Class? = nil
+    var
+    method :Result.Method? = nil
     let
     buffer = DictionaryBuilder<String, Any>()
     
@@ -54,15 +106,31 @@ EasyEventBuilder {
     typealias
         Event = EasyEvent
     func
-        event() throws ->Event {
+        event() throws ->EasyEventSeed {
+        guard let
+            cls = self.cls
+            else {
+                throw BuilderError.missedProperty(
+                    name: "class",
+                    result: String(describing: type(of: self))
+                )
+        }
+        guard let
+            method = self.method
+            else {
+                throw BuilderError.missedProperty(
+                    name: "method",
+                    result: String(describing: type(of: self))
+                )
+        }
         let
-        dictionary = try buffer.build(),
-        cls :Event.Class = try dictionary.required("class", for: self),
-        method :Event.Method = try dictionary.required("method", for: self)
-        
+        dictionary = try buffer.build()
         let
-        event = Event(class: cls, method: method)
-        event.payload = dictionary
+        event = Result(
+            class: cls,
+            method: method,
+            payload: dictionary
+        )
         return event
     }
     
@@ -71,9 +139,18 @@ EasyEventBuilder {
 }
 
 extension
-EasyEventBuilder {
-    subscript(key :String) ->Any? {
-        get { return buffer[key] }
-        set { buffer[key] = newValue }
-    }
+EasyEventBuilder : Builder {
+    public typealias
+        Result = EasyEventSeed
+    public func
+        build() throws -> Result { return try event() }
+    public func
+        _build() throws -> Any { return try build() }
 }
+//extension
+//EasyEventBuilder {
+//    subscript(key :String) ->Any? {
+//        get { return buffer[key] }
+//        set { buffer[key] = newValue }
+//    }
+//}

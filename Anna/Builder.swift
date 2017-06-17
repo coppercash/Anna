@@ -74,6 +74,10 @@ extension Dictionary {
 }
 
 extension Array {
+    mutating func merge(with another: Array) {
+        self += another
+    }
+    
     func merged(with another: Array) ->Array {
         return self + another
     }

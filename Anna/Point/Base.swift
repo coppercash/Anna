@@ -26,16 +26,55 @@ EasyTrackerCarrier {
 
 protocol
 EasyPayloadNode : EasyPayloadCarrier, EasyTrackerCarrier {
-    var parentNode :EasyPayloadNode? { get }
-    func merged(with another :EasyPayloadNode) ->EasyPayloadNode
+    var
+    parentNode :EasyPayloadNode? { get }
+    func
+        mergedFromRoot() throws ->EasyPayloadNode
+}
+
+extension
+EasyPayloadNode {
+    func
+        mergedFromRoot() throws ->EasyPayloadNode {
+        var
+        stack = Array<EasyPayloadNode>()
+        var
+        current :EasyPayloadNode! = self
+        while current != nil {
+            stack.append(current)
+            current = current.parentNode
+        }
+        var
+        payload = Self.Payload()
+        var
+        trackers = Array<Self.Tracker>()
+        while stack.isEmpty == false {
+            let
+            current = stack.removeLast()
+            if let
+                cPayload = current.payload {
+                payload.merge(with: cPayload)
+            }
+            if let
+                cTrackers = current.trackers {
+               trackers.merge(with: cTrackers)
+            }
+        }
+        return EasyPoint(
+            trackers: trackers,
+            payload: payload,
+            predicates: nil,
+            children: nil
+        )
+    }
 }
 
 protocol
 EasyEventMatching {
     typealias
-        Event = EasyEvent
+    Event = EasyEventSeed
     typealias
-        Point = EasyPoint
+        Point = EasyPayloadNode
     func points(match event :Event) ->[Point]?
 }
 
@@ -57,20 +96,6 @@ EasyBasePoint : EasyPayloadCarrier {
         ) {
         self.trackers = trackers
         self.payload = payload
-    }
-    
-    func
-        merged(with another: EasyPayloadNode) -> EasyPayloadNode {
-        let
-        payload = another.payload == nil ?
-            self.payload :
-            self.payload?.merged(with: another.payload!)
-        return EasyPoint(
-            trackers: nil,
-            payload: payload,
-            predicates: nil,
-            children: nil
-        )
     }
 }
 

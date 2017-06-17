@@ -11,7 +11,7 @@ import Foundation
 public class
 EasyPrefix {
     typealias
-        Target = EasySender
+        Target = EasyAnalyzable
     let
     target :Target
     init(target :Target) {
@@ -37,8 +37,8 @@ EasyPrefix {
         analyze(method :Method = #function) {
         let
         event = self.event ?? EventBuilder()
-        event["class"] = type(of: target)
-        event["method"] = method
+        event.cls = type(of: target)
+        event.method = method
         manager.receive(try! event.event())
     }
     

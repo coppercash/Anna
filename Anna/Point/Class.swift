@@ -69,13 +69,11 @@ EasyClassPoint : EasyEventMatching {
         points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
         var
         points = Array<EasyEventMatching.Point>()
-        var
-        current :EasyClassPoint! = self
-        while current != nil {
-            if let matched = current.points(match: event) {
-                points.append(contentsOf: matched)
-            }
-            current = current.superClassPoint
+        if let methods = children[event.method]?.points(match: event) {
+            points.append(contentsOf: methods)
+        }
+        if let supers = superClassPoint?.points(match: event) {
+            points.append(contentsOf: supers)
         }
         return points
     }

@@ -16,7 +16,7 @@ EasyMethodPoint : EasyBasePoint {
     typealias
         Child = EasyPoint
     let
-    children :[Child]
+    children :[Child]?
     typealias
         Parent = EasyClassPoint
     weak var
@@ -25,7 +25,7 @@ EasyMethodPoint : EasyBasePoint {
     init(
         trackers :[Tracker]?,
         payload :Payload?,
-        children :[Child],
+        children :[Child]?,
         parent :Parent? = nil
         ) {
         self.parent = parent
@@ -46,6 +46,10 @@ extension
 EasyMethodPoint : EasyEventMatching {
     internal func
         points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
+        guard
+            let children = self.children,
+            children.count > 0
+            else { return [self] }
         var
         points = Array<EasyEventMatching.Point>()
         for child in children {
@@ -71,11 +75,17 @@ EasyMethodPoint {
             else { throw EasyMethodPointError.differentParent }
         // TODO: Make tackers and children Set
         let
-        trackers = another.trackers == nil ? self.trackers : self.trackers?.merged(with :another.trackers!)
+        trackers = another.trackers == nil ?
+            self.trackers :
+            self.trackers?.merged(with :another.trackers!)
         let
-        payload = another.payload == nil ? self.payload : self.payload?.merged(with: another.payload!)
+        payload = another.payload == nil ?
+            self.payload :
+            self.payload?.merged(with: another.payload!)
         let
-        children = self.children.merged(with :another.children)
+        children = another.children == nil ?
+            self.children :
+            self.children?.merged(with :another.children!)
         return EasyMethodPoint(
             trackers: trackers,
             payload: payload,
@@ -124,7 +134,7 @@ EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint> {
         point() throws -> Point {
         let
         dictionary = try buffer.build(),
-        children :[Point.Child] = try dictionary.required("children", for: self),
+        children = dictionary["children"] as? [Point.Child],
         trackers = dictionary["trackers"] as? [Point.Tracker],
         payload = try self.payload(from: dictionary),
         point = Point(
@@ -132,8 +142,10 @@ EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint> {
             payload: payload,
             children: children
         )
-        for child in point.children {
-            child.parent = point
+        if let children = point.children {
+            for child in children {
+                child.parent = point
+            }
         }
         
         return point

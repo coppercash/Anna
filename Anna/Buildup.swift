@@ -11,11 +11,9 @@ import Foundation
 enum BuilderError : Error {
     case missedProperty(name :String, result :String)
 }
-// TODO: missingProperty with more detail
 
 // Why Builder is needed?
 //   + We need to cast to some type responds to build
-
 public protocol
 _Builder {
     func

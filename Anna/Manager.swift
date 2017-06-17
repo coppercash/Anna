@@ -19,76 +19,88 @@ EasyManager {
     let
     queue :DispatchQueue = DispatchQueue(label: "Anna")
     
-    public typealias
-        DefaultsProvider = EasyDefaultsProvider
-    public weak var
-    defaultsProvider :DefaultsProvider? = nil
-    
-    public
     init(root :Root) {
         self.root = root
     }
     
     public typealias
+        Configuration = EasyConfiguration
+    public convenience init
+        (config :Configuration) {
+        let
+        root = EasyRootPoint(
+            trackers: config.pointDefaults.trackers,
+            payload: config.pointDefaults.payload
+        )
+        self.init(root: root)
+    }
+    
+    
+    public typealias
         Event = EasyEvent
-    func receive(_ event :Event) {
+    public typealias
+        Seed = EasyEventSeed
+    func receive(_ seed :Seed) {
         queue.async {
-            try! self.dispatch(event)
+            try! self.dispatch(seed)
         }
     }
     
     public typealias
         Point = EasyPoint
-    func dispatch(_ event :Event) throws {
+    func dispatch(_ seed :Seed) throws {
         // Try to load points if they have not been loaded
         //
-        try loadPoints(for: event.cls)
+        try loadPoints(for: seed.cls)
         
         // Find point
         //
-        let points :[Point]! = self.root.points(match: event)
+        let
+        points :[EasyPayloadNode]! = self.root.points(match: seed)
         assert(
             points != nil && points.count == 1,
             "Exactly one point is expected to be matched, " +
             "but found \(points.count). \n\(points)"
         )
         
-        guard
-            let point = points?.first
+        guard let
+            point = points?.first
             else { return }
         
         // Dispatch the event with point to every tracker tracks the point
         //
-        let merged = try point.mergedToRoot()
+        let merged = try point.mergedFromRoot()
         guard
-            let trackers = merged.trackers
+            let trackers = merged.trackers,
+            trackers.count > 0
             else {
                 // TODO: throw
                 return
         }
+        let
+        event = try EasyEvent(seed: seed, point: point)
         for tracker in trackers {
-            tracker.receiveAnalysisEvent(
+            tracker.receiveAnalyticsEvent(
                 event,
-                with: merged,
                 dispatchedBy: self
             )
         }
     }
     
     typealias
-        Registrant = EasyRegistrant
+        Class = EasyAnalyzable
     typealias
         ClassPointBuilder = EasyClassPointBuilder
-    func loadPoints(for cls :Registrant.Type) throws {
+    func loadPoints(for cls :Class.Type) throws {
         guard
             root.classPoint(for: cls) == nil
             else { return }
-        
         let
         builder = ClassPointBuilder()
         cls.registerAnalysisPoints(with: builder)
         let
         point = try builder.point()
+        point.parent = root
         root.setClassPoint(point, for: cls)
     }
 }
@@ -96,14 +108,21 @@ EasyManager {
 extension
 EasyClassPointBuilder : EasyRegistrar {}
 
-public typealias
-    EasyPointDefaults = EasyPoint
 public protocol
-EasyDefaultsProvider : class {
+EasyPointDefaults {
     typealias
-        PointDefaults = EasyPointDefaults 
-    var point :PointDefaults? { get }
+        Payload = Dictionary<String, Any>
+    var
+    payload :Payload? { get }
+    typealias
+        Tracker = EasyTracker
+    var
+    trackers :[Tracker] { get }
 }
 
 public protocol
-EasyAnalyzable : EasySender, EasyRegistrant {}
+EasyConfiguration {
+    typealias
+        PointDefaults = EasyPointDefaults 
+    var pointDefaults :PointDefaults { get }
+}

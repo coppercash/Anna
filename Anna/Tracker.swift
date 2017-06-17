@@ -13,13 +13,10 @@ EasyTracker {
     typealias
         Event = EasyEvent
     typealias
-        Point = EasyPayloadCarrier
-    typealias
         Manager = EasyManager
     func
-        receiveAnalysisEvent(
+        receiveAnalyticsEvent(
         _ event :Event,
-        with point :Point,
         dispatchedBy manager :Manager
     )
 }

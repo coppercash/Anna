@@ -83,20 +83,6 @@ EasyPoint : EasyPayloadNode {
     }
 }
 
-extension
-EasyPoint {
-    func
-        mergedToRoot() throws ->EasyPayloadNode {
-        var
-        merged :EasyPayloadNode = self
-        while let
-            parent = merged.parentNode {
-                merged = parent.merged(with: merged)
-        }
-        return merged
-    }
-}
-
 public class
 EasyPointBuilder : EasyBasePointBuilder<EasyPoint> {
     

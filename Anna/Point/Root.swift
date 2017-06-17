@@ -18,11 +18,6 @@ EasyRootPoint : EasyBasePoint {
     init(trackers :[Tracker], payload :Payload? = nil) {
         super.init(trackers: trackers, payload: payload);
     }
-    
-    typealias
-        Event = EasyEvent
-    typealias
-        Point = EasyPoint
 }
 
 extension
@@ -36,7 +31,7 @@ EasyRootPoint : EasyPayloadNode {
 extension
 EasyRootPoint : EasyEventMatching {
     func
-        points(match event :Event) ->[Point]? {
+        points(match event :EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
         return classPoint(for: event.cls)?.points(match: event)
     }
 }
@@ -44,11 +39,11 @@ EasyRootPoint : EasyEventMatching {
 extension
 EasyRootPoint {
     typealias
-        Registrant = EasyRegistrant
-    func classPoint(for cls :Registrant.Type) ->Child? {
+        Sender = EasyAnalyzable
+    func classPoint(for cls :Sender.Type) ->Child? {
         return children[String(describing: cls)]
     }
-    func setClassPoint(_ classPoint :Child, for cls :Registrant.Type) {
+    func setClassPoint(_ classPoint :Child, for cls :Sender.Type) {
         children[String(describing: cls)] = classPoint
     }
 }

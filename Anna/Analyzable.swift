@@ -9,19 +9,19 @@
 import Foundation
 
 public protocol
-EasySender {
-    typealias
-        Prefix = EasyPrefix
+EasyAnalyzable : EasyRegistrant {
     typealias
         Manager = EasyManager
     var
-    ana :Prefix { get }
-    var
     analysisManager :Manager { get }
+    typealias
+        Prefix = EasyPrefix
+    var
+    ana :Prefix { get }
 }
 
 public extension
-EasySender {
+EasyAnalyzable {
     var ana :Prefix {
         return Prefix(target: self)
     }

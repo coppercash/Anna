@@ -31,7 +31,7 @@ class PointMatchingTests: AnnaTestCase {
             Object(manager).call()
         }
         
-        XCTAssertEqual(receivedPoints.last?.payload?["data"] as? String, "42")
+        XCTAssertEqual(receivedEvents.last?["data"] as? String, "42")
     }
     
     func test_missmatch() {
@@ -56,7 +56,7 @@ class PointMatchingTests: AnnaTestCase {
                         }
                         .point { $0
                             .when("index", equal: 1)
-                            .set("data", "42")
+                            .set("data", "24")
                         }
                 }
             }
@@ -69,8 +69,8 @@ class PointMatchingTests: AnnaTestCase {
             object.functionContainsTwoPoints(index: 1)
         }
         
-        XCTAssertEqual(receivedPoints[0].payload?["data"] as? String, "42")
-        XCTAssertEqual(receivedPoints[1].payload?["data"] as? String, "24")
+        XCTAssertEqual(receivedEvents[0]["data"] as? String, "42")
+        XCTAssertEqual(receivedEvents[1]["data"] as? String, "24")
     }
 }
 

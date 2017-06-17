@@ -22,7 +22,7 @@
 		BE80F35F1EEBF486000B0E15 /* Predicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3511EEBF486000B0E15 /* Predicate.swift */; };
 		BE80F3601EEBF486000B0E15 /* Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3521EEBF486000B0E15 /* Prefix.swift */; };
 		BE80F3611EEBF486000B0E15 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3531EEBF486000B0E15 /* Register.swift */; };
-		BE80F3621EEBF486000B0E15 /* Sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3541EEBF486000B0E15 /* Sender.swift */; };
+		BE80F3621EEBF486000B0E15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3541EEBF486000B0E15 /* Analyzable.swift */; };
 		BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3551EEBF486000B0E15 /* Tracker.swift */; };
 		BE80F3641EEBF486000B0E15 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3561EEBF486000B0E15 /* Type.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -64,7 +64,7 @@
 		BE80F3511EEBF486000B0E15 /* Predicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Predicate.swift; sourceTree = "<group>"; };
 		BE80F3521EEBF486000B0E15 /* Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefix.swift; sourceTree = "<group>"; };
 		BE80F3531EEBF486000B0E15 /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
-		BE80F3541EEBF486000B0E15 /* Sender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sender.swift; sourceTree = "<group>"; };
+		BE80F3541EEBF486000B0E15 /* Analyzable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analyzable.swift; sourceTree = "<group>"; };
 		BE80F3551EEBF486000B0E15 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		BE80F3561EEBF486000B0E15 /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		BE87DA801EAB608700DA81EB /* Anna.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Anna.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -196,7 +196,7 @@
 				BE80F34A1EEBF486000B0E15 /* Manager.swift */,
 				BE80F3521EEBF486000B0E15 /* Prefix.swift */,
 				BE80F3531EEBF486000B0E15 /* Register.swift */,
-				BE80F3541EEBF486000B0E15 /* Sender.swift */,
+				BE80F3541EEBF486000B0E15 /* Analyzable.swift */,
 				BE80F3551EEBF486000B0E15 /* Tracker.swift */,
 				BE80F3561EEBF486000B0E15 /* Type.swift */,
 				BE80F34B1EEBF486000B0E15 /* Point */,
@@ -426,7 +426,7 @@
 				3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */,
 				BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */,
 				BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */,
-				BE80F3621EEBF486000B0E15 /* Sender.swift in Sources */,
+				BE80F3621EEBF486000B0E15 /* Analyzable.swift in Sources */,
 				BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */,
 				BE80F3641EEBF486000B0E15 /* Type.swift in Sources */,
 				BE80F3611EEBF486000B0E15 /* Register.swift in Sources */,

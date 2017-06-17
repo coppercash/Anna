@@ -16,22 +16,18 @@ AnnaTestCase : XCTestCase {
     var
     manager :Manager! = nil,
     expectations :[XCTestExpectation]! = nil,
-    receivedPoints :[Manager.Point]! = nil,
     receivedEvents :[Manager.Event]! = nil
     override func
         setUp() {
         super.setUp()
         receivedEvents = Array<Manager.Event>()
-        receivedPoints = Array<Manager.Point>()
         expectations = [XCTestExpectation]()
-        manager = Manager()
-        manager.defaultsProvider = self
+        manager = Manager(config: self)
     }
     override func
         tearDown() {
         manager = nil
         expectations = nil
-        receivedPoints = nil
         receivedEvents = nil
         super.tearDown()
     }
@@ -49,27 +45,27 @@ AnnaTestCase : XCTestCase {
 }
 
 extension
-AnnaTestCase : Anna.EasyDefaultsProvider {
+AnnaTestCase : Anna.EasyConfiguration, Anna.EasyPointDefaults {
     public var
-    point: Anna.EasyDefaultsProvider.PointDefaults? {
-        return EasyPointDefaults(
-            trackers: [self],
-            predicates: nil,
-            payload: nil
-        )
+    pointDefaults: EasyConfiguration.PointDefaults {
+        return self
+    }
+    var payload: EasyPointDefaults.Payload? {
+        return nil
+    }
+    var trackers: [EasyPointDefaults.Tracker] {
+        return [self]
     }
 }
 
 extension
 AnnaTestCase : EasyTracker {
     func
-        receiveAnalysisEvent(
+        receiveAnalyticsEvent(
         _ event: EasyTracker.Event,
-        with point: EasyTracker.Point,
         dispatchedBy manager: EasyTracker.Manager
         ) {
         receivedEvents.append(event)
-        receivedPoints.append(point)
         expectations.removeLast().fulfill()
     }
 }
@@ -84,7 +80,7 @@ Analyzable : EasyAnalyzable {
         self.analyzer = analyzer
     }
     var
-    analysisManager: EasySender.Manager {
+    analysisManager: EasyAnalyzable.Manager {
         return self.analyzer
     }
     class func
