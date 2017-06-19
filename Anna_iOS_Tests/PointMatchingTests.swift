@@ -9,7 +9,8 @@
 import XCTest
 import Anna
 
-class PointMatchingTests: AnnaTestCase {
+class
+PointMatchingTests: AnnaTestCase {
     
     func
         test_pointUserInfo() {
@@ -34,11 +35,8 @@ class PointMatchingTests: AnnaTestCase {
         XCTAssertEqual(receivedEvents.last?["data"] as? String, "42")
     }
     
-    func test_missmatch() {
-        
-    }
-    
-    func test_twoPointsContainedInOneMethod() {
+    func
+        test_twoPointsContainedInOneMethod() {
         class
         Object : Analyzable {
             func
@@ -72,15 +70,52 @@ class PointMatchingTests: AnnaTestCase {
         XCTAssertEqual(receivedEvents[0]["data"] as? String, "42")
         XCTAssertEqual(receivedEvents[1]["data"] as? String, "24")
     }
+    
+    func
+        test_missMatching() {
+        class
+        Object : Analyzable {
+            func
+                call() { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .method("whatever")
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).call()
+        }
+        
+        XCTAssertEqual(
+            receivedErrors.last as? MatchingError,
+            MatchingError.noMatchingPoint(class: String(describing: Object.self), method: "call()")
+        )
+    }
+    
+    func
+        test_emptyClassPointError() {
+        class
+        Object : Analyzable {
+            func
+                call() { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).call()
+        }
+        
+        XCTAssertNotNil(receivedErrors.last)
+    }
 }
 
-// TODO 
+// TODO
 // test custom prefix anat
 // .fucntion leverage String Literal
 // super selector
-
-//extension Anna.Analyzable {
-//    var anat :Anna.InvocationContext {
-//        return self.ana
-//    }
-//}

@@ -11,6 +11,9 @@
 		3D646E071EF20A3B00D39AF7 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34A1EEBF486000B0E15 /* Manager.swift */; };
 		57D01EC76231C5F76F002185 /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
+		BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */; };
+		BE3127D11EF5657100DA452A /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D01EF5657100DA452A /* Selector.swift */; };
+		BE3127D31EF56A5D00DA452A /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D21EF56A5D00DA452A /* Configuration.swift */; };
 		BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */; };
 		BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3471EEBF486000B0E15 /* Builder.swift */; };
 		BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3481EEBF486000B0E15 /* Buildup.swift */; };
@@ -52,6 +55,9 @@
 		4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorMatchingTests.swift; sourceTree = "<group>"; };
+		BE3127D01EF5657100DA452A /* Selector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
+		BE3127D21EF56A5D00DA452A /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnaTestCase.swift; sourceTree = "<group>"; };
 		BE80F3471EEBF486000B0E15 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		BE80F3481EEBF486000B0E15 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
@@ -181,6 +187,7 @@
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
 				BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */,
 				BE98B1421EC274A000978728 /* PointMatchingTests.swift */,
+				BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */,
 				BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */,
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 			);
@@ -194,11 +201,13 @@
 				BE80F3481EEBF486000B0E15 /* Buildup.swift */,
 				BE80F3491EEBF486000B0E15 /* Event.swift */,
 				BE80F34A1EEBF486000B0E15 /* Manager.swift */,
+				BE3127D21EF56A5D00DA452A /* Configuration.swift */,
 				BE80F3521EEBF486000B0E15 /* Prefix.swift */,
 				BE80F3531EEBF486000B0E15 /* Register.swift */,
 				BE80F3541EEBF486000B0E15 /* Analyzable.swift */,
 				BE80F3551EEBF486000B0E15 /* Tracker.swift */,
 				BE80F3561EEBF486000B0E15 /* Type.swift */,
+				BE3127D01EF5657100DA452A /* Selector.swift */,
 				BE80F34B1EEBF486000B0E15 /* Point */,
 				BE80F3501EEBF486000B0E15 /* Predicate */,
 				BEDB99E91EBE8DA1006637DC /* ObjC */,
@@ -428,6 +437,8 @@
 				BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */,
 				BE80F3621EEBF486000B0E15 /* Analyzable.swift in Sources */,
 				BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */,
+				BE3127D31EF56A5D00DA452A /* Configuration.swift in Sources */,
+				BE3127D11EF5657100DA452A /* Selector.swift in Sources */,
 				BE80F3641EEBF486000B0E15 /* Type.swift in Sources */,
 				BE80F3611EEBF486000B0E15 /* Register.swift in Sources */,
 				BE80F35B1EEBF486000B0E15 /* Class.swift in Sources */,
@@ -440,6 +451,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */,
 				BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */,
 				BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */,
 			);

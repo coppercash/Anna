@@ -15,8 +15,13 @@ EasyTracker {
     typealias
         Manager = EasyManager
     func
-        receiveAnalyticsEvent(
-        _ event :Event,
+        receive(
+        analyticsEvent event :Event,
+        dispatchedBy manager :Manager
+    )
+    func
+        receive(
+        analyticsError error :Error,
         dispatchedBy manager :Manager
     )
 }

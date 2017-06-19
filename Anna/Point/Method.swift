@@ -62,7 +62,8 @@ EasyMethodPoint : EasyEventMatching {
     }
 }
 
-enum EasyMethodPointError : Error {
+enum
+EasyMethodPointError : Error {
     case differentParent
 }
 
@@ -112,18 +113,41 @@ EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint> {
         return self
     }
     
-    // MARK:- Predicates
+    // MARK:- Method
     
     public typealias
         MethodName = String
-    typealias
-        Methods = ArrayBuilder<Result.Method>
+    lazy var
+    methodNames = [MethodName]()
     @discardableResult public func
         method(_ name :MethodName) ->Self {
-        let
-        methods = buffer.get("methods", Methods())
-        methods.add(name)
+        methodNames.append(name)
         return self
+    }
+    
+    lazy var
+    selectors = Array<Selector>()
+    @discardableResult public func
+        selector(_ selector :Selector) ->Self {
+        selectors.append(selector)
+        return self
+    }
+    
+    typealias
+        Method = String
+    func
+        allMethods() ->[Method] {
+        var
+        methods = [MethodName]()
+        for methodName in methodNames {
+            methods.append(methodName)
+        }
+        for selector in selectors {
+            let
+            methodName = selector.methodName
+            methods.append(methodName)
+        }
+        return methods
     }
     
     // MARK:- Build

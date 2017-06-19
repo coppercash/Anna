@@ -132,9 +132,7 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint> {
         var
         childrenByMethod = Dictionary<MethodPoint.Method, MethodPoint>()
         for child :Child in children.elements() {
-            let
-            methods :EasyMethodPointBuilder.Methods = try child.required("methods", for: self)
-            for method in try methods.array() {
+            for method in child.allMethods() {
                 guard
                     let point = childrenByMethod[method]
                     else {

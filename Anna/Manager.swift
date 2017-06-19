@@ -35,58 +35,14 @@ EasyManager {
         self.init(root: root)
     }
     
-    
-    public typealias
-        Event = EasyEvent
-    public typealias
-        Seed = EasyEventSeed
-    func receive(_ seed :Seed) {
-        queue.async {
-            try! self.dispatch(seed)
-        }
-    }
-    
-    public typealias
-        Point = EasyPoint
-    func dispatch(_ seed :Seed) throws {
-        // Try to load points if they have not been loaded
-        //
-        try loadPoints(for: seed.cls)
-        
-        // Find point
-        //
-        let
-        points :[EasyPayloadNode]! = self.root.points(match: seed)
-        assert(
-            points != nil && points.count == 1,
-            "Exactly one point is expected to be matched, " +
-            "but found \(points.count). \n\(points)"
-        )
-        
-        guard let
-            point = points?.first
-            else { return }
-        
-        // Dispatch the event with point to every tracker tracks the point
-        //
-        let merged = try point.mergedFromRoot()
-        guard
-            let trackers = merged.trackers,
-            trackers.count > 0
-            else {
-                // TODO: throw
-                return
-        }
-        let
-        event = try EasyEvent(seed: seed, point: point)
-        for tracker in trackers {
-            tracker.receiveAnalyticsEvent(
-                event,
-                dispatchedBy: self
-            )
-        }
-    }
-    
+}
+
+// MARK: - Load Points
+
+extension
+EasyClassPointBuilder : EasyRegistrar {}
+extension
+EasyManager {
     typealias
         Class = EasyAnalyzable
     typealias
@@ -105,24 +61,93 @@ EasyManager {
     }
 }
 
+// MARK: - Receive & Dispatch
+
+public enum
+MatchingError : Error {
+    case noMatchingPoint(class :String, method :String)
+    case tooManyMatchingPoints(count :Int)
+}
+
 extension
-EasyClassPointBuilder : EasyRegistrar {}
-
-public protocol
-EasyPointDefaults {
-    typealias
-        Payload = Dictionary<String, Any>
-    var
-    payload :Payload? { get }
-    typealias
-        Tracker = EasyTracker
-    var
-    trackers :[Tracker] { get }
+MatchingError : Equatable {
+    public static func
+        == (lhs: MatchingError, rhs: MatchingError) ->Bool {
+        switch (lhs, rhs) {
+        case (.noMatchingPoint, .noMatchingPoint):
+            return true
+        case (.tooManyMatchingPoints, .tooManyMatchingPoints):
+            return true
+        default:
+            return false;
+        }
+    }
 }
 
-public protocol
-EasyConfiguration {
-    typealias
-        PointDefaults = EasyPointDefaults 
-    var pointDefaults :PointDefaults { get }
+extension
+EasyManager {
+    public typealias
+        Event = EasyEvent
+    public typealias
+        Seed = EasyEventSeed
+    func receive(_ seed :Seed) {
+        queue.async {
+            do {
+               try self.dispatch(seed)
+            }
+            catch {
+                self.sendDefaultTrackers(error)
+            }
+        }
+    }
+    
+    public typealias
+        Point = EasyPoint
+    func dispatch(_ seed :Seed) throws {
+        // Try to load points if they have not been loaded
+        //
+        try loadPoints(for: seed.cls)
+        
+        // Find point
+        //
+        let
+        points :[EasyPayloadNode]! = self.root.points(match: seed)
+        guard
+            points.count > 0
+            else { throw MatchingError.noMatchingPoint(class: String(describing: seed.cls), method: seed.method) }
+        guard
+            points.count <= 1
+            else { throw MatchingError.tooManyMatchingPoints(count: points.count) }
+        guard let
+            point = points?.first
+            else { return }
+        
+        // Dispatch the event with point to every tracker tracks the point
+        //
+        let merged = try point.mergedFromRoot()
+        guard
+            let trackers = merged.trackers,
+            trackers.count > 0
+            else {
+                // TODO: throw
+                return
+        }
+        let
+        event = try EasyEvent(seed: seed, point: point)
+        for tracker in trackers {
+            tracker.receive(
+                analyticsEvent: event,
+                dispatchedBy: self
+            )
+        }
+    }
+    
+    
+    func
+        sendDefaultTrackers(_ error :Error) {
+        for tracker in root.trackers! {
+            tracker.receive(analyticsError: error, dispatchedBy: self)
+        }
+    }
 }
+    
