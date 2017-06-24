@@ -12,7 +12,7 @@ public class
 EasyPrefix {
     typealias
         Target = EasyAnalyzable
-    let
+    unowned let
     target :Target
     init(target :Target) {
         self.target = target

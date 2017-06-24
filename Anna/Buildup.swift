@@ -26,7 +26,6 @@ Builder : _Builder {
     Result
     typealias
         Buildup = (Self)->Void
-//    init()
     func
         build() throws ->Result
 }
@@ -35,9 +34,6 @@ public
 class ArrayBuilder<Element>
 {
     var buffer = Array<Any>()
-    
-//    required
-//    public init() {}
     
     @discardableResult func
         add(_ element :Element) ->Self {
@@ -52,16 +48,6 @@ class ArrayBuilder<Element>
         buffer.append(builder)
         return self
     }
-    
-//    @discardableResult func
-//        add<ElementBuilder>(_ buildup :(ElementBuilder)->Void) ->Self
-//        where ElementBuilder : Builder, ElementBuilder.Result == Element
-//    {
-//        let builder = ElementBuilder()
-//        buildup(builder)
-//        buffer.append(builder)
-//        return self
-//    }
     
     func
         array() throws ->Array<Element> {

@@ -113,9 +113,6 @@ where
     public let
     buffer = Buffer()
     
-//    public required
-//    init() {}
-    
     // MARK:- Payload
     
     @discardableResult public func
