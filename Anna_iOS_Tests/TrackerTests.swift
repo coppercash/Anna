@@ -38,6 +38,32 @@ class TrackerTests: AnnaTestCase {
         XCTAssertNotNil(appended.receivedEvents.last)
     }
     
+    /*
     func test_appendOverrideTrackers() {
+        class
+        Object : Analyzable {
+            func
+                call() { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .method("call()")
+                        .trackers([$0.trackers["second"]!])
+                }
+            }
+        }
+        
+        let appended = ClosureTracker()
+        appended.append(expectation(description: "AnotherExpectation"))
+        manager.trackers["second"] = appended
+        
+        waitForEvents {
+            Object(manager).call()
+        }
+        
+        XCTAssertNil(receivedEvents.last)
+        XCTAssertNotNil(appended.receivedEvents.last)
     }
+     */
 }
