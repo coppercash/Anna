@@ -80,11 +80,13 @@ EasyClassPoint : EasyEventMatching {
 }
 
 final class
-EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerConfigurable {
+EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerBuilding {
 
+    public var
+    trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
     public let
-    trackers :EasyTrackerConfigurable.Trackers
-    init(trackers :EasyTrackerConfigurable.Trackers) {
+    trackers :EasyTrackerBuilding.Trackers
+    init(trackers :EasyTrackerBuilding.Trackers) {
         self.trackers = trackers
     }
     
@@ -116,7 +118,7 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerConfigu
         let
         childrenByMethod = try self.childrenByMethod(from: buffer),
         dictionary = try buffer.build(),
-        trackers = dictionary["trackers"] as? [Point.Tracker],
+        trackers = trackersBuffer,
         payload = try self.payload(from: dictionary),
         point = Point(
             trackers: trackers,

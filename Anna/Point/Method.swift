@@ -97,11 +97,13 @@ EasyMethodPoint {
 }
 
 final public class
-EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint>, EasyTrackerConfigurable {
+EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint>, EasyTrackerBuilding {
     
+    public var
+    trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
     public let
-    trackers :EasyTrackerConfigurable.Trackers
-    init(trackers :EasyTrackerConfigurable.Trackers) {
+    trackers :EasyTrackerBuilding.Trackers
+    init(trackers :EasyTrackerBuilding.Trackers) {
         self.trackers = trackers
     }
     
@@ -168,7 +170,7 @@ EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint>, EasyTrackerConfi
         let
         dictionary = try buffer.build(),
         children = dictionary["children"] as? [Point.Child],
-        trackers = dictionary["trackers"] as? [Point.Tracker],
+        trackers = trackersBuffer,
         payload = try self.payload(from: dictionary),
         point = Point(
             trackers: trackers,

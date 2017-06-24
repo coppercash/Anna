@@ -61,12 +61,9 @@ extension
 EasyTrackerCollection : EasyImmutableTrackerCollection {}
 
 public protocol
-EasyTrackerConfigurable {
-    typealias
-        Buffer = DictionaryBuilder<String, Any>
+EasyTrackerBuilding : class {
     var
-    buffer : Buffer { get }
-    
+    trackersBuffer :[Tracker]? { get set }
     typealias
         Tracker = EasyTracker
     @discardableResult func
@@ -79,12 +76,13 @@ EasyTrackerConfigurable {
 }
 
 extension
-EasyTrackerConfigurable {
+EasyTrackerBuilding {
     @discardableResult public func
         tracker(_ tracker :Tracker) ->Self {
-        var
-        trackers = buffer.get("trackers", Array<Tracker>())
-        trackers.append(tracker)
+        if trackersBuffer == nil {
+            trackersBuffer = [Tracker]()
+        }
+        trackersBuffer!.append(tracker)
         return self
     }
 }
