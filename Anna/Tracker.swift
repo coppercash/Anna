@@ -41,11 +41,17 @@ EasyTrackerConfigurator {
     public
     subscript(key :String) ->Tracker? {
         get {
-            return trackers[key]
+            var
+            tracker :Tracker? = nil
+            queue.sync {
+                tracker = self.trackers[key]
+            }
+            return tracker
         }
         set {
-            
-            trackers[key] = newValue
+            queue.async(flags: .barrier) {
+                self.trackers[key] = newValue
+            }
         }
     }
 }

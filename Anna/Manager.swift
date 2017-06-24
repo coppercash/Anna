@@ -12,7 +12,8 @@ open class
 EasyManager {
     
     let
-    queue :DispatchQueue = DispatchQueue(label: "Anna")
+    configQueue :DispatchQueue,
+    queue :DispatchQueue
     public typealias
         Trackers = EasyTrackerConfigurator
     public let
@@ -24,7 +25,15 @@ EasyManager {
     root :Root
     init(root :Root) {
         self.root = root
-        self.trackers = Trackers(queue: queue)
+        self.configQueue = DispatchQueue(
+            label: "Anna.config",
+            attributes: .concurrent
+        )
+        self.queue = DispatchQueue (
+            label: "Anna.main",
+            target: configQueue
+        )
+        self.trackers = Trackers(queue: configQueue)
     }
     
     public typealias
