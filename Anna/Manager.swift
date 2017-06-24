@@ -16,8 +16,10 @@ EasyManager {
     queue :DispatchQueue
     public typealias
         Trackers = EasyTrackerConfigurator
-    public let
-    trackers :Trackers
+    lazy public internal(set) var
+    trackers :Trackers = {
+        return Trackers(host: self)
+    }()
     
     public typealias
         Root = EasyRootPoint
@@ -33,7 +35,6 @@ EasyManager {
             label: "Anna.main",
             target: configQueue
         )
-        self.trackers = Trackers(queue: configQueue)
     }
     
     public typealias

@@ -28,10 +28,12 @@ EasyTracker {
 
 public class
 EasyTrackerConfigurator {
-    let
-    queue :DispatchQueue
-    init(queue :DispatchQueue) {
-        self.queue = queue
+    typealias
+    Host = EasyManager
+    unowned let
+    host :Host
+    init(host :Host) {
+        self.host = host
     }
     
     public typealias
@@ -43,14 +45,31 @@ EasyTrackerConfigurator {
         get {
             var
             tracker :Tracker? = nil
-            queue.sync {
+            host.configQueue.sync {
                 tracker = self.trackers[key]
             }
             return tracker
         }
         set {
-            queue.async(flags: .barrier) {
+            host.configQueue.async(flags: .barrier) {
                 self.trackers[key] = newValue
+            }
+        }
+    }
+    
+    public var
+    defaults :[Tracker] {
+        get {
+            var
+            trackers :[Tracker]
+            host.configQueue.sync {
+                trackers = host.root.trackers
+            }
+            return trackers
+        }
+        set {
+            host.configQueue.async(flags: .barrier) {
+                host.root.trackers = newValue
             }
         }
     }

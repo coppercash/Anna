@@ -24,7 +24,8 @@ AnnaTestCase : XCTestCase {
         receivedEvents = Array<Manager.Event>()
         receivedErrors =  Array<Error>()
         expectations = [XCTestExpectation]()
-        manager = Manager(config: self)
+        manager = Manager()
+        manager.defa
     }
     override func
         tearDown() {
