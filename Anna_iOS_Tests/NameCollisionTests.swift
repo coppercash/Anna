@@ -15,7 +15,7 @@ NameCollisionTests: AnnaTestCase {
     func
         test_customPrefix() {
         class
-        Object : Analyzable {
+        Object : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
@@ -37,7 +37,7 @@ NameCollisionTests: AnnaTestCase {
 }
 
 extension
-Analyzable {
+ANATAnalyzable {
     var
     custom :EasyAnalyzable.Prefix {
         return self.ana

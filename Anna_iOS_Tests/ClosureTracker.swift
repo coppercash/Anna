@@ -19,7 +19,13 @@ ClosureTracker : EasyTracker {
     var
     expectations = [XCTestExpectation]()
     
-    init() {}
+    typealias
+        Closure = (Event?, Error?)->Void
+    let
+    closure :Closure?
+    init(closure : Closure? = nil) {
+        self.closure = closure
+    }
     
     func
         receive(
@@ -27,6 +33,9 @@ ClosureTracker : EasyTracker {
         dispatchedBy manager: EasyTracker.Manager
         ) {
         receivedEvents.append(event)
+        if let closure = self.closure {
+            closure(event, nil)
+        }
         expectations.removeLast().fulfill()
     }
     func
@@ -34,6 +43,9 @@ ClosureTracker : EasyTracker {
         analyticsError error: Error,
         dispatchedBy manager: EasyTracker.Manager) {
         receivedErrors.append(error)
+        if let closure = self.closure {
+            closure(nil, error)
+        }
         expectations.removeLast().fulfill()
     }
     

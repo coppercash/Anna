@@ -22,7 +22,12 @@ EasyAnalyzable : class, EasyRegistrant {
 
 public extension
 EasyAnalyzable {
-    var ana :Prefix {
+    var
+    ana :Prefix {
         return Prefix(target: self)
+    }
+    var
+    analyticsManager :Manager {
+       return Manager.shared
     }
 }

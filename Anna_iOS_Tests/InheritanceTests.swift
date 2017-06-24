@@ -15,7 +15,7 @@ InheritanceTests: AnnaTestCase {
     func
         test_inheritsMethodFromSuper() {
         class
-        Parent : Analyzable {
+        Parent : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
@@ -44,7 +44,7 @@ InheritanceTests: AnnaTestCase {
     func
         test_inheritsMethodFromSuperWithouthRegistering() {
         class
-        Parent : Analyzable {
+        Parent : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
@@ -68,7 +68,7 @@ InheritanceTests: AnnaTestCase {
     func
         test_pointNotRegisterredBySuper() {
         class
-        Parent : Analyzable {
+        Parent : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
         }
@@ -94,7 +94,7 @@ InheritanceTests: AnnaTestCase {
     func
         test_overriedsPointRegisterredBySuper() {
         class
-        Parent : Analyzable {
+        Parent : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func

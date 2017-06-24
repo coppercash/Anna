@@ -68,7 +68,7 @@ AnnaTestCase : EasyTracker {
 }
 
 class
-Analyzable : EasyAnalyzable {
+ANATAnalyzable : EasyAnalyzable {
     typealias
         Analyzer = EasyManager
     let
@@ -85,7 +85,7 @@ Analyzable : EasyAnalyzable {
 }
 
 class
-AnalyzableObjC : NSObject, EasyAnalyzable {
+ANATAnalyzableObjC : NSObject, EasyAnalyzable {
     typealias
         Analyzer = EasyManager
     let

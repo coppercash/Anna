@@ -15,7 +15,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_withoutParameter() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc func
                 call() { self.ana.analyze() }
             override class func
@@ -40,7 +40,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterWith() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc func
                 call(with number :Int) { self.ana.analyze() }
             override class func
@@ -63,7 +63,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterPreposition() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc func
                 call(at index :Int) { self.ana.analyze() }
             override class func
@@ -86,7 +86,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterPrepositionNoun() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc func
                 go(to bed :String) { self.ana.analyze() }
             override class func
@@ -109,7 +109,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_methodNamePrepositionNoun_firstNamePrepositionNoun() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc func
                 goToBed(at time :String) { self.ana.analyze() }
             override class func
@@ -132,7 +132,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterNoun() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc func
                 call(phoneNumber number :Int) { self.ana.analyze() }
             override class func
@@ -155,7 +155,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_methodNameVerdNoun_firstParameterPrepositionNoun() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc func
                 selectRow(at index :Int) { self.ana.analyze() }
             override class func
@@ -178,7 +178,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_secondParameterVerbPreposition() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             func
                 view(_ view: UIView, didTapAreaAround point: CGPoint) {
                 self.ana.analyze()
@@ -203,7 +203,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_secondParameterVerbPrepositionNounPrepositionNoun() {
         class
-        Object : AnalyzableObjC, UITableViewDelegate {
+        Object : ANATAnalyzableObjC, UITableViewDelegate {
             func
                 tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                 self.ana.analyze()
@@ -228,7 +228,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_oneOmittedParameterLabel() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             func
                 call(_ string :String) { self.ana.analyze() }
             override class func
@@ -251,7 +251,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_twoOmittedParameterLabels() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             func
                 call(_ string :String, _ number :Int) { self.ana.analyze() }
             override class func
@@ -274,7 +274,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_omittingOneParameterAmongTwo() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             func
                 call(_ string :String, number :Int) { self.ana.analyze() }
             override class func
@@ -297,7 +297,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_unableToMatchCustomObjCSelector() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             @objc(call:) func
                 call(parameterA argumentA :Int) { self.ana.analyze() }
             override class func
@@ -320,7 +320,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_getter() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             var
             property :String {
                 self.ana.analyze()
@@ -346,7 +346,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_setter() {
         class
-        Object : AnalyzableObjC {
+        Object : ANATAnalyzableObjC {
             var
             property :String {
                 get {

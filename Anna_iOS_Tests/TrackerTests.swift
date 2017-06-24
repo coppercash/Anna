@@ -13,7 +13,7 @@ class TrackerTests: AnnaTestCase {
     
     func test_appendTracker() {
         class
-        Object : Analyzable {
+        Object : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
@@ -41,7 +41,7 @@ class TrackerTests: AnnaTestCase {
     /*
     func test_appendOverrideTrackers() {
         class
-        Object : Analyzable {
+        Object : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func

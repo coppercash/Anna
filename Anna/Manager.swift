@@ -38,6 +38,14 @@ EasyManager {
     }
 }
 
+// MARK: - Singleton
+
+extension
+EasyManager {
+    public static let
+    shared = EasyManager()
+}
+
 // MARK: - Load Points
 
 extension

@@ -15,7 +15,7 @@ PointMatchingTests: AnnaTestCase {
     func
         test_pointUserInfo() {
         class
-        Object : Analyzable {
+        Object : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
@@ -38,7 +38,7 @@ PointMatchingTests: AnnaTestCase {
     func
         test_twoPointsContainedInOneMethod() {
         class
-        Object : Analyzable {
+        Object : ANATAnalyzable {
             func
                 functionContainsTwoPoints(index :Int) {
                 self.ana.event{ $0.set("index", index) }.analyze()
@@ -74,7 +74,7 @@ PointMatchingTests: AnnaTestCase {
     func
         test_missMatching() {
         class
-        Object : Analyzable {
+        Object : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
@@ -99,7 +99,7 @@ PointMatchingTests: AnnaTestCase {
     func
         test_emptyClassPointError() {
         class
-        Object : Analyzable {
+        Object : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
