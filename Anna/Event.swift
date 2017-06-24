@@ -86,7 +86,7 @@ EasyEvent {
 }
 
 public class
-EasyEventBuilder {
+EasyEventSeedBuilder {
     var
     cls :Result.Class? = nil
     var
@@ -135,11 +135,11 @@ EasyEventBuilder {
     }
     
     public typealias
-        Buildup = (EasyEventBuilder)->Void
+        Buildup = (EasyEventSeedBuilder)->Void
 }
 
 extension
-EasyEventBuilder : Builder {
+EasyEventSeedBuilder : Builder {
     public typealias
         Result = EasyEventSeed
     public func
@@ -147,10 +147,3 @@ EasyEventBuilder : Builder {
     public func
         _build() throws -> Any { return try build() }
 }
-//extension
-//EasyEventBuilder {
-//    subscript(key :String) ->Any? {
-//        get { return buffer[key] }
-//        set { buffer[key] = newValue }
-//    }
-//}

@@ -19,7 +19,7 @@ EasyPrefix {
     }
     
     public typealias
-        EventBuilder = EasyEventBuilder
+        EventBuilder = EasyEventSeedBuilder
     var
     event :EventBuilder? = nil
     public func
