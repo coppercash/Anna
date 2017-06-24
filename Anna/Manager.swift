@@ -14,7 +14,7 @@ EasyManager {
     let
     queue :DispatchQueue = DispatchQueue(label: "Anna")
     public typealias
-        Trackers = EasyTrackerCollection
+        Trackers = EasyTrackerConfigurator
     public let
     trackers :Trackers
     

@@ -27,7 +27,7 @@ EasyTracker {
 }
 
 public class
-EasyTrackerCollection {
+EasyTrackerConfigurator {
     let
     queue :DispatchQueue
     init(queue :DispatchQueue) {
@@ -51,14 +51,14 @@ EasyTrackerCollection {
 }
 
 public protocol
-EasyImmutableTrackerCollection {
+EasyTrackerCollection {
     typealias
     Tracker = EasyTracker
     subscript(key :String) ->Tracker? { get }
 }
 
 extension
-EasyTrackerCollection : EasyImmutableTrackerCollection {}
+EasyTrackerConfigurator : EasyTrackerCollection {}
 
 public protocol
 EasyTrackerBuilding : class {
@@ -70,7 +70,7 @@ EasyTrackerBuilding : class {
         tracker(_ tracker :Tracker) ->Self
     
     typealias
-        Trackers = EasyImmutableTrackerCollection
+        Trackers = EasyTrackerCollection
     var
     trackers :Trackers { get }
 }
