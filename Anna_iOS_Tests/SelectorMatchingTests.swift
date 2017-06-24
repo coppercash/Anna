@@ -316,6 +316,60 @@ SelectorMatchingTests : AnnaTestCase {
         XCTAssertNil(receivedEvents.last)
         XCTAssertNotNil(receivedErrors.last)
     }
+    
+    func
+        test_getter() {
+        class
+        Object : AnalyzableObjC {
+            var
+            property :String {
+                self.ana.analyze()
+                return "42"
+            }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(getter: property))
+                }
+            }
+        }
+        
+        waitForEvents {
+            let _ = Object(manager).property
+        }
+        
+        XCTAssertNil(receivedEvents.last)
+        XCTAssertNotNil(receivedErrors.last)
+    }
+    
+    func
+        test_setter() {
+        class
+        Object : AnalyzableObjC {
+            var
+            property :String {
+                get {
+                    return "42"
+                }
+                set {
+                    self.ana.analyze()
+                }
+            }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(setter: property))
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).property = "24"
+        }
+        
+        XCTAssertNil(receivedEvents.last)
+        XCTAssertNotNil(receivedErrors.last)
+    }
 }
-
-// TODO: Getter Setter
