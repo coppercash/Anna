@@ -35,6 +35,8 @@
 		BEAAB5931EC12BA900C0EBF9 /* ANAPointBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB5911EC12BA900C0EBF9 /* ANAPointBuilder.h */; };
 		BEAAB59C1EC135FC00C0EBF9 /* ANAInvocationContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB59A1EC135FC00C0EBF9 /* ANAInvocationContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BEF96EF41EFE23FD004C2967 /* NameCollisionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */; };
+		BEF96EF61EFE25BA004C2967 /* InheritanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +90,8 @@
 		BEAAB59B1EC135FC00C0EBF9 /* ANAInvocationContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAInvocationContext.m; sourceTree = "<group>"; };
 		BEDB99EA1EBE8DBA006637DC /* ANAManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAManager.h; sourceTree = "<group>"; };
 		BEDB99EB1EBE8DBA006637DC /* ANAManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAManager.m; sourceTree = "<group>"; };
+		BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCollisionTests.swift; sourceTree = "<group>"; };
+		BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InheritanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,7 +191,9 @@
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
 				BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */,
 				BE98B1421EC274A000978728 /* PointMatchingTests.swift */,
+				BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */,
 				BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */,
+				BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */,
 				BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */,
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 			);
@@ -452,8 +458,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */,
+				BEF96EF61EFE25BA004C2967 /* InheritanceTests.swift in Sources */,
 				BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */,
 				BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */,
+				BEF96EF41EFE23FD004C2967 /* NameCollisionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

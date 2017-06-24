@@ -114,8 +114,3 @@ PointMatchingTests: AnnaTestCase {
         XCTAssertNotNil(receivedErrors.last)
     }
 }
-
-// TODO
-// test custom prefix anat
-// .fucntion leverage String Literal
-// super selector
