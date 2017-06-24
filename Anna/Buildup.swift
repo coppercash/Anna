@@ -26,7 +26,7 @@ Builder : _Builder {
     Result
     typealias
         Buildup = (Self)->Void
-    init()
+//    init()
     func
         build() throws ->Result
 }
@@ -36,26 +36,35 @@ class ArrayBuilder<Element>
 {
     var buffer = Array<Any>()
     
-    required
-    public init() {}
+//    required
+//    public init() {}
     
-    @discardableResult
-    func add(_ element :Element) ->Self {
+    @discardableResult func
+        add(_ element :Element) ->Self {
         buffer.append(element)
         return self
     }
 
-    @discardableResult
-    func add<ElementBuilder>(_ buildup :(ElementBuilder)->Void) ->Self
+    @discardableResult func
+        add<ElementBuilder>(_ builder :ElementBuilder) ->Self
         where ElementBuilder : Builder, ElementBuilder.Result == Element
     {
-        let builder = ElementBuilder()
-        buildup(builder)
         buffer.append(builder)
         return self
     }
     
-    func array() throws ->Array<Element> {
+//    @discardableResult func
+//        add<ElementBuilder>(_ buildup :(ElementBuilder)->Void) ->Self
+//        where ElementBuilder : Builder, ElementBuilder.Result == Element
+//    {
+//        let builder = ElementBuilder()
+//        buildup(builder)
+//        buffer.append(builder)
+//        return self
+//    }
+    
+    func
+        array() throws ->Array<Element> {
         var array = [Element]()
         array.reserveCapacity(buffer.count)
         for item in buffer {
@@ -70,7 +79,8 @@ class ArrayBuilder<Element>
         return array
     }
     
-    func elements<Type>() ->AnyIterator<Type> {
+    func
+        elements<Type>() ->AnyIterator<Type> {
         var index = 0
         return AnyIterator {
             while
@@ -88,7 +98,8 @@ class ArrayBuilder<Element>
         }
     }
     
-    var count :Int {
+    var
+    count :Int {
         return buffer.count
     }
 }

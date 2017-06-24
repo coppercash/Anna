@@ -11,16 +11,20 @@ import Foundation
 open class
 EasyManager {
     
+    let
+    queue :DispatchQueue = DispatchQueue(label: "Anna")
+    public typealias
+        Trackers = EasyTrackerCollection
+    public let
+    trackers :Trackers
+    
     public typealias
         Root = EasyRootPoint
     let
     root :Root
-    
-    let
-    queue :DispatchQueue = DispatchQueue(label: "Anna")
-    
     init(root :Root) {
         self.root = root
+        self.trackers = Trackers(queue: queue)
     }
     
     public typealias
@@ -52,7 +56,7 @@ EasyManager {
             root.classPoint(for: cls) == nil
             else { return }
         let
-        builder = ClassPointBuilder()
+        builder = ClassPointBuilder(trackers: trackers)
         cls.registerAnalyticsPoints(with: builder)
         let
         point = try builder.point()
@@ -82,6 +86,11 @@ MatchingError : Equatable {
             return false;
         }
     }
+}
+
+public enum
+ConfigurationError : Error {
+   case noAvailableTrackers
 }
 
 extension
@@ -128,10 +137,7 @@ EasyManager {
         guard
             let trackers = merged.trackers,
             trackers.count > 0
-            else {
-                // TODO: throw
-                return
-        }
+            else { throw ConfigurationError.noAvailableTrackers }
         let
         event = try EasyEvent(seed: seed, point: point)
         for tracker in trackers {

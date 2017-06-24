@@ -96,8 +96,14 @@ EasyMethodPoint {
     }
 }
 
-public class
-EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint> {
+final public class
+EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint>, EasyTrackerConfigurable {
+    
+    public let
+    trackers :EasyTrackerConfigurable.Trackers
+    init(trackers :EasyTrackerConfigurable.Trackers) {
+        self.trackers = trackers
+    }
     
     // MARK:- Children
     
@@ -108,8 +114,11 @@ EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint> {
     @discardableResult public func
         point(_ buildup :Child.Buildup) ->Self {
         let
+        builder = Child(trackers: trackers)
+        buildup(builder)
+        let
         points = buffer.get("children", ChildPoints())
-        points.add(buildup)
+        points.add(builder)
         return self
     }
     

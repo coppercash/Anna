@@ -108,13 +108,13 @@ EasyBasePointBuilder<Point>
 where
     Point : EasyBasePoint
 {
-    typealias
+    public typealias
         Buffer = DictionaryBuilder<String, Any>
-    let
+    public let
     buffer = Buffer()
     
-    public required
-    init() {}
+//    public required
+//    init() {}
     
     // MARK:- Payload
     

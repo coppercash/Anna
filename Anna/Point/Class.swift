@@ -79,20 +79,29 @@ EasyClassPoint : EasyEventMatching {
     }
 }
 
-class
-EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint> {
+final class
+EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerConfigurable {
 
+    public let
+    trackers :EasyTrackerConfigurable.Trackers
+    init(trackers :EasyTrackerConfigurable.Trackers) {
+        self.trackers = trackers
+    }
+    
     // MARK:- Children
     
     typealias
         Child = EasyMethodPointBuilder
     typealias
-        Children = ArrayBuilder<Child.Result>
+        ChildPoints = ArrayBuilder<Child.Result>
     @discardableResult func
         point(_ buildup :Child.Buildup) ->Self {
         let
-        points = buffer.get("children", Children())
-        points.add(buildup)
+        builder = Child(trackers: trackers)
+        buildup(builder)
+        let
+        points = buffer.get("children", ChildPoints())
+        points.add(builder)
         return self
     }
     
@@ -124,7 +133,7 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint> {
     
     func childrenByMethod(from buffer :Buffer) throws ->Dictionary<MethodPoint.Method, MethodPoint> {
         guard let
-            children :Children = buffer.removeProperty(forKey: "children"),
+            children :ChildPoints = buffer.removeProperty(forKey: "children"),
             children.count > 0
             else {
                 throw BuilderError.missedProperty(name: "children", result: String(describing: self))

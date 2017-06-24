@@ -83,8 +83,14 @@ EasyPoint : EasyPayloadNode {
     }
 }
 
-public class
-EasyPointBuilder : EasyBasePointBuilder<EasyPoint> {
+final public class
+EasyPointBuilder : EasyBasePointBuilder<EasyPoint>, EasyTrackerConfigurable {
+    
+    public let
+    trackers :EasyTrackerConfigurable.Trackers
+    init(trackers :EasyTrackerConfigurable.Trackers) {
+        self.trackers = trackers
+    }
     
     // MARK:- Children
     
@@ -95,8 +101,11 @@ EasyPointBuilder : EasyBasePointBuilder<EasyPoint> {
     @discardableResult public func
         point(_ buildup :Child.Buildup) ->Self {
         let
+        builder = Child(trackers: trackers)
+        buildup(builder)
+        let
         points = buffer.get("children", ChildPoints())
-        points.add(buildup)
+        points.add(builder)
         return self
     }
     

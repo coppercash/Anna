@@ -14,6 +14,8 @@
 		BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */; };
 		BE3127D11EF5657100DA452A /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D01EF5657100DA452A /* Selector.swift */; };
 		BE3127D31EF56A5D00DA452A /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D21EF56A5D00DA452A /* Configuration.swift */; };
+		BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FC1EFE32650006665A /* TrackerTests.swift */; };
+		BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */; };
 		BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */; };
 		BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3471EEBF486000B0E15 /* Builder.swift */; };
 		BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3481EEBF486000B0E15 /* Buildup.swift */; };
@@ -60,6 +62,8 @@
 		BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorMatchingTests.swift; sourceTree = "<group>"; };
 		BE3127D01EF5657100DA452A /* Selector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
 		BE3127D21EF56A5D00DA452A /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		BE55D4FC1EFE32650006665A /* TrackerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
+		BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureTracker.swift; sourceTree = "<group>"; };
 		BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnaTestCase.swift; sourceTree = "<group>"; };
 		BE80F3471EEBF486000B0E15 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		BE80F3481EEBF486000B0E15 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
@@ -190,12 +194,14 @@
 			children = (
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
 				BE87DA9A1EAB6C3800DA81EB /* ANATPointMatchingTests.m */,
+				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 				BE98B1421EC274A000978728 /* PointMatchingTests.swift */,
 				BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */,
 				BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */,
 				BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */,
+				BE55D4FC1EFE32650006665A /* TrackerTests.swift */,
 				BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */,
-				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
+				BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */,
 			);
 			path = Anna_iOS_Tests;
 			sourceTree = "<group>";
@@ -457,6 +463,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */,
+				BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */,
 				BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */,
 				BEF96EF61EFE25BA004C2967 /* InheritanceTests.swift in Sources */,
 				BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */,
