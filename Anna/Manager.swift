@@ -24,9 +24,9 @@ EasyManager {
     public typealias
         Root = EasyRootPoint
     let
-    root :Root
-    init(root :Root) {
-        self.root = root
+    root :Root = Root()
+    public init
+        () {
         self.configQueue = DispatchQueue(
             label: "Anna.config",
             attributes: .concurrent
@@ -36,19 +36,6 @@ EasyManager {
             target: configQueue
         )
     }
-    
-    public typealias
-        Configuration = EasyConfiguration
-    public convenience init
-        (config :Configuration) {
-        let
-        root = EasyRootPoint(
-            trackers: config.pointDefaults.trackers,
-            payload: config.pointDefaults.payload
-        )
-        self.init(root: root)
-    }
-    
 }
 
 // MARK: - Load Points

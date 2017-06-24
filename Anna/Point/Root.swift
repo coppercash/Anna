@@ -9,19 +9,27 @@
 import Foundation
 
 public class
-EasyRootPoint : EasyBasePoint {
+EasyRootPoint {
     typealias
         Child = EasyClassPoint
     var
     children :[Child.Class: Child] = Dictionary<Child.Class, Child>()
+    public typealias
+        Tracker = EasyTracker
+    lazy var
+    trackers :[Tracker]? = nil
     
-    init(trackers :[Tracker], payload :Payload? = nil) {
-        super.init(trackers: trackers, payload: payload);
+    init() {
     }
 }
 
 extension
 EasyRootPoint : EasyPayloadNode {
+    public var
+    payload: EasyPayloadCarrier.Payload? {
+        return nil
+    }
+
     var
     parentNode: EasyPayloadNode? {
         return nil

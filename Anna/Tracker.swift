@@ -58,10 +58,10 @@ EasyTrackerConfigurator {
     }
     
     public var
-    defaults :[Tracker] {
+    defaults :[Tracker]? {
         get {
             var
-            trackers :[Tracker]
+            trackers :[Tracker]?
             host.configQueue.sync {
                 trackers = host.root.trackers
             }
@@ -69,7 +69,7 @@ EasyTrackerConfigurator {
         }
         set {
             host.configQueue.async(flags: .barrier) {
-                host.root.trackers = newValue
+                self.host.root.trackers = newValue
             }
         }
     }

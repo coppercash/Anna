@@ -25,7 +25,7 @@ AnnaTestCase : XCTestCase {
         receivedErrors =  Array<Error>()
         expectations = [XCTestExpectation]()
         manager = Manager()
-        manager.defa
+        manager.trackers.defaults = [self]
     }
     override func
         tearDown() {
@@ -45,20 +45,6 @@ AnnaTestCase : XCTestCase {
         }
         execution()
         waitForExpectations(timeout: 0.1) { (error) in }
-    }
-}
-
-extension
-AnnaTestCase : Anna.EasyConfiguration, Anna.EasyPointDefaults {
-    public var
-    pointDefaults: EasyConfiguration.PointDefaults {
-        return self
-    }
-    var payload: EasyPointDefaults.Payload? {
-        return nil
-    }
-    var trackers: [EasyPointDefaults.Tracker] {
-        return [self]
     }
 }
 
