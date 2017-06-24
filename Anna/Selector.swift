@@ -9,17 +9,46 @@
 import Foundation
 
 /*
+ * U > U()
+ * call > call()
+ *
+ * UP: > U(P:)
  * callWith: > call(with:)
  * callAt: > call(at:)
- * callWithParameterA: > call(parameterA:)
+ *
+ * UPN: > U(P:)
+ * goToBed: > go(to:) (> goTo:)
+ * callWithPhoneNumber: > call(phoneNumber:)
+ *
+ * UPNPN: > UPN(P:)
+ * goToBedAtTime: > goToBed(at:) (> goToBedAt:)
+ *
+ * TN: > T(N:)
+ * X callPhoneNumber: > call(phoneNumber:) (> callWithPhoneNumber:)
+ *
+ * TNPN: > TN(P:)
+ * selectRowAtIndex: > selectRow(at:) (> selectRowAt:)
+ *
+ * *:UP: > *(*:UP:)
+ * view:didTouchAround: > view(_:didTouchAround:)
+ *
+ * *:UPN: > N(_:UP:)
+ * view:didTouchAroundPoint: > view(_:didTouchAround:)
+ *
+ * *:UPNPN: > N(_:UPNP:)
+ * view:didTouchAreaAroundPoint: > view(_:didTouchAreaAround:)
+ *
+ * *:TN: > *(_:T:)
+ * X tableView:didSelectRow: > tableView(_:didSelect:)
+ *
+ * *:TNPN: > *(_:TNP:)
  * tableView:didSelectRowAtIndexPath: > tableView(_:didSelectRowAt:)
+ *
+ * ?
  * call:: > call
  */
 extension
 Selector {
-    static let
-    prepositions = PrepositionCollection()
-    
     var
     methodName :String {
         let name = NSStringFromSelector(self)
@@ -52,7 +81,7 @@ Selector {
             if label == "" { return "_:" }
             let pruned = label
                 .firstUncapitalized()
-                .argumentDropped(with: type(of: self).prepositions)
+                .argumentDropped()
             return pruned + ":"
         }
         
@@ -65,20 +94,19 @@ extension
 String {
     var
     methodAndFirstParameter :(String, String) {
-        let method :String
-        var first :String
-        if let with = range(of: "With") {
-            method = substring(to: with.lowerBound)
-            first = substring(from: with.upperBound)
-            if first == "" {
-                first = "with"
+        let prepositions = PrepositionCollection.shared
+        let scalars = unicodeScalars
+        var method = self, first = ""
+        for range in scalars.backwardCamelSubstringRanges() {
+            let substring = String(scalars[range])
+            if prepositions.contains(substring) {
+                method = String(scalars[scalars.startIndex..<range.lowerBound])
+                first = ((substring == "With") && (range.upperBound != scalars.endIndex)) ?
+                    String(scalars[range.upperBound..<scalars.endIndex]) :
+                    String(scalars[range])
+                break
             }
         }
-        else {
-            method = self
-            first = ""
-        }
-        
         return (method, first)
     }
     
@@ -91,11 +119,11 @@ String {
     }
     
     func
-        argumentDropped(with prepositions :PrepositionCollection) ->String {
+        argumentDropped() ->String {
+        let prepositions = PrepositionCollection.shared
         let scalars = unicodeScalars
         for range in scalars.backwardCamelSubstringRanges() {
             let substring = String(scalars[range])
-            print(substring)
             if prepositions.contains(substring) {
                 return String(scalars[scalars.startIndex..<range.upperBound])
             }
@@ -140,10 +168,18 @@ UnicodeScalar {
     }
 }
 
+protocol
+IndexedString {
+    var startIndex :String.Index { get }
+    var endIndex :String.Index { get }
+}
+extension
+String : IndexedString {}
+
 extension
 Array
 where
-    Element == String
+    Element : IndexedString
 {
     func haveLabels() ->Bool {
         for label in self {
@@ -163,156 +199,8 @@ PrepositionCollection {
         contains(_ preposition :String) ->Bool {
         return set.contains(preposition)
     }
-    
     static let
-    prepositions = [
-        "Aboard",
-        "About",
-        "Above",
-        "Across",
-        "Cross",
-        "After",
-        "Against",
-        "Along",
-        "Alongside",
-        "Amid",
-        "Among",
-        "Apropos ",
-        "Apud ",
-        "Around",
-        "As",
-        "Astride",
-        "At",
-        "Bar",
-        "Before",
-        "Behind",
-        "Below",
-        "Beneath",
-        "Beside",
-        "Besides",
-        "Between",
-        "Beyond",
-        "But",
-        "By",
-        "Circa",
-        "Come",
-        "Despite",
-        "Spite",
-        "Down",
-        "During",
-        "Except",
-        "For",
-        "From",
-        "In",
-        "Inside",
-        "Into",
-        "Less",
-        "Like",
-        "Minus",
-        "Near",
-        "Of",
-        "Off",
-        "On",
-        "Onto",
-        "Opposite",
-        "Out",
-        "Outside",
-        "Over",
-        "Past",
-        "Per",
-        "Short",
-        "Since",
-        "Than",
-        "Through",
-        "Throughout",
-        "To",
-        "Toward",
-        "Towards",
-        "Under",
-        "Underneath",
-        "Unlike",
-        "Until",
-        "Till",
-        "Til",
-        "Up",
-        "Upon",
-        "Upside",
-        "Versus",
-        "Via",
-        "With",
-        "Within",
-        "Without",
-        "Worth",
-    ]
-}
-
-class
-PrepositionTrie {
-    let root :Node
-    
-    init() {
-        self.root = Node()
-        insertPrepositions()
-    }
-    
-    func endIndexByMatching(_ characters :ReversedCollection<String.CharacterView>) ->String.CharacterView.Index?
-    {
-        var current :Node = root
-        for (index, char) in characters.enumerated() {
-            print(char)
-            guard
-                let child = current.child(for: char)
-                else { return nil }
-            if child.isTerminating {
-                return characters.index(characters.startIndex, offsetBy: index).base
-            }
-            current = child
-        }
-        return nil
-    }
-    
-    func
-        insertPrepositions() {
-        for preposision in type(of: self).prepositions {
-            insert(preposision.characters.reversed())
-        }
-    }
-    
-    func
-        insert<Chars>(_ characters :Chars)
-        where Chars : Sequence, Chars.Iterator.Element == Character
-    {
-        var current = root
-        for char in characters {
-            current = current.getOrCreateChild(for :char)
-        }
-        current.createChild(for: "\0")
-    }
-    
-    class Node {
-        var children = [Character: Node]()
-        init() {}
-        
-        var isTerminating :Bool {
-            return children["\0"] != nil
-        }
-        
-        func child(for character :Character) ->Node? {
-            return children[character]
-        }
-        
-        func getOrCreateChild(for character :Character) ->Node {
-            if children[character] == nil {
-                children[character] = Node()
-            }
-            return children[character]!
-        }
-        
-        func createChild(for character :Character) {
-            children[character] = Node()
-        }
-    }
-    
+    shared = PrepositionCollection()
     static let
     prepositions = [
         "Aboard",

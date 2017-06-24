@@ -10,10 +10,10 @@ import XCTest
 import Anna
 
 class
-FunctionMatchingTests : AnnaTestCase {
+SelectorMatchingTests : AnnaTestCase {
     
     func
-        test_selectorWithoutParameter() {
+        test_withoutParameter() {
         class
         Object : AnalyzableObjC {
             @objc func
@@ -22,6 +22,8 @@ FunctionMatchingTests : AnnaTestCase {
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
+                        // call
+                        //
                         .selector(#selector(Object.call))
                 }
             }
@@ -36,7 +38,7 @@ FunctionMatchingTests : AnnaTestCase {
     }
 
     func
-        test_selectorStartsWithWith() {
+        test_firstParameterWith() {
         class
         Object : AnalyzableObjC {
             @objc func
@@ -59,30 +61,7 @@ FunctionMatchingTests : AnnaTestCase {
     }
     
     func
-        test_selectorTakeObjectAsFirstParameter() {
-        class
-        Object : AnalyzableObjC {
-            @objc func
-                call(phoneNumber number :Int) { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                registrar
-                    .point { $0
-                        .selector(#selector(Object.call(phoneNumber:)))
-                }
-            }
-        }
-        
-        waitForEvents {
-            Object(manager).call(phoneNumber: 24)
-        }
-       
-        XCTAssertNotNil(receivedEvents.last)
-        XCTAssertNil(receivedErrors.last)
-    }
-    
-    func
-        test_selectorStartsWithOtherPreposition() {
+        test_firstParameterPreposition() {
         class
         Object : AnalyzableObjC {
             @objc func
@@ -105,30 +84,99 @@ FunctionMatchingTests : AnnaTestCase {
     }
     
     func
-        test_selectorWithOneParameter() {
+        test_firstParameterPrepositionNoun() {
         class
         Object : AnalyzableObjC {
             @objc func
-                call(parameterA argumentA :Int) { self.ana.analyze() }
+                go(to bed :String) { self.ana.analyze() }
             override class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
-                        .selector(#selector(Object.call(parameterA:)))
+                        .selector(#selector(go(to:)))
                 }
             }
         }
         
         waitForEvents {
-            Object(manager).call(parameterA: 24)
+            Object(manager).go(to: "bed")
         }
-        
+       
         XCTAssertNotNil(receivedEvents.last)
         XCTAssertNil(receivedErrors.last)
     }
     
     func
-        test_selectorWithTwoParamters() {
+        test_methodNamePrepositionNoun_firstNamePrepositionNoun() {
+        class
+        Object : AnalyzableObjC {
+            @objc func
+                goToBed(at time :String) { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(goToBed(at:)))
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).goToBed(at: "night")
+        }
+       
+        XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
+    }
+    
+    func
+        test_firstParameterNoun() {
+        class
+        Object : AnalyzableObjC {
+            @objc func
+                call(phoneNumber number :Int) { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(Object.call(phoneNumber:)))
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).call(phoneNumber: 24)
+        }
+       
+        XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
+    }
+    
+    func
+        test_methodNameVerdNoun_firstParameterPrepositionNoun() {
+        class
+        Object : AnalyzableObjC {
+            @objc func
+                selectRow(at index :Int) { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(selectRow(at:)))
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).selectRow(at: 0)
+        }
+       
+        XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
+    }
+    
+    func
+        test_secondParameterVerbPreposition() {
         class
         Object : AnalyzableObjC {
             func
@@ -153,76 +201,7 @@ FunctionMatchingTests : AnnaTestCase {
     }
     
     func
-        test_selectorWithOneOmittedParameterLabel() {
-        class
-        Object : AnalyzableObjC {
-            func
-                call(_ string :String) { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                registrar
-                    .point { $0
-                        .selector(#selector(call(_:)))
-                }
-            }
-        }
-        
-        waitForEvents {
-            Object(manager).call("42")
-        }
-        
-        XCTAssertNotNil(receivedEvents.last)
-        XCTAssertNil(receivedErrors.last)
-    }
-    
-    func
-        test_selectorWithTwoOmittedParameterLabels() {
-        class
-        Object : AnalyzableObjC {
-            func
-                call(_ string :String, _ number :Int) { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                registrar
-                    .point { $0
-                        .selector(#selector(call(_:_:)))
-                }
-            }
-        }
-        
-        waitForEvents {
-            Object(manager).call("42", 24)
-        }
-        
-        XCTAssertNotNil(receivedEvents.last)
-        XCTAssertNil(receivedErrors.last)
-    }
-    
-    func
-        test_selectorOmittingOneParameterAmongTwo() {
-        class
-        Object : AnalyzableObjC {
-            func
-                call(_ string :String, number :Int) { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                registrar
-                    .point { $0
-                        .selector(#selector(call(_:number:)))
-                }
-            }
-        }
-        
-        waitForEvents {
-            Object(manager).call("42", number: 24)
-        }
-        
-        XCTAssertNotNil(receivedEvents.last)
-        XCTAssertNil(receivedErrors.last)
-    }
-    
-    func
-        test_commonlySeenUIKitSelector() {
+        test_secondParameterVerbPrepositionNounPrepositionNoun() {
         class
         Object : AnalyzableObjC, UITableViewDelegate {
             func
@@ -247,7 +226,76 @@ FunctionMatchingTests : AnnaTestCase {
     }
     
     func
-        off_test_matchingObjCSelectorWithOneParameter() {
+        test_oneOmittedParameterLabel() {
+        class
+        Object : AnalyzableObjC {
+            func
+                call(_ string :String) { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(call(_:)))
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).call("42")
+        }
+        
+        XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
+    }
+    
+    func
+        test_twoOmittedParameterLabels() {
+        class
+        Object : AnalyzableObjC {
+            func
+                call(_ string :String, _ number :Int) { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(call(_:_:)))
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).call("42", 24)
+        }
+        
+        XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
+    }
+    
+    func
+        test_omittingOneParameterAmongTwo() {
+        class
+        Object : AnalyzableObjC {
+            func
+                call(_ string :String, number :Int) { self.ana.analyze() }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(call(_:number:)))
+                }
+            }
+        }
+        
+        waitForEvents {
+            Object(manager).call("42", number: 24)
+        }
+        
+        XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
+    }
+    
+    func
+        test_unableToMatchCustomObjCSelector() {
         class
         Object : AnalyzableObjC {
             @objc(call:) func
@@ -265,7 +313,9 @@ FunctionMatchingTests : AnnaTestCase {
             Object(manager).call(parameterA: 24)
         }
         
-        XCTAssertNotNil(receivedEvents.last)
-        XCTAssertNil(receivedErrors.last)
+        XCTAssertNil(receivedEvents.last)
+        XCTAssertNotNil(receivedErrors.last)
     }
 }
+
+// TODO: Getter Setter
