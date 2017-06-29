@@ -57,7 +57,7 @@ EasyPayloadNode {
             }
             if let
                 cTrackers = current.trackers {
-               trackers.merge(with: cTrackers)
+                trackers.merge(with: cTrackers)
             }
         }
         return EasyPoint(

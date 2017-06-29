@@ -54,3 +54,43 @@ class ConvenienceTests: XCTestCase {
         XCTAssertEqual(tracker.event?["theAnswer"] as? Int, 42)
     }
 }
+
+class SampleCodeTests: XCTestCase {
+    
+    func testtheModeBasic() {
+class Object : NSObject, Anna.Analyzable {
+    func call() {
+        self.ana.analyze()
+    }
+    class func registerAnalyticsPoints(
+        with registrar :Registrar
+        ) {
+        registrar
+            .point { $0
+                .selector(#selector(call))
+                .set("theAnswer", 42)
+        }
+    }
+}
+
+class Tracker : Anna.Tracker {
+    public func receive(
+        analyticsEvent event: Event,
+        dispatchedBy manager: Manager
+        ) {
+        // Record the event or something else
+    }
+    public func receive(
+        analyticsError error: Error,
+        dispatchedBy manager: Manager
+        ) {
+        // Deal with the error
+    }
+}
+
+let tracker = Tracker()
+Anna.Manager.shared.trackers.defaults = [tracker]
+
+Object().call()
+    }
+}

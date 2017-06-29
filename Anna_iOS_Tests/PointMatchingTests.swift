@@ -72,6 +72,56 @@ PointMatchingTests: AnnaTestCase {
     }
     
     func
+        test_threePointsContainedInOneMethod() {
+        class
+        Object : ANATAnalyzableObjC {
+func call(with index :Int, name :String) {
+    self.ana.event{ $0
+        .set("index", index)
+        .set("name", name)
+        }.analyze()
+}
+override class func
+    registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+    registrar
+        .point { $0
+            .selector(#selector(call(with:name:)))
+            .point { $0
+                .when("index", equal: 0)
+                .set("first-level", "42")
+                .point { $0
+                    .when("name", equal: "Tom")
+                    .set("second-level", 42)
+                }
+                .point { $0
+                    .when("name", equal: "Jerry")
+                    .set("second-level", 24)
+                }
+            }
+            .point { $0
+                .when("index", equal: 1)
+                .set("first-level", "24")
+            }
+    }
+}
+        }
+        
+        waitForEvents(of: 3) {
+            let
+            object = Object(manager)
+            object.call(with: 0, name: "Tom")
+            object.call(with: 0, name: "Jerry")
+            object.call(with: 1, name: "Jimmy")
+        }
+        
+        XCTAssertEqual(receivedEvents[0]["first-level"] as? String, "42")
+        XCTAssertEqual(receivedEvents[0]["second-level"] as? Int, 42)
+        XCTAssertEqual(receivedEvents[1]["first-level"] as? String, "42")
+        XCTAssertEqual(receivedEvents[1]["second-level"] as? Int, 24)
+        XCTAssertEqual(receivedEvents[2]["first-level"] as? String, "24")
+    }
+    
+    func
         test_missMatching() {
         class
         Object : ANATAnalyzable {

@@ -144,7 +144,7 @@ EasyManager {
             trackers.count > 0
             else { throw ConfigurationError.noAvailableTrackers }
         let
-        event = try EasyEvent(seed: seed, point: point)
+        event = try EasyEvent(seed: seed, point: merged)
         for tracker in trackers {
             tracker.receive(
                 analyticsEvent: event,
