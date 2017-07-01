@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ANAManager : NSObject
+@protocol AANTrackerCollection, ANATrackerConfigurator;
+@protocol ANAManager <NSObject>
+@property (readonly) id<ANATrackerConfigurator, AANTrackerCollection> trackers;
+@end
 
+@interface ANAManager : NSObject <ANAManager>
 @end

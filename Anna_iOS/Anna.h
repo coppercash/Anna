@@ -18,3 +18,6 @@ FOUNDATION_EXPORT const unsigned char AnnaVersionString[];
 #import <Anna/ANAManager.h>
 #import <Anna/ANARegister.h>
 #import <Anna/ANAInvocationContext.h>
+#import <Anna/ANAAnalyzable.h>
+#import <Anna/ANAEvent.h>
+#import <Anna/ANATracker.h>
