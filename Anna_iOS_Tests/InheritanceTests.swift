@@ -125,4 +125,42 @@ InheritanceTests: AnnaTestCase {
         
         XCTAssertEqual(receivedEvents.last?["name"] as? String, "Child")
     }
+    
+    func
+        test_KVObservedObject() {
+        class
+        Observable : ANATAnalyzableObjC {
+            var property :String {
+                self.ana.analyze()
+                return "whatever"
+            }
+            override class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .method(#keyPath(property))
+                        .set("answer", "42")
+                }
+            }
+        }
+        
+        waitForEvents {
+            let
+            object = Observable(manager)
+            object.addObserver(
+                self,
+                forKeyPath: #keyPath(Observable.property),
+                options: .new,
+                context: nil
+            )
+            let _ = object.property
+            object.removeObserver(
+                self,
+                forKeyPath: #keyPath(Observable.property)
+            )
+        }
+        
+        XCTAssertEqual(receivedEvents.last?["answer"] as? String, "42")
+        XCTAssertNil(receivedErrors.last)
+    }
 }
