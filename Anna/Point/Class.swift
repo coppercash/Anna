@@ -64,15 +64,15 @@ EasyClassPoint :  EasyPayloadNode {
  1            1             1             1              in both    self, super
  */
 extension
-EasyClassPoint : EasyEventMatching {
+EasyClassPoint : EasyPointMatching {
     internal func
-        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
+        points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         var
-        points = Array<EasyEventMatching.Point>()
-        if let methods = children[event.method]?.points(match: event) {
+        points = Array<EasyPointMatching.Point>()
+        if let methods = children[conditions.method]?.points(match: conditions) {
             points.append(contentsOf: methods)
         }
-        if let supers = superClassPoint?.points(match: event) {
+        if let supers = superClassPoint?.points(match: conditions) {
             points.append(contentsOf: supers)
         }
         return points
@@ -80,7 +80,10 @@ EasyClassPoint : EasyEventMatching {
 }
 
 final class
-EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerBuilding {
+EasyClassPointBuilder :
+    EasyBasePointBuilder<EasyClassPoint>,
+    EasyTrackerBuilding
+{
 
     public var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
@@ -93,18 +96,25 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerBuildin
     // MARK:- Children
     
     typealias
-        Child = EasyMethodPointBuilder
+        Child = EasyMethodPoint
     typealias
-        ChildPoints = ArrayBuilder<Child.Result>
+        ChildBuilder = EasyMethodPointBuilder
+    typealias
+        ChildrenBuffer = ArrayBuilder<Child>
+    public var
+    childrenBuffer :ChildrenBuffer? = nil
     @discardableResult func
-        point(_ buildup :Child.Buildup) ->Self {
+        point(_ buildup :ChildBuilder.Buildup) ->Self {
         let
-        builder = Child(trackers: trackers)
+        builder = ChildBuilder(trackers: trackers)
         buildup(builder)
-        let
-        points = buffer.get("children", ChildPoints())
-        points.add(builder)
+        append(builder)
         return self
+    }
+    func
+        append(_ child :ChildBuilder) {
+        if childrenBuffer == nil { childrenBuffer = ChildrenBuffer() }
+        childrenBuffer!.add(child)
     }
     
     // MARK:- Build
@@ -135,21 +145,36 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerBuildin
     
     func childrenByMethod(from buffer :Buffer) throws ->Dictionary<MethodPoint.Method, MethodPoint> {
         guard let
-            children :ChildPoints = buffer.removeProperty(forKey: "children"),
+            children :ChildrenBuffer = childrenBuffer,
             children.count > 0
             else {
-                throw BuilderError.missedProperty(name: "children", result: String(describing: self))
+                throw BuilderError.missedProperty(
+                    name: "children",
+                    result: String(describing: self)
+                )
         }
-        var
-        childrenByMethod = Dictionary<MethodPoint.Method, MethodPoint>()
-        for child :Child in children.elements() {
+        
+        var childrenByMethod = Dictionary<MethodPoint.Method, MethodPoint>()
+        
+        // For every Method Point Builder
+        //
+        for child :ChildBuilder in children.elements() {
+            
+            // One Method Point Builder could have multiple bound methods
+            //
             for method in child.allMethods() {
-                guard
-                    let point = childrenByMethod[method]
-                    else {
-                        childrenByMethod[method] = try child.point()
-                        continue
+                
+                // If the point by the method yet been registered,
+                // build a new point from the Method Point Builder
+                //
+                guard let point = childrenByMethod[method] else {
+                    childrenByMethod[method] = try child.point()
+                    continue
                 }
+                
+                // If the point by the method has been registered,
+                // update the previously registered point with the newly built point
+                //
                 childrenByMethod[method] = try point.merged(with: try child.point())
             }
         }

@@ -10,8 +10,6 @@
 #import <Anna/Anna.h>
 #import <extobjc/EXTobjc.h>
 
-#define anat ana
-
 @interface PointUserInfoObject : ANATAnalyzable <ANAAnalyzable>
 - (void)call;
 @end
@@ -22,9 +20,9 @@
     self.ana.analyze();
 }
 
-+ (void)registerAnalyticsPointsWithRegistrar:(id<ANARegistrar>)registrar {
++ (void)registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
     registrar
-    .point(^(id<ANAPointBuilder> _) { _
+    .point(^(id<ANAMethodPointBuilding> _) { _
         .selector(@checkselector0([self new], call))
         .set(@"data", @"42");
     });

@@ -53,10 +53,10 @@ EasyClassPointBuilder : EasyRegistrar {}
 extension
 EasyManager {
     typealias
-        Class = EasyAnalyzable
+        Registrant = EasyRegistrant.Type
     typealias
         ClassPointBuilder = EasyClassPointBuilder
-    func loadPoints(for cls :Class.Type) throws {
+    func loadPoints(for cls :Registrant) throws {
         guard
             root.classPoint(for: cls) == nil
             else { return }
@@ -99,15 +99,17 @@ ConfigurationError : Error {
 }
 
 extension
-EasyManager {
+EasyManager : EasyEventDispatching {
     public typealias
         Event = EasyEvent
-    public typealias
-        Seed = EasyEventSeed
-    func receive(_ seed :Seed) {
+    func
+        dispatchEvent(with seed: Seed) {
         queue.async {
             do {
-               try self.dispatch(seed)
+                // Try to load points if they have not been loaded
+                //
+                try self.loadPoints(for: seed.registrant)
+                try self.dispatch(seed)
             }
             catch {
                 self.sendDefaultTrackers(error)
@@ -117,24 +119,23 @@ EasyManager {
     
     public typealias
         Point = EasyPoint
-    func dispatch(_ seed :Seed) throws {
-        // Try to load points if they have not been loaded
-        //
-        try loadPoints(for: seed.cls)
+    func
+        dispatch(_ seed :EasyPointMatchable & EasyPayloadCarrier) throws {
         
         // Find point
         //
         let
         points :[EasyPayloadNode]! = self.root.points(match: seed)
-        guard
-            points.count > 0
-            else { throw MatchingError.noMatchingPoint(class: String(describing: seed.cls), method: seed.method) }
-        guard
-            points.count <= 1
-            else { throw MatchingError.tooManyMatchingPoints(count: points.count) }
-        guard let
-            point = points?.first
-            else { return }
+        guard points.count > 0 else {
+            throw MatchingError.noMatchingPoint(
+                class: String(describing: seed.cls),
+                method: seed.method
+            )
+        }
+        guard points.count <= 1 else {
+            throw MatchingError.tooManyMatchingPoints(count: points.count)
+        }
+        guard let point = points?.first else { return }
         
         // Dispatch the event with point to every tracker tracks the point
         //
@@ -152,7 +153,6 @@ EasyManager {
             )
         }
     }
-    
     
     func
         sendDefaultTrackers(_ error :Error) {

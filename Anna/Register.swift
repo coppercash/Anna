@@ -23,3 +23,11 @@ EasyRegistrant {
     static func
         registerAnalyticsPoints(with registrar :Registrar)
 }
+
+protocol
+EasyRegistrantCarrying {
+    typealias
+        Registrant = EasyRegistrant
+    var
+    registrant : Registrant.Type { get }
+}

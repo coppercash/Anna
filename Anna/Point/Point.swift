@@ -39,34 +39,34 @@ EasyPoint : EasyBasePoint {
 }
 
 extension
-EasyPoint : EasyEventMatching {
+EasyPoint : EasyPointMatching {
     internal func
-        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
+        points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         guard
-            matches(event)
+            matches(conditions)
             else { return nil }
         guard
             let children = self.children,
             children.count > 0
             else { return [self] }
         var
-        points = Array<EasyEventMatching.Point>()
+        points = Array<EasyPointMatching.Point>()
         for child in children {
             guard
-                let childPoints = child.points(match: event)
+                let childPoints = child.points(match: conditions)
                 else { continue }
             points.append(contentsOf: childPoints)
         }
         return points
     }
     
-    func matches(_ event :EasyEventMatching.Event) ->Bool {
+    func matches(_ conditions :EasyPointMatching.Conditions) ->Bool {
         guard let
             predicates = self.predicates
             else { return true }
         for predicate in predicates {
             let
-            object = event.object(to: predicate)
+            object = conditions.object(to: predicate)
             guard
                 predicate.evaluate(with: object)
                 else { return false }

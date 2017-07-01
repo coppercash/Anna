@@ -37,21 +37,19 @@ EasyRootPoint : EasyPayloadNode {
 }
 
 extension
-EasyRootPoint : EasyEventMatching {
+EasyRootPoint : EasyPointMatching {
     func
-        points(match event :EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
-        return classPoint(for: event.cls)?.points(match: event)
+        points(match conditions :EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
+        return classPoint(for: conditions.cls)?.points(match: conditions)
     }
 }
 
 extension
 EasyRootPoint {
-    typealias
-        Sender = EasyAnalyzable
-    func classPoint(for cls :Sender.Type) ->Child? {
+    func classPoint(for cls :Any.Type) ->Child? {
         return children[String(describing: cls)]
     }
-    func setClassPoint(_ classPoint :Child, for cls :Sender.Type) {
+    func setClassPoint(_ classPoint :Child, for cls :Any.Type) {
         children[String(describing: cls)] = classPoint
     }
 }

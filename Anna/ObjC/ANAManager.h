@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ANAEventSeed.h"
 
-@protocol AANTrackerCollection, ANATrackerConfigurator;
+@protocol
+ANATrackerCollection,
+ANATrackerConfigurator,
+ANAEventSeed;
+NS_SWIFT_NAME(ANAManagerProtocol)
 @protocol ANAManager <NSObject>
-@property (readonly) id<ANATrackerConfigurator, AANTrackerCollection> trackers;
-@end
-
-@interface ANAManager : NSObject <ANAManager>
+@property (readonly, nonnull) id<ANATrackerConfigurator, ANATrackerCollection> trackers;
+@property (readonly, class, nonnull) __kindof id<ANAManager> sharedManager;
 @end

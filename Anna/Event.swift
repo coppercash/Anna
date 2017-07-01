@@ -8,32 +8,70 @@
 
 import Foundation
 
+//public protocol
+//EasyEventSeed {
+//    typealias
+//        Class = EasyAnalyzable.Type
+//    var
+//    cls :Class { get }
+//    
+//    typealias
+//        Method = String
+//    var
+//    method :Method { get }
+//    
+//    typealias
+//        Payload = Dictionary<String, Any>
+//    var
+//    payload :Payload? { get }
+//    
+//    func
+//        object(to predicate :Predicate) ->Any?
+//}
+//
+//extension
+//EasyEventSeed {
+//    func
+//        object(to predicate :Predicate) ->Any? {
+//        guard let
+//            objects = payload
+//            else { return nil }
+//        return objects[predicate.key]
+//    }
+//}
+
+protocol
+EasyEventDispatching {
+    typealias
+        Seed = EasyPayloadCarrier & EasyPointMatchable & EasyRegistrantCarrying
+    func
+        dispatchEvent(with seed: Seed)
+}
+
 public class
-EasyEventSeed {
-    typealias
-        Class = EasyAnalyzable.Type
+    EasyEventSeed :
+    EasyPointMatchable,
+    EasyPayloadCarrier,
+    EasyRegistrantCarrying
+{
+    var
+    cls :EasyPointMatchable.Class { return registrant }
     let
-    cls :Class
-    
-    typealias
-        Method = String
+    method :EasyEventSeed.Method
+    public let
+    payload :EasyPayloadCarrier.Payload?
     let
-    method :String
+    registrant: Registrant.Type
     
     init(
-        class cls :Class,
-        method :Method,
-        payload :Payload? = nil
+        class cls :Registrant.Type,
+        method :EasyEventSeed.Method,
+        payload :EasyPayloadCarrier.Payload? = nil
         ) {
-        self.cls = cls
+        self.registrant = cls
         self.method = method
         self.payload = payload
     }
-    
-    public typealias
-        Payload = Dictionary<String, Any>
-    public let
-    payload :Payload?
     
     func
         object(to predicate :Predicate) ->Any? {
@@ -65,7 +103,7 @@ EasyEvent {
     }
     
     convenience
-    init(seed :EasyEventSeed, point :EasyPayloadNode) throws {
+    init(seed :EasyPayloadCarrier, point :EasyPayloadNode) throws {
         guard seed.payload != nil ||
             point.payload != nil
             else { throw EventError.unloadedEvent }
@@ -88,7 +126,7 @@ EasyEvent {
 public class
 EasyEventSeedBuilder {
     var
-    cls :Result.Class? = nil
+    cls :Result.Registrant.Type? = nil
     var
     method :Result.Method? = nil
     let
@@ -126,7 +164,7 @@ EasyEventSeedBuilder {
         let
         dictionary = try buffer.build()
         let
-        event = Result(
+        event = EasyEventSeed(
             class: cls,
             method: method,
             payload: dictionary

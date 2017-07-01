@@ -70,12 +70,27 @@ EasyPayloadNode {
 }
 
 protocol
-EasyEventMatching {
+EasyPointMatching {
     typealias
-    Event = EasyEventSeed
+        Conditions = EasyPointMatchable
     typealias
         Point = EasyPayloadNode
-    func points(match event :Event) ->[Point]?
+    func
+        points(match conditions :Conditions) ->[Point]?
+}
+
+protocol
+EasyPointMatchable {
+    typealias
+        Class = Any.Type
+    var
+    cls :Class { get }
+    typealias
+        Method = String
+    var
+    method :Method { get }
+    func
+        object(to predicate :Predicate) ->Any?
 }
 
 public class
@@ -116,7 +131,7 @@ where
     // MARK:- Payload
     
     @discardableResult public func
-        set(_ key :String, _ value :Any) ->Self {
+        set(_ key :String, _ value :Any?) ->Self {
         buffer.set(key, value)
         return self
     }

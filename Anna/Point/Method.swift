@@ -43,18 +43,18 @@ EasyMethodPoint : EasyPayloadNode {
 }
 
 extension
-EasyMethodPoint : EasyEventMatching {
+EasyMethodPoint : EasyPointMatching {
     internal func
-        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
+        points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         guard
             let children = self.children,
             children.count > 0
             else { return [self] }
         var
-        points = Array<EasyEventMatching.Point>()
+        points = Array<EasyPointMatching.Point>()
         for child in children {
             guard
-                let childPoints = child.points(match: event)
+                let childPoints = child.points(match: conditions)
                 else { continue }
             points.append(contentsOf: childPoints)
         }

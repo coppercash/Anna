@@ -28,3 +28,5 @@ typedef void(^ANATEventsBlock)(void);
 
 @interface ANATAnalyzable : NSObject <ANATAnalyzable>
 @end
+
+#define anat ana

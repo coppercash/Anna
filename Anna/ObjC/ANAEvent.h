@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @protocol ANAEvent <NSObject>
-- (id)objectForKeyedSubscript:(id<NSCopying>)key;
+- (id __nullable)objectForKeyedSubscript:(NSString * __nonnull)key;
 @end
 
-@interface ANAEvent : NSObject <ANAEvent>
-@end

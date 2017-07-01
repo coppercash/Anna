@@ -39,7 +39,7 @@ EasyPrefix {
         event = self.event ?? EventBuilder()
         event.cls = type(of: target)
         event.method = method
-        manager.receive(try! event.event())
+        manager.dispatchEvent(with: try! event.event())
     }
     
     typealias

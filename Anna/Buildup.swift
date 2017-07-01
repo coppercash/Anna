@@ -115,7 +115,7 @@ public class DictionaryBuilder<Key, Value>
     var buffer = Dictionary<Key, Any>()
     
     @discardableResult
-    func set(_ key :Key, _ value :Value) ->Self {
+    func set(_ key :Key, _ value :Value?) ->Self {
         buffer[key] = value
         return self
     }
