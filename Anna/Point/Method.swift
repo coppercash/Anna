@@ -97,32 +97,26 @@ EasyMethodPoint {
 }
 
 final public class
-EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint>, EasyTrackerBuilding {
+    EasyMethodPointBuilder :
+    EasyBasePointBuilder<EasyMethodPoint>,
+    EasyTrackerBuilding,
+    EasyChildrenBuilding
+{
+    init(trackers :EasyTrackerBuilding.Trackers) {
+        self.trackers = trackers
+    }
+    
+    // MARK:- Trackers
     
     public var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
     public let
     trackers :EasyTrackerBuilding.Trackers
-    init(trackers :EasyTrackerBuilding.Trackers) {
-        self.trackers = trackers
-    }
     
     // MARK:- Children
     
-    public typealias
-        Child = EasyPointBuilder
-    typealias
-        ChildPoints = ArrayBuilder<Child.Result>
-    @discardableResult public func
-        point(_ buildup :Child.Buildup) ->Self {
-        let
-        builder = Child(trackers: trackers)
-        buildup(builder)
-        let
-        points = buffer.get("children", ChildPoints())
-        points.add(builder)
-        return self
-    }
+    public var
+    childrenBuffer :ChildrenBuffer? = nil
     
     // MARK:- Method
     
@@ -169,9 +163,9 @@ EasyMethodPointBuilder : EasyBasePointBuilder<EasyMethodPoint>, EasyTrackerBuild
         point() throws -> Point {
         let
         dictionary = try buffer.build(),
-        children = dictionary["children"] as? [Point.Child],
-        trackers = trackersBuffer,
         payload = try self.payload(from: dictionary),
+        children = try childrenBuffer?.array(),
+        trackers = trackersBuffer,
         point = Point(
             trackers: trackers,
             payload: payload,

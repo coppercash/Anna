@@ -55,3 +55,30 @@ EasyRootPoint {
         children[String(describing: cls)] = classPoint
     }
 }
+
+public protocol
+EasyChildrenBuilding : EasyTrackerBuilding {
+    typealias
+        Child = EasyPoint
+    typealias
+        ChildBuilder = EasyPointBuilder
+    typealias
+        ChildrenBuffer = ArrayBuilder<Child>
+    var
+    childrenBuffer :ChildrenBuffer? { get set }
+    @discardableResult func
+        point(_ buildup :ChildBuilder.Buildup) ->Self
+}
+
+extension
+EasyChildrenBuilding {
+    @discardableResult public func
+        point(_ buildup :ChildBuilder.Buildup) ->Self {
+        let
+        builder = ChildBuilder(trackers: trackers)
+        buildup(builder)
+        if childrenBuffer == nil { childrenBuffer = ChildrenBuffer() }
+        childrenBuffer!.add(builder)
+        return self
+    }
+}

@@ -84,45 +84,42 @@ EasyPoint : EasyPayloadNode {
 }
 
 final public class
-EasyPointBuilder : EasyBasePointBuilder<EasyPoint>, EasyTrackerBuilding {
+    EasyPointBuilder :
+    EasyBasePointBuilder<EasyPoint>,
+    EasyTrackerBuilding,
+    EasyChildrenBuilding
+{
+    
+    init(trackers :EasyTrackerBuilding.Trackers) {
+        self.trackers = trackers
+    }
+    
+    // MARK:- Trackers
     
     public var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
     public let
     trackers :EasyTrackerBuilding.Trackers
-    init(trackers :EasyTrackerBuilding.Trackers) {
-        self.trackers = trackers
-    }
     
     // MARK:- Children
     
-    public typealias
-        Child = EasyPointBuilder
-    typealias
-        ChildPoints = ArrayBuilder<Child.Result>
-    @discardableResult public func
-        point(_ buildup :Child.Buildup) ->Self {
-        let
-        builder = Child(trackers: trackers)
-        buildup(builder)
-        let
-        points = buffer.get("children", ChildPoints())
-        points.add(builder)
-        return self
-    }
+    public var
+    childrenBuffer :ChildrenBuffer? = nil
     
     // MARK:- Predicates
     
     typealias
-    Predicates = ArrayBuilder<Predicate>
+        PredicatesBuffer = ArrayBuilder<Predicate>
+    lazy var
+    predicatesBuffer :PredicatesBuffer? = nil
     @discardableResult public func
         when<Value>(_ key :String, equal expectedValue :Value)
         ->Self where Value : Equatable
     {
         let
-        predicate = EqualPredicate(key: key, expectedValue: expectedValue),
-        predicates = buffer.get("predicates", Predicates())
-        predicates.add(predicate)
+        predicate = EqualPredicate(key: key, expectedValue: expectedValue)
+        if predicatesBuffer == nil { predicatesBuffer = PredicatesBuffer() }
+        predicatesBuffer!.add(predicate)
         return self
     }
     
@@ -134,10 +131,10 @@ EasyPointBuilder : EasyBasePointBuilder<EasyPoint>, EasyTrackerBuilding {
         point() throws -> Point {
         let
         dictionary = try buffer.build(),
-        trackers = trackersBuffer,
         payload = try self.payload(from: dictionary),
-        predicates = dictionary["predicates"] as? [Point.Predicate],
-        children = dictionary["children"] as? [Point.Child],
+        trackers = trackersBuffer,
+        predicates = try predicatesBuffer?.array(),
+        children = try childrenBuffer?.array(),
         point = Point(
             trackers: trackers,
             payload: payload,
