@@ -49,7 +49,7 @@ AnnaTestCase : XCTestCase {
 }
 
 extension
-AnnaTestCase : EasyTracker {
+AnnaTestCase : Tracker {
     func
         receive(
         analyticsEvent event: EasyTracker.Event,

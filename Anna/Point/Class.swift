@@ -8,17 +8,20 @@
 
 import Foundation
 
-class
-EasyClassPoint : EasyBasePoint {
-    
+protocol
+EasyClassPointBeing : class, EasyPointMatching, EasyPayloadNode {
     typealias
         Class = String
     typealias
         Child = EasyMethodPoint
-    let
-    children :[Child.Method: Child]
     typealias
         Parent = EasyRootPoint
+}
+
+class
+EasyClassPoint : EasyBasePoint, EasyClassPointBeing {
+    let
+    children :[Child.Method: Child]
     weak var
     parent :Parent!
     let
@@ -84,7 +87,6 @@ EasyClassPointBuilder :
     EasyBasePointBuilder<EasyClassPoint>,
     EasyTrackerBuilding
 {
-
     public var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
     public let
@@ -126,9 +128,9 @@ EasyClassPointBuilder :
     override func
         point() throws ->Point {
         let
-        childrenByMethod = try self.childrenByMethod(from: buffer),
-        dictionary = try buffer.build(),
+        childrenByMethod = try madeChildrenByMethod(),
         trackers = trackersBuffer,
+        dictionary = try buffer.build(),
         payload = try self.payload(from: dictionary),
         point = Point(
             trackers: trackers,
@@ -143,7 +145,7 @@ EasyClassPointBuilder :
         return point
     }
     
-    func childrenByMethod(from buffer :Buffer) throws ->Dictionary<MethodPoint.Method, MethodPoint> {
+    func madeChildrenByMethod() throws ->Dictionary<MethodPoint.Method, MethodPoint> {
         guard let
             children :ChildrenBuffer = childrenBuffer,
             children.count > 0
@@ -164,7 +166,7 @@ EasyClassPointBuilder :
             //
             for method in child.allMethods() {
                 
-                // If the point by the method yet been registered,
+                // If the point by the method has yet been registered,
                 // build a new point from the Method Point Builder
                 //
                 guard let point = childrenByMethod[method] else {

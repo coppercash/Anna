@@ -8,18 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-NS_SWIFT_NAME(ANAPointMatchableProtocol)
 @protocol ANAPointMatchable <NSObject>
 @property (readonly, nonnull) Class cls;
 @property (readonly, nonnull) SEL selector;
 @end
 
-NS_SWIFT_NAME(ANAPayloadCarryingProtocol)
 @protocol ANAPayloadCarrying <NSObject>
 @property (readonly, nullable) NSDictionary<NSString *, id> *payload;
 @end
 
-NS_SWIFT_NAME(ANAEventDispatchingProtocol)
+@protocol ANARegistrantCarrying;
 @protocol ANAEventDispatching <NSObject>
-- (void)dispatchEventWithSeed:(id<ANAPointMatchable, ANAPayloadCarrying> __nonnull)seed;
+- (void)dispatchEventWithSeed:(id<ANAPointMatchable, ANAPayloadCarrying, ANARegistrantCarrying> __nonnull)seed;
 @end

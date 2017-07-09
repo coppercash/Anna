@@ -1,4 +1,4 @@
-//
+
 //  ANAManager.swift
 //  Anna
 //
@@ -56,16 +56,16 @@ public class
 }
 
 extension
-ANAManager : ANAEventDispatchingProtocol {
+ANAManager : ANAEventDispatching {
     public func
         dispatchEvent(
-        withSeed seed: ANAPayloadCarryingProtocol & ANAPointMatchableProtocol
+        withSeed seed: ANAPayloadCarrying & ANAPointMatchable & ANARegistrantCarrying
         ) {
         proto.queue.async {
             do {
                 // Try to load points if they have not been loaded
                 //
-                try self.loadPoints(for: seed.cls as! Registrant)
+                try self.loadPoints(for: seed.registrant)
                 try self.proto.dispatch(ObjCEventSeed(seed))
             }
             catch {
@@ -75,16 +75,27 @@ ANAManager : ANAEventDispatchingProtocol {
     }
 }
 
-//extension
-//NSObject : EasyAnalyzable {
-//    public static func
-//        registerAnalyticsPoints(with registrar: EasyRegistrant.Registrar) {
-//        guard let registering = self as? ANARegistering else { return }
-//        let objCRegistrar = ANAClassPointBuilder(registrar as! EasyClassPointBuilder)
-//        registering.ana_registerAnalyticsPoints(withRegistrar: objCRegistrar)
-//    }
-//}
-
 extension
 ANAClassPointBuilder : ANARegistrationRecording {
+}
+
+extension
+NSObject {
+    public func
+        ana_context() ->(Selector)->ANAPrefixProtocol {
+        return { [unowned self] (selector) in
+            return ANAPrefix(
+                target: self as! ANAAnalyzable,
+                selector: selector
+            )
+        }
+    }
+
+    public func
+        ana_analyticsManager() ->ANAEventDispatching {
+        return ANAManager.shared as! ANAEventDispatching
+    }
+    
+//    public class func
+//        ana_registerAnalyticsPoints(withRegistrar registrar: ANARegistrationRecording) {}
 }

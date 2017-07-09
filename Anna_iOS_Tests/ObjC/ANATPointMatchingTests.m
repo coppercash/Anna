@@ -20,7 +20,7 @@
     self.ana.analyze();
 }
 
-+ (void)registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
++ (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
     registrar
     .point(^(id<ANAMethodPointBuilding> _) { _
         .selector(@checkselector0([self new], call))
@@ -40,6 +40,7 @@
         [[PointUserInfoObject objectWithAnalyzer:self.manager] call];
     }];
     XCTAssertEqualObjects(self.receivedEvents.lastObject[@"data"], @"42");
+    XCTAssertNil(self.receivedErrors.lastObject);
 }
 
 @end

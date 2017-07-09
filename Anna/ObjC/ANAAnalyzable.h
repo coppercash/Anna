@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ANARegister.h"
 
 @protocol ANAEventDispatching, ANAPrefix;
-@protocol ANAAnalyzable <NSObject>
+@protocol ANAAnalyzable <NSObject, ANARegistering>
+//@property (readonly, nonnull) id<ANAEventDispatching> ana_analyticsManager;
+//@property (readonly, nonnull) id<ANAPrefix> __nonnull (^ana_context)(SEL __nonnull selector);
 - (id<ANAEventDispatching> __nonnull)ana_analyticsManager;
 - (id<ANAPrefix> __nonnull (^ __nonnull)(SEL __nonnull)) ana_context;
 @end
@@ -18,5 +21,5 @@
 
 #define ana ana_context(_cmd)
 
-@interface NSObject (ANAAnalyzable) <ANAAnalyzable>
-@end
+//@interface NSObject (ANAAnalyzable) <ANAAnalyzable>
+//@end

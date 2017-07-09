@@ -11,7 +11,7 @@ import Foundation
 public class
 EasyRootPoint {
     typealias
-        Child = EasyClassPoint
+        Child = EasyClassPointBeing
     var
     children :[Child.Class: Child] = Dictionary<Child.Class, Child>()
     public typealias

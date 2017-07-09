@@ -8,14 +8,25 @@
 
 import Foundation
 
+@objc public protocol
+ANARegistrantCarrying : NSObjectProtocol {
+    typealias
+        Registrant = ANARegistering
+    var
+    registrant : Registrant.Type { get }
+}
+
 class
 ANAEventSeed :
     NSObject,
-    ANAPointMatchableProtocol,
-    ANAPayloadCarryingProtocol
+    ANAPointMatchable,
+    ANAPayloadCarrying,
+    ANARegistrantCarrying
 {
     let
-    cls :AnyClass
+    registrant: Registrant.Type
+    var
+    cls :AnyClass { return registrant }
     let
     selector :Selector
     typealias
@@ -24,11 +35,11 @@ ANAEventSeed :
     payload :Payload?
     
     init(
-        class cls :AnyClass,
+        class cls :Registrant.Type,
         selector :Selector,
         payload :Payload?
         ) {
-        self.cls = cls
+        self.registrant = cls
         self.selector = selector
         self.payload = payload
     }
@@ -40,7 +51,7 @@ class
     EasyPayloadCarrier
 {
     typealias
-        Proto = ANAPayloadCarryingProtocol & ANAPointMatchableProtocol
+        Proto = ANAPayloadCarrying & ANAPointMatchable
     let
     proto :Proto
     init(_ proto :Proto) {

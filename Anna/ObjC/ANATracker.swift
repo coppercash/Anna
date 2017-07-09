@@ -44,6 +44,12 @@ class ObjCTrackerConfigurator :
     ANATrackerConfigurator,
     ANATrackerCollection
 {
+    typealias Proto = EasyTrackerConfigurator
+    let proto :Proto
+    init(_ proto :Proto) {
+        self.proto = proto
+    }
+    
     subscript(key: String) ->ANATracker? {
         get {
             if let tracker = proto[key] as? SwiftEasyTracker {
@@ -66,12 +72,27 @@ class ObjCTrackerConfigurator :
         }
     }
 
-    var defaults: [ANATracker]?
-
-    typealias Proto = EasyTrackerConfigurator
-    let proto :Proto
-    init(_ proto :Proto) {
-        self.proto = proto
+    var defaults: [ANATracker]? {
+        get {
+            return proto.defaults?.map { (tracker) -> ANATracker in
+                if let tracker = tracker as? SwiftEasyTracker {
+                    return tracker.proto
+                }
+                else {
+                    return ObjCTracker(tracker)
+                }
+            }
+        }
+        set {
+            guard let trackers = newValue else {
+                proto.defaults = nil
+                return
+            }
+            
+            proto.defaults = trackers.map { (tracker) -> Proto.Tracker in
+                return SwiftEasyTracker(tracker)
+            }
+        }
     }
 }
 

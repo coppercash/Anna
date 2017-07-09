@@ -18,7 +18,7 @@ EasyMethodPoint : EasyBasePoint {
     let
     children :[Child]?
     typealias
-        Parent = EasyClassPoint
+        Parent = EasyClassPointBeing
     weak var
     parent :Parent!
     

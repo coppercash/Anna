@@ -79,6 +79,19 @@ MatchingError : Error {
 }
 
 extension
+MatchingError : LocalizedError {
+    public var
+    errorDescription: String? {
+        switch self {
+        case .noMatchingPoint(class: let cls, method: let method):
+            return "No matching point found on class \(cls) for method \(method)."
+        case .tooManyMatchingPoints(count: let count):
+            return "Too many matching points found. Expected one but found \(count)."
+        }
+    }
+}
+
+extension
 MatchingError : Equatable {
     public static func
         == (lhs: MatchingError, rhs: MatchingError) ->Bool {

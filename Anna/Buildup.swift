@@ -8,8 +8,20 @@
 
 import Foundation
 
-enum BuilderError : Error {
+enum
+BuilderError : Error {
     case missedProperty(name :String, result :String)
+}
+
+extension
+BuilderError : LocalizedError {
+    var
+    errorDescription: String? {
+        switch self {
+        case .missedProperty(name: let name, result: let result):
+            return "Property '\(name)' for Result '\(result)' is required but missed."
+        }
+    }
 }
 
 // Why Builder is needed?

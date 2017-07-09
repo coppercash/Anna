@@ -7,7 +7,6 @@
 //
 
 #import "ANATAnnaTestCase.h"
-#import <Anna/Anna.h>
 
 @interface ANATAnnaTestCase ()
 @property (strong, nonatomic) NSMutableArray<id<ANAEvent>> *receivedEvents;
@@ -59,6 +58,28 @@
 
 @end
 
+@interface ANATAnnaTestCase (ANATracker) <ANATracker>
+@end
+
+@implementation ANATAnnaTestCase (ANATracker)
+
+- (void)receiveAnalyticsEvent:(id<ANAEvent>)event
+                 dispatchedBy:(id<ANAManager>)manager
+{
+    [self.receivedEvents addObject:event];
+    [self.expectations.lastObject fulfill];
+    [self.expectations removeLastObject];
+}
+
+- (void)receiveAnalyticsError:(NSError *)error
+                 dispatchedBy:(id<ANAManager>)manager
+{
+    [self.receivedErrors addObject:error];
+    [self.expectations.lastObject fulfill];
+    [self.expectations removeLastObject];
+}
+
+@end
 
 @interface ANATAnalyzable ()
 @property (strong, nonatomic) id<ANAManager> analyzer;
@@ -77,6 +98,14 @@
         _analyzer = analyzer;
     }
     return self;
+}
+
+- (id<ANAEventDispatching>)ana_analyticsManager {
+    return self.analyzer;
+}
+
++ (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording> __nonnull)registrar {
+    
 }
 
 @end

@@ -13,6 +13,7 @@ typedef void(^ANATEventsBlock)(void);
 @protocol ANATAnnaTestCase
 @property (readonly) id<ANAManager> manager;
 @property (readonly) NSArray<id<ANAEvent>> *receivedEvents;
+@property (readonly) NSArray<NSError *> *receivedErrors;
 - (void)waitForEvents:(ANATEventsBlock)execution;
 - (void)waitForEventsOfCount:(NSUInteger)count
                    execution:(ANATEventsBlock)execution;
@@ -26,7 +27,9 @@ typedef void(^ANATEventsBlock)(void);
 + (instancetype)objectWithAnalyzer:(id<ANAManager>)analyzer;
 @end
 
-@interface ANATAnalyzable : NSObject <ANATAnalyzable>
+#import <Anna/Anna.h>
+
+@interface ANATAnalyzable : NSObject <ANATAnalyzable, ANAAnalyzable>
 @end
 
 #define anat ana
