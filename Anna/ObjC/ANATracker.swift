@@ -20,7 +20,7 @@ class ObjCTracker :
     
     func receiveAnalyticsEvent(
         _ event: ANAEvent,
-        dispatchedBy manager: ANAManagerProtocol
+        dispatchedBy manager: ANAManaging
         ) {
         proto.receive(
             analyticsEvent: (event as! ObjCEvent).proto,
@@ -30,7 +30,7 @@ class ObjCTracker :
     
     func receiveAnalyticsError(
         _ error: Error,
-        dispatchedBy manager: ANAManagerProtocol
+        dispatchedBy manager: ANAManaging
         ) {
         proto.receive(
             analyticsError: error,

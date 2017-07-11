@@ -13,8 +13,7 @@
 ANATrackerCollection,
 ANATrackerConfigurator,
 ANAEventSeed;
-NS_SWIFT_NAME(ANAManagerProtocol)
-@protocol ANAManager <NSObject>
+@protocol ANAManaging <NSObject, ANAEventDispatching>
 @property (readonly, nonnull) id<ANATrackerConfigurator, ANATrackerCollection> trackers;
-@property (readonly, class, nonnull) id<ANAManager> __kindof sharedManager;
+@property (readonly, class, nonnull) id<ANAManaging> __kindof sharedManager;
 @end

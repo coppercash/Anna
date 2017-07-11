@@ -11,7 +11,7 @@ import Foundation
 public class
     ANAManager :
     NSObject,
-    ANAManagerProtocol
+    ANAManaging
 {
     typealias
         Proto = EasyManager
@@ -30,7 +30,7 @@ public class
     public let
     trackers :ANATrackerCollection & ANATrackerConfigurator
     public static var
-    shared: ANAManagerProtocol = ANAManager(Proto.shared)
+    sharedManager: ANAManaging = ANAManager(Proto.shared)
     
     // MARK: - Load
     
@@ -77,25 +77,4 @@ ANAManager : ANAEventDispatching {
 
 extension
 ANAClassPointBuilder : ANARegistrationRecording {
-}
-
-extension
-NSObject {
-    public func
-        ana_context() ->(Selector)->ANAPrefixProtocol {
-        return { [unowned self] (selector) in
-            return ANAPrefix(
-                target: self as! ANAAnalyzable,
-                selector: selector
-            )
-        }
-    }
-
-    public func
-        ana_analyticsManager() ->ANAEventDispatching {
-        return ANAManager.shared as! ANAEventDispatching
-    }
-    
-//    public class func
-//        ana_registerAnalyticsPoints(withRegistrar registrar: ANARegistrationRecording) {}
 }

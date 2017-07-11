@@ -161,25 +161,12 @@ EasyClassPointBuilder :
         // For every Method Point Builder
         //
         for child :ChildBuilder in children.elements() {
-            
-            // One Method Point Builder could have multiple bound methods
+            let point = try child.point()
+            // One Method Point Builder could have multiple bound selectors and methods
             //
-            for method in child.allMethods() {
-                
-                // If the point by the method has yet been registered,
-                // build a new point from the Method Point Builder
-                //
-                guard let point = childrenByMethod[method] else {
-                    childrenByMethod[method] = try child.point()
-                    continue
-                }
-                
-                // If the point by the method has been registered,
-                // update the previously registered point with the newly built point
-                //
-                childrenByMethod[method] = try point.merged(with: try child.point())
-            }
+            try childrenByMethod.updatePoints(for: child.allMethods(), with: point)
         }
+        
         return childrenByMethod
     }
 }

@@ -11,9 +11,9 @@
 @protocol ANAEvent;
 @protocol ANATracker <NSObject>
 - (void)receiveAnalyticsEvent:(id<ANAEvent> __nonnull)event
-                 dispatchedBy:(id<ANAManager> __nonnull)manager;
+                 dispatchedBy:(id<ANAManaging> __nonnull)manager;
 - (void)receiveAnalyticsError:(NSError * __nonnull)error
-                 dispatchedBy:(id<ANAManager> __nonnull)manager;
+                 dispatchedBy:(id<ANAManaging> __nonnull)manager;
 @end
 
 @protocol ANATrackerCollection <NSObject>

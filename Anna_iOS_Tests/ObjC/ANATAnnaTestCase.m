@@ -12,7 +12,7 @@
 @property (strong, nonatomic) NSMutableArray<id<ANAEvent>> *receivedEvents;
 @property (strong, nonatomic) NSMutableArray<NSError *> *receivedErrors;
 @property (strong, nonatomic) NSMutableArray<XCTestExpectation *> *expectations;
-@property (strong, nonatomic) id<ANAManager> manager;
+@property (strong, nonatomic) id<ANAManaging> manager;
 @end
 
 @implementation ANATAnnaTestCase
@@ -64,7 +64,7 @@
 @implementation ANATAnnaTestCase (ANATracker)
 
 - (void)receiveAnalyticsEvent:(id<ANAEvent>)event
-                 dispatchedBy:(id<ANAManager>)manager
+                 dispatchedBy:(id<ANAManaging>)manager
 {
     [self.receivedEvents addObject:event];
     [self.expectations.lastObject fulfill];
@@ -72,7 +72,7 @@
 }
 
 - (void)receiveAnalyticsError:(NSError *)error
-                 dispatchedBy:(id<ANAManager>)manager
+                 dispatchedBy:(id<ANAManaging>)manager
 {
     [self.receivedErrors addObject:error];
     [self.expectations.lastObject fulfill];
@@ -82,18 +82,18 @@
 @end
 
 @interface ANATAnalyzable ()
-@property (strong, nonatomic) id<ANAManager> analyzer;
+@property (strong, nonatomic) id<ANAManaging> analyzer;
 @end
 
 @implementation ANATAnalyzable
 
-+ (instancetype)objectWithAnalyzer:(id<ANAManager>)analyzer {
++ (instancetype)objectWithAnalyzer:(id<ANAManaging>)analyzer {
     ANATAnalyzable *object;
     object = [[self alloc] initWithAnalyzer:analyzer];
     return object;
 }
 
-- (instancetype)initWithAnalyzer:(id<ANAManager>)analyzer {
+- (instancetype)initWithAnalyzer:(id<ANAManaging>)analyzer {
     if (self = [super init]) {
         _analyzer = analyzer;
     }
@@ -105,7 +105,6 @@
 }
 
 + (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording> __nonnull)registrar {
-    
 }
 
 @end

@@ -9,9 +9,9 @@
 #import <XCTest/XCTest.h>
 
 typedef void(^ANATEventsBlock)(void);
-@protocol ANAEvent, ANAManager;
+@protocol ANAEvent, ANAManaging;
 @protocol ANATAnnaTestCase
-@property (readonly) id<ANAManager> manager;
+@property (readonly) id<ANAManaging> manager;
 @property (readonly) NSArray<id<ANAEvent>> *receivedEvents;
 @property (readonly) NSArray<NSError *> *receivedErrors;
 - (void)waitForEvents:(ANATEventsBlock)execution;
@@ -22,9 +22,9 @@ typedef void(^ANATEventsBlock)(void);
 @interface ANATAnnaTestCase : XCTestCase <ANATAnnaTestCase>
 @end
 
-@protocol ANAManager;
+@protocol ANAManaging;
 @protocol ANATAnalyzable <NSObject>
-+ (instancetype)objectWithAnalyzer:(id<ANAManager>)analyzer;
++ (instancetype)objectWithAnalyzer:(id<ANAManaging>)analyzer;
 @end
 
 #import <Anna/Anna.h>

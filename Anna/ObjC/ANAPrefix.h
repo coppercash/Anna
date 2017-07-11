@@ -8,13 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_SWIFT_NAME(ANAPrefixProtocol)
-@protocol ANAPrefix
+@protocol ANAPrefixing
 @property (readonly, nonnull) void(^analyze)();
 @end
-
-//@protocol ANAAnalyzable;
-//@interface ANAPrefix : NSObject <ANAPrefix>
-//- (instancetype)initWithTarget:(id<ANAAnalyzable> __unsafe_unretained)target
-//                      selector:(SEL)selector;
-//@end

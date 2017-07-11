@@ -25,13 +25,13 @@
 		BE22D37E1F0789EE007AEE40 /* ANATracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37D1F0789EE007AEE40 /* ANATracker.swift */; };
 		BE22D3801F0794AA007AEE40 /* ANAEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */; };
 		BE22D3811F079821007AEE40 /* ANAEventSeed.h in Headers */ = {isa = PBXBuildFile; fileRef = BE22D3701F077EF8007AEE40 /* ANAEventSeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE22D3841F07A01E007AEE40 /* ANAAnalyzable.m in Sources */ = {isa = PBXBuildFile; fileRef = BE22D36E1F077E00007AEE40 /* ANAAnalyzable.m */; };
 		BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */; };
 		BE3127D11EF5657100DA452A /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D01EF5657100DA452A /* Selector.swift */; };
 		BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FC1EFE32650006665A /* TrackerTests.swift */; };
 		BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */; };
 		BE55D5031EFE66060006665A /* ConvenienceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D5021EFE66060006665A /* ConvenienceTests.swift */; };
 		BE55D5041EFE6CD70006665A /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D5001EFE65AE0006665A /* Convenience.swift */; };
+		BE65D7671F158A9F0079F9E8 /* ANAAnalyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE65D7661F158A9F0079F9E8 /* ANAAnalyzable.swift */; };
 		BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */; };
 		BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3471EEBF486000B0E15 /* Builder.swift */; };
 		BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3481EEBF486000B0E15 /* Buildup.swift */; };
@@ -88,7 +88,6 @@
 		BE22D3601F076ADB007AEE40 /* ANAAnalyzable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAAnalyzable.h; sourceTree = "<group>"; };
 		BE22D3621F076B40007AEE40 /* ANAEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAEvent.h; sourceTree = "<group>"; };
 		BE22D3681F077589007AEE40 /* ANATracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANATracker.h; sourceTree = "<group>"; };
-		BE22D36E1F077E00007AEE40 /* ANAAnalyzable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAAnalyzable.m; sourceTree = "<group>"; };
 		BE22D3701F077EF8007AEE40 /* ANAEventSeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAEventSeed.h; sourceTree = "<group>"; };
 		BE22D3741F07845C007AEE40 /* ANAManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAManager.swift; sourceTree = "<group>"; };
 		BE22D37D1F0789EE007AEE40 /* ANATracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANATracker.swift; sourceTree = "<group>"; };
@@ -99,6 +98,7 @@
 		BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureTracker.swift; sourceTree = "<group>"; };
 		BE55D5001EFE65AE0006665A /* Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		BE55D5021EFE66060006665A /* ConvenienceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvenienceTests.swift; sourceTree = "<group>"; };
+		BE65D7661F158A9F0079F9E8 /* ANAAnalyzable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAAnalyzable.swift; sourceTree = "<group>"; };
 		BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnaTestCase.swift; sourceTree = "<group>"; };
 		BE80F3471EEBF486000B0E15 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		BE80F3481EEBF486000B0E15 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
@@ -288,7 +288,7 @@
 			children = (
 				BE042E641F0EF73E00E0B44A /* Point */,
 				BE22D3601F076ADB007AEE40 /* ANAAnalyzable.h */,
-				BE22D36E1F077E00007AEE40 /* ANAAnalyzable.m */,
+				BE65D7661F158A9F0079F9E8 /* ANAAnalyzable.swift */,
 				BEDB99EA1EBE8DBA006637DC /* ANAManager.h */,
 				BE22D3741F07845C007AEE40 /* ANAManager.swift */,
 				BE22D3681F077589007AEE40 /* ANATracker.h */,
@@ -454,7 +454,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		8FE117F669E63E43E5394798 /* [CP] Check Pods Manifest.lock */ = {
@@ -469,7 +469,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9249D5954B2E3FE0BB9D4FAD /* [CP] Embed Pods Frameworks */ = {
@@ -509,7 +509,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE22D3841F07A01E007AEE40 /* ANAAnalyzable.m in Sources */,
 				BE22D37C1F078692007AEE40 /* ANAManager.swift in Sources */,
 				BE22D37E1F0789EE007AEE40 /* ANATracker.swift in Sources */,
 				BE55D5041EFE6CD70006665A /* Convenience.swift in Sources */,
@@ -524,6 +523,7 @@
 				BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */,
 				BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */,
 				BE80F3621EEBF486000B0E15 /* Analyzable.swift in Sources */,
+				BE65D7671F158A9F0079F9E8 /* ANAAnalyzable.swift in Sources */,
 				BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */,
 				BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */,
 				BE042E6D1F0EF9C900E0B44A /* ANAClass.swift in Sources */,

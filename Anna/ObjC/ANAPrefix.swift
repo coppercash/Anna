@@ -11,7 +11,7 @@ import Foundation
 public class
     ANAPrefix :
     NSObject,
-    ANAPrefixProtocol
+    ANAPrefixing
 {
     unowned let
     target :ANAAnalyzable
