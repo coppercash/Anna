@@ -35,7 +35,9 @@ class TrackerTests: AnnaTestCase {
         }
         
         XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
         XCTAssertNotNil(appended.receivedEvents.last)
+        XCTAssertNil(appended.receivedErrors.last)
     }
     
     /*

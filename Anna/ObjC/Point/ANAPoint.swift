@@ -13,20 +13,13 @@ public class
     NSObject,
     ANAPointBuilding
 {
-    public var
-    equal: (String, NSObject) -> ANAPointBuilding {
-        return { [unowned self] (key, value) in
-            self.proto.when(key, equal: value)
-            return self
-        }
-    }
-
     typealias
         Proto = EasyPointBuilder
     let
     proto :Proto
     init(_ proto :Proto) {
         self.proto = proto
+        self.availableTrackers = ObjCTrackerCollection(proto.trackers)
     }
 
     public var
@@ -51,4 +44,23 @@ public class
             return self
         }
     }
+    
+    public var
+    equal: (String, NSObject) -> ANAPointBuilding {
+        return { [unowned self] (key, value) in
+            self.proto.when(key, equal: value)
+            return self
+        }
+    }
+
+    public var
+    tracker: (ANATracker) -> ANAPointBuilding {
+        return { [unowned self] (tracker) in
+            self.proto.tracker(SwiftEasyTracker(tracker))
+            return self
+        }
+    }
+    
+    public let
+    availableTrackers: ANATrackerCollection
 }

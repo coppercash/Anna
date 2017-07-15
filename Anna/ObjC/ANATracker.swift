@@ -39,6 +39,33 @@ class ObjCTracker :
     }
 }
 
+class ObjCTrackerCollection :
+    NSObject,
+    ANATrackerCollection
+{
+    typealias Proto = EasyTrackerCollection
+    let proto :Proto
+    init(_ proto :Proto) {
+        self.proto = proto
+    }
+    
+    subscript(key: String) ->ANATracker? {
+        get {
+            if let tracker = proto[key] as? SwiftEasyTracker {
+                return tracker.proto
+            }
+            else if let tracker = proto[key] {
+                return ObjCTracker(tracker)
+            }
+            else {
+                return nil
+            }
+        }
+        set(tracker) {
+        }
+    }
+}
+
 class ObjCTrackerConfigurator :
     NSObject,
     ANATrackerConfigurator,

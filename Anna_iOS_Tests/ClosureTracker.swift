@@ -10,7 +10,7 @@ import XCTest
 import Anna
 
 class
-ClosureTracker : EasyTracker {
+ClosureTracker : Tracker {
     typealias Event = EasyEvent
     var
     receivedEvents = [Event]()

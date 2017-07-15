@@ -19,6 +19,7 @@ class
     proto :Proto
     init(_ proto :Proto) {
         self.proto = proto
+        self.availableTrackers = ObjCTrackerCollection(proto.trackers)
     }
     
     var
@@ -32,7 +33,7 @@ class
     var
     set: (String, Any?) -> ANAMethodPointBuilding {
         return { [unowned self] (key, value) in
-            self.proto.buffer.set(key, value)
+            self.proto.set(key, value)
             return self
         }
     }
@@ -51,5 +52,15 @@ class
             return self
         }
     }
+    
+    var
+    tracker: (ANATracker) -> ANAMethodPointBuilding {
+        return { [unowned self] (tracker) in
+            self.proto.tracker(SwiftEasyTracker(tracker))
+            return self
+        }
+    }
+    
+    let availableTrackers: ANATrackerCollection
 }
 
