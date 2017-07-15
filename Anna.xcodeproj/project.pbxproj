@@ -25,6 +25,7 @@
 		BE22D37E1F0789EE007AEE40 /* ANATracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37D1F0789EE007AEE40 /* ANATracker.swift */; };
 		BE22D3801F0794AA007AEE40 /* ANAEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */; };
 		BE22D3811F079821007AEE40 /* ANAEventSeed.h in Headers */ = {isa = PBXBuildFile; fileRef = BE22D3701F077EF8007AEE40 /* ANAEventSeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE237AFB1F19D907002EB52B /* ANATInheritanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE237AFA1F19D907002EB52B /* ANATInheritanceTests.m */; };
 		BE2B8DC11F19C1BD0071DDC4 /* ANAManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */; };
 		BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */; };
 		BE3127D11EF5657100DA452A /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D01EF5657100DA452A /* Selector.swift */; };
@@ -94,6 +95,7 @@
 		BE22D3741F07845C007AEE40 /* ANAManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAManager.swift; sourceTree = "<group>"; };
 		BE22D37D1F0789EE007AEE40 /* ANATracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANATracker.swift; sourceTree = "<group>"; };
 		BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAEvent.swift; sourceTree = "<group>"; };
+		BE237AFA1F19D907002EB52B /* ANATInheritanceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATInheritanceTests.m; sourceTree = "<group>"; };
 		BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAManager.m; sourceTree = "<group>"; };
 		BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorMatchingTests.swift; sourceTree = "<group>"; };
 		BE3127D01EF5657100DA452A /* Selector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				BE22D35B1F076263007AEE40 /* ANATPointMatchingTests.m */,
+				BE237AFA1F19D907002EB52B /* ANATInheritanceTests.m */,
 				BE22D35D1F0766F2007AEE40 /* ANATAnnaTestCase.h */,
 				BE22D35E1F0766F2007AEE40 /* ANATAnnaTestCase.m */,
 			);
@@ -550,6 +553,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE237AFB1F19D907002EB52B /* ANATInheritanceTests.m in Sources */,
 				BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */,
 				BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */,
 				BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */,

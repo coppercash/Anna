@@ -39,6 +39,7 @@ InheritanceTests: AnnaTestCase {
         }
         
         XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
@@ -92,7 +93,7 @@ InheritanceTests: AnnaTestCase {
     }
     
     func
-        test_overriedsPointRegisterredBySuper() {
+        test_overridesPointRegisterredBySuper() {
         class
         Parent : ANATAnalyzable {
             func
@@ -124,10 +125,11 @@ InheritanceTests: AnnaTestCase {
         }
         
         XCTAssertEqual(receivedEvents.last?["name"] as? String, "Child")
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
-        test_KVObservedObject() {
+        test_KVObservedObjectBehavesAsNormalObject() {
         class
         Observable : ANATAnalyzableObjC {
             var property :String {
