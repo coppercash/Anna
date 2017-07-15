@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ANAPointBuilding;
+typedef void(^ANAPointBuildup)(id<ANAPointBuilding> __nonnull _);
+
 @protocol ANAPointBuilding <NSObject>
 @property (readonly, nonnull) id<ANAPointBuilding> __nonnull (^equal)(NSString *__nonnull, NSObject *__nonnull);
 @property (readonly, nonnull) id<ANAPointBuilding> __nonnull (^set)(NSString * __nonnull, id __nullable);
+@property (readonly, nonnull) id<ANAPointBuilding> __nonnull (^point)(ANAPointBuildup __nullable);
 @end
-typedef void(^ANAPointBuildup)(id<ANAPointBuilding> __nonnull _);

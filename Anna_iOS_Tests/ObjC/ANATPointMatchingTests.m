@@ -25,6 +25,15 @@
     self.ana.event_.set(@"index", @(index))._.analyze();
 }
 
+- (void)threePointsContainedInOneMethodWithIndex:(NSInteger)index
+                                            name:(NSString *)name
+{
+    self.ana.event_
+    .set(@"index", @(index))
+    .set(@"name", name)
+    ._.analyze();
+}
+
 + (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
     registrar
     .point(^(id<ANAMethodPointBuilding> _) { _
@@ -42,6 +51,30 @@
         .point(^(id<ANAPointBuilding> _) { _
             .equal(@"index", @1)
             .set(@"data", @"24")
+            ;
+        })
+        ;
+    })
+    .point(^(id<ANAMethodPointBuilding> _) { _
+        .selector(@checkselector([self new], threePointsContainedInOneMethodWithIndex:, name:))
+        .point(^(id<ANAPointBuilding> _) { _
+            .equal(@"index", @0)
+            .set(@"first-level", @"42")
+            .point(^(id<ANAPointBuilding> _) { _
+                .equal(@"name", @"Tom")
+                .set(@"second-level", @42)
+                ;
+            })
+            .point(^(id<ANAPointBuilding> _) { _
+                .equal(@"name", @"Jerry")
+                .set(@"second-level", @24)
+                ;
+            })
+            ;
+        })
+        .point(^(id<ANAPointBuilding> _) { _
+            .equal(@"index", @1)
+            .set(@"first-level", @"24")
             ;
         })
         ;
@@ -73,6 +106,22 @@
     }];
     XCTAssertEqualObjects(self.receivedEvents[0][@"data"], @"42");
     XCTAssertEqualObjects(self.receivedEvents[1][@"data"], @"24");
+    XCTAssertNil(self.receivedErrors.lastObject);
+}
+
+- (void)test_threePointsContainedInOneMethod {
+    [self waitForEvents:^{
+        PointMatchingObject *object;
+        object = [PointMatchingObject objectWithAnalyzer:self.manager];
+        [object threePointsContainedInOneMethodWithIndex:0 name:@"Tom"];
+        [object threePointsContainedInOneMethodWithIndex:0 name:@"Jerry"];
+        [object threePointsContainedInOneMethodWithIndex:1 name:@"Jimmy"];
+    }];
+    XCTAssertEqualObjects(self.receivedEvents[0][@"first-level"], @"42");
+    XCTAssertEqualObjects(self.receivedEvents[0][@"second-level"], @42);
+    XCTAssertEqualObjects(self.receivedEvents[1][@"first-level"], @"42");
+    XCTAssertEqualObjects(self.receivedEvents[1][@"second-level"], @24);
+    XCTAssertEqualObjects(self.receivedEvents[2][@"first-level"], @"24");
     XCTAssertNil(self.receivedErrors.lastObject);
 }
 

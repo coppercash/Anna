@@ -51,16 +51,5 @@ class
             return self
         }
     }
-
-
-//    var point: (ANAMethodPointBuildup?) -> ANAClassPointBuilding {
-//        return { [unowned self] (buildup) in
-//            let
-//            builder = ANAMethodPointBuilder(ANAMethodPointBuilder.Proto(trackers: self.proto.trackers))
-//            buildup(builder)
-//            self.proto.append(builder)
-//            return self
-//        }
-//    }
 }
 
