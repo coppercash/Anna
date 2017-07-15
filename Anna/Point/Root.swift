@@ -18,6 +18,8 @@ EasyRootPoint {
         Tracker = EasyTracker
     lazy var
     trackers :[Tracker]? = nil
+    let
+    overridesTrackers = false
     
     init() {
     }

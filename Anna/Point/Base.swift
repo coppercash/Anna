@@ -22,6 +22,8 @@ EasyTrackerCarrier {
         Tracker = EasyTracker
     var
     trackers :[Tracker]? { get }
+    var
+    overridesTrackers :Bool { get }
 }
 
 protocol
@@ -55,13 +57,18 @@ EasyPayloadNode {
                 cPayload = current.payload {
                 payload.merge(with: cPayload)
             }
-            if let
-                cTrackers = current.trackers {
-                trackers.merge(with: cTrackers)
+            if current.overridesTrackers {
+                trackers = current.trackers ?? Array<Self.Tracker>()
+            }
+            else {
+                if let cTrackers = current.trackers {
+                    trackers.merge(with: cTrackers)
+                }
             }
         }
         return EasyPoint(
             trackers: trackers,
+            overridesTrackers :true,
             payload: payload,
             predicates: nil,
             children: nil
@@ -103,13 +110,17 @@ EasyBasePoint : EasyPayloadCarrier {
         Tracker = EasyTracker
     public let
     trackers :[Tracker]?
+    let
+    overridesTrackers :Bool
     
     public
     init(
         trackers :[Tracker]? = nil,
+        overridesTrackers :Bool,
         payload :Payload? = nil
         ) {
         self.trackers = trackers
+        self.overridesTrackers = overridesTrackers
         self.payload = payload
     }
 }

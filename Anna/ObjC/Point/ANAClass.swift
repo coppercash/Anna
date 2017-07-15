@@ -22,6 +22,7 @@ ANAClassPoint : EasyBasePoint, EasyClassPointBeing {
     superClassPoint :EasyClassPointBeing?
     init(
         trackers :[Tracker]?,
+        overridesTrackers :Bool,
         payload :Payload?,
         superClassPoint :EasyClassPointBeing? = nil,
         children :[Selector: Child],
@@ -32,7 +33,11 @@ ANAClassPoint : EasyBasePoint, EasyClassPointBeing {
         self.children = children
         self.childrenByMethod = childrenByMethod
         self.superClassPoint = superClassPoint
-        super.init(trackers: trackers, payload: payload);
+        super.init(
+            trackers: trackers,
+            overridesTrackers :overridesTrackers,
+            payload: payload
+        );
     }
 }
 
@@ -90,6 +95,7 @@ public class
     proto :Proto
     init(_ proto :Proto) {
         self.proto = proto
+        self.availableTrackers = ObjCTrackerCollection(proto.trackers)
     }
 
     public var
@@ -106,6 +112,25 @@ public class
             return self
         }
     }
+    
+    public var
+    tracker: (ANATracker) -> ANAClassPointBuilding {
+        return { [unowned self] (tracker) in
+            self.proto.tracker(SwiftEasyTracker(tracker))
+            return self
+        }
+    }
+
+    public var
+    trackers: ([ANATracker]) -> ANAClassPointBuilding {
+        return { [unowned self] (trackers) in
+            self.proto.trackers(trackers.map { SwiftEasyTracker($0) })
+            return self
+        }
+    }
+    
+    public let
+    availableTrackers: ANATrackerCollection
 }
 
 // TODO: Merge childrenNyMethod, instead of replacing
@@ -122,6 +147,7 @@ ANAClassPointBuilder {
         payload = try proto.payload(from: dictionary),
         point = Result(
             trackers: trackers,
+            overridesTrackers: proto.overridesTrackers,
             payload: payload,
             superClassPoint: nil,
             children: children.0,

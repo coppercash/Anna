@@ -61,6 +61,14 @@ public class
         }
     }
     
+    public var
+    trackers: ([ANATracker]) -> ANAPointBuilding {
+        return { [unowned self] (trackers) in
+            self.proto.trackers(trackers.map { SwiftEasyTracker($0) })
+            return self
+        }
+    }
+    
     public let
     availableTrackers: ANATrackerCollection
 }

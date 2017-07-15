@@ -24,13 +24,18 @@ EasyMethodPoint : EasyBasePoint {
     
     init(
         trackers :[Tracker]?,
+        overridesTrackers :Bool,
         payload :Payload?,
         children :[Child]?,
         parent :Parent? = nil
         ) {
         self.parent = parent
         self.children = children
-        super.init(trackers: trackers, payload: payload);
+        super.init(
+            trackers: trackers,
+            overridesTrackers: overridesTrackers,
+            payload: payload
+        );
     }
 }
 
@@ -80,6 +85,8 @@ EasyMethodPoint {
             self.trackers :
             self.trackers?.merged(with :another.trackers!)
         let
+        overridesTrackers = self.overridesTrackers && another.overridesTrackers
+        let
         payload = another.payload == nil ?
             self.payload :
             self.payload?.merged(with: another.payload!)
@@ -89,6 +96,7 @@ EasyMethodPoint {
             self.children?.merged(with :another.children!)
         return EasyMethodPoint(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
             children: children,
             parent: parent
@@ -110,6 +118,8 @@ final public class
     
     public var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
+    public var
+    overridesTrackers: Bool = false
     public let
     trackers :EasyTrackerBuilding.Trackers
     
@@ -168,6 +178,7 @@ final public class
         trackers = trackersBuffer,
         point = Point(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
             children: children
         )

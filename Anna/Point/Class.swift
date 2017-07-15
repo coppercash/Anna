@@ -28,6 +28,7 @@ EasyClassPoint : EasyBasePoint, EasyClassPointBeing {
     superClassPoint :EasyClassPoint?
     init(
         trackers :[Tracker]?,
+        overridesTrackers :Bool,
         payload :Payload?,
         superClassPoint :EasyClassPoint? = nil,
         children :[Child.Method: Child],
@@ -36,7 +37,11 @@ EasyClassPoint : EasyBasePoint, EasyClassPointBeing {
         self.parent = parent
         self.children = children
         self.superClassPoint = superClassPoint
-        super.init(trackers: trackers, payload: payload);
+        super.init(
+            trackers: trackers,
+            overridesTrackers: overridesTrackers,
+            payload: payload
+        );
     }
 }
 
@@ -89,6 +94,8 @@ EasyClassPointBuilder :
 {
     public var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
+    var
+    overridesTrackers: Bool = false
     public let
     trackers :EasyTrackerBuilding.Trackers
     init(trackers :EasyTrackerBuilding.Trackers) {
@@ -134,6 +141,7 @@ EasyClassPointBuilder :
         payload = try self.payload(from: dictionary),
         point = Point(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
             superClassPoint: nil,
             children: childrenByMethod

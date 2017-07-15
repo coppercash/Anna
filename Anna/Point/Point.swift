@@ -21,6 +21,7 @@ EasyPoint : EasyBasePoint {
     
     init(
         trackers :[Tracker]?,
+        overridesTrackers :Bool,
         payload :Payload?,
         predicates :[Predicate]?,
         children :[Child]?,
@@ -29,7 +30,11 @@ EasyPoint : EasyBasePoint {
         self.predicates = predicates
         self.parent = parent
         self.children = children
-        super.init(trackers: trackers, payload: payload);
+        super.init(
+            trackers: trackers,
+            overridesTrackers: overridesTrackers,
+            payload: payload
+        );
     }
     
     typealias
@@ -98,6 +103,8 @@ final public class
     
     public var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
+    public var
+    overridesTrackers: Bool = false
     public let
     trackers :EasyTrackerBuilding.Trackers
     
@@ -142,6 +149,7 @@ final public class
         children = try childrenBuffer?.array(),
         point = Point(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
             predicates: predicates,
             children: children

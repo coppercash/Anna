@@ -23,5 +23,6 @@ typedef void(^ANAMethodPointBuildup)(id<ANAMethodPointBuilding> __nonnull _);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^set)(NSString * __nonnull, id __nullable);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^point)(ANAPointBuildup __nullable);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^tracker)(id<ANATracker> __nonnull);
+@property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^trackers)(NSArray<id<ANATracker>> * __nonnull);
 @property (readonly, nonnull) id<ANATrackerCollection> availableTrackers;
 @end

@@ -89,10 +89,16 @@ public protocol
 EasyTrackerBuilding : class {
     var
     trackersBuffer :[Tracker]? { get set }
+    var
+    overridesTrackers :Bool { get set }
+    
     typealias
         Tracker = EasyTracker
     @discardableResult func
         tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
     
     typealias
         Trackers = EasyTrackerCollection
@@ -109,5 +115,13 @@ EasyTrackerBuilding {
         }
         trackersBuffer!.append(tracker)
         return self
+    }
+    
+    @discardableResult public func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker {
+            trackersBuffer = Array(trackers)
+            overridesTrackers = true
+            return self
     }
 }

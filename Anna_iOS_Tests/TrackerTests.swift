@@ -40,8 +40,8 @@ class TrackerTests: AnnaTestCase {
         XCTAssertNil(appended.receivedErrors.last)
     }
     
-    /*
-    func test_appendOverrideTrackers() {
+    func
+        test_overrideTrackers() {
         class
         Object : ANATAnalyzable {
             func
@@ -60,12 +60,13 @@ class TrackerTests: AnnaTestCase {
         appended.append(expectation(description: "AnotherExpectation"))
         manager.trackers["second"] = appended
         
-        waitForEvents {
+        waitForEvents(of: 0) {
             Object(manager).call()
         }
         
         XCTAssertNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
         XCTAssertNotNil(appended.receivedEvents.last)
+        XCTAssertNil(appended.receivedErrors.last)
     }
-     */
 }

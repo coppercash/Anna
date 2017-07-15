@@ -17,11 +17,17 @@
 @implementation TrackerObject
 
 - (void)appendTracker { self.ana.analyze(); }
+- (void)overrideTrackers { self.ana.analyze(); }
 + (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
     registrar
     .point(^(id<ANAMethodPointBuilding> _) { _
         .selector(@checkselector0([self new], appendTracker))
         .tracker(_.availableTrackers[@"second"])
+        ;
+    })
+    .point(^(id<ANAMethodPointBuilding> _) { _
+        .selector(@checkselector0([self new], overrideTrackers))
+        .trackers(@[_.availableTrackers[@"second"]])
         ;
     })
     ;
@@ -44,6 +50,22 @@
     }];
     
     XCTAssertNotNil(self.receivedEvents.lastObject);
+    XCTAssertNil(self.receivedErrors.lastObject);
+    XCTAssertNotNil(appended.receivedEvents.lastObject);
+    XCTAssertNil(appended.receivedErrors.lastObject);
+}
+
+- (void)test_overrideTrackers {
+    ANATBlockTracker *appended;
+    appended = [[ANATBlockTracker alloc] init];
+    [appended addExpectation:[self expectationWithDescription:@"AnotherExpectation"]];
+    self.manager.trackers[@"second"] = appended;
+    
+    [self waitForEventsOfCount:0 execution:^{
+        [[TrackerObject objectWithAnalyzer:self.manager] overrideTrackers];
+    }];
+    
+    XCTAssertNil(self.receivedEvents.lastObject);
     XCTAssertNil(self.receivedErrors.lastObject);
     XCTAssertNotNil(appended.receivedEvents.lastObject);
     XCTAssertNil(appended.receivedErrors.lastObject);
