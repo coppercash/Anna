@@ -21,3 +21,9 @@
 @protocol ANAEventDispatching <NSObject>
 - (void)dispatchEventWithSeed:(id<ANAPointMatchable, ANAPayloadCarrying, ANARegistrantCarrying> __nonnull)seed;
 @end
+
+@protocol ANAPrefixing;
+@protocol ANAEventSeedBuilding <NSObject>
+@property (readonly, nonnull) id<ANAEventSeedBuilding>__nonnull (^set)(NSString * __nonnull, id __nullable);
+@property (readonly, nonnull) id<ANAPrefixing> _;
+@end

@@ -11,7 +11,8 @@ import Foundation
 public class
     ANAPrefix :
     NSObject,
-    ANAPrefixing
+    ANAPrefixing,
+    BuilderParenting
 {
     unowned let
     target :ANAAnalyzable
@@ -28,14 +29,41 @@ public class
     
     public var
     analyze: (() -> Void) {
-        return { [unowned self] in
-            let
+        return ANAPrefix._analyze(self)
+    }
+    
+    func
+        _analyze() {
+        let
+        seed :ANAEventSeed
+        if let builder = eventSeed {
+            builder.cls = type(of: target)
+            builder.selector = selector
+            seed = try! builder.eventSeed()
+        }
+        else {
             seed = ANAEventSeed(
-                class: type(of: self.target),
-                selector: self.selector,
+                class: type(of: target),
+                selector: selector,
                 payload: nil
             )
-            self.target.ana_analyticsManager().dispatchEvent(withSeed: seed)
+        }
+        target.ana_analyticsManager().dispatchEvent(withSeed: seed)
+    }
+    
+    public var
+    event_: ANAEventSeedBuilding {
+        return ANAEventSeedBuilder(parent: self)
+    }
+    
+    typealias
+        EventSeed = ANAEventSeedBuilder
+    var
+    eventSeed :EventSeed? = nil
+    func
+        close(child :Any) {
+        if let seed = child as? EventSeed {
+            self.eventSeed = seed
         }
     }
 }

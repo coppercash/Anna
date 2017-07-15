@@ -30,7 +30,7 @@ ANAEventSeed :
     let
     selector :Selector
     typealias
-        Payload = [String:Any]
+        Payload = [String : Any]
     let
     payload :Payload?
     
@@ -80,4 +80,71 @@ class
             else { return nil }
         return objects[predicate.key]
     }
+}
+
+class
+    ANAEventSeedBuilder :
+    NSObject,
+    ANAEventSeedBuilding
+{
+    typealias
+        Result = ANAEventSeed
+    var
+    cls :Result.Registrant.Type? = nil
+    var
+    selector :Selector? = nil
+    let
+    buffer = DictionaryBuilder<String, Any>()
+    typealias
+        Parent = ANAPrefixing & BuilderParenting
+    let
+    parent :Parent
+    init(parent :Parent) {
+        self.parent = parent
+    }
+    
+    var
+    set: (String, Any?) -> ANAEventSeedBuilding {
+        return { [unowned self] (key, value) in
+            self.buffer.set(key, value)
+            return self
+        }
+    }
+    
+    var
+    `_` :ANAPrefixing {
+        parent.close(child: self)
+        return parent
+    }
+    
+    func
+        eventSeed() throws ->ANAEventSeed {
+        guard let cls = self.cls else {
+            throw BuilderError.missedProperty(
+                name: "class",
+                result: String(describing: type(of: self))
+            )
+        }
+        guard let selector = self.selector else {
+            throw BuilderError.missedProperty(
+                name: "selector",
+                result: String(describing: type(of: self))
+            )
+        }
+        let
+        dictionary = try buffer.build()
+        let
+        seed = ANAEventSeed(
+            class: cls,
+            selector: selector,
+            payload: dictionary
+        )
+        return seed
+    }
+}
+
+protocol
+BuilderParenting {
+    func
+        close(child :Any)
 }

@@ -12,8 +12,11 @@
 @property (readonly, nonnull) id<BDPDictionaryBuilding> __nonnull (^set)(id<NSCopying> __nonnull, id __nullable);
 @end
 
+#import "ANAPoint.h"
+
 @protocol ANAMethodPointBuilding <NSObject>
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^selector)(SEL __nonnull);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^set)(NSString * __nonnull, id __nullable);
+@property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^point)(ANAPointBuildup __nullable);
 @end
 typedef void(^ANAMethodPointBuildup)(id<ANAMethodPointBuilding> __nonnull _);

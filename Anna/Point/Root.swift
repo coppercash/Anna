@@ -75,8 +75,13 @@ EasyChildrenBuilding {
         let
         builder = ChildBuilder(trackers: trackers)
         buildup(builder)
-        if childrenBuffer == nil { childrenBuffer = ChildrenBuffer() }
-        childrenBuffer!.add(builder)
+        append(builder)
         return self
+    }
+    
+    func
+        append(_ child :ChildBuilder) {
+        if childrenBuffer == nil { childrenBuffer = ChildrenBuffer() }
+        childrenBuffer!.add(child)
     }
 }

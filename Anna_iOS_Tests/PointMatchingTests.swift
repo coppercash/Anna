@@ -33,6 +33,7 @@ PointMatchingTests: AnnaTestCase {
         }
         
         XCTAssertEqual(receivedEvents.last?["data"] as? String, "42")
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
@@ -69,6 +70,7 @@ PointMatchingTests: AnnaTestCase {
         
         XCTAssertEqual(receivedEvents[0]["data"] as? String, "42")
         XCTAssertEqual(receivedEvents[1]["data"] as? String, "24")
+        XCTAssertNil(receivedErrors.last)
     }
     
     func

@@ -118,9 +118,14 @@ final public class
     {
         let
         predicate = EqualPredicate(key: key, expectedValue: expectedValue)
+        append(predicate)
+        return self
+    }
+    
+    func
+        append(_ predicate :Predicate) {
         if predicatesBuffer == nil { predicatesBuffer = PredicatesBuffer() }
         predicatesBuffer!.add(predicate)
-        return self
     }
     
     // MARK:- Build
