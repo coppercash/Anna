@@ -11,8 +11,6 @@
 #import <extobjc/EXTobjc.h>
 
 @interface PointMatchingObject : ANATAnalyzable <ANAAnalyzable>
-- (void)pointUserInfo;
-- (void)twoPointsContainedInOneMethod:(NSInteger)index;
 @end
 
 @implementation PointMatchingObject
@@ -32,6 +30,10 @@
     .set(@"index", @(index))
     .set(@"name", name)
     ._.analyze();
+}
+
+- (void)throwErrorForMissingMatching {
+    self.ana.analyze();
 }
 
 + (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
@@ -82,9 +84,15 @@
     ;
 }
 
-- (void)missingMatch {
-    self.ana.analyze();
-}
+@end
+
+@interface EmptyRegistrationObject : ANATAnalyzable <ANAAnalyzable>
+@end
+@implementation EmptyRegistrationObject
+
+- (void)throwErrorForEmptyRegistration { self.ana.analyze(); }
+
++ (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {}
 
 @end
 
@@ -129,15 +137,22 @@
     XCTAssertNil(self.receivedErrors.lastObject);
 }
 
-- (void)test_missingMatch {
+- (void)test_throwErrorForMissingMatching {
     [self waitForEvents:^{
-        [[PointMatchingObject objectWithAnalyzer:self.manager] missingMatch];
+        [[PointMatchingObject objectWithAnalyzer:self.manager] throwErrorForMissingMatching];
     }];
     NSError *answer;
     answer = [NSError errorWithDomain:ANAMatchingErrorDomain
                                  code:ANAMatchingErrorNoMatchingPoint
                              userInfo:nil];
     XCTAssertEqualObjects(self.receivedErrors.lastObject, answer);
+}
+
+- (void)test_throwErrorForEmptyRegistration {
+    [self waitForEvents:^{
+        [[EmptyRegistrationObject objectWithAnalyzer:self.manager] throwErrorForEmptyRegistration];
+    }];
+    XCTAssertNotNil(self.receivedErrors.lastObject);
 }
 
 @end

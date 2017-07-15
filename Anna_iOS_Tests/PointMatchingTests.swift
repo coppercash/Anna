@@ -125,7 +125,7 @@ PointMatchingTests: AnnaTestCase {
     }
     
     func
-        test_missMatching() {
+        test_throwErrorForMissingMatching() {
         class
         Object : ANATAnalyzable {
             func
@@ -145,18 +145,21 @@ PointMatchingTests: AnnaTestCase {
         
         XCTAssertEqual(
             receivedErrors.last as? MatchingError,
-            MatchingError.noMatchingPoint(class: String(describing: Object.self), method: "call()")
+            MatchingError.noMatchingPoint(
+                class: String(describing: Object.self),
+                method: "call()"
+            )
         )
     }
     
     func
-        test_emptyClassPointError() {
+        test_throwErrorForEmptyRegistration() {
         class
         Object : ANATAnalyzable {
             func
                 call() { self.ana.analyze() }
             override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
             }
         }
         
