@@ -25,6 +25,7 @@
 		BE22D37E1F0789EE007AEE40 /* ANATracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37D1F0789EE007AEE40 /* ANATracker.swift */; };
 		BE22D3801F0794AA007AEE40 /* ANAEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */; };
 		BE22D3811F079821007AEE40 /* ANAEventSeed.h in Headers */ = {isa = PBXBuildFile; fileRef = BE22D3701F077EF8007AEE40 /* ANAEventSeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE2B8DC11F19C1BD0071DDC4 /* ANAManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */; };
 		BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */; };
 		BE3127D11EF5657100DA452A /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D01EF5657100DA452A /* Selector.swift */; };
 		BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FC1EFE32650006665A /* TrackerTests.swift */; };
@@ -93,6 +94,7 @@
 		BE22D3741F07845C007AEE40 /* ANAManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAManager.swift; sourceTree = "<group>"; };
 		BE22D37D1F0789EE007AEE40 /* ANATracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANATracker.swift; sourceTree = "<group>"; };
 		BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAEvent.swift; sourceTree = "<group>"; };
+		BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAManager.m; sourceTree = "<group>"; };
 		BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorMatchingTests.swift; sourceTree = "<group>"; };
 		BE3127D01EF5657100DA452A /* Selector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
 		BE55D4FC1EFE32650006665A /* TrackerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				BE65D7661F158A9F0079F9E8 /* ANAAnalyzable.swift */,
 				BEDB99EA1EBE8DBA006637DC /* ANAManager.h */,
 				BE22D3741F07845C007AEE40 /* ANAManager.swift */,
+				BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */,
 				BE22D3681F077589007AEE40 /* ANATracker.h */,
 				BE22D37D1F0789EE007AEE40 /* ANATracker.swift */,
 				BEAAB59A1EC135FC00C0EBF9 /* ANAPrefix.h */,
@@ -384,7 +387,7 @@
 				TargetAttributes = {
 					BE87DA7F1EAB608700DA81EB = {
 						CreatedOnToolsVersion = 8.2.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					BE87DA8C1EAB615C00DA81EB = {
@@ -530,6 +533,7 @@
 				BE65D7671F158A9F0079F9E8 /* ANAAnalyzable.swift in Sources */,
 				BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */,
 				BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */,
+				BE2B8DC11F19C1BD0071DDC4 /* ANAManager.m in Sources */,
 				BE042E6D1F0EF9C900E0B44A /* ANAClass.swift in Sources */,
 				BE3127D11EF5657100DA452A /* Selector.swift in Sources */,
 				BE80F3641EEBF486000B0E15 /* Type.swift in Sources */,

@@ -82,6 +82,10 @@
     ;
 }
 
+- (void)missingMatch {
+    self.ana.analyze();
+}
+
 @end
 
 @interface ANATPointMatchingTests : ANATAnnaTestCase
@@ -123,6 +127,17 @@
     XCTAssertEqualObjects(self.receivedEvents[1][@"second-level"], @24);
     XCTAssertEqualObjects(self.receivedEvents[2][@"first-level"], @"24");
     XCTAssertNil(self.receivedErrors.lastObject);
+}
+
+- (void)test_missingMatch {
+    [self waitForEvents:^{
+        [[PointMatchingObject objectWithAnalyzer:self.manager] missingMatch];
+    }];
+    NSError *answer;
+    answer = [NSError errorWithDomain:ANAMatchingErrorDomain
+                                 code:ANAMatchingErrorNoMatchingPoint
+                             userInfo:nil];
+    XCTAssertEqualObjects(self.receivedErrors.lastObject, answer);
 }
 
 @end
