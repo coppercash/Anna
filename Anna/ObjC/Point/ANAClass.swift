@@ -80,6 +80,11 @@ ANAClassPoint : EasyPointMatching {
         for (selector, child) in children {
             byMethod[selector.methodName] = child
         }
+        if let children = childrenByMethod {
+            for (method, child) in children {
+                byMethod[method] = child
+            }
+        }
         self.childrenByMethod = byMethod
     }
 }
@@ -133,7 +138,6 @@ public class
     availableTrackers: ANATrackerCollection
 }
 
-// TODO: Merge childrenNyMethod, instead of replacing
 extension
 ANAClassPointBuilder {
     typealias
