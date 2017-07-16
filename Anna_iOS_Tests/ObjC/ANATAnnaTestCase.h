@@ -29,7 +29,7 @@ typedef void(^ANATEventsBlock)(void);
 
 #import <Anna/Anna.h>
 
-@interface ANATAnalyzable : NSObject <ANATAnalyzable, ANAAnalyzable>
+@interface ANATAnalyzable : NSObject <ANATAnalyzable>
 @end
 
 #define anat ana

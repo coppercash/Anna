@@ -14,6 +14,10 @@ EasyRegistrar {
         PointBuilder = EasyMethodPointBuilder
     @discardableResult func
         point(_ :PointBuilder.Buildup) ->Self
+    typealias
+        SuperClass = EasyRegistrant
+    @discardableResult func
+        superClass(_ cls :SuperClass.Type) ->Self
 }
 
 public protocol

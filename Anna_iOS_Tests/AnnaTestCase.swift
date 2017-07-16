@@ -68,7 +68,7 @@ AnnaTestCase : Tracker {
 }
 
 class
-ANATAnalyzable : EasyAnalyzable {
+ANATAnalyzable {
     typealias
         Analyzer = EasyManager
     let
@@ -80,12 +80,10 @@ ANATAnalyzable : EasyAnalyzable {
     analyticsManager: EasyAnalyzable.Manager {
         return self.analyzer
     }
-    class func
-        registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {}
 }
 
 class
-ANATAnalyzableObjC : NSObject, EasyAnalyzable {
+ANATAnalyzableObjC : NSObject {
     typealias
         Analyzer = EasyManager
     let
@@ -97,6 +95,4 @@ ANATAnalyzableObjC : NSObject, EasyAnalyzable {
     analyticsManager: EasyAnalyzable.Manager {
         return self.analyzer
     }
-    class func
-        registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {}
 }

@@ -19,12 +19,12 @@ ANAClassPoint : EasyBasePoint, EasyClassPointBeing {
     weak var
     parent :Parent!
     let
-    superClassPoint :EasyClassPointBeing?
+    superClassPoint :ANAClassPoint?
     init(
         trackers :[Tracker]?,
         overridesTrackers :Bool,
         payload :Payload?,
-        superClassPoint :EasyClassPointBeing? = nil,
+        superClassPoint :ANAClassPoint? = nil,
         children :[Selector: Child],
         childrenByMethod :[Child.Method : Child]?,
         parent :Parent? = nil
@@ -54,9 +54,6 @@ ANAClassPoint : EasyPointMatching {
         points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         var
         points = Array<EasyPointMatching.Point>()
-        if let supers = superClassPoint?.points(match: conditions) {
-            points.append(contentsOf: supers)
-        }
         if let conditions = conditions as? ObjCEventSeed {
             if let methods = children[conditions.proto.selector]?.points(match: conditions) {
                 points.append(contentsOf: methods)
@@ -70,6 +67,10 @@ ANAClassPoint : EasyPointMatching {
             if let methods = childrenByMethod?[conditions.method]?.points(match: conditions) {
                 points.append(contentsOf: methods)
             }
+        }
+        if points.isEmpty,
+            let supers = superClassPoint?.points(match: conditions) {
+            points.append(contentsOf: supers)
         }
         return points
     }
@@ -136,33 +137,39 @@ public class
     
     public let
     availableTrackers: ANATrackerCollection
-}
-
-extension
-ANAClassPointBuilder {
+    
+    // MARK: - Class
+    
     typealias
-        Result = ANAClassPoint
+        Class = ANARegistering
+    var
+    classBuffer :Class.Type? = nil
+    
+    // MARK:- Super Class
+    
+    typealias
+        SuperClass = Class
+    var
+    superClassBuffer :SuperClass.Type? {
+        guard let superClass = class_getSuperclass(classBuffer) as? SuperClass.Type else { return nil }
+        return superClass
+    }
+    var
+    superClassPointBuilder :ANAClassPointBuilder? = nil
     func
-        build() throws ->Result {
+        madeSuperClassPoint() throws ->Result? {
+        guard let superClass = superClassBuffer else { return nil }
         let
-        children = try madeChildren(),
-        trackers = proto.trackersBuffer,
-        dictionary = try proto.buffer.build(),
-        payload = try proto.payload(from: dictionary),
-        point = Result(
-            trackers: trackers,
-            overridesTrackers: proto.overridesTrackers,
-            payload: payload,
-            superClassPoint: nil,
-            children: children.0,
-            childrenByMethod: (children.1.isEmpty ? nil : children.1)
-        )
-        for child in point.children.values {
-            child.parent = point
-        }
+        builder = ANAClassPointBuilder(Proto(trackers: proto.trackers))
+        builder.classBuffer = superClass
+        let
+        point = try builder.build()
         
+        self.superClassPointBuilder = builder
         return point
     }
+    
+    // MARK: - Children
     
     func madeChildren() throws ->(Dictionary<Selector, Proto.MethodPoint>, Dictionary<Proto.MethodPoint.Method, Proto.MethodPoint>) {
         guard let
@@ -171,7 +178,7 @@ ANAClassPointBuilder {
             else {
                 throw BuilderError.missedProperty(
                     name: "children",
-                    result: String(describing: self)
+                    result: String(describing: Result.self)
                 )
         }
         
@@ -190,6 +197,42 @@ ANAClassPointBuilder {
         }
         return (childrenBySelector, childrenByMethod)
     }
+}
+
+extension
+ANAClassPointBuilder {
+    typealias
+        Result = ANAClassPoint
+    func
+        build() throws ->Result {
+        guard let cls = classBuffer else {
+            throw BuilderError.missedProperty(
+                name: "class",
+                result: String(describing: type(of: self))
+            )
+        }
+        cls.ana_registerAnalyticsPoints(withRegistrar: self)
+        let
+        children = try madeChildren(),
+        superClassPoint = try madeSuperClassPoint(),
+        trackers = proto.trackersBuffer,
+        dictionary = try proto.buffer.build(),
+        payload = try proto.payload(from: dictionary),
+        point = Result(
+            trackers: trackers,
+            overridesTrackers: proto.overridesTrackers,
+            payload: payload,
+            superClassPoint: superClassPoint,
+            children: children.0,
+            childrenByMethod: (children.1.isEmpty ? nil : children.1)
+        )
+        for child in point.children.values {
+            child.parent = point
+        }
+        
+        return point
+    }
+    
 }
 
 extension

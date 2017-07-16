@@ -41,17 +41,30 @@ public class
     typealias
         ClassPointBuilder = ANAClassPointBuilder
     func loadPoints(for registrant :Registrant) throws {
-        guard
-            (proto.root.classPoint(for: registrant) is ClassPoint) == false
-            else { return }
+        guard (proto.root.classPoint(for: registrant) is ClassPoint) == false else { return }
         let
         builder = ClassPointBuilder(ClassPointBuilder.Proto(trackers: proto.trackers))
-        registrant.ana_registerAnalyticsPoints(withRegistrar: builder)
+        builder.classBuffer = registrant
         let
         point = try builder.build()
-        point.parent = proto.root
         
-        proto.root.setClassPoint(point, for: registrant)
+        // Register the newly loaded point and all its super points
+        //
+        var current :ClassPoint? = point
+        var currentBuilder :ClassPointBuilder? = builder
+        while
+            let point = current,
+            let cls = currentBuilder?.classBuffer
+        {
+            point.parent = proto.root
+            proto.root.setClassPoint(point, for: cls)
+//            point.parent = root
+//            root.setClassPoint(point, for: cls)
+            current = point.superClassPoint
+            currentBuilder = currentBuilder?.superClassPointBuilder
+        }
+        
+        
     }
 }
 

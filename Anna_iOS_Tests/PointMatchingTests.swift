@@ -15,10 +15,10 @@ PointMatchingTests: AnnaTestCase {
     func
         test_pointUserInfo() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -39,12 +39,12 @@ PointMatchingTests: AnnaTestCase {
     func
         test_twoPointsContainedInOneMethod() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, Analyzable {
             func
                 functionContainsTwoPoints(index :Int) {
                 self.ana.event{ $0.set("index", index) }.analyze()
             }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -76,14 +76,14 @@ PointMatchingTests: AnnaTestCase {
     func
         test_threePointsContainedInOneMethod() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             func call(with index :Int, name :String) {
                 self.ana.event{ $0
                     .set("index", index)
                     .set("name", name)
                     }.analyze()
             }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -127,10 +127,10 @@ PointMatchingTests: AnnaTestCase {
     func
         test_throwErrorForMissingMatching() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -155,10 +155,10 @@ PointMatchingTests: AnnaTestCase {
     func
         test_throwErrorForEmptyRegistration() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :Registrar) {
             }
         }

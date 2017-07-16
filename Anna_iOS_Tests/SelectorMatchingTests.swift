@@ -15,10 +15,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_withoutParameter() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -40,10 +40,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterWith() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc func
                 call(with number :Int) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -63,10 +63,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterPreposition() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc func
                 call(at index :Int) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -86,10 +86,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterPrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc func
                 go(to bed :String) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -109,10 +109,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_methodNamePrepositionNoun_firstNamePrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc func
                 goToBed(at time :String) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -132,10 +132,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterNoun() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc func
                 call(phoneNumber number :Int) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -155,10 +155,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_methodNameVerdNoun_firstParameterPrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc func
                 selectRow(at index :Int) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -178,12 +178,12 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_secondParameterVerbPreposition() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             func
                 view(_ view: UIView, didTapAreaAround point: CGPoint) {
                 self.ana.analyze()
             }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -203,12 +203,12 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_secondParameterVerbPrepositionNounPrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC, UITableViewDelegate {
+        Object : ANATAnalyzableObjC, UITableViewDelegate, Analyzable {
             func
                 tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                 self.ana.analyze()
             }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -228,10 +228,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_oneOmittedParameterLabel() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             func
                 call(_ string :String) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -251,10 +251,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_twoOmittedParameterLabels() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             func
                 call(_ string :String, _ number :Int) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -274,10 +274,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_omittingOneParameterAmongTwo() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             func
                 call(_ string :String, number :Int) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -297,10 +297,10 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_unableToMatchCustomObjCSelector() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             @objc(call:) func
                 call(parameterA argumentA :Int) { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -320,13 +320,13 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_getter() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             var
             property :String {
                 self.ana.analyze()
                 return "42"
             }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -346,7 +346,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_setter() {
         class
-        Object : ANATAnalyzableObjC {
+        Object : ANATAnalyzableObjC, Analyzable {
             var
             property :String {
                 get {
@@ -356,7 +356,7 @@ SelectorMatchingTests : AnnaTestCase {
                     self.ana.analyze()
                 }
             }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0

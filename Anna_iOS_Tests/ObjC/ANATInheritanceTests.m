@@ -16,6 +16,7 @@
 
 - (void)inheritsMethodFromSuper { self.ana.analyze(); }
 - (void)inheritsMethodFromSuperWithouthRegistering { self.ana.analyze(); }
+- (void)pointNotRegisterredBySuper {}
 - (void)overridesPointRegisterredBySuper { self.ana.analyze();  }
 - (void)KVObservedObjectBehavesAsNormalObject { self.ana.analyze(); }
 + (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
@@ -47,12 +48,17 @@
 @end
 @implementation InheritanceChild
 
+- (void)pointNotRegisterredBySuper { self.ana.analyze(); }
 + (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar
 {
-    [super ana_registerAnalyticsPointsWithRegistrar:registrar];
     registrar
     .point(^(id<ANAMethodPointBuilding> _) { _
         .selector(@checkselector0([self new], overridesPointRegisterredBySuper))
+        .set(@"name", @"Child")
+        ;
+    })
+    .point(^(id<ANAMethodPointBuilding> _) { _
+        .selector(@checkselector0([self new], pointNotRegisterredBySuper))
         .set(@"name", @"Child")
         ;
     })
@@ -81,6 +87,14 @@
 - (void)test_inheritsMethodFromSuperWithouthRegistering {
     [self waitForEvents:^{
         [[InheritanceChildWithoutRegistering objectWithAnalyzer:self.manager] inheritsMethodFromSuperWithouthRegistering];
+    }];
+    XCTAssertNotNil(self.receivedEvents.lastObject);
+    XCTAssertNil(self.receivedErrors.lastObject);
+}
+
+- (void)test_pointNotRegisterredBySuper {
+    [self waitForEvents:^{
+        [[InheritanceChild objectWithAnalyzer:self.manager] pointNotRegisterredBySuper];
     }];
     XCTAssertNotNil(self.receivedEvents.lastObject);
     XCTAssertNil(self.receivedErrors.lastObject);

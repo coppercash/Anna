@@ -57,16 +57,27 @@ EasyManager {
     typealias
         ClassPointBuilder = EasyClassPointBuilder
     func loadPoints(for cls :Registrant) throws {
-        guard
-            root.classPoint(for: cls) == nil
-            else { return }
+        guard root.classPoint(for: cls) == nil else { return }
         let
         builder = ClassPointBuilder(trackers: trackers)
-        cls.registerAnalyticsPoints(with: builder)
+        builder.classBuffer = cls
         let
         point = try builder.point()
-        point.parent = root
-        root.setClassPoint(point, for: cls)
+        
+        // Register the newly loaded point and all its super points
+        //
+        var
+        current :EasyClassPoint? = point,
+        currentBuilder :ClassPointBuilder? = builder
+        while
+            let point = current,
+            let cls = currentBuilder?.classBuffer
+        {
+            point.parent = root
+            root.setClassPoint(point, for: cls)
+            current = point.superClassPoint
+            currentBuilder = currentBuilder?.superClassPointBuilder
+        }
     }
 }
 
@@ -138,7 +149,7 @@ EasyManager : EasyEventDispatching {
         // Find point
         //
         let
-        points :[EasyPayloadNode]! = self.root.points(match: seed)
+        points :[EasyPayloadNode]! = root.points(match: seed)
         guard points.count > 0 else {
             throw MatchingError.noMatchingPoint(
                 class: String(describing: seed.cls),

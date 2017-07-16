@@ -15,10 +15,10 @@ NameCollisionTests: AnnaTestCase {
     func
         test_customPrefix() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, Analyzable {
             func
-                call() { self.ana.analyze() }
-            override class func
+                call() { self.custom.analyze() }
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -37,7 +37,7 @@ NameCollisionTests: AnnaTestCase {
 }
 
 extension
-ANATAnalyzable {
+Analyzable {
     var
     custom :EasyAnalyzable.Prefix {
         return self.ana

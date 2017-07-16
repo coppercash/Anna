@@ -15,10 +15,10 @@ InheritanceTests: AnnaTestCase {
     func
         test_inheritsMethodFromSuper() {
         class
-        Parent : ANATAnalyzable {
+        Parent : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -28,9 +28,15 @@ InheritanceTests: AnnaTestCase {
         }
         class
         Child : Parent {
+            func
+                methodAvoidingEmptyRegistration() { self.ana.analyze() }
             override class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                super.registerAnalyticsPoints(with: registrar)
+                registrar
+                    .superClass(Parent.self)
+                    .point { $0
+                        .method("methodAvoidingEmptyRegistration")
+                }
             }
         }
         
@@ -45,10 +51,10 @@ InheritanceTests: AnnaTestCase {
     func
         test_inheritsMethodFromSuperWithouthRegistering() {
         class
-        Parent : ANATAnalyzable {
+        Parent : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -69,16 +75,25 @@ InheritanceTests: AnnaTestCase {
     func
         test_pointNotRegisterredBySuper() {
         class
-        Parent : ANATAnalyzable {
+        Parent : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
+            func
+                methodAvoidingEmptyRegistration() { self.ana.analyze() }
+            class func
+                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registrar
+                    .point { $0
+                        .method("methodAvoidingEmptyRegistration")
+                }
+            }
         }
         class
         Child : Parent {
             override class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                super.registerAnalyticsPoints(with: registrar)
                 registrar
+                    .superClass(Parent.self)
                     .point { $0
                         .method("call()")
                 }
@@ -90,15 +105,16 @@ InheritanceTests: AnnaTestCase {
         }
         
         XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
         test_overridesPointRegisterredBySuper() {
         class
-        Parent : ANATAnalyzable {
+        Parent : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -111,8 +127,8 @@ InheritanceTests: AnnaTestCase {
         Child : Parent {
             override class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                super.registerAnalyticsPoints(with: registrar)
                 registrar
+                    .superClass(Parent.self)
                     .point { $0
                         .method("call()")
                         .set("name", "Child")
@@ -131,12 +147,12 @@ InheritanceTests: AnnaTestCase {
     func
         test_KVObservedObjectBehavesAsNormalObject() {
         class
-        Observable : ANATAnalyzableObjC {
+        Observable : ANATAnalyzableObjC, Analyzable {
             var property :String {
                 self.ana.analyze()
                 return "whatever"
             }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0

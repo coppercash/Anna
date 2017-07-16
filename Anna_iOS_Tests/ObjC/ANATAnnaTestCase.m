@@ -51,9 +51,9 @@
         [self.expectations addObject:expectation];
     }
     execution();
-    [self waitForExpectationsWithTimeout:.1
+    [self waitForExpectationsWithTimeout:.7
                                  handler:
-     ^(NSError * _Nullable error) { }];
+     ^(NSError *error) { }];
 }
 
 @end
@@ -102,9 +102,6 @@
 
 - (id<ANAEventDispatching>)ana_analyticsManager {
     return self.analyzer;
-}
-
-+ (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording> __nonnull)registrar {
 }
 
 @end

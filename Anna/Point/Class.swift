@@ -80,8 +80,8 @@ EasyClassPoint : EasyPointMatching {
         if let methods = children[conditions.method]?.points(match: conditions) {
             points.append(contentsOf: methods)
         }
-        if let supers = superClassPoint?.points(match: conditions) {
-            points.append(contentsOf: supers)
+        if points.isEmpty, let inherited = superClassPoint?.points(match: conditions) {
+            points.append(contentsOf: inherited)
         }
         return points
     }
@@ -125,35 +125,8 @@ EasyClassPointBuilder :
         if childrenBuffer == nil { childrenBuffer = ChildrenBuffer() }
         childrenBuffer!.add(child)
     }
-    
-    // MARK:- Build
-    
-    typealias
-        Point = EasyClassPoint
-    typealias
-        MethodPoint = EasyMethodPoint
-    override func
-        point() throws ->Point {
-        let
-        childrenByMethod = try madeChildrenByMethod(),
-        trackers = trackersBuffer,
-        dictionary = try buffer.build(),
-        payload = try self.payload(from: dictionary),
-        point = Point(
-            trackers: trackers,
-            overridesTrackers: overridesTrackers,
-            payload: payload,
-            superClassPoint: nil,
-            children: childrenByMethod
-        )
-        for child in point.children.values {
-            child.parent = point
-        }
-        
-        return point
-    }
-    
-    func madeChildrenByMethod() throws ->Dictionary<MethodPoint.Method, MethodPoint> {
+    func
+        madeChildrenByMethod() throws ->Dictionary<MethodPoint.Method, MethodPoint> {
         guard let
             children :ChildrenBuffer = childrenBuffer,
             children.count > 0
@@ -176,5 +149,74 @@ EasyClassPointBuilder :
         }
         
         return childrenByMethod
+    }
+    
+    
+    // MARK:- Class
+    
+    typealias
+        Class = EasyRegistrant
+    var
+    classBuffer :Class.Type? = nil
+    
+    // MARK:- Super Class
+    
+    typealias
+        SuperClass = EasyRegistrant
+    var
+    superClassBuffer :SuperClass.Type? = nil
+    var
+    superClassPointBuilder :EasyClassPointBuilder? = nil
+    public func
+        superClass(_ cls :SuperClass.Type) ->Self {
+        superClassBuffer = cls
+        return self
+    }
+    func
+        madeSuperClassPoint() throws ->Point? {
+        guard let superClass = superClassBuffer else { return nil }
+        let
+        builder = EasyClassPointBuilder(trackers: trackers)
+        builder.classBuffer = superClass
+        let
+        point = try builder.point()
+        
+        self.superClassPointBuilder = builder
+        return point
+    }
+    
+    // MARK:- Build
+    
+    typealias
+        Point = EasyClassPoint
+    typealias
+        MethodPoint = EasyMethodPoint
+    override func
+        point() throws ->Point {
+        guard let cls = classBuffer else {
+            throw BuilderError.missedProperty(
+                name: "class",
+                result: String(describing: type(of: self))
+            )
+        }
+        cls.registerAnalyticsPoints(with: self)
+        let
+        childrenByMethod = try madeChildrenByMethod(),
+        superClassPoint = try madeSuperClassPoint(),
+        trackers = trackersBuffer,
+        dictionary = try buffer.build(),
+        payload = try self.payload(from: dictionary),
+        point = Point(
+            trackers: trackers,
+            overridesTrackers: overridesTrackers,
+            payload: payload,
+            superClassPoint: superClassPoint,
+            children: childrenByMethod
+        )
+        for child in point.children.values {
+            child.parent = point
+        }
+        
+        return point
     }
 }

@@ -13,10 +13,10 @@ class TrackerTests: AnnaTestCase {
     
     func test_appendTracker() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
@@ -43,10 +43,10 @@ class TrackerTests: AnnaTestCase {
     func
         test_overrideTrackers() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, Analyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
+            class func
                 registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
                 registrar
                     .point { $0
