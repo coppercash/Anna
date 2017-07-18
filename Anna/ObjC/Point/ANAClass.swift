@@ -205,15 +205,20 @@ ANAClassPointBuilder {
         Result = ANAClassPoint
     func
         build() throws ->Result {
-        guard let cls = classBuffer else {
-            throw BuilderError.missedProperty(
-                name: "class",
-                result: String(describing: type(of: self))
-            )
+        guard
+            let cls = classBuffer else {
+                throw BuilderError.missedProperty(
+                    name: "class",
+                    result: String(describing: type(of: self))
+                )
         }
         cls.ana_registerAnalyticsPoints(withRegistrar: self)
+        guard
+            let children = try? madeChildren()
+            else {
+                throw ClassPointBuilderError.emtpyRegistration
+        }
         let
-        children = try madeChildren(),
         superClassPoint = try madeSuperClassPoint(),
         trackers = proto.trackersBuffer,
         dictionary = try proto.buffer.build(),

@@ -21,7 +21,7 @@ EasyClassPointBeing : class, EasyPointMatching, EasyPayloadNode {
 class
 EasyClassPoint : EasyBasePoint, EasyClassPointBeing {
     let
-    children :[Child.Method: Child]
+    children :[Child.Method: Child]?
     weak var
     parent :Parent!
     let
@@ -31,7 +31,7 @@ EasyClassPoint : EasyBasePoint, EasyClassPointBeing {
         overridesTrackers :Bool,
         payload :Payload?,
         superClassPoint :EasyClassPoint? = nil,
-        children :[Child.Method: Child],
+        children :[Child.Method: Child]?,
         parent :Parent? = nil
         ) {
         self.parent = parent
@@ -77,13 +77,29 @@ EasyClassPoint : EasyPointMatching {
         points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         var
         points = Array<EasyPointMatching.Point>()
-        if let methods = children[conditions.method]?.points(match: conditions) {
+        if let methods = children?[conditions.method]?.points(match: conditions) {
             points.append(contentsOf: methods)
         }
         if points.isEmpty, let inherited = superClassPoint?.points(match: conditions) {
             points.append(contentsOf: inherited)
         }
         return points
+    }
+}
+
+public enum
+ClassPointBuilderError : Error {
+   case emtpyRegistration
+}
+
+extension
+ClassPointBuilderError : LocalizedError {
+    public var
+    errorDescription: String? {
+        switch self {
+        case .emtpyRegistration:
+            return "Empty registration is not allowed. At least one of following property should be presented: childrenPoints, superClass"
+        }
     }
 }
 
@@ -126,16 +142,11 @@ EasyClassPointBuilder :
         childrenBuffer!.add(child)
     }
     func
-        madeChildrenByMethod() throws ->Dictionary<MethodPoint.Method, MethodPoint> {
+        madeChildrenByMethod() throws ->Dictionary<MethodPoint.Method, MethodPoint>? {
         guard let
             children :ChildrenBuffer = childrenBuffer,
             children.count > 0
-            else {
-                throw BuilderError.missedProperty(
-                    name: "children",
-                    result: String(describing: self)
-                )
-        }
+            else { return nil }
         
         var childrenByMethod = Dictionary<MethodPoint.Method, MethodPoint>()
         
@@ -196,13 +207,20 @@ EasyClassPointBuilder :
         guard let cls = classBuffer else {
             throw BuilderError.missedProperty(
                 name: "class",
-                result: String(describing: type(of: self))
+                result: String(describing: Result.self)
             )
         }
         cls.registerAnalyticsPoints(with: self)
         let
         childrenByMethod = try madeChildrenByMethod(),
-        superClassPoint = try madeSuperClassPoint(),
+        superClassPoint = try madeSuperClassPoint()
+        guard
+            childrenByMethod != nil ||
+            superClassPoint != nil
+            else {
+                throw ClassPointBuilderError.emtpyRegistration
+        }
+        let
         trackers = trackersBuffer,
         dictionary = try buffer.build(),
         payload = try self.payload(from: dictionary),
@@ -213,8 +231,10 @@ EasyClassPointBuilder :
             superClassPoint: superClassPoint,
             children: childrenByMethod
         )
-        for child in point.children.values {
-            child.parent = point
+        if let children = point.children?.values {
+            for child in children {
+                child.parent = point
+            }
         }
         
         return point
