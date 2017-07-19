@@ -8,38 +8,6 @@
 
 import Foundation
 
-//public protocol
-//EasyEventSeed {
-//    typealias
-//        Class = EasyAnalyzable.Type
-//    var
-//    cls :Class { get }
-//    
-//    typealias
-//        Method = String
-//    var
-//    method :Method { get }
-//    
-//    typealias
-//        Payload = Dictionary<String, Any>
-//    var
-//    payload :Payload? { get }
-//    
-//    func
-//        object(to predicate :Predicate) ->Any?
-//}
-//
-//extension
-//EasyEventSeed {
-//    func
-//        object(to predicate :Predicate) ->Any? {
-//        guard let
-//            objects = payload
-//            else { return nil }
-//        return objects[predicate.key]
-//    }
-//}
-
 protocol
 EasyEventDispatching {
     typealias
@@ -90,7 +58,7 @@ EventError : Error {
 public class
 EasyEvent {
     typealias
-        Payload = Dictionary<String, Any>
+        Payload = EasyPayloadCarrier.Payload
     let
     payload :Payload
     init(payload :Payload) {
@@ -98,7 +66,7 @@ EasyEvent {
     }
     
     public
-    subscript(key :String) ->Any? {
+    subscript(key :AnyHashable) ->Any? {
         return payload[key]
     }
     
@@ -129,14 +97,16 @@ EasyEventSeedBuilder {
     cls :Result.Registrant.Type? = nil
     var
     method :Result.Method? = nil
+    typealias
+        Buffer = DictionaryBuilder<AnyHashable, Any>
     let
-    buffer = DictionaryBuilder<String, Any>()
+    buffer = Buffer()
     
     required public
     init() {}
     
     @discardableResult public func
-        set(_ key :String, _ value :Any) ->Self {
+        set(_ key :AnyHashable, _ value :Any?) ->Self {
         buffer.set(key, value)
         return self
     }

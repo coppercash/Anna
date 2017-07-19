@@ -30,7 +30,7 @@ ANAEventSeed :
     let
     selector :Selector
     typealias
-        Payload = [String : Any]
+        Payload = [AnyHashable : Any]
     let
     payload :Payload?
     
@@ -94,7 +94,7 @@ class
     var
     selector :Selector? = nil
     let
-    buffer = DictionaryBuilder<String, Any>()
+    buffer = DictionaryBuilder<AnyHashable, Any>()
     typealias
         Parent = ANAPrefixing & BuilderParenting
     let
@@ -104,9 +104,9 @@ class
     }
     
     var
-    set: (String, Any?) -> ANAEventSeedBuilding {
+    set: (NSCopying & NSObjectProtocol, Any?) -> ANAEventSeedBuilding {
         return { [unowned self] (key, value) in
-            self.buffer.set(key, value)
+            self.buffer.set(key as! NSObject, value)
             return self
         }
     }

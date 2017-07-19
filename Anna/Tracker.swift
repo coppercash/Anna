@@ -39,9 +39,9 @@ EasyTrackerConfigurator {
     public typealias
     Tracker = EasyTracker
     var
-    trackers = [String:Tracker]()
+    trackers = [AnyHashable : Tracker]()
     public
-    subscript(key :String) ->Tracker? {
+    subscript(key :AnyHashable) ->Tracker? {
         get {
             var
             tracker :Tracker? = nil
@@ -79,7 +79,7 @@ public protocol
 EasyTrackerCollection {
     typealias
     Tracker = EasyTracker
-    subscript(key :String) ->Tracker? { get }
+    subscript(key :AnyHashable) ->Tracker? { get }
 }
 
 extension

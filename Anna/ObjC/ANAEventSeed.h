@@ -14,7 +14,7 @@
 @end
 
 @protocol ANAPayloadCarrying <NSObject>
-@property (readonly, nullable) NSDictionary<NSString *, id> *payload;
+@property (readonly, nullable) NSDictionary<NSObject<NSCopying> *, id> *payload;
 @end
 
 @protocol ANARegistrantCarrying;
@@ -24,6 +24,6 @@
 
 @protocol ANAPrefixing;
 @protocol ANAEventSeedBuilding <NSObject>
-@property (readonly, nonnull) id<ANAEventSeedBuilding>__nonnull (^set)(NSString * __nonnull, id __nullable);
+@property (readonly, nonnull) id<ANAEventSeedBuilding>__nonnull (^set)(NSObject<NSCopying> * __nonnull, id __nullable);
 @property (readonly, nonnull) id<ANAPrefixing> _;
 @end

@@ -23,9 +23,9 @@ public class
     }
 
     public var
-    set: (String, Any?) -> ANAPointBuilding {
+    set: (NSCopying & NSObjectProtocol, Any?) -> ANAPointBuilding {
         return { [unowned self] (key, value) in
-            self.proto.set(key, value)
+        self.proto.set(key as! NSObject, value)
             return self
         }
     }

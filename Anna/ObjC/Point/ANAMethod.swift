@@ -31,9 +31,9 @@ class
     }
 
     var
-    set: (String, Any?) -> ANAMethodPointBuilding {
+    set: (NSCopying & NSObjectProtocol, Any?) -> ANAMethodPointBuilding {
         return { [unowned self] (key, value) in
-            self.proto.set(key, value)
+            self.proto.set(key as! NSObject, value)
             return self
         }
     }

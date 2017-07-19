@@ -17,9 +17,9 @@
 @end
 
 @protocol ANATrackerCollection <NSObject>
-- (id<ANATracker> __nullable)objectForKeyedSubscript:(NSString * __nonnull)key;
+- (id<ANATracker> __nullable)objectForKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;
 - (void)setObject:(id<ANATracker> __nullable)obj
-forKeyedSubscript:(NSString * __nonnull)key;
+forKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;
 @end
 
 @protocol ANATrackerConfigurator <NSObject>

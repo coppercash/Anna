@@ -20,7 +20,7 @@ class ObjCEvent :
         self.proto = proto
     }
     
-    subscript(key: String) -> Any? {
-        return proto[key]
+    subscript(key: NSCopying & NSObjectProtocol) -> Any? {
+        return proto[key as! NSObject]
     }
 }

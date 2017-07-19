@@ -49,12 +49,12 @@ class ObjCTrackerCollection :
         self.proto = proto
     }
     
-    subscript(key: String) ->ANATracker? {
+    subscript(key: NSCopying & NSObjectProtocol) ->ANATracker? {
         get {
-            if let tracker = proto[key] as? SwiftEasyTracker {
+            if let tracker = proto[key as! NSObject] as? SwiftEasyTracker {
                 return tracker.proto
             }
-            else if let tracker = proto[key] {
+            else if let tracker = proto[key as! NSObject] {
                 return ObjCTracker(tracker)
             }
             else {
@@ -77,12 +77,12 @@ class ObjCTrackerConfigurator :
         self.proto = proto
     }
     
-    subscript(key: String) ->ANATracker? {
+    subscript(key: NSCopying & NSObjectProtocol) ->ANATracker? {
         get {
-            if let tracker = proto[key] as? SwiftEasyTracker {
+            if let tracker = proto[key as! NSObject] as? SwiftEasyTracker {
                 return tracker.proto
             }
-            else if let tracker = proto[key] {
+            else if let tracker = proto[key as! NSObject] {
                 return ObjCTracker(tracker)
             }
             else {
@@ -91,10 +91,10 @@ class ObjCTrackerConfigurator :
         }
         set(tracker) {
             if let tracker = tracker {
-                proto[key] = SwiftEasyTracker(tracker)
+                proto[key as! NSObject] = SwiftEasyTracker(tracker)
             }
             else {
-                proto[key] = nil
+                proto[key as! NSObject] = nil
             }
         }
     }

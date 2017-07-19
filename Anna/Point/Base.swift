@@ -11,7 +11,7 @@ import Foundation
 public protocol
 EasyPayloadCarrier : class {
     typealias
-        Payload = Dictionary<String, Any>
+        Payload = Dictionary<AnyHashable, Any>
     var
     payload :Payload? { get }
 }
@@ -102,8 +102,6 @@ EasyPointMatchable {
 
 public class
 EasyBasePoint : EasyPayloadCarrier {
-    public typealias
-        Payload = Dictionary<String, Any>
     public let
     payload :Payload?
     public typealias
@@ -135,14 +133,14 @@ where
     Point : EasyBasePoint
 {
     public typealias
-        Buffer = DictionaryBuilder<String, Any>
+        Buffer = DictionaryBuilder<AnyHashable, Any>
     public let
     buffer = Buffer()
     
     // MARK:- Payload
     
     @discardableResult public func
-        set(_ key :String, _ value :Any?) ->Self {
+        set(_ key :AnyHashable, _ value :Any?) ->Self {
         buffer.set(key, value)
         return self
     }
@@ -155,7 +153,7 @@ where
     }
     
     internal func
-        payload(from buffer:[String:Any]) throws ->[String:Any]? {
+        payload(from buffer :[AnyHashable : Any]) throws ->[AnyHashable : Any]? {
         return buffer
     }
 }
