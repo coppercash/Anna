@@ -17,12 +17,12 @@
 @protocol ANAMethodPointBuilding;
 typedef void(^ANAMethodPointBuildup)(id<ANAMethodPointBuilding> __nonnull _);
 
-@protocol ANATracking, ANATrackerCollection;
+@protocol ANATracking, ANATrackerCollecting;
 @protocol ANAMethodPointBuilding <NSObject>
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^selector)(SEL __nonnull);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^set)(NSObject<NSCopying> * __nonnull, id __nullable);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^point)(ANAPointBuildup __nullable);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^tracker)(id<ANATracking> __nonnull);
 @property (readonly, nonnull) id<ANAMethodPointBuilding> __nonnull (^trackers)(NSArray<id<ANATracking>> * __nonnull);
-@property (readonly, nonnull) id<ANATrackerCollection> availableTrackers;
+@property (readonly, nonnull) id<ANATrackerCollecting> availableTrackers;
 @end

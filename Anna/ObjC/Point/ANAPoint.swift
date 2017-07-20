@@ -70,5 +70,5 @@ public class
     }
     
     public let
-    availableTrackers: ANATrackerCollection
+    availableTrackers: ANATrackerCollecting
 }

@@ -16,7 +16,7 @@
                  dispatchedBy:(id<ANAManaging> __nonnull)manager;
 @end
 
-@protocol ANATrackerCollection <NSObject>
+@protocol ANATrackerCollecting <NSObject>
 - (id<ANATracking> __nullable)objectForKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;
 - (void)setObject:(id<ANATracking> __nullable)obj
 forKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;

@@ -69,6 +69,6 @@ class
         }
     }
     
-    let availableTrackers: ANATrackerCollection
+    let availableTrackers: ANATrackerCollecting
 }
 

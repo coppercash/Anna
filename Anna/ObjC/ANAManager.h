@@ -10,11 +10,11 @@
 #import "ANAEventSeed.h"
 
 @protocol
-ANATrackerCollection,
+ANATrackerCollecting,
 ANATrackerConfigurator,
 ANAEventSeed;
 @protocol ANAManaging <NSObject, ANAEventDispatching>
-@property (readonly, nonnull) id<ANATrackerConfigurator, ANATrackerCollection> trackers;
+@property (readonly, nonnull) id<ANATrackerConfigurator, ANATrackerCollecting> trackers;
 @property (readonly, class, nonnull) id<ANAManaging> __kindof sharedManager;
 @end
 
