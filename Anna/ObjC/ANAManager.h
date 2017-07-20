@@ -11,10 +11,10 @@
 
 @protocol
 ANATrackerCollecting,
-ANATrackerConfigurator,
+ANATrackerConfiguring,
 ANAEventSeed;
 @protocol ANAManaging <NSObject, ANAEventDispatching>
-@property (readonly, nonnull) id<ANATrackerConfigurator, ANATrackerCollecting> trackers;
+@property (readonly, nonnull) id<ANATrackerConfiguring, ANATrackerCollecting> trackers;
 @property (readonly, class, nonnull) id<ANAManaging> __kindof sharedManager;
 @end
 

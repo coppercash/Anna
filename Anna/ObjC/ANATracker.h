@@ -22,6 +22,6 @@
 forKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;
 @end
 
-@protocol ANATrackerConfigurator <NSObject>
+@protocol ANATrackerConfiguring <NSObject>
 @property (readwrite, nullable) NSArray<id<ANATracking>> *defaults;
 @end

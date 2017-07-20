@@ -28,7 +28,7 @@ public class
     }
     
     public let
-    trackers :ANATrackerCollecting & ANATrackerConfigurator
+    trackers :ANATrackerCollecting & ANATrackerConfiguring
     public static var
     sharedManager: ANAManaging = ANAManager(Proto.shared)
     

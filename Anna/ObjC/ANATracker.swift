@@ -68,7 +68,7 @@ class ObjCTrackerCollection :
 
 class ObjCTrackerConfigurator :
     NSObject,
-    ANATrackerConfigurator,
+    ANATrackerConfiguring,
     ANATrackerCollecting
 {
     typealias Proto = EasyTrackerConfigurator
