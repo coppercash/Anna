@@ -10,7 +10,7 @@ import Foundation
 
 class ObjCEvent :
     NSObject,
-    ANAEvent
+    ANAEventBeing
 {
     typealias
         Proto = EasyEvent

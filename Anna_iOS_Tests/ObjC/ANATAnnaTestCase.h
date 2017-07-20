@@ -9,10 +9,10 @@
 #import <XCTest/XCTest.h>
 
 typedef void(^ANATEventsBlock)(void);
-@protocol ANAEvent, ANAManaging;
+@protocol ANAEventBeing, ANAManaging;
 @protocol ANATAnnaTestCase
 @property (readonly) id<ANAManaging> manager;
-@property (readonly) NSArray<id<ANAEvent>> *receivedEvents;
+@property (readonly) NSArray<id<ANAEventBeing>> *receivedEvents;
 @property (readonly) NSArray<NSError *> *receivedErrors;
 - (void)waitForEvents:(ANATEventsBlock)execution;
 - (void)waitForEventsOfCount:(NSUInteger)count

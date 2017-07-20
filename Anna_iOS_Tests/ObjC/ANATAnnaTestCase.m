@@ -9,7 +9,7 @@
 #import "ANATAnnaTestCase.h"
 
 @interface ANATAnnaTestCase ()
-@property (strong, nonatomic) NSMutableArray<id<ANAEvent>> *receivedEvents;
+@property (strong, nonatomic) NSMutableArray<id<ANAEventBeing>> *receivedEvents;
 @property (strong, nonatomic) NSMutableArray<NSError *> *receivedErrors;
 @property (strong, nonatomic) NSMutableArray<XCTestExpectation *> *expectations;
 @property (strong, nonatomic) id<ANAManaging> manager;
@@ -63,7 +63,7 @@
 
 @implementation ANATAnnaTestCase (ANATracking)
 
-- (void)receiveAnalyticsEvent:(id<ANAEvent>)event
+- (void)receiveAnalyticsEvent:(id<ANAEventBeing>)event
                  dispatchedBy:(id<ANAManaging>)manager
 {
     [self.receivedEvents addObject:event];

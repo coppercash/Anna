@@ -19,7 +19,7 @@ class ObjCTracker :
     }
     
     func receiveAnalyticsEvent(
-        _ event: ANAEvent,
+        _ event: ANAEventBeing,
         dispatchedBy manager: ANAManaging
         ) {
         proto.receive(

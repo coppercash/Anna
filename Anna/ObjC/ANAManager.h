@@ -7,15 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ANAEventSeed.h"
 
 @protocol
 ANATrackerCollecting,
-ANATrackerConfiguring,
-ANAEventSeed;
+ANATrackerConfiguring;
 @protocol ANAManaging <NSObject, ANAEventDispatching>
 @property (readonly, nonnull) id<ANATrackerConfiguring, ANATrackerCollecting> trackers;
-@property (readonly, class, nonnull) id<ANAManaging> __kindof sharedManager;
 @end
 
 extern NSErrorDomain const __unsafe_unretained __nonnull ANAMatchingErrorDomain;

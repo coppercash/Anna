@@ -30,7 +30,7 @@ public class
     public let
     trackers :ANATrackerCollecting & ANATrackerConfiguring
     public static var
-    sharedManager: ANAManaging = ANAManager(Proto.shared)
+    sharedManager: ANAManager = ANAManager(Proto.shared)
     
     // MARK: - Load
     
@@ -58,8 +58,6 @@ public class
         {
             point.parent = proto.root
             proto.root.setClassPoint(point, for: cls)
-//            point.parent = root
-//            root.setClassPoint(point, for: cls)
             current = point.superClassPoint
             currentBuilder = currentBuilder?.superClassPointBuilder
         }

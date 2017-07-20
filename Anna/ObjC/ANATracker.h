@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol ANAEvent;
+@protocol ANAEventBeing;
 @protocol ANATracking <NSObject>
-- (void)receiveAnalyticsEvent:(id<ANAEvent> __nonnull)event
+- (void)receiveAnalyticsEvent:(id<ANAEventBeing> __nonnull)event
                  dispatchedBy:(id<ANAManaging> __nonnull)manager;
 - (void)receiveAnalyticsError:(NSError * __nonnull)error
                  dispatchedBy:(id<ANAManaging> __nonnull)manager;

@@ -27,7 +27,7 @@
     return self;
 }
 
-- (NSArray<id<ANAEvent>> *)receivedEvents {
+- (NSArray<id<ANAEventBeing>> *)receivedEvents {
     return _receivedEvents;
 }
 
@@ -39,7 +39,7 @@
     [self.expectations addObject:expectation];
 }
 
-- (void)receiveAnalyticsEvent:(id<ANAEvent>)event
+- (void)receiveAnalyticsEvent:(id<ANAEventBeing>)event
                  dispatchedBy:(id<ANAManaging>)manager
 {
     [_receivedEvents addObject:event];
