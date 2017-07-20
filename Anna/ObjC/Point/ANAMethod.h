@@ -8,10 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol BDPDictionaryBuilding <NSObject>
-@property (readonly, nonnull) id<BDPDictionaryBuilding> __nonnull (^set)(NSObject<NSCopying> * __nonnull, id __nullable);
-@end
-
 #import "ANAPoint.h"
 
 @protocol ANAMethodPointBuilding;
