@@ -10,7 +10,7 @@ import Foundation
 
 class ObjCTracker :
     NSObject,
-    ANATracker
+    ANATracking
 {
     typealias Proto = EasyTracker
     let proto :Proto
@@ -49,7 +49,7 @@ class ObjCTrackerCollection :
         self.proto = proto
     }
     
-    subscript(key: NSCopying & NSObjectProtocol) ->ANATracker? {
+    subscript(key: NSCopying & NSObjectProtocol) ->ANATracking? {
         get {
             if let tracker = proto[key as! NSObject] as? SwiftEasyTracker {
                 return tracker.proto
@@ -77,7 +77,7 @@ class ObjCTrackerConfigurator :
         self.proto = proto
     }
     
-    subscript(key: NSCopying & NSObjectProtocol) ->ANATracker? {
+    subscript(key: NSCopying & NSObjectProtocol) ->ANATracking? {
         get {
             if let tracker = proto[key as! NSObject] as? SwiftEasyTracker {
                 return tracker.proto
@@ -99,9 +99,9 @@ class ObjCTrackerConfigurator :
         }
     }
 
-    var defaults: [ANATracker]? {
+    var defaults: [ANATracking]? {
         get {
-            return proto.defaults?.map { (tracker) -> ANATracker in
+            return proto.defaults?.map { (tracker) -> ANATracking in
                 if let tracker = tracker as? SwiftEasyTracker {
                     return tracker.proto
                 }
@@ -124,8 +124,8 @@ class ObjCTrackerConfigurator :
 }
 
 class SwiftEasyTracker : EasyTracker {
-    let proto :ANATracker
-    init(_ proto :ANATracker) {
+    let proto :ANATracking
+    init(_ proto :ANATracking) {
         self.proto = proto
     }
     

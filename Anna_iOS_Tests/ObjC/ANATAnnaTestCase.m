@@ -58,10 +58,10 @@
 
 @end
 
-@interface ANATAnnaTestCase (ANATracker) <ANATracker>
+@interface ANATAnnaTestCase (ANATracking) <ANATracking>
 @end
 
-@implementation ANATAnnaTestCase (ANATracker)
+@implementation ANATAnnaTestCase (ANATracking)
 
 - (void)receiveAnalyticsEvent:(id<ANAEvent>)event
                  dispatchedBy:(id<ANAManaging>)manager

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol ANAEvent;
-@protocol ANATracker <NSObject>
+@protocol ANATracking <NSObject>
 - (void)receiveAnalyticsEvent:(id<ANAEvent> __nonnull)event
                  dispatchedBy:(id<ANAManaging> __nonnull)manager;
 - (void)receiveAnalyticsError:(NSError * __nonnull)error
@@ -17,11 +17,11 @@
 @end
 
 @protocol ANATrackerCollection <NSObject>
-- (id<ANATracker> __nullable)objectForKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;
-- (void)setObject:(id<ANATracker> __nullable)obj
+- (id<ANATracking> __nullable)objectForKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;
+- (void)setObject:(id<ANATracking> __nullable)obj
 forKeyedSubscript:(NSObject<NSCopying> * __nonnull)key;
 @end
 
 @protocol ANATrackerConfigurator <NSObject>
-@property (readwrite, nullable) NSArray<id<ANATracker>> *defaults;
+@property (readwrite, nullable) NSArray<id<ANATracking>> *defaults;
 @end

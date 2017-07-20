@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "ANAMethod.h"
 
-@protocol ANATracker, ANATrackerCollection;
+@protocol ANATracking, ANATrackerCollection;
 @protocol ANAClassPointBuilding <NSObject>
 @property (readonly, nonnull) id<ANAClassPointBuilding> __nonnull (^point)(ANAMethodPointBuildup __nullable);
-@property (readonly, nonnull) id<ANAClassPointBuilding> __nonnull (^tracker)(id<ANATracker> __nonnull);
-@property (readonly, nonnull) id<ANAClassPointBuilding> __nonnull (^trackers)(NSArray<id<ANATracker>> * __nonnull);
+@property (readonly, nonnull) id<ANAClassPointBuilding> __nonnull (^tracker)(id<ANATracking> __nonnull);
+@property (readonly, nonnull) id<ANAClassPointBuilding> __nonnull (^trackers)(NSArray<id<ANATracking>> * __nonnull);
 @property (readonly, nonnull) id<ANATrackerCollection> availableTrackers;
 @end

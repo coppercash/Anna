@@ -11,7 +11,7 @@
 
 @class XCTestExpectation;
 @protocol ANAEvent;
-@interface ANATBlockTracker : NSObject <ANATracker>
+@interface ANATBlockTracker : NSObject <ANATracking>
 @property (nonatomic, readonly) NSArray<id<ANAEvent>> *receivedEvents;
 @property (nonatomic, readonly) NSArray<NSError *> *receivedErrors;
 - (void)addExpectation:(XCTestExpectation *)expectation;
