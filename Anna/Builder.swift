@@ -9,23 +9,23 @@
 import Foundation
 
 extension Dictionary {
-    mutating func merge(with dictionary: Dictionary) {
+    mutating func update(with dictionary: Dictionary) {
         dictionary.forEach { updateValue($1, forKey: $0) }
     }
     
-    func merged(with another: Dictionary) ->Dictionary {
+    func updated(with another: Dictionary) ->Dictionary {
         var merged = self
-        merged.merge(with: another)
+        merged.update(with: another)
         return merged
     }
 }
 
 extension Array {
-    mutating func merge(with another: Array) {
+    mutating func update(with another: Array) {
         self += another
     }
     
-    func merged(with another: Array) ->Array {
+    func updated(with another: Array) ->Array {
         return self + another
     }
 }

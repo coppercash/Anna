@@ -78,7 +78,7 @@ EasyEvent {
         let payload :Payload
         if let points = point.payload {
             if let seeds = seed.payload {
-                payload = points.merged(with: seeds)
+                payload = points.updated(with: seeds)
             }
             else {
                 payload = points

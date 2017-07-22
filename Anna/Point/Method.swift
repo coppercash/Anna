@@ -83,17 +83,17 @@ EasyMethodPoint {
         let
         trackers = another.trackers == nil ?
             self.trackers :
-            self.trackers?.merged(with :another.trackers!)
+            self.trackers?.updated(with :another.trackers!)
         let
         overridesTrackers = self.overridesTrackers && another.overridesTrackers
         let
         payload = another.payload == nil ?
             self.payload :
-            self.payload?.merged(with: another.payload!)
+            self.payload?.updated(with: another.payload!)
         let
         children = another.children == nil ?
             self.children :
-            self.children?.merged(with :another.children!)
+            self.children?.updated(with :another.children!)
         return EasyMethodPoint(
             trackers: trackers,
             overridesTrackers: overridesTrackers,

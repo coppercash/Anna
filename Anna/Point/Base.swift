@@ -55,14 +55,14 @@ EasyPayloadNode {
             current = stack.removeLast()
             if let
                 cPayload = current.payload {
-                payload.merge(with: cPayload)
+                payload.update(with: cPayload)
             }
             if current.overridesTrackers {
                 trackers = current.trackers ?? Array<Self.Tracker>()
             }
             else {
                 if let cTrackers = current.trackers {
-                    trackers.merge(with: cTrackers)
+                    trackers.update(with: cTrackers)
                 }
             }
         }
