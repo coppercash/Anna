@@ -8,6 +8,31 @@
 
 import Foundation
 
+public protocol
+    EasyClassPointBuilding {
+    typealias
+        Buildup = (EasyClassPointBuilding)->Void
+    typealias
+        PointBuilder = EasyMethodPointBuilding
+    @discardableResult func
+        point(_ :PointBuilder.Buildup) ->Self
+    typealias
+        SuperClass = EasyRegistering
+    @discardableResult func
+        superClass(_ cls :SuperClass.Type) ->Self
+    typealias
+        Tracker = EasyTracking
+    @discardableResult func
+        tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
+    typealias
+        Trackers = EasyTrackerCollection
+    var
+    trackers :Trackers { get }
+}
+
 protocol
 EasyClassPointBeing : class, EasyPointMatching, EasyPayloadNode {
     typealias
@@ -106,13 +131,14 @@ ClassPointBuilderError : LocalizedError {
 final class
 EasyClassPointBuilder :
     EasyBasePointBuilder<EasyClassPoint>,
+    EasyClassPointBuilding,
     EasyTrackerBuilding
 {
-    public var
+    var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
     var
     overridesTrackers: Bool = false
-    public let
+    let
     trackers :EasyTrackerBuilding.Trackers
     init(trackers :EasyTrackerBuilding.Trackers) {
         self.trackers = trackers
@@ -126,7 +152,7 @@ EasyClassPointBuilder :
         ChildBuilder = EasyMethodPointBuilder
     typealias
         ChildrenBuffer = ArrayBuilder<Child>
-    public var
+    var
     childrenBuffer :ChildrenBuffer? = nil
     @discardableResult func
         point(_ buildup :ChildBuilder.Buildup) ->Self {
@@ -178,7 +204,7 @@ EasyClassPointBuilder :
     superClassBuffer :SuperClass.Type? = nil
     var
     superClassPointBuilder :EasyClassPointBuilder? = nil
-    public func
+    func
         superClass(_ cls :SuperClass.Type) ->Self {
         superClassBuffer = cls
         return self

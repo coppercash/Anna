@@ -51,7 +51,7 @@
         [self.expectations addObject:expectation];
     }
     execution();
-    [self waitForExpectationsWithTimeout:.7
+    [self waitForExpectationsWithTimeout:1.0
                                  handler:
      ^(NSError *error) { }];
 }

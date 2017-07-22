@@ -9,15 +9,7 @@
 import Foundation
 
 public protocol
-EasyRegistrationRecording {
-    typealias
-        PointBuilder = EasyMethodPointBuilding
-    @discardableResult func
-        point(_ :PointBuilder.Buildup) ->Self
-    typealias
-        SuperClass = EasyRegistering
-    @discardableResult func
-        superClass(_ cls :SuperClass.Type) ->Self
+EasyRegistrationRecording : EasyClassPointBuilding {
 }
 
 public protocol
