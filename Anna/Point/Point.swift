@@ -29,7 +29,7 @@ EasyPointBuilding {
         trackers<Trackers>(_ trackers :Trackers) ->Self
         where Trackers : Sequence, Trackers.Iterator.Element == Tracker
     typealias
-        Trackers = EasyTrackerCollection
+        Trackers = EasyTrackerCollecting
     var
     trackers :Trackers { get }
 }

@@ -76,14 +76,14 @@ EasyTrackerConfigurator {
 }
 
 public protocol
-EasyTrackerCollection {
+EasyTrackerCollecting {
     typealias
     Tracker = EasyTracking
     subscript(key :AnyHashable) ->Tracker? { get }
 }
 
 extension
-EasyTrackerConfigurator : EasyTrackerCollection {}
+EasyTrackerConfigurator : EasyTrackerCollecting {}
 
 protocol
 EasyTrackerBuilding : class {
@@ -101,7 +101,7 @@ EasyTrackerBuilding : class {
         where Trackers : Sequence, Trackers.Iterator.Element == Tracker
     
     typealias
-        Trackers = EasyTrackerCollection
+        Trackers = EasyTrackerCollecting
     var
     trackers :Trackers { get }
 }

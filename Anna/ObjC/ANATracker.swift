@@ -43,7 +43,7 @@ class ObjCTrackerCollection :
     NSObject,
     ANATrackerCollecting
 {
-    typealias Proto = EasyTrackerCollection
+    typealias Proto = EasyTrackerCollecting
     let proto :Proto
     init(_ proto :Proto) {
         self.proto = proto
