@@ -13,6 +13,14 @@ EasyEventBeing {
     subscript(key :AnyHashable) ->Any? { get }
 }
 
+public protocol
+EasyEventSeedBuilding {
+    typealias
+        Buildup = (EasyEventSeedBuilding)->Void
+    @discardableResult func
+        set(_ key :AnyHashable, _ value :Any?) ->Self
+}
+
 protocol
 EasyEventDispatching {
     typealias
@@ -115,27 +123,27 @@ EasyEvent : EasyEventBeing
     }
 }
 
-public class
-EasyEventSeedBuilder {
-    internal var
+class
+EasyEventSeedBuilder : EasyEventSeedBuilding {
+    var
     cls :Result.Registrant.Type? = nil
-    internal var
+    var
     method :Result.Method? = nil
-    internal typealias
+    typealias
         Buffer = DictionaryBuilder<AnyHashable, Any>
-    internal let
+    let
     buffer = Buffer()
     
-    required public
+    required
     init() {}
     
-    @discardableResult public func
+    @discardableResult func
         set(_ key :AnyHashable, _ value :Any?) ->Self {
         buffer.set(key, value)
         return self
     }
     
-    internal func
+    func
         event() throws ->EasyEventSeed {
         guard let
             cls = self.cls

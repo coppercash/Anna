@@ -18,12 +18,12 @@ EasyPrefix {
         self.target = target
     }
     
-    public typealias
+    typealias
         EventBuilder = EasyEventSeedBuilder
     var
     event :EventBuilder? = nil
     public func
-        event(_ buildup :EventBuilder.Buildup) ->Self {
+        event(_ buildup :EasyEventSeedBuilding.Buildup) ->Self {
         let
         builder = EventBuilder()
         buildup(builder)
