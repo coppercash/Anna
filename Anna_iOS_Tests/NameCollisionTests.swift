@@ -19,7 +19,7 @@ NameCollisionTests: AnnaTestCase {
             func
                 call() { self.custom.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .method("call()")

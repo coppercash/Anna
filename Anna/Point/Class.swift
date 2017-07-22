@@ -166,14 +166,14 @@ EasyClassPointBuilder :
     // MARK:- Class
     
     typealias
-        Class = EasyRegistrant
+        Class = EasyRegistering
     var
     classBuffer :Class.Type? = nil
     
     // MARK:- Super Class
     
     typealias
-        SuperClass = EasyRegistrant
+        SuperClass = EasyRegistering
     var
     superClassBuffer :SuperClass.Type? = nil
     var

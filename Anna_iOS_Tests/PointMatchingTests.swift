@@ -19,7 +19,7 @@ PointMatchingTests: AnnaTestCase {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -45,7 +45,7 @@ PointMatchingTests: AnnaTestCase {
                 self.ana.event{ $0.set("index", index) }.analyze()
             }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .method("functionContainsTwoPoints(index:)")
@@ -84,7 +84,7 @@ PointMatchingTests: AnnaTestCase {
                     }.analyze()
             }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(call(with:name:)))
@@ -131,7 +131,7 @@ PointMatchingTests: AnnaTestCase {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .method("whatever")

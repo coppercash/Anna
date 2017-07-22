@@ -17,7 +17,7 @@ class TrackerTests: AnnaTestCase {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -47,7 +47,7 @@ class TrackerTests: AnnaTestCase {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .method("call()")

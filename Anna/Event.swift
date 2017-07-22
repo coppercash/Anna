@@ -24,7 +24,7 @@ EasyEventSeedBuilding {
 protocol
 EasyEventDispatching {
     typealias
-        Seed = EasyPayloadCarrier & EasyPointMatchable & EasyRegistrantCarrying
+        Seed = EasyPayloadCarrier & EasyPointMatchable & EasyRegisteringCarrying
     func
         dispatchEvent(with seed: Seed)
 }
@@ -51,7 +51,7 @@ class
     EasyEventSeed :
     EasyPointMatchable,
     EasyPayloadCarrier,
-    EasyRegistrantCarrying
+    EasyRegisteringCarrying
 {
     var
     cls :EasyPointMatchable.Class { return registrant }

@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol
-EasyAnalyzable : class, EasyRegistrant {
+EasyAnalyzable : class, EasyRegistering {
     typealias
         Manager = EasyManager
     var

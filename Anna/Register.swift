@@ -9,29 +9,29 @@
 import Foundation
 
 public protocol
-EasyRegistrar {
+EasyRegistrationRecording {
     typealias
         PointBuilder = EasyMethodPointBuilder
     @discardableResult func
         point(_ :PointBuilder.Buildup) ->Self
     typealias
-        SuperClass = EasyRegistrant
+        SuperClass = EasyRegistering
     @discardableResult func
         superClass(_ cls :SuperClass.Type) ->Self
 }
 
 public protocol
-EasyRegistrant {
+EasyRegistering {
     typealias
-        Registrar = EasyRegistrar
+        Registrar = EasyRegistrationRecording
     static func
         registerAnalyticsPoints(with registrar :Registrar)
 }
 
 protocol
-EasyRegistrantCarrying {
+EasyRegisteringCarrying {
     typealias
-        Registrant = EasyRegistrant
+        Registrant = EasyRegistering
     var
     registrant : Registrant.Type { get }
 }

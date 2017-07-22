@@ -19,7 +19,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         // call
@@ -44,7 +44,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc func
                 call(with number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(with:)))
@@ -67,7 +67,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc func
                 call(at index :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(at:)))
@@ -90,7 +90,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc func
                 go(to bed :String) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(go(to:)))
@@ -113,7 +113,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc func
                 goToBed(at time :String) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(goToBed(at:)))
@@ -136,7 +136,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc func
                 call(phoneNumber number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(phoneNumber:)))
@@ -159,7 +159,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc func
                 selectRow(at index :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(selectRow(at:)))
@@ -184,7 +184,7 @@ SelectorMatchingTests : AnnaTestCase {
                 self.ana.analyze()
             }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(view(_:didTapAreaAround:)))
@@ -209,7 +209,7 @@ SelectorMatchingTests : AnnaTestCase {
                 self.ana.analyze()
             }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(tableView(_:didSelectRowAt:)))
@@ -232,7 +232,7 @@ SelectorMatchingTests : AnnaTestCase {
             func
                 call(_ string :String) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(call(_:)))
@@ -255,7 +255,7 @@ SelectorMatchingTests : AnnaTestCase {
             func
                 call(_ string :String, _ number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(call(_:_:)))
@@ -278,7 +278,7 @@ SelectorMatchingTests : AnnaTestCase {
             func
                 call(_ string :String, number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(call(_:number:)))
@@ -301,7 +301,7 @@ SelectorMatchingTests : AnnaTestCase {
             @objc(call:) func
                 call(parameterA argumentA :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(parameterA:)))
@@ -327,7 +327,7 @@ SelectorMatchingTests : AnnaTestCase {
                 return "42"
             }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(getter: property))
@@ -357,7 +357,7 @@ SelectorMatchingTests : AnnaTestCase {
                 }
             }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(setter: property))

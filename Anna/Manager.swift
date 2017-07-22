@@ -63,11 +63,11 @@ EasyManager {
 // MARK: - Load Points
 
 extension
-EasyClassPointBuilder : EasyRegistrar {}
+EasyClassPointBuilder : EasyRegistrationRecording {}
 extension
 EasyManager {
     typealias
-        Registrant = EasyRegistrant.Type
+        Registrant = EasyRegistering.Type
     typealias
         ClassPointBuilder = EasyClassPointBuilder
     func loadPoints(for cls :Registrant) throws {
