@@ -71,8 +71,8 @@ class ObjCTrackerConfigurator :
     ANATrackerConfiguring,
     ANATrackerCollecting
 {
-    typealias Proto = EasyTrackerConfigurator
-    let proto :Proto
+    typealias Proto = EasyTrackerConfiguring
+    var proto :Proto
     init(_ proto :Proto) {
         self.proto = proto
     }

@@ -11,7 +11,7 @@ import Foundation
 public protocol
 EasyManaging {
     typealias
-        Trackers = EasyTrackerConfigurator
+        Trackers = Anna.TrackerConfiguring & Anna.TrackerCollecting
     var
     trackers :Trackers { get }
 }
@@ -44,11 +44,9 @@ EasyManager : EasyManaging
     
     // MARK:- Tracker
     
-    public typealias
-        Trackers = EasyTrackerConfigurator
     lazy internal(set) public var
-    trackers :Trackers = {
-        return Trackers(host: self)
+    trackers :Anna.Managing.Trackers = {
+        return EasyTrackerConfigurator(host: self)
     }()
 }
 

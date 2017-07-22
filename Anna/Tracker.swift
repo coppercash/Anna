@@ -26,8 +26,27 @@ EasyTracking {
     )
 }
 
-public class
-EasyTrackerConfigurator {
+public protocol
+EasyTrackerConfiguring : class {
+    typealias
+        Tracker = Anna.Tracking
+    subscript(key :AnyHashable) ->Tracker? { set get }
+    var
+    defaults :[Tracker]? { set get }
+}
+
+public protocol
+EasyTrackerCollecting {
+    typealias
+        Tracker = Anna.Tracking
+    subscript(key :AnyHashable) ->Tracker? { get }
+}
+
+class
+    EasyTrackerConfigurator :
+    EasyTrackerConfiguring,
+    EasyTrackerCollecting
+{
     typealias
     Host = EasyManager
     unowned let
@@ -74,16 +93,6 @@ EasyTrackerConfigurator {
         }
     }
 }
-
-public protocol
-EasyTrackerCollecting {
-    typealias
-    Tracker = EasyTracking
-    subscript(key :AnyHashable) ->Tracker? { get }
-}
-
-extension
-EasyTrackerConfigurator : EasyTrackerCollecting {}
 
 protocol
 EasyTrackerBuilding : class {

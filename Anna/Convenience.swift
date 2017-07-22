@@ -13,6 +13,8 @@ public typealias
 public typealias
     Prefix = EasyPrefix
 public typealias
+    EventBeing = EasyEventBeing
+public typealias
     Managing = EasyManaging
 public typealias
     Manager = EasyManager
@@ -23,4 +25,6 @@ public typealias
 public typealias
     Tracking = EasyTracking
 public typealias
-    EventBeing = EasyEventBeing
+    TrackerCollecting = EasyTrackerCollecting
+public typealias
+    TrackerConfiguring = EasyTrackerConfiguring
