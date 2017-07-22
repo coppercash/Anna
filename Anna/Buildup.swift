@@ -36,8 +36,6 @@ protocol
 Builder : _Builder {
     associatedtype
     Result
-//    typealias
-//        Buildup = (Self)->Void
     func
         build() throws ->Result
 }
@@ -167,15 +165,15 @@ extension DictionaryBuilder {
 }
 
 extension DictionaryBuilder : Builder {
-    public typealias
+    typealias
         Result = Dictionary<Key, Value>
     
-    public func
+    func
         build() throws -> Dictionary<Key, Value> {
         return try dictionary()
     }
     
-    public func
+    func
         _build() throws -> Any {
         return try build()
     }

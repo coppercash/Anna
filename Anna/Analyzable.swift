@@ -11,11 +11,11 @@ import Foundation
 public protocol
 EasyAnalyzable : class, EasyRegistering {
     typealias
-        Manager = EasyManager
+        Manager = Anna.Manager
     var
     analyticsManager :Manager { get }
     typealias
-        Prefix = EasyPrefix
+        Prefix = Anna.Prefix
     var
     ana :Prefix { get }
 }

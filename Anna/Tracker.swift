@@ -11,7 +11,7 @@ import Foundation
 public protocol
 EasyTracking {
     typealias
-        Event = EasyEventBeing
+        Event = EventBeing
     typealias
         Manager = EasyManager
     func

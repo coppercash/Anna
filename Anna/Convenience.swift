@@ -11,6 +11,8 @@ import Foundation
 public typealias
     Analyzable = EasyAnalyzable
 public typealias
+    Prefix = EasyPrefix
+public typealias
     Managing = EasyManaging
 public typealias
     Manager = EasyManager

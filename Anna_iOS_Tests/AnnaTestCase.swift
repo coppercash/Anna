@@ -52,8 +52,8 @@ extension
 AnnaTestCase : Tracking {
     func
         receive(
-        analyticsEvent event: EasyTracking.Event,
-        dispatchedBy manager: EasyTracking.Manager
+        analyticsEvent event: Tracking.Event,
+        dispatchedBy manager: Tracking.Manager
         ) {
         receivedEvents.append(event)
         expectations.removeLast().fulfill()
@@ -61,7 +61,7 @@ AnnaTestCase : Tracking {
     func
         receive(
         analyticsError error: Error,
-        dispatchedBy manager: EasyTracking.Manager) {
+        dispatchedBy manager: Tracking.Manager) {
         receivedErrors.append(error)
         expectations.removeLast().fulfill()
     }
@@ -70,14 +70,14 @@ AnnaTestCase : Tracking {
 class
 ANATAnalyzable {
     typealias
-        Analyzer = EasyManager
+        Analyzer = Manager
     let
     analyzer :Analyzer
     init(_ analyzer :Analyzer) {
         self.analyzer = analyzer
     }
     var
-    analyticsManager: EasyAnalyzable.Manager {
+    analyticsManager: Analyzable.Manager {
         return self.analyzer
     }
 }
@@ -85,14 +85,14 @@ ANATAnalyzable {
 class
 ANATAnalyzableObjC : NSObject {
     typealias
-        Analyzer = EasyManager
+        Analyzer = Manager
     let
     analyzer :Analyzer
     init(_ analyzer :Analyzer) {
         self.analyzer = analyzer
     }
     var
-    analyticsManager: EasyAnalyzable.Manager {
+    analyticsManager: Manager {
         return self.analyzer
     }
 }

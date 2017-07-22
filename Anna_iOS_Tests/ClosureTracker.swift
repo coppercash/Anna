@@ -30,8 +30,8 @@ ClosureTracker : Tracking {
     
     func
         receive(
-        analyticsEvent event: EasyTracking.Event,
-        dispatchedBy manager: EasyTracking.Manager
+        analyticsEvent event: Tracking.Event,
+        dispatchedBy manager: Tracking.Manager
         ) {
         receivedEvents.append(event)
         if let closure = self.closure {
@@ -42,7 +42,7 @@ ClosureTracker : Tracking {
     func
         receive(
         analyticsError error: Error,
-        dispatchedBy manager: EasyTracking.Manager) {
+        dispatchedBy manager: Tracking.Manager) {
         receivedErrors.append(error)
         if let closure = self.closure {
             closure(nil, error)

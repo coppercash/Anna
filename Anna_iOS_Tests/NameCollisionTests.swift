@@ -19,7 +19,7 @@ NameCollisionTests: AnnaTestCase {
             func
                 call() { self.custom.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :EasyRegistering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registering.Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -39,7 +39,7 @@ NameCollisionTests: AnnaTestCase {
 extension
 Analyzable {
     var
-    custom :EasyAnalyzable.Prefix {
+    custom :Analyzable.Prefix {
         return self.ana
     }
 }
