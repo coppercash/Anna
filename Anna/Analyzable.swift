@@ -24,10 +24,10 @@ public extension
 EasyAnalyzable {
     var
     ana :Prefix {
-        return Prefix(target: self)
+        return EasyPrefix(target: self)
     }
     var
     analyticsManager :Manager {
-       return Manager.shared
+       return EasyManager.shared
     }
 }

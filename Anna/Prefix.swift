@@ -8,8 +8,20 @@
 
 import Foundation
 
+public protocol
+EasyPrefixing {
+    typealias
+        Method = String
+    func
+    analyze(method :Method)
+    typealias
+        EventSeedBuilder = EasyEventSeedBuilding
+    func
+        event(_ buildup :EventSeedBuilder.Buildup) ->Self
+}
+
 public class
-EasyPrefix {
+EasyPrefix : EasyPrefixing {
     typealias
         Target = EasyAnalyzable
     unowned let
@@ -19,33 +31,24 @@ EasyPrefix {
     }
     
     typealias
-        EventBuilder = EasyEventSeedBuilder
+        EventSeedBuilder = EasyEventSeedBuilder
     var
-    event :EventBuilder? = nil
+    event :EventSeedBuilder? = nil
     public func
-        event(_ buildup :EasyEventSeedBuilding.Buildup) ->Self {
+        event(_ buildup :EasyPrefixing.EventSeedBuilder.Buildup) ->Self {
         let
-        builder = EventBuilder()
+        builder = EventSeedBuilder()
         buildup(builder)
         event = builder
         return self
     }
     
-    public typealias
-        Method = String
     public func
-        analyze(method :Method = #function) {
+        analyze(method :EasyPrefixing.Method = #function) {
         let
-        event = self.event ?? EventBuilder()
+        event = self.event ?? EventSeedBuilder()
         event.cls = type(of: target)
         event.method = method
-        manager.dispatchEvent(with: try! event.event())
-    }
-    
-    typealias
-        Manager = EasyManager
-    var
-    manager :Manager {
-        return target.analyticsManager
+        target.analyticsManager.dispatchEvent(with: try! event.event())
     }
 }

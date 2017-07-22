@@ -8,23 +8,21 @@
 
 import Foundation
 
-open class
-EasyManager {
-    
+public protocol
+EasyManaging {
+    typealias
+        Trackers = EasyTrackerConfigurator
+    var
+    trackers :Trackers { get }
+}
+
+public class
+EasyManager : EasyManaging
+{
     let
     configQueue :DispatchQueue,
     queue :DispatchQueue
-    public typealias
-        Trackers = EasyTrackerConfigurator
-    lazy public internal(set) var
-    trackers :Trackers = {
-        return Trackers(host: self)
-    }()
     
-    public typealias
-        Root = EasyRootPoint
-    let
-    root :Root = Root()
     public init
         () {
         self.configQueue = DispatchQueue(
@@ -36,6 +34,22 @@ EasyManager {
             target: configQueue
         )
     }
+    
+    // MARK:- Point
+    
+    typealias
+        Root = EasyRootPoint
+    let
+    root :Root = Root()
+    
+    // MARK:- Tracker
+    
+    public typealias
+        Trackers = EasyTrackerConfigurator
+    lazy internal(set) public var
+    trackers :Trackers = {
+        return Trackers(host: self)
+    }()
 }
 
 // MARK: - Singleton
@@ -141,7 +155,7 @@ EasyManager : EasyEventDispatching {
         }
     }
     
-    public typealias
+    typealias
         Point = EasyPoint
     func
         dispatch(_ seed :EasyPointMatchable & EasyPayloadCarrier) throws {
