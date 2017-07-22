@@ -21,7 +21,7 @@ NSObject {
     }
 
     public func
-        ana_analyticsManager() ->ANAEventDispatching {
+        ana_analyticsManager() ->ANAManager {
         return ANAManager.sharedManager
     }
 }

@@ -51,7 +51,7 @@
         [self.expectations addObject:expectation];
     }
     execution();
-    [self waitForExpectationsWithTimeout:1.0
+    [self waitForExpectationsWithTimeout:0.1
                                  handler:
      ^(NSError *error) { }];
 }
@@ -100,7 +100,7 @@
     return self;
 }
 
-- (id<ANAEventDispatching>)ana_analyticsManager {
+- (ANAManager *)ana_analyticsManager {
     return self.analyzer;
 }
 

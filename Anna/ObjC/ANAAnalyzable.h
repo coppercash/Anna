@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "ANARegister.h"
 
-@protocol ANAEventDispatching, ANAPrefixing;
+@class ANAManager;
+@protocol ANAPrefixing;
 @protocol ANAAnalyzable <NSObject, ANARegistering>
-- (id<ANAEventDispatching> __nonnull)ana_analyticsManager;
+- (ANAManager * __nonnull)ana_analyticsManager;
 - (id<ANAPrefixing> __nonnull (^ __nonnull)(SEL __nonnull)) ana_context;
 @end
 

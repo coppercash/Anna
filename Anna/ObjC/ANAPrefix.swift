@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class
+class
     ANAPrefix :
     NSObject,
     ANAPrefixing,
@@ -18,7 +18,7 @@ public class
     target :ANAAnalyzable
     let
     selector :Selector
-    public init
+    init
     (
         target :ANAAnalyzable,
         selector :Selector
@@ -48,7 +48,7 @@ public class
                 payload: nil
             )
         }
-        target.ana_analyticsManager().dispatchEvent(withSeed: seed)
+        target.ana_analyticsManager().dispatchEvent(with: seed)
     }
     
     public var

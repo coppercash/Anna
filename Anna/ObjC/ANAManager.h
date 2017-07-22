@@ -11,7 +11,7 @@
 @protocol
 ANATrackerCollecting,
 ANATrackerConfiguring;
-@protocol ANAManaging <NSObject, ANAEventDispatching>
+@protocol ANAManaging <NSObject>
 @property (readonly, nonnull) id<ANATrackerConfiguring, ANATrackerCollecting> trackers;
 @end
 

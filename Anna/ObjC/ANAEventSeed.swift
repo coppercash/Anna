@@ -8,12 +8,34 @@
 
 import Foundation
 
-@objc public protocol
-ANARegistrantCarrying : NSObjectProtocol {
+@objc protocol
+ANARegistrantCarrying {
     typealias
         Registrant = ANARegistering
     var
     registrant : Registrant.Type { get }
+}
+
+@objc protocol
+ANAEventDispatching {
+    typealias
+        Seed = ANAPointMatchable & ANAPayloadCarrying & ANARegistrantCarrying
+    func
+        dispatchEvent(with seed :Seed)
+}
+
+@objc protocol
+ANAPointMatchable {
+    var
+    cls :AnyClass { get }
+    var
+    selector :Selector { get }
+}
+
+@objc protocol
+ANAPayloadCarrying {
+    var
+    payload :Dictionary<AnyHashable, Any>? { get }
 }
 
 class

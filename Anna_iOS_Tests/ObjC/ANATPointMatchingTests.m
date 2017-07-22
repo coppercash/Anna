@@ -110,7 +110,8 @@
 }
 
 - (void)test_twoPointsContainedInOneMethod {
-    [self waitForEvents:^{
+    [self waitForEventsOfCount:2
+                     execution:^{
         PointMatchingObject *object;
         object = [PointMatchingObject objectWithAnalyzer:self.manager];
         [object twoPointsContainedInOneMethod:0];
@@ -122,7 +123,8 @@
 }
 
 - (void)test_threePointsContainedInOneMethod {
-    [self waitForEvents:^{
+    [self waitForEventsOfCount:3
+                     execution:^{
         PointMatchingObject *object;
         object = [PointMatchingObject objectWithAnalyzer:self.manager];
         [object threePointsContainedInOneMethodWithIndex:0 name:@"Tom"];

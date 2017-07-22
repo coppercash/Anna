@@ -68,9 +68,9 @@ public class
 
 extension
 ANAManager : ANAEventDispatching {
-    public func
+    func
         dispatchEvent(
-        withSeed seed: ANAPayloadCarrying & ANAPointMatchable & ANARegistrantCarrying
+        with seed: ANAPayloadCarrying & ANAPointMatchable & ANARegistrantCarrying
         ) {
         proto.queue.async {
             do {
