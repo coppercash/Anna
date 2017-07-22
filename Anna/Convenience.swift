@@ -13,7 +13,9 @@ public typealias
 public typealias
     Prefix = EasyPrefix
 public typealias
-    EventBeing = EasyEventBeing
+    EventSeedBuilding = EasyEventSeedBuilding
+public typealias
+EventBeing = EasyEventBeing
 public typealias
     Managing = EasyManaging
 public typealias

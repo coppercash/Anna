@@ -15,9 +15,9 @@ EasyPrefixing {
     func
     analyze(method :Method)
     typealias
-        EventSeedBuilder = EasyEventSeedBuilding
+        SeedBuilder = Anna.EventSeedBuilding
     func
-        event(_ buildup :EventSeedBuilder.Buildup) ->Self
+        event(_ buildup :SeedBuilder.Buildup) ->Self
 }
 
 public class
@@ -31,13 +31,13 @@ EasyPrefix : EasyPrefixing {
     }
     
     typealias
-        EventSeedBuilder = EasyEventSeedBuilder
+        SeedBuilder = EasyEventSeedBuilder
     var
-    event :EventSeedBuilder? = nil
+    event :SeedBuilder? = nil
     public func
-        event(_ buildup :EasyPrefixing.EventSeedBuilder.Buildup) ->Self {
+        event(_ buildup :EasyPrefixing.SeedBuilder.Buildup) ->Self {
         let
-        builder = EventSeedBuilder()
+        builder = SeedBuilder()
         buildup(builder)
         event = builder
         return self
@@ -46,7 +46,7 @@ EasyPrefix : EasyPrefixing {
     public func
         analyze(method :EasyPrefixing.Method = #function) {
         let
-        event = self.event ?? EventSeedBuilder()
+        event = self.event ?? SeedBuilder()
         event.cls = type(of: target)
         event.method = method
         target.analyticsManager.dispatchEvent(with: try! event.event())
