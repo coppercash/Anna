@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol
-EasyTracker {
+EasyTracking {
     typealias
         Event = EasyEventBeing
     typealias
@@ -37,7 +37,7 @@ EasyTrackerConfigurator {
     }
     
     public typealias
-    Tracker = EasyTracker
+    Tracker = EasyTracking
     var
     trackers = [AnyHashable : Tracker]()
     public
@@ -78,7 +78,7 @@ EasyTrackerConfigurator {
 public protocol
 EasyTrackerCollection {
     typealias
-    Tracker = EasyTracker
+    Tracker = EasyTracking
     subscript(key :AnyHashable) ->Tracker? { get }
 }
 
@@ -93,7 +93,7 @@ EasyTrackerBuilding : class {
     overridesTrackers :Bool { get set }
     
     typealias
-        Tracker = EasyTracker
+        Tracker = EasyTracking
     @discardableResult func
         tracker(_ tracker :Tracker) ->Self
     @discardableResult func

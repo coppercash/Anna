@@ -12,7 +12,7 @@ class ObjCTracker :
     NSObject,
     ANATracking
 {
-    typealias Proto = EasyTracker
+    typealias Proto = EasyTracking
     let proto :Proto
     init(_ proto :Proto) {
         self.proto = proto
@@ -123,7 +123,7 @@ class ObjCTrackerConfigurator :
     }
 }
 
-class SwiftEasyTracker : EasyTracker {
+class SwiftEasyTracker : EasyTracking {
     let proto :ANATracking
     init(_ proto :ANATracking) {
         self.proto = proto
@@ -131,8 +131,8 @@ class SwiftEasyTracker : EasyTracker {
     
     func
         receive(
-        analyticsEvent event :Event,
-        dispatchedBy manager :Manager
+        analyticsEvent event :EasyTracking.Event,
+        dispatchedBy manager :EasyTracking.Manager
         ) {
         proto.receiveAnalyticsEvent(
             ObjCEvent(event),
@@ -142,7 +142,7 @@ class SwiftEasyTracker : EasyTracker {
     func
         receive(
         analyticsError error :Error,
-        dispatchedBy manager :Manager
+        dispatchedBy manager :EasyTracking.Manager
         ) {
         proto.receiveAnalyticsError(
             error,

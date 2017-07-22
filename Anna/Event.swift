@@ -40,7 +40,7 @@ EasyPayloadCarrier : class {
 protocol
 EasyTrackerCarrier {
     typealias
-        Tracker = EasyTracker
+        Tracker = EasyTracking
     var
     trackers :[Tracker]? { get }
     var

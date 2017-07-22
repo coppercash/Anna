@@ -87,7 +87,7 @@ EasyBasePoint : EasyPayloadCarrier {
     let
     payload :Payload?
     public typealias
-        Tracker = EasyTracker
+        Tracker = EasyTracking
     public let
     trackers :[Tracker]?
     let

@@ -49,11 +49,11 @@ AnnaTestCase : XCTestCase {
 }
 
 extension
-AnnaTestCase : Tracker {
+AnnaTestCase : Tracking {
     func
         receive(
-        analyticsEvent event: EasyTracker.Event,
-        dispatchedBy manager: EasyTracker.Manager
+        analyticsEvent event: EasyTracking.Event,
+        dispatchedBy manager: EasyTracking.Manager
         ) {
         receivedEvents.append(event)
         expectations.removeLast().fulfill()
@@ -61,7 +61,7 @@ AnnaTestCase : Tracker {
     func
         receive(
         analyticsError error: Error,
-        dispatchedBy manager: EasyTracker.Manager) {
+        dispatchedBy manager: EasyTracking.Manager) {
         receivedErrors.append(error)
         expectations.removeLast().fulfill()
     }

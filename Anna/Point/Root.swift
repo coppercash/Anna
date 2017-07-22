@@ -15,7 +15,7 @@ EasyRootPoint {
     var
     children :[Child.Class: Child] = Dictionary<Child.Class, Child>()
     public typealias
-        Tracker = EasyTracker
+        Tracker = EasyTracking
     lazy var
     trackers :[Tracker]? = nil
     let

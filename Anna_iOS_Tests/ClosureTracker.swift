@@ -10,7 +10,7 @@ import XCTest
 import Anna
 
 class
-ClosureTracker : Tracker {
+ClosureTracker : Tracking {
     typealias
         Event = Anna.EventBeing
     var
@@ -30,8 +30,8 @@ ClosureTracker : Tracker {
     
     func
         receive(
-        analyticsEvent event: EasyTracker.Event,
-        dispatchedBy manager: EasyTracker.Manager
+        analyticsEvent event: EasyTracking.Event,
+        dispatchedBy manager: EasyTracking.Manager
         ) {
         receivedEvents.append(event)
         if let closure = self.closure {
@@ -42,7 +42,7 @@ ClosureTracker : Tracker {
     func
         receive(
         analyticsError error: Error,
-        dispatchedBy manager: EasyTracker.Manager) {
+        dispatchedBy manager: EasyTracking.Manager) {
         receivedErrors.append(error)
         if let closure = self.closure {
             closure(nil, error)

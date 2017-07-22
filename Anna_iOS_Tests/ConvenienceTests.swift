@@ -27,7 +27,7 @@ class ConvenienceTests: XCTestCase {
         }
         
         class
-        Tracker : Anna.Tracker {
+        Tracker : Anna.Tracking {
             var
             event :Event? = nil
             var
@@ -73,7 +73,7 @@ class Object : NSObject, Anna.Analyzable {
     }
 }
 
-class Tracker : Anna.Tracker {
+class Tracker : Anna.Tracking {
     public func receive(
         analyticsEvent event: Event,
         dispatchedBy manager: Manager

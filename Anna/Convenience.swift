@@ -15,8 +15,10 @@ public typealias
 public typealias
     Manager = EasyManager
 public typealias
-    Registrar = EasyRegistrationRecording
+    RegistrationRecording = EasyRegistrationRecording
 public typealias
-    Tracker = EasyTracker
+    Registering = EasyRegistering
+public typealias
+    Tracking = EasyTracking
 public typealias
     EventBeing = EasyEventBeing
