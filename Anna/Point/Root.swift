@@ -56,7 +56,7 @@ EasyRootPoint {
     }
 }
 
-public protocol
+protocol
 EasyChildrenBuilding : EasyTrackerBuilding {
     typealias
         Child = EasyPoint

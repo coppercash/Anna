@@ -110,7 +110,7 @@ final public class
     
     // MARK:- Children
     
-    public var
+    var
     childrenBuffer :ChildrenBuffer? = nil
     
     // MARK:- Predicates

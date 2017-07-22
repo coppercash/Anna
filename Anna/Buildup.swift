@@ -26,13 +26,13 @@ BuilderError : LocalizedError {
 
 // Why Builder is needed?
 //   + We need to cast to some type responds to build
-public protocol
+protocol
 _Builder {
     func
         _build() throws ->Any
 }
 
-public protocol
+protocol
 Builder : _Builder {
     associatedtype
     Result

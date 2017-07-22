@@ -16,7 +16,7 @@ EasyEventDispatching {
         dispatchEvent(with seed: Seed)
 }
 
-public class
+class
     EasyEventSeed :
     EasyPointMatchable,
     EasyPayloadCarrier,
@@ -148,10 +148,10 @@ EasyEventSeedBuilder {
 
 extension
 EasyEventSeedBuilder : Builder {
-    public typealias
+    typealias
         Result = EasyEventSeed
-    public func
+    func
         build() throws -> Result { return try event() }
-    public func
+    func
         _build() throws -> Any { return try build() }
 }

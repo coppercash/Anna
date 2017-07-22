@@ -125,7 +125,7 @@ final public class
     
     // MARK:- Children
     
-    public var
+    var
     childrenBuffer :ChildrenBuffer? = nil
     
     // MARK:- Method
@@ -167,6 +167,8 @@ final public class
     
     // MARK:- Build
     
+    public typealias
+        Buildup = (EasyMethodPointBuilder)->Void
     typealias
         Point = EasyMethodPoint
     override func
