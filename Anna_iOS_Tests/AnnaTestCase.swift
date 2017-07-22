@@ -12,16 +12,16 @@ import Anna
 class
 AnnaTestCase : XCTestCase {
     typealias
-        Manager = EasyManager
+        Manager = Anna.Manager
     var
     manager :Manager! = nil,
     expectations :[XCTestExpectation]! = nil,
-    receivedEvents :[Manager.Event]! = nil,
+    receivedEvents :[Anna.EventBeing]! = nil,
     receivedErrors :[Error]! = nil
     override func
         setUp() {
         super.setUp()
-        receivedEvents = Array<Manager.Event>()
+        receivedEvents = Array<Anna.EventBeing>()
         receivedErrors =  Array<Error>()
         expectations = [XCTestExpectation]()
         manager = Manager()

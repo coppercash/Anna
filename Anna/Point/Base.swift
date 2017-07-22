@@ -8,24 +8,6 @@
 
 import Foundation
 
-public protocol
-EasyPayloadCarrier : class {
-    typealias
-        Payload = Dictionary<AnyHashable, Any>
-    var
-    payload :Payload? { get }
-}
-
-protocol
-EasyTrackerCarrier {
-    typealias
-        Tracker = EasyTracker
-    var
-    trackers :[Tracker]? { get }
-    var
-    overridesTrackers :Bool { get }
-}
-
 protocol
 EasyPayloadNode : EasyPayloadCarrier, EasyTrackerCarrier {
     var
@@ -102,7 +84,7 @@ EasyPointMatchable {
 
 public class
 EasyBasePoint : EasyPayloadCarrier {
-    public let
+    let
     payload :Payload?
     public typealias
         Tracker = EasyTracker
@@ -111,7 +93,6 @@ EasyBasePoint : EasyPayloadCarrier {
     let
     overridesTrackers :Bool
     
-    public
     init(
         trackers :[Tracker]? = nil,
         overridesTrackers :Bool,

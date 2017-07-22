@@ -124,7 +124,7 @@ ConfigurationError : Error {
 
 extension
 EasyManager : EasyEventDispatching {
-    public typealias
+    typealias
         Event = EasyEvent
     func
         dispatchEvent(with seed: Seed) {

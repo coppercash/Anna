@@ -8,12 +8,35 @@
 
 import Foundation
 
+public protocol
+EasyEventBeing {
+    subscript(key :AnyHashable) ->Any? { get }
+}
+
 protocol
 EasyEventDispatching {
     typealias
         Seed = EasyPayloadCarrier & EasyPointMatchable & EasyRegistrantCarrying
     func
         dispatchEvent(with seed: Seed)
+}
+
+protocol
+EasyPayloadCarrier : class {
+    typealias
+        Payload = Dictionary<AnyHashable, Any>
+    var
+    payload :Payload? { get }
+}
+
+protocol
+EasyTrackerCarrier {
+    typealias
+        Tracker = EasyTracker
+    var
+    trackers :[Tracker]? { get }
+    var
+    overridesTrackers :Bool { get }
 }
 
 class
@@ -55,8 +78,9 @@ EventError : Error {
    case unloadedEvent
 }
 
-public class
-EasyEvent {
+class
+EasyEvent : EasyEventBeing
+{
     typealias
         Payload = EasyPayloadCarrier.Payload
     let
@@ -93,13 +117,13 @@ EasyEvent {
 
 public class
 EasyEventSeedBuilder {
-    var
+    internal var
     cls :Result.Registrant.Type? = nil
-    var
+    internal var
     method :Result.Method? = nil
-    typealias
+    internal typealias
         Buffer = DictionaryBuilder<AnyHashable, Any>
-    let
+    internal let
     buffer = Buffer()
     
     required public
@@ -111,9 +135,7 @@ EasyEventSeedBuilder {
         return self
     }
     
-    typealias
-        Event = EasyEvent
-    func
+    internal func
         event() throws ->EasyEventSeed {
         guard let
             cls = self.cls
@@ -142,12 +164,12 @@ EasyEventSeedBuilder {
         return event
     }
     
-    public typealias
-        Buildup = (EasyEventSeedBuilder)->Void
 }
 
 extension
 EasyEventSeedBuilder : Builder {
+    public typealias
+        Buildup = (EasyEventSeedBuilder)->Void
     typealias
         Result = EasyEventSeed
     func

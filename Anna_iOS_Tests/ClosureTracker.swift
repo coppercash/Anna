@@ -11,7 +11,8 @@ import Anna
 
 class
 ClosureTracker : Tracker {
-    typealias Event = EasyEvent
+    typealias
+        Event = Anna.EventBeing
     var
     receivedEvents = [Event]()
     var

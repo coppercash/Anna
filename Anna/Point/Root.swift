@@ -27,7 +27,7 @@ EasyRootPoint {
 
 extension
 EasyRootPoint : EasyPayloadNode {
-    public var
+    var
     payload: EasyPayloadCarrier.Payload? {
         return nil
     }

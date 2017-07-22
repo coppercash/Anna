@@ -13,7 +13,7 @@ class ObjCEvent :
     ANAEventBeing
 {
     typealias
-        Proto = EasyEvent
+        Proto = EasyEventBeing
     let
     proto :Proto
     init(_ proto :Proto) {

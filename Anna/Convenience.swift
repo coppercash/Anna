@@ -17,4 +17,4 @@ public typealias
 public typealias
     Tracker = EasyTracker
 public typealias
-    Event = EasyEvent
+    EventBeing = EasyEventBeing
