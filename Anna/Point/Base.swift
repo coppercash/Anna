@@ -158,13 +158,13 @@ where
     }
 }
 
-extension
-EasyBasePointBuilder : BuilderPropertyBuffer {
-    subscript(key :String) ->Any? {
-        get { return buffer[key] }
-        set { buffer[key] = newValue }
-    }
-}
+//extension
+//EasyBasePointBuilder : BuilderPropertyBuffer {
+//    subscript(key :String) ->Any? {
+//        get { return buffer[key] }
+//        set { buffer[key] = newValue }
+//    }
+//}
 
 extension
 EasyBasePointBuilder : Builder {
