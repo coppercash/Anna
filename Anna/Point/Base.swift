@@ -82,13 +82,13 @@ EasyPointMatchable {
         object(to predicate :Predicate) ->Any?
 }
 
-public class
+class
 EasyBasePoint : EasyPayloadCarrier {
     let
     payload :Payload?
-    public typealias
+    typealias
         Tracker = EasyTracking
-    public let
+    let
     trackers :[Tracker]?
     let
     overridesTrackers :Bool
@@ -108,14 +108,14 @@ enum EasyBasePointBuilderError : Error {
    case unimplemented
 }
 
-public class
+class
 EasyBasePointBuilder<Point>
 where
     Point : EasyBasePoint
 {
-    public typealias
+    typealias
         Buffer = DictionaryBuilder<AnyHashable, Any>
-    public let
+    let
     buffer = Buffer()
     
     // MARK:- Payload
@@ -139,20 +139,12 @@ where
     }
 }
 
-//extension
-//EasyBasePointBuilder : BuilderPropertyBuffer {
-//    subscript(key :String) ->Any? {
-//        get { return buffer[key] }
-//        set { buffer[key] = newValue }
-//    }
-//}
-
 extension
 EasyBasePointBuilder : Builder {
-    public typealias
+    typealias
         Result = Point
-    public func
+    func
         build() throws -> Point { return try point() }
-    public func
+    func
         _build() throws -> Any { return try build() }
 }

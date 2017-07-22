@@ -11,7 +11,7 @@ import Foundation
 public protocol
 EasyRegistrationRecording {
     typealias
-        PointBuilder = EasyMethodPointBuilder
+        PointBuilder = EasyMethodPointBuilding
     @discardableResult func
         point(_ :PointBuilder.Buildup) ->Self
     typealias

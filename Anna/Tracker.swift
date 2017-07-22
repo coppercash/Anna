@@ -85,7 +85,7 @@ EasyTrackerCollection {
 extension
 EasyTrackerConfigurator : EasyTrackerCollection {}
 
-public protocol
+protocol
 EasyTrackerBuilding : class {
     var
     trackersBuffer :[Tracker]? { get set }

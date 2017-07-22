@@ -8,7 +8,33 @@
 
 import Foundation
 
-public class
+public protocol
+EasyPointBuilding {
+    typealias
+        Buildup = (EasyPointBuilding)->Void
+    @discardableResult func
+        when<Value>(_ key :String, equal expectedValue :Value)
+        ->Self where Value : Equatable
+    @discardableResult func
+        set(_ key :AnyHashable, _ value :Any?) ->Self
+    typealias
+        ChildBuilder = EasyPointBuilding
+    @discardableResult func
+        point(_ buildup :ChildBuilder.Buildup) ->Self
+    typealias
+        Tracker = EasyTracking
+    @discardableResult func
+        tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
+    typealias
+        Trackers = EasyTrackerCollection
+    var
+    trackers :Trackers { get }
+}
+
+class
 EasyPoint : EasyBasePoint {
     typealias
         Child = EasyPoint
@@ -88,9 +114,10 @@ EasyPoint : EasyPayloadNode {
     }
 }
 
-final public class
+final class
     EasyPointBuilder :
     EasyBasePointBuilder<EasyPoint>,
+    EasyPointBuilding,
     EasyTrackerBuilding,
     EasyChildrenBuilding
 {
@@ -101,11 +128,11 @@ final public class
     
     // MARK:- Trackers
     
-    public var
+    var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
-    public var
+    var
     overridesTrackers: Bool = false
-    public let
+    let
     trackers :EasyTrackerBuilding.Trackers
     
     // MARK:- Children
@@ -119,7 +146,7 @@ final public class
         PredicatesBuffer = ArrayBuilder<Predicate>
     lazy var
     predicatesBuffer :PredicatesBuffer? = nil
-    @discardableResult public func
+    @discardableResult func
         when<Value>(_ key :String, equal expectedValue :Value)
         ->Self where Value : Equatable
     {

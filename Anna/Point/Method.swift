@@ -8,7 +8,36 @@
 
 import Foundation
 
-public class
+public protocol
+    EasyMethodPointBuilding {
+    typealias
+        Buildup = (EasyMethodPointBuilding)->Void
+    typealias
+        MethodName = String
+    @discardableResult func
+        method(_ name :MethodName) ->Self
+    @discardableResult func
+        selector(_ selector :Selector) ->Self
+    @discardableResult func
+        set(_ key :AnyHashable, _ value :Any?) ->Self
+    typealias
+        ChildBuilder = EasyPointBuilding
+    @discardableResult func
+        point(_ buildup :ChildBuilder.Buildup) ->Self
+    typealias
+        Tracker = EasyTracking
+    @discardableResult func
+        tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
+    typealias
+        Trackers = EasyTrackerCollection
+    var
+    trackers :Trackers { get }
+}
+
+class
 EasyMethodPoint : EasyBasePoint {
     
     typealias
@@ -104,9 +133,10 @@ EasyMethodPoint {
     }
 }
 
-final public class
+final class
     EasyMethodPointBuilder :
     EasyBasePointBuilder<EasyMethodPoint>,
+    EasyMethodPointBuilding,
     EasyTrackerBuilding,
     EasyChildrenBuilding
 {
@@ -116,11 +146,11 @@ final public class
     
     // MARK:- Trackers
     
-    public var
+    var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
-    public var
+    var
     overridesTrackers: Bool = false
-    public let
+    let
     trackers :EasyTrackerBuilding.Trackers
     
     // MARK:- Children
@@ -130,11 +160,9 @@ final public class
     
     // MARK:- Method
     
-    public typealias
-        MethodName = String
     lazy var
-    methodNames = [MethodName]()
-    @discardableResult public func
+    methodNames = Array<EasyMethodPointBuilding.MethodName>()
+    @discardableResult func
         method(_ name :MethodName) ->Self {
         methodNames.append(name)
         return self
@@ -142,7 +170,7 @@ final public class
     
     lazy var
     selectors = Array<Selector>()
-    @discardableResult public func
+    @discardableResult func
         selector(_ selector :Selector) ->Self {
         selectors.append(selector)
         return self
@@ -153,7 +181,7 @@ final public class
     func
         allMethods() ->[Method] {
         var
-        methods = [MethodName]()
+        methods = Array<EasyMethodPointBuilding.MethodName>()
         for methodName in methodNames {
             methods.append(methodName)
         }
@@ -167,8 +195,6 @@ final public class
     
     // MARK:- Build
     
-    public typealias
-        Buildup = (EasyMethodPointBuilder)->Void
     typealias
         Point = EasyMethodPoint
     override func
