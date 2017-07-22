@@ -15,7 +15,7 @@ EasyRegistrationRecording : EasyClassPointBuilding {
 public protocol
 EasyRegistering {
     typealias
-        Registrar = RegistrationRecording
+        Registrar = EasyRegistrationRecording
     static func
         registerAnalyticsPoints(with registrar :Registrar)
 }

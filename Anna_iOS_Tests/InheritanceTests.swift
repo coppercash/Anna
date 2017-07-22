@@ -15,11 +15,11 @@ InheritanceTests: AnnaTestCase {
     func
         test_inheritsMethodFromSuper() {
         class
-        Parent : ANATAnalyzable, Analyzable {
+        Parent : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -29,7 +29,7 @@ InheritanceTests: AnnaTestCase {
         class
         Child : Parent {
             override class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .superClass(Parent.self)
             }
@@ -46,11 +46,11 @@ InheritanceTests: AnnaTestCase {
     func
         test_inheritsMethodFromSuperWithouthRegistering() {
         class
-        Parent : ANATAnalyzable, Analyzable {
+        Parent : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -75,11 +75,11 @@ InheritanceTests: AnnaTestCase {
                 call() {}
         }
         class
-        Child : Parent, Analyzable {
+        Child : Parent, EasyAnalyzable {
             override func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -98,11 +98,11 @@ InheritanceTests: AnnaTestCase {
     func
         test_overridesPointRegisterredBySuper() {
         class
-        Parent : ANATAnalyzable, Analyzable {
+        Parent : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -113,7 +113,7 @@ InheritanceTests: AnnaTestCase {
         class
         Child : Parent {
             override class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .superClass(Parent.self)
                     .point { $0
@@ -134,13 +134,13 @@ InheritanceTests: AnnaTestCase {
     func
         test_KVObservedObjectBehavesAsNormalObject() {
         class
-        Observable : ANATAnalyzableObjC, Analyzable {
+        Observable : ANATAnalyzableObjC, EasyAnalyzable {
             var property :String {
                 self.ana.analyze()
                 return "whatever"
             }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method(#keyPath(property))

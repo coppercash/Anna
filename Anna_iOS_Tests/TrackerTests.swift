@@ -13,11 +13,11 @@ class TrackerTests: AnnaTestCase {
     
     func test_appendTracker() {
         class
-        Object : ANATAnalyzable, Analyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -43,11 +43,11 @@ class TrackerTests: AnnaTestCase {
     func
         test_overrideTrackers() {
         class
-        Object : ANATAnalyzable, Analyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")

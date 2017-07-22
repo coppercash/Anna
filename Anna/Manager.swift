@@ -11,7 +11,9 @@ import Foundation
 public protocol
 EasyManaging {
     typealias
-        Trackers = Anna.TrackerConfiguring & Anna.TrackerCollecting
+        Event = EasyEventBeing
+    typealias
+        Trackers = EasyTrackerConfiguring & EasyTrackerCollecting
     var
     trackers :Trackers { get }
 }
@@ -45,7 +47,7 @@ EasyManager : EasyManaging
     // MARK:- Tracker
     
     lazy internal(set) public var
-    trackers :Anna.Managing.Trackers = {
+    trackers :EasyManaging.Trackers = {
         return EasyTrackerConfigurator(host: self)
     }()
 }
@@ -136,8 +138,6 @@ ConfigurationError : Error {
 
 extension
 EasyManager : EasyEventDispatching {
-    typealias
-        Event = EasyEvent
     func
         dispatchEvent(with seed: Seed) {
         queue.async {

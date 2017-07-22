@@ -13,7 +13,7 @@ class ConvenienceTests: XCTestCase {
     
     func test_convenience() {
         class
-        Object : NSObject, Anna.Analyzable {
+        Object : NSObject, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
             class func
@@ -27,7 +27,7 @@ class ConvenienceTests: XCTestCase {
         }
         
         class
-        Tracker : Anna.Tracking {
+        Tracker : EasyTracking {
             var
             event :Event? = nil
             var
@@ -46,7 +46,7 @@ class ConvenienceTests: XCTestCase {
         let
         tracker = Tracker()
         tracker.eventExpectation = expectation(description: "")
-        Anna.Manager.shared.trackers.defaults = [tracker]
+        EasyManager.shared.trackers.defaults = [tracker]
         
         Object().call()
         
@@ -58,7 +58,7 @@ class ConvenienceTests: XCTestCase {
 class SampleCodeTests: XCTestCase {
     
     func testtheModeBasic() {
-class Object : NSObject, Anna.Analyzable {
+class Object : NSObject, EasyAnalyzable {
     func call() {
         self.ana.analyze()
     }
@@ -73,7 +73,7 @@ class Object : NSObject, Anna.Analyzable {
     }
 }
 
-class Tracker : Anna.Tracking {
+class Tracker : EasyTracking {
     public func receive(
         analyticsEvent event: Event,
         dispatchedBy manager: Manager
@@ -89,7 +89,7 @@ class Tracker : Anna.Tracking {
 }
 
 let tracker = Tracker()
-Anna.Manager.shared.trackers.defaults = [tracker]
+EasyManager.shared.trackers.defaults = [tracker]
 
 Object().call()
     }

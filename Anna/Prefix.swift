@@ -15,7 +15,7 @@ EasyPrefixing {
     func
     analyze(method :Method)
     typealias
-        SeedBuilder = Anna.EventSeedBuilding
+        SeedBuilder = EasyEventSeedBuilding
     func
         event(_ buildup :SeedBuilder.Buildup) ->Self
 }

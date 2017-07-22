@@ -15,11 +15,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_withoutParameter() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc func
                 call() { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         // call
@@ -40,11 +40,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterWith() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc func
                 call(with number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(with:)))
@@ -63,11 +63,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterPreposition() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc func
                 call(at index :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(at:)))
@@ -86,11 +86,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterPrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc func
                 go(to bed :String) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(go(to:)))
@@ -109,11 +109,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_methodNamePrepositionNoun_firstNamePrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc func
                 goToBed(at time :String) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(goToBed(at:)))
@@ -132,11 +132,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_firstParameterNoun() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc func
                 call(phoneNumber number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(phoneNumber:)))
@@ -155,11 +155,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_methodNameVerdNoun_firstParameterPrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc func
                 selectRow(at index :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(selectRow(at:)))
@@ -178,13 +178,13 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_secondParameterVerbPreposition() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             func
                 view(_ view: UIView, didTapAreaAround point: CGPoint) {
                 self.ana.analyze()
             }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(view(_:didTapAreaAround:)))
@@ -203,13 +203,13 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_secondParameterVerbPrepositionNounPrepositionNoun() {
         class
-        Object : ANATAnalyzableObjC, UITableViewDelegate, Analyzable {
+        Object : ANATAnalyzableObjC, UITableViewDelegate, EasyAnalyzable {
             func
                 tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                 self.ana.analyze()
             }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(tableView(_:didSelectRowAt:)))
@@ -228,11 +228,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_oneOmittedParameterLabel() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             func
                 call(_ string :String) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(call(_:)))
@@ -251,11 +251,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_twoOmittedParameterLabels() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             func
                 call(_ string :String, _ number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(call(_:_:)))
@@ -274,11 +274,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_omittingOneParameterAmongTwo() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             func
                 call(_ string :String, number :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(call(_:number:)))
@@ -297,11 +297,11 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_unableToMatchCustomObjCSelector() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             @objc(call:) func
                 call(parameterA argumentA :Int) { self.ana.analyze() }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(Object.call(parameterA:)))
@@ -320,14 +320,14 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_getter() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             var
             property :String {
                 self.ana.analyze()
                 return "42"
             }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(getter: property))
@@ -346,7 +346,7 @@ SelectorMatchingTests : AnnaTestCase {
     func
         test_setter() {
         class
-        Object : ANATAnalyzableObjC, Analyzable {
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
             var
             property :String {
                 get {
@@ -357,7 +357,7 @@ SelectorMatchingTests : AnnaTestCase {
                 }
             }
             class func
-                registerAnalyticsPoints(with registrar :Registering.Registrar) {
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .selector(#selector(setter: property))

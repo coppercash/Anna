@@ -12,16 +12,16 @@ import Anna
 class
 AnnaTestCase : XCTestCase {
     typealias
-        Manager = Anna.Manager
+        Manager = Anna.EasyManager
     var
     manager :Manager! = nil,
     expectations :[XCTestExpectation]! = nil,
-    receivedEvents :[Anna.EventBeing]! = nil,
+    receivedEvents :[Manager.Event]! = nil,
     receivedErrors :[Error]! = nil
     override func
         setUp() {
         super.setUp()
-        receivedEvents = Array<Anna.EventBeing>()
+        receivedEvents = Array<Manager.Event>()
         receivedErrors =  Array<Error>()
         expectations = [XCTestExpectation]()
         manager = Manager()
@@ -49,11 +49,11 @@ AnnaTestCase : XCTestCase {
 }
 
 extension
-AnnaTestCase : Tracking {
+AnnaTestCase : Anna.EasyTracking {
     func
         receive(
-        analyticsEvent event: Tracking.Event,
-        dispatchedBy manager: Tracking.Manager
+        analyticsEvent event: Event,
+        dispatchedBy manager: Manager
         ) {
         receivedEvents.append(event)
         expectations.removeLast().fulfill()
@@ -61,7 +61,7 @@ AnnaTestCase : Tracking {
     func
         receive(
         analyticsError error: Error,
-        dispatchedBy manager: Tracking.Manager) {
+        dispatchedBy manager: Manager) {
         receivedErrors.append(error)
         expectations.removeLast().fulfill()
     }
@@ -70,14 +70,14 @@ AnnaTestCase : Tracking {
 class
 ANATAnalyzable {
     typealias
-        Analyzer = Manager
+        Analyzer = Anna.EasyManager
     let
     analyzer :Analyzer
     init(_ analyzer :Analyzer) {
         self.analyzer = analyzer
     }
     var
-    analyticsManager: Analyzable.Manager {
+    analyticsManager: Analyzer {
         return self.analyzer
     }
 }
@@ -85,14 +85,14 @@ ANATAnalyzable {
 class
 ANATAnalyzableObjC : NSObject {
     typealias
-        Analyzer = Manager
+        Analyzer = Anna.EasyManager
     let
     analyzer :Analyzer
     init(_ analyzer :Analyzer) {
         self.analyzer = analyzer
     }
     var
-    analyticsManager: Manager {
+    analyticsManager: Analyzer {
         return self.analyzer
     }
 }

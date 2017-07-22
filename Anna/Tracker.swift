@@ -11,7 +11,7 @@ import Foundation
 public protocol
 EasyTracking {
     typealias
-        Event = Anna.EventBeing
+        Event = EasyEventBeing
     typealias
         Manager = EasyManager
     func
@@ -29,7 +29,7 @@ EasyTracking {
 public protocol
 EasyTrackerConfiguring : class {
     typealias
-        Tracker = Anna.Tracking
+        Tracker = EasyTracking
     subscript(key :AnyHashable) ->Tracker? { set get }
     var
     defaults :[Tracker]? { set get }
@@ -38,7 +38,7 @@ EasyTrackerConfiguring : class {
 public protocol
 EasyTrackerCollecting {
     typealias
-        Tracker = Anna.Tracking
+        Tracker = EasyTracking
     subscript(key :AnyHashable) ->Tracker? { get }
 }
 
