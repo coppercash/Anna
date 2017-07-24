@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ANAManager : NSObject
-
+@protocol
+ANATrackerCollecting,
+ANATrackerConfiguring;
+@protocol ANAManaging <NSObject>
+@property (readonly, nonnull) id<ANATrackerConfiguring, ANATrackerCollecting> trackers;
 @end
+
+extern NSErrorDomain const __unsafe_unretained __nonnull ANAMatchingErrorDomain;
+typedef NS_ENUM(NSInteger, ANAMatchingError) {
+    ANAMatchingErrorNoMatchingPoint,
+    ANAMatchingErrorTooManyMatchingPoints,
+};

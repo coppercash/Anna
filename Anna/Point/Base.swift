@@ -8,22 +8,6 @@
 
 import Foundation
 
-public protocol
-EasyPayloadCarrier : class {
-    typealias
-        Payload = Dictionary<String, Any>
-    var
-    payload :Payload? { get }
-}
-
-protocol
-EasyTrackerCarrier {
-    typealias
-        Tracker = EasyTracker
-    var
-    trackers :[Tracker]? { get }
-}
-
 protocol
 EasyPayloadNode : EasyPayloadCarrier, EasyTrackerCarrier {
     var
@@ -53,15 +37,20 @@ EasyPayloadNode {
             current = stack.removeLast()
             if let
                 cPayload = current.payload {
-                payload.merge(with: cPayload)
+                payload.update(with: cPayload)
             }
-            if let
-                cTrackers = current.trackers {
-                trackers.merge(with: cTrackers)
+            if current.overridesTrackers {
+                trackers = current.trackers ?? Array<Self.Tracker>()
+            }
+            else {
+                if let cTrackers = current.trackers {
+                    trackers.update(with: cTrackers)
+                }
             }
         }
         return EasyPoint(
             trackers: trackers,
+            overridesTrackers :true,
             payload: payload,
             predicates: nil,
             children: nil
@@ -70,31 +59,47 @@ EasyPayloadNode {
 }
 
 protocol
-EasyEventMatching {
+EasyPointMatching {
     typealias
-    Event = EasyEventSeed
+        Conditions = EasyPointMatchable
     typealias
         Point = EasyPayloadNode
-    func points(match event :Event) ->[Point]?
+    func
+        points(match conditions :Conditions) ->[Point]?
 }
 
-public class
+protocol
+EasyPointMatchable {
+    typealias
+        Class = Any.Type
+    var
+    cls :Class { get }
+    typealias
+        Method = String
+    var
+    method :Method { get }
+    func
+        object(to predicate :Predicate) ->Any?
+}
+
+class
 EasyBasePoint : EasyPayloadCarrier {
-    public typealias
-        Payload = Dictionary<String, Any>
-    public let
+    let
     payload :Payload?
-    public typealias
-        Tracker = EasyTracker
-    public let
+    typealias
+        Tracker = EasyTracking
+    let
     trackers :[Tracker]?
+    let
+    overridesTrackers :Bool
     
-    public
     init(
         trackers :[Tracker]? = nil,
+        overridesTrackers :Bool,
         payload :Payload? = nil
         ) {
         self.trackers = trackers
+        self.overridesTrackers = overridesTrackers
         self.payload = payload
     }
 }
@@ -103,20 +108,20 @@ enum EasyBasePointBuilderError : Error {
    case unimplemented
 }
 
-public class
+class
 EasyBasePointBuilder<Point>
 where
     Point : EasyBasePoint
 {
-    public typealias
-        Buffer = DictionaryBuilder<String, Any>
-    public let
+    typealias
+        Buffer = DictionaryBuilder<AnyHashable, Any>
+    let
     buffer = Buffer()
     
     // MARK:- Payload
     
     @discardableResult public func
-        set(_ key :String, _ value :Any) ->Self {
+        set(_ key :AnyHashable, _ value :Any?) ->Self {
         buffer.set(key, value)
         return self
     }
@@ -129,25 +134,17 @@ where
     }
     
     internal func
-        payload(from buffer:[String:Any]) throws ->[String:Any]? {
+        payload(from buffer :[AnyHashable : Any]) throws ->[AnyHashable : Any]? {
         return buffer
     }
 }
 
 extension
-EasyBasePointBuilder : BuilderPropertyBuffer {
-    subscript(key :String) ->Any? {
-        get { return buffer[key] }
-        set { buffer[key] = newValue }
-    }
-}
-
-extension
 EasyBasePointBuilder : Builder {
-    public typealias
+    typealias
         Result = Point
-    public func
+    func
         build() throws -> Point { return try point() }
-    public func
+    func
         _build() throws -> Any { return try build() }
 }

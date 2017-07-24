@@ -8,23 +8,23 @@
 
 import Foundation
 
-open class
-EasyManager {
-    
+public protocol
+EasyManaging {
+    typealias
+        Event = EasyEventBeing
+    typealias
+        Trackers = EasyTrackerConfiguring & EasyTrackerCollecting
+    var
+    trackers :Trackers { get }
+}
+
+public class
+EasyManager : EasyManaging
+{
     let
     configQueue :DispatchQueue,
     queue :DispatchQueue
-    public typealias
-        Trackers = EasyTrackerConfigurator
-    lazy public internal(set) var
-    trackers :Trackers = {
-        return Trackers(host: self)
-    }()
     
-    public typealias
-        Root = EasyRootPoint
-    let
-    root :Root = Root()
     public init
         () {
         self.configQueue = DispatchQueue(
@@ -36,6 +36,20 @@ EasyManager {
             target: configQueue
         )
     }
+    
+    // MARK:- Point
+    
+    typealias
+        Root = EasyRootPoint
+    let
+    root :Root = Root()
+    
+    // MARK:- Tracker
+    
+    lazy internal(set) public var
+    trackers :EasyManaging.Trackers = {
+        return EasyTrackerConfigurator(host: self)
+    }()
 }
 
 // MARK: - Singleton
@@ -49,24 +63,35 @@ EasyManager {
 // MARK: - Load Points
 
 extension
-EasyClassPointBuilder : EasyRegistrar {}
+EasyClassPointBuilder : EasyRegistrationRecording {}
 extension
 EasyManager {
     typealias
-        Class = EasyAnalyzable
+        Registrant = EasyRegistering.Type
     typealias
         ClassPointBuilder = EasyClassPointBuilder
-    func loadPoints(for cls :Class.Type) throws {
-        guard
-            root.classPoint(for: cls) == nil
-            else { return }
+    func loadPoints(for cls :Registrant) throws {
+        guard root.classPoint(for: cls) == nil else { return }
         let
         builder = ClassPointBuilder(trackers: trackers)
-        cls.registerAnalyticsPoints(with: builder)
+        builder.classBuffer = cls
         let
         point = try builder.point()
-        point.parent = root
-        root.setClassPoint(point, for: cls)
+        
+        // Register the newly loaded point and all its super points
+        //
+        var
+        current :EasyClassPoint? = point,
+        currentBuilder :ClassPointBuilder? = builder
+        while
+            let point = current,
+            let cls = currentBuilder?.classBuffer
+        {
+            point.parent = root
+            root.setClassPoint(point, for: cls)
+            current = point.superClassPoint
+            currentBuilder = currentBuilder?.superClassPointBuilder
+        }
     }
 }
 
@@ -76,6 +101,19 @@ public enum
 MatchingError : Error {
     case noMatchingPoint(class :String, method :String)
     case tooManyMatchingPoints(count :Int)
+}
+
+extension
+MatchingError : LocalizedError {
+    public var
+    errorDescription: String? {
+        switch self {
+        case .noMatchingPoint(class: let cls, method: let method):
+            return "No matching point found on class \(cls) for method \(method)."
+        case .tooManyMatchingPoints(count: let count):
+            return "Too many matching points found. Expected one but found \(count)."
+        }
+    }
 }
 
 extension
@@ -99,15 +137,15 @@ ConfigurationError : Error {
 }
 
 extension
-EasyManager {
-    public typealias
-        Event = EasyEvent
-    public typealias
-        Seed = EasyEventSeed
-    func receive(_ seed :Seed) {
+EasyManager : EasyEventDispatching {
+    func
+        dispatchEvent(with seed: Seed) {
         queue.async {
             do {
-               try self.dispatch(seed)
+                // Try to load points if they have not been loaded
+                //
+                try self.loadPoints(for: seed.registrant)
+                try self.dispatch(seed)
             }
             catch {
                 self.sendDefaultTrackers(error)
@@ -115,26 +153,25 @@ EasyManager {
         }
     }
     
-    public typealias
+    typealias
         Point = EasyPoint
-    func dispatch(_ seed :Seed) throws {
-        // Try to load points if they have not been loaded
-        //
-        try loadPoints(for: seed.cls)
+    func
+        dispatch(_ seed :EasyPointMatchable & EasyPayloadCarrier) throws {
         
         // Find point
         //
         let
-        points :[EasyPayloadNode]! = self.root.points(match: seed)
-        guard
-            points.count > 0
-            else { throw MatchingError.noMatchingPoint(class: String(describing: seed.cls), method: seed.method) }
-        guard
-            points.count <= 1
-            else { throw MatchingError.tooManyMatchingPoints(count: points.count) }
-        guard let
-            point = points?.first
-            else { return }
+        points :[EasyPayloadNode]! = root.points(match: seed)
+        guard points.count > 0 else {
+            throw MatchingError.noMatchingPoint(
+                class: String(describing: seed.cls),
+                method: seed.method
+            )
+        }
+        guard points.count <= 1 else {
+            throw MatchingError.tooManyMatchingPoints(count: points.count)
+        }
+        guard let point = points?.first else { return }
         
         // Dispatch the event with point to every tracker tracks the point
         //
@@ -152,7 +189,6 @@ EasyManager {
             )
         }
     }
-    
     
     func
         sendDefaultTrackers(_ error :Error) {

@@ -8,32 +8,69 @@
 
 import Foundation
 
-public class
-EasyEventSeed {
+public protocol
+EasyEventBeing {
+    subscript(key :AnyHashable) ->Any? { get }
+}
+
+public protocol
+EasyEventSeedBuilding {
     typealias
-        Class = EasyAnalyzable.Type
-    let
-    cls :Class
-    
+        Buildup = (EasyEventSeedBuilding)->Void
+    @discardableResult func
+        set(_ key :AnyHashable, _ value :Any?) ->Self
+}
+
+protocol
+EasyEventDispatching {
     typealias
-        Method = String
+        Seed = EasyPayloadCarrier & EasyPointMatchable & EasyRegisteringCarrying
+    func
+        dispatchEvent(with seed: Seed)
+}
+
+protocol
+EasyPayloadCarrier : class {
+    typealias
+        Payload = Dictionary<AnyHashable, Any>
+    var
+    payload :Payload? { get }
+}
+
+protocol
+EasyTrackerCarrier {
+    typealias
+        Tracker = EasyTracking
+    var
+    trackers :[Tracker]? { get }
+    var
+    overridesTrackers :Bool { get }
+}
+
+class
+    EasyEventSeed :
+    EasyPointMatchable,
+    EasyPayloadCarrier,
+    EasyRegisteringCarrying
+{
+    var
+    cls :EasyPointMatchable.Class { return registrant }
     let
-    method :String
+    method :EasyEventSeed.Method
+    public let
+    payload :EasyPayloadCarrier.Payload?
+    let
+    registrant: Registrant.Type
     
     init(
-        class cls :Class,
-        method :Method,
-        payload :Payload? = nil
+        class cls :Registrant.Type,
+        method :EasyEventSeed.Method,
+        payload :EasyPayloadCarrier.Payload? = nil
         ) {
-        self.cls = cls
+        self.registrant = cls
         self.method = method
         self.payload = payload
     }
-    
-    public typealias
-        Payload = Dictionary<String, Any>
-    public let
-    payload :Payload?
     
     func
         object(to predicate :Predicate) ->Any? {
@@ -49,10 +86,11 @@ EventError : Error {
    case unloadedEvent
 }
 
-public class
-EasyEvent {
+class
+EasyEvent : EasyEventBeing
+{
     typealias
-        Payload = Dictionary<String, Any>
+        Payload = EasyPayloadCarrier.Payload
     let
     payload :Payload
     init(payload :Payload) {
@@ -60,19 +98,19 @@ EasyEvent {
     }
     
     public
-    subscript(key :String) ->Any? {
+    subscript(key :AnyHashable) ->Any? {
         return payload[key]
     }
     
     convenience
-    init(seed :EasyEventSeed, point :EasyPayloadNode) throws {
+    init(seed :EasyPayloadCarrier, point :EasyPayloadNode) throws {
         guard seed.payload != nil ||
             point.payload != nil
             else { throw EventError.unloadedEvent }
         let payload :Payload
         if let points = point.payload {
             if let seeds = seed.payload {
-                payload = points.merged(with: seeds)
+                payload = points.updated(with: seeds)
             }
             else {
                 payload = points
@@ -85,26 +123,26 @@ EasyEvent {
     }
 }
 
-public class
-EasyEventSeedBuilder {
+class
+EasyEventSeedBuilder : EasyEventSeedBuilding {
     var
-    cls :Result.Class? = nil
+    cls :Result.Registrant.Type? = nil
     var
     method :Result.Method? = nil
+    typealias
+        Buffer = DictionaryBuilder<AnyHashable, Any>
     let
-    buffer = DictionaryBuilder<String, Any>()
+    buffer = Buffer()
     
-    required public
+    required
     init() {}
     
-    @discardableResult public func
-        set(_ key :String, _ value :Any) ->Self {
+    @discardableResult func
+        set(_ key :AnyHashable, _ value :Any?) ->Self {
         buffer.set(key, value)
         return self
     }
     
-    typealias
-        Event = EasyEvent
     func
         event() throws ->EasyEventSeed {
         guard let
@@ -126,7 +164,7 @@ EasyEventSeedBuilder {
         let
         dictionary = try buffer.build()
         let
-        event = Result(
+        event = EasyEventSeed(
             class: cls,
             method: method,
             payload: dictionary
@@ -134,16 +172,16 @@ EasyEventSeedBuilder {
         return event
     }
     
-    public typealias
-        Buildup = (EasyEventSeedBuilder)->Void
 }
 
 extension
 EasyEventSeedBuilder : Builder {
     public typealias
+        Buildup = (EasyEventSeedBuilder)->Void
+    typealias
         Result = EasyEventSeed
-    public func
+    func
         build() throws -> Result { return try event() }
-    public func
+    func
         _build() throws -> Any { return try build() }
 }

@@ -8,7 +8,36 @@
 
 import Foundation
 
-public class
+public protocol
+    EasyMethodPointBuilding {
+    typealias
+        Buildup = (EasyMethodPointBuilding)->Void
+    typealias
+        MethodName = String
+    @discardableResult func
+        method(_ name :MethodName) ->Self
+    @discardableResult func
+        selector(_ selector :Selector) ->Self
+    @discardableResult func
+        set(_ key :AnyHashable, _ value :Any?) ->Self
+    typealias
+        ChildBuilder = EasyPointBuilding
+    @discardableResult func
+        point(_ buildup :ChildBuilder.Buildup) ->Self
+    typealias
+        Tracker = EasyTracking
+    @discardableResult func
+        tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
+    typealias
+        Trackers = EasyTrackerCollecting
+    var
+    trackers :Trackers { get }
+}
+
+class
 EasyMethodPoint : EasyBasePoint {
     
     typealias
@@ -18,19 +47,24 @@ EasyMethodPoint : EasyBasePoint {
     let
     children :[Child]?
     typealias
-        Parent = EasyClassPoint
+        Parent = EasyClassPointBeing
     weak var
     parent :Parent!
     
     init(
         trackers :[Tracker]?,
+        overridesTrackers :Bool,
         payload :Payload?,
         children :[Child]?,
         parent :Parent? = nil
         ) {
         self.parent = parent
         self.children = children
-        super.init(trackers: trackers, payload: payload);
+        super.init(
+            trackers: trackers,
+            overridesTrackers: overridesTrackers,
+            payload: payload
+        );
     }
 }
 
@@ -43,18 +77,18 @@ EasyMethodPoint : EasyPayloadNode {
 }
 
 extension
-EasyMethodPoint : EasyEventMatching {
+EasyMethodPoint : EasyPointMatching {
     internal func
-        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
+        points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         guard
             let children = self.children,
             children.count > 0
             else { return [self] }
         var
-        points = Array<EasyEventMatching.Point>()
+        points = Array<EasyPointMatching.Point>()
         for child in children {
             guard
-                let childPoints = child.points(match: event)
+                let childPoints = child.points(match: conditions)
                 else { continue }
             points.append(contentsOf: childPoints)
         }
@@ -78,17 +112,20 @@ EasyMethodPoint {
         let
         trackers = another.trackers == nil ?
             self.trackers :
-            self.trackers?.merged(with :another.trackers!)
+            self.trackers?.updated(with :another.trackers!)
+        let
+        overridesTrackers = self.overridesTrackers && another.overridesTrackers
         let
         payload = another.payload == nil ?
             self.payload :
-            self.payload?.merged(with: another.payload!)
+            self.payload?.updated(with: another.payload!)
         let
         children = another.children == nil ?
             self.children :
-            self.children?.merged(with :another.children!)
+            self.children?.updated(with :another.children!)
         return EasyMethodPoint(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
             children: children,
             parent: parent
@@ -96,9 +133,10 @@ EasyMethodPoint {
     }
 }
 
-final public class
+final class
     EasyMethodPointBuilder :
     EasyBasePointBuilder<EasyMethodPoint>,
+    EasyMethodPointBuilding,
     EasyTrackerBuilding,
     EasyChildrenBuilding
 {
@@ -108,23 +146,23 @@ final public class
     
     // MARK:- Trackers
     
-    public var
+    var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
-    public let
+    var
+    overridesTrackers: Bool = false
+    let
     trackers :EasyTrackerBuilding.Trackers
     
     // MARK:- Children
     
-    public var
+    var
     childrenBuffer :ChildrenBuffer? = nil
     
     // MARK:- Method
     
-    public typealias
-        MethodName = String
     lazy var
-    methodNames = [MethodName]()
-    @discardableResult public func
+    methodNames = Array<EasyMethodPointBuilding.MethodName>()
+    @discardableResult func
         method(_ name :MethodName) ->Self {
         methodNames.append(name)
         return self
@@ -132,7 +170,7 @@ final public class
     
     lazy var
     selectors = Array<Selector>()
-    @discardableResult public func
+    @discardableResult func
         selector(_ selector :Selector) ->Self {
         selectors.append(selector)
         return self
@@ -143,7 +181,7 @@ final public class
     func
         allMethods() ->[Method] {
         var
-        methods = [MethodName]()
+        methods = Array<EasyMethodPointBuilding.MethodName>()
         for methodName in methodNames {
             methods.append(methodName)
         }
@@ -168,6 +206,7 @@ final public class
         trackers = trackersBuffer,
         point = Point(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
             children: children
         )

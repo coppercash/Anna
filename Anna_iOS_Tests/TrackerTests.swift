@@ -13,11 +13,11 @@ class TrackerTests: AnnaTestCase {
     
     func test_appendTracker() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -35,17 +35,19 @@ class TrackerTests: AnnaTestCase {
         }
         
         XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
         XCTAssertNotNil(appended.receivedEvents.last)
+        XCTAssertNil(appended.receivedErrors.last)
     }
     
-    /*
-    func test_appendOverrideTrackers() {
+    func
+        test_overrideTrackers() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -58,12 +60,13 @@ class TrackerTests: AnnaTestCase {
         appended.append(expectation(description: "AnotherExpectation"))
         manager.trackers["second"] = appended
         
-        waitForEvents {
+        waitForEvents(of: 0) {
             Object(manager).call()
         }
         
         XCTAssertNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
         XCTAssertNotNil(appended.receivedEvents.last)
+        XCTAssertNil(appended.receivedErrors.last)
     }
-     */
 }

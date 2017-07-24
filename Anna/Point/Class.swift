@@ -8,32 +8,65 @@
 
 import Foundation
 
-class
-EasyClassPoint : EasyBasePoint {
-    
+public protocol
+    EasyClassPointBuilding {
+    typealias
+        Buildup = (EasyClassPointBuilding)->Void
+    typealias
+        PointBuilder = EasyMethodPointBuilding
+    @discardableResult func
+        point(_ :PointBuilder.Buildup) ->Self
+    typealias
+        SuperClass = EasyRegistering
+    @discardableResult func
+        superClass(_ cls :SuperClass.Type) ->Self
+    typealias
+        Tracker = EasyTracking
+    @discardableResult func
+        tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
+    typealias
+        Trackers = EasyTrackerCollecting
+    var
+    trackers :Trackers { get }
+}
+
+protocol
+EasyClassPointBeing : class, EasyPointMatching, EasyPayloadNode {
     typealias
         Class = String
     typealias
         Child = EasyMethodPoint
-    let
-    children :[Child.Method: Child]
     typealias
         Parent = EasyRootPoint
+}
+
+class
+EasyClassPoint : EasyBasePoint, EasyClassPointBeing {
+    let
+    children :[Child.Method: Child]?
     weak var
     parent :Parent!
     let
     superClassPoint :EasyClassPoint?
     init(
         trackers :[Tracker]?,
+        overridesTrackers :Bool,
         payload :Payload?,
         superClassPoint :EasyClassPoint? = nil,
-        children :[Child.Method: Child],
+        children :[Child.Method: Child]?,
         parent :Parent? = nil
         ) {
         self.parent = parent
         self.children = children
         self.superClassPoint = superClassPoint
-        super.init(trackers: trackers, payload: payload);
+        super.init(
+            trackers: trackers,
+            overridesTrackers: overridesTrackers,
+            payload: payload
+        );
     }
 }
 
@@ -64,27 +97,48 @@ EasyClassPoint :  EasyPayloadNode {
  1            1             1             1              in both    self, super
  */
 extension
-EasyClassPoint : EasyEventMatching {
+EasyClassPoint : EasyPointMatching {
     internal func
-        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
+        points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         var
-        points = Array<EasyEventMatching.Point>()
-        if let methods = children[event.method]?.points(match: event) {
+        points = Array<EasyPointMatching.Point>()
+        if let methods = children?[conditions.method]?.points(match: conditions) {
             points.append(contentsOf: methods)
         }
-        if let supers = superClassPoint?.points(match: event) {
-            points.append(contentsOf: supers)
+        if points.isEmpty, let inherited = superClassPoint?.points(match: conditions) {
+            points.append(contentsOf: inherited)
         }
         return points
     }
 }
 
-final class
-EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerBuilding {
+public enum
+ClassPointBuilderError : Error {
+   case emtpyRegistration
+}
 
+extension
+ClassPointBuilderError : LocalizedError {
     public var
+    errorDescription: String? {
+        switch self {
+        case .emtpyRegistration:
+            return "Empty registration is not allowed. At least one of following property should be presented: childrenPoints, superClass"
+        }
+    }
+}
+
+final class
+EasyClassPointBuilder :
+    EasyBasePointBuilder<EasyClassPoint>,
+    EasyClassPointBuilding,
+    EasyTrackerBuilding
+{
+    var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
-    public let
+    var
+    overridesTrackers: Bool = false
+    let
     trackers :EasyTrackerBuilding.Trackers
     init(trackers :EasyTrackerBuilding.Trackers) {
         self.trackers = trackers
@@ -93,18 +147,79 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerBuildin
     // MARK:- Children
     
     typealias
-        Child = EasyMethodPointBuilder
+        Child = EasyMethodPoint
     typealias
-        ChildPoints = ArrayBuilder<Child.Result>
+        ChildBuilder = EasyMethodPointBuilder
+    typealias
+        ChildrenBuffer = ArrayBuilder<Child>
+    var
+    childrenBuffer :ChildrenBuffer? = nil
     @discardableResult func
-        point(_ buildup :Child.Buildup) ->Self {
+        point(_ buildup :ChildBuilder.Buildup) ->Self {
         let
-        builder = Child(trackers: trackers)
+        builder = ChildBuilder(trackers: trackers)
         buildup(builder)
-        let
-        points = buffer.get("children", ChildPoints())
-        points.add(builder)
+        append(builder)
         return self
+    }
+    func
+        append(_ child :ChildBuilder) {
+        if childrenBuffer == nil { childrenBuffer = ChildrenBuffer() }
+        childrenBuffer!.add(child)
+    }
+    func
+        madeChildrenByMethod() throws ->Dictionary<MethodPoint.Method, MethodPoint>? {
+        guard let
+            children :ChildrenBuffer = childrenBuffer,
+            children.count > 0
+            else { return nil }
+        
+        var childrenByMethod = Dictionary<MethodPoint.Method, MethodPoint>()
+        
+        // For every Method Point Builder
+        //
+        for child :ChildBuilder in children.elements() {
+            let point = try child.point()
+            // One Method Point Builder could have multiple bound selectors and methods
+            //
+            try childrenByMethod.updatePoints(for: child.allMethods(), with: point)
+        }
+        
+        return childrenByMethod
+    }
+    
+    
+    // MARK:- Class
+    
+    typealias
+        Class = EasyRegistering
+    var
+    classBuffer :Class.Type? = nil
+    
+    // MARK:- Super Class
+    
+    typealias
+        SuperClass = EasyRegistering
+    var
+    superClassBuffer :SuperClass.Type? = nil
+    var
+    superClassPointBuilder :EasyClassPointBuilder? = nil
+    func
+        superClass(_ cls :SuperClass.Type) ->Self {
+        superClassBuffer = cls
+        return self
+    }
+    func
+        madeSuperClassPoint() throws ->Point? {
+        guard let superClass = superClassBuffer else { return nil }
+        let
+        builder = EasyClassPointBuilder(trackers: trackers)
+        builder.classBuffer = superClass
+        let
+        point = try builder.point()
+        
+        self.superClassPointBuilder = builder
+        return point
     }
     
     // MARK:- Build
@@ -115,44 +230,39 @@ EasyClassPointBuilder : EasyBasePointBuilder<EasyClassPoint>, EasyTrackerBuildin
         MethodPoint = EasyMethodPoint
     override func
         point() throws ->Point {
+        guard let cls = classBuffer else {
+            throw BuilderError.missedProperty(
+                name: "class",
+                result: String(describing: Result.self)
+            )
+        }
+        cls.registerAnalyticsPoints(with: self)
         let
-        childrenByMethod = try self.childrenByMethod(from: buffer),
-        dictionary = try buffer.build(),
+        childrenByMethod = try madeChildrenByMethod(),
+        superClassPoint = try madeSuperClassPoint()
+        guard
+            childrenByMethod != nil ||
+            superClassPoint != nil
+            else {
+                throw ClassPointBuilderError.emtpyRegistration
+        }
+        let
         trackers = trackersBuffer,
+        dictionary = try buffer.build(),
         payload = try self.payload(from: dictionary),
         point = Point(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
-            superClassPoint: nil,
+            superClassPoint: superClassPoint,
             children: childrenByMethod
         )
-        for child in point.children.values {
-            child.parent = point
+        if let children = point.children?.values {
+            for child in children {
+                child.parent = point
+            }
         }
         
         return point
-    }
-    
-    func childrenByMethod(from buffer :Buffer) throws ->Dictionary<MethodPoint.Method, MethodPoint> {
-        guard let
-            children :ChildPoints = buffer.removeProperty(forKey: "children"),
-            children.count > 0
-            else {
-                throw BuilderError.missedProperty(name: "children", result: String(describing: self))
-        }
-        var
-        childrenByMethod = Dictionary<MethodPoint.Method, MethodPoint>()
-        for child :Child in children.elements() {
-            for method in child.allMethods() {
-                guard
-                    let point = childrenByMethod[method]
-                    else {
-                        childrenByMethod[method] = try child.point()
-                        continue
-                }
-                childrenByMethod[method] = try point.merged(with: try child.point())
-            }
-        }
-        return childrenByMethod
     }
 }

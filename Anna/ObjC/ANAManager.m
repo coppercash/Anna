@@ -2,12 +2,10 @@
 //  ANAManager.m
 //  Anna
 //
-//  Created by William on 07/05/2017.
+//  Created by William on 15/07/2017.
 //
 //
 
-#import "ANAManager.h"
+#import <Foundation/Foundation.h>
 
-@implementation ANAManager
-
-@end
+NSErrorDomain const __unsafe_unretained __nonnull ANAMatchingErrorDomain = @"Anna.MatchingError";

@@ -8,24 +8,34 @@
 
 import Foundation
 
-enum BuilderError : Error {
+enum
+BuilderError : Error {
     case missedProperty(name :String, result :String)
+}
+
+extension
+BuilderError : LocalizedError {
+    var
+    errorDescription: String? {
+        switch self {
+        case .missedProperty(name: let name, result: let result):
+            return "Property '\(name)' for Result '\(result)' is required but missed."
+        }
+    }
 }
 
 // Why Builder is needed?
 //   + We need to cast to some type responds to build
-public protocol
+protocol
 _Builder {
     func
         _build() throws ->Any
 }
 
-public protocol
+protocol
 Builder : _Builder {
     associatedtype
     Result
-    typealias
-        Buildup = (Self)->Void
     func
         build() throws ->Result
 }
@@ -115,7 +125,7 @@ public class DictionaryBuilder<Key, Value>
     var buffer = Dictionary<Key, Any>()
     
     @discardableResult
-    func set(_ key :Key, _ value :Value) ->Self {
+    func set(_ key :Key, _ value :Value?) ->Self {
         buffer[key] = value
         return self
     }
@@ -155,15 +165,15 @@ extension DictionaryBuilder {
 }
 
 extension DictionaryBuilder : Builder {
-    public typealias
+    typealias
         Result = Dictionary<Key, Value>
     
-    public func
+    func
         build() throws -> Dictionary<Key, Value> {
         return try dictionary()
     }
     
-    public func
+    func
         _build() throws -> Any {
         return try build()
     }

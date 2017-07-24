@@ -12,7 +12,7 @@ import Anna
 class
 AnnaTestCase : XCTestCase {
     typealias
-        Manager = EasyManager
+        Manager = Anna.EasyManager
     var
     manager :Manager! = nil,
     expectations :[XCTestExpectation]! = nil,
@@ -49,11 +49,11 @@ AnnaTestCase : XCTestCase {
 }
 
 extension
-AnnaTestCase : EasyTracker {
+AnnaTestCase : Anna.EasyTracking {
     func
         receive(
-        analyticsEvent event: EasyTracker.Event,
-        dispatchedBy manager: EasyTracker.Manager
+        analyticsEvent event: Event,
+        dispatchedBy manager: Manager
         ) {
         receivedEvents.append(event)
         expectations.removeLast().fulfill()
@@ -61,42 +61,38 @@ AnnaTestCase : EasyTracker {
     func
         receive(
         analyticsError error: Error,
-        dispatchedBy manager: EasyTracker.Manager) {
+        dispatchedBy manager: Manager) {
         receivedErrors.append(error)
         expectations.removeLast().fulfill()
     }
 }
 
 class
-ANATAnalyzable : EasyAnalyzable {
+ANATAnalyzable {
     typealias
-        Analyzer = EasyManager
+        Analyzer = Anna.EasyManager
     let
     analyzer :Analyzer
     init(_ analyzer :Analyzer) {
         self.analyzer = analyzer
     }
     var
-    analyticsManager: EasyAnalyzable.Manager {
+    analyticsManager: Analyzer {
         return self.analyzer
     }
-    class func
-        registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {}
 }
 
 class
-ANATAnalyzableObjC : NSObject, EasyAnalyzable {
+ANATAnalyzableObjC : NSObject {
     typealias
-        Analyzer = EasyManager
+        Analyzer = Anna.EasyManager
     let
     analyzer :Analyzer
     init(_ analyzer :Analyzer) {
         self.analyzer = analyzer
     }
     var
-    analyticsManager: EasyAnalyzable.Manager {
+    analyticsManager: Analyzer {
         return self.analyzer
     }
-    class func
-        registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {}
 }

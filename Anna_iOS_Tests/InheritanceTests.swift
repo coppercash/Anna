@@ -15,11 +15,11 @@ InheritanceTests: AnnaTestCase {
     func
         test_inheritsMethodFromSuper() {
         class
-        Parent : ANATAnalyzable {
+        Parent : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -29,8 +29,9 @@ InheritanceTests: AnnaTestCase {
         class
         Child : Parent {
             override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                super.registerAnalyticsPoints(with: registrar)
+                registerAnalyticsPoints(with registrar :Registrar) {
+                registrar
+                    .superClass(Parent.self)
             }
         }
         
@@ -39,16 +40,17 @@ InheritanceTests: AnnaTestCase {
         }
         
         XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
         test_inheritsMethodFromSuperWithouthRegistering() {
         class
-        Parent : ANATAnalyzable {
+        Parent : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -70,13 +72,14 @@ InheritanceTests: AnnaTestCase {
         class
         Parent : ANATAnalyzable {
             func
-                call() { self.ana.analyze() }
+                call() {}
         }
         class
-        Child : Parent {
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                super.registerAnalyticsPoints(with: registrar)
+        Child : Parent, EasyAnalyzable {
+            override func
+                call() { self.ana.analyze() }
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -89,16 +92,17 @@ InheritanceTests: AnnaTestCase {
         }
         
         XCTAssertNotNil(receivedEvents.last)
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
-        test_overriedsPointRegisterredBySuper() {
+        test_overridesPointRegisterredBySuper() {
         class
-        Parent : ANATAnalyzable {
+        Parent : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -109,9 +113,9 @@ InheritanceTests: AnnaTestCase {
         class
         Child : Parent {
             override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-                super.registerAnalyticsPoints(with: registrar)
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
+                    .superClass(Parent.self)
                     .point { $0
                         .method("call()")
                         .set("name", "Child")
@@ -124,18 +128,19 @@ InheritanceTests: AnnaTestCase {
         }
         
         XCTAssertEqual(receivedEvents.last?["name"] as? String, "Child")
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
-        test_KVObservedObject() {
+        test_KVObservedObjectBehavesAsNormalObject() {
         class
-        Observable : ANATAnalyzableObjC {
+        Observable : ANATAnalyzableObjC, EasyAnalyzable {
             var property :String {
                 self.ana.analyze()
                 return "whatever"
             }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method(#keyPath(property))

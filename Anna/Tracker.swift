@@ -9,9 +9,9 @@
 import Foundation
 
 public protocol
-EasyTracker {
+EasyTracking {
     typealias
-        Event = EasyEvent
+        Event = EasyEventBeing
     typealias
         Manager = EasyManager
     func
@@ -26,8 +26,27 @@ EasyTracker {
     )
 }
 
-public class
-EasyTrackerConfigurator {
+public protocol
+EasyTrackerConfiguring : class {
+    typealias
+        Tracker = EasyTracking
+    subscript(key :AnyHashable) ->Tracker? { set get }
+    var
+    defaults :[Tracker]? { set get }
+}
+
+public protocol
+EasyTrackerCollecting {
+    typealias
+        Tracker = EasyTracking
+    subscript(key :AnyHashable) ->Tracker? { get }
+}
+
+class
+    EasyTrackerConfigurator :
+    EasyTrackerConfiguring,
+    EasyTrackerCollecting
+{
     typealias
     Host = EasyManager
     unowned let
@@ -37,11 +56,11 @@ EasyTrackerConfigurator {
     }
     
     public typealias
-    Tracker = EasyTracker
+    Tracker = EasyTracking
     var
-    trackers = [String:Tracker]()
+    trackers = [AnyHashable : Tracker]()
     public
-    subscript(key :String) ->Tracker? {
+    subscript(key :AnyHashable) ->Tracker? {
         get {
             var
             tracker :Tracker? = nil
@@ -75,27 +94,23 @@ EasyTrackerConfigurator {
     }
 }
 
-public protocol
-EasyTrackerCollection {
-    typealias
-    Tracker = EasyTracker
-    subscript(key :String) ->Tracker? { get }
-}
-
-extension
-EasyTrackerConfigurator : EasyTrackerCollection {}
-
-public protocol
+protocol
 EasyTrackerBuilding : class {
     var
     trackersBuffer :[Tracker]? { get set }
-    typealias
-        Tracker = EasyTracker
-    @discardableResult func
-        tracker(_ tracker :Tracker) ->Self
+    var
+    overridesTrackers :Bool { get set }
     
     typealias
-        Trackers = EasyTrackerCollection
+        Tracker = EasyTracking
+    @discardableResult func
+        tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
+    
+    typealias
+        Trackers = EasyTrackerCollecting
     var
     trackers :Trackers { get }
 }
@@ -109,5 +124,13 @@ EasyTrackerBuilding {
         }
         trackersBuffer!.append(tracker)
         return self
+    }
+    
+    @discardableResult public func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker {
+            trackersBuffer = Array(trackers)
+            overridesTrackers = true
+            return self
     }
 }

@@ -15,11 +15,11 @@ PointMatchingTests: AnnaTestCase {
     func
         test_pointUserInfo() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("call()")
@@ -33,18 +33,19 @@ PointMatchingTests: AnnaTestCase {
         }
         
         XCTAssertEqual(receivedEvents.last?["data"] as? String, "42")
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
         test_twoPointsContainedInOneMethod() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 functionContainsTwoPoints(index :Int) {
                 self.ana.event{ $0.set("index", index) }.analyze()
             }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("functionContainsTwoPoints(index:)")
@@ -69,41 +70,42 @@ PointMatchingTests: AnnaTestCase {
         
         XCTAssertEqual(receivedEvents[0]["data"] as? String, "42")
         XCTAssertEqual(receivedEvents[1]["data"] as? String, "24")
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
         test_threePointsContainedInOneMethod() {
         class
-        Object : ANATAnalyzableObjC {
-func call(with index :Int, name :String) {
-    self.ana.event{ $0
-        .set("index", index)
-        .set("name", name)
-        }.analyze()
-}
-override class func
-    registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
-    registrar
-        .point { $0
-            .selector(#selector(call(with:name:)))
-            .point { $0
-                .when("index", equal: 0)
-                .set("first-level", "42")
-                .point { $0
-                    .when("name", equal: "Tom")
-                    .set("second-level", 42)
-                }
-                .point { $0
-                    .when("name", equal: "Jerry")
-                    .set("second-level", 24)
+        Object : ANATAnalyzableObjC, EasyAnalyzable {
+            func call(with index :Int, name :String) {
+                self.ana.event{ $0
+                    .set("index", index)
+                    .set("name", name)
+                    }.analyze()
+            }
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
+                registrar
+                    .point { $0
+                        .selector(#selector(call(with:name:)))
+                        .point { $0
+                            .when("index", equal: 0)
+                            .set("first-level", "42")
+                            .point { $0
+                                .when("name", equal: "Tom")
+                                .set("second-level", 42)
+                            }
+                            .point { $0
+                                .when("name", equal: "Jerry")
+                                .set("second-level", 24)
+                            }
+                        }
+                        .point { $0
+                            .when("index", equal: 1)
+                            .set("first-level", "24")
+                        }
                 }
             }
-            .point { $0
-                .when("index", equal: 1)
-                .set("first-level", "24")
-            }
-    }
-}
         }
         
         waitForEvents(of: 3) {
@@ -119,16 +121,17 @@ override class func
         XCTAssertEqual(receivedEvents[1]["first-level"] as? String, "42")
         XCTAssertEqual(receivedEvents[1]["second-level"] as? Int, 24)
         XCTAssertEqual(receivedEvents[2]["first-level"] as? String, "24")
+        XCTAssertNil(receivedErrors.last)
     }
     
     func
-        test_missMatching() {
+        test_throwErrorForMissingMatching() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
                 registrar
                     .point { $0
                         .method("whatever")
@@ -142,18 +145,21 @@ override class func
         
         XCTAssertEqual(
             receivedErrors.last as? MatchingError,
-            MatchingError.noMatchingPoint(class: String(describing: Object.self), method: "call()")
+            MatchingError.noMatchingPoint(
+                class: String(describing: Object.self),
+                method: "call()"
+            )
         )
     }
     
     func
-        test_emptyClassPointError() {
+        test_throwErrorForEmptyRegistration() {
         class
-        Object : ANATAnalyzable {
+        Object : ANATAnalyzable, EasyAnalyzable {
             func
                 call() { self.ana.analyze() }
-            override class func
-                registerAnalyticsPoints(with registrar :EasyRegistrant.Registrar) {
+            class func
+                registerAnalyticsPoints(with registrar :Registrar) {
             }
         }
         

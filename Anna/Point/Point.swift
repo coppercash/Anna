@@ -8,7 +8,33 @@
 
 import Foundation
 
-public class
+public protocol
+EasyPointBuilding {
+    typealias
+        Buildup = (EasyPointBuilding)->Void
+    @discardableResult func
+        when<Value>(_ key :String, equal expectedValue :Value)
+        ->Self where Value : Equatable
+    @discardableResult func
+        set(_ key :AnyHashable, _ value :Any?) ->Self
+    typealias
+        ChildBuilder = EasyPointBuilding
+    @discardableResult func
+        point(_ buildup :ChildBuilder.Buildup) ->Self
+    typealias
+        Tracker = EasyTracking
+    @discardableResult func
+        tracker(_ tracker :Tracker) ->Self
+    @discardableResult func
+        trackers<Trackers>(_ trackers :Trackers) ->Self
+        where Trackers : Sequence, Trackers.Iterator.Element == Tracker
+    typealias
+        Trackers = EasyTrackerCollecting
+    var
+    trackers :Trackers { get }
+}
+
+class
 EasyPoint : EasyBasePoint {
     typealias
         Child = EasyPoint
@@ -21,6 +47,7 @@ EasyPoint : EasyBasePoint {
     
     init(
         trackers :[Tracker]?,
+        overridesTrackers :Bool,
         payload :Payload?,
         predicates :[Predicate]?,
         children :[Child]?,
@@ -29,7 +56,11 @@ EasyPoint : EasyBasePoint {
         self.predicates = predicates
         self.parent = parent
         self.children = children
-        super.init(trackers: trackers, payload: payload);
+        super.init(
+            trackers: trackers,
+            overridesTrackers: overridesTrackers,
+            payload: payload
+        );
     }
     
     typealias
@@ -39,34 +70,34 @@ EasyPoint : EasyBasePoint {
 }
 
 extension
-EasyPoint : EasyEventMatching {
+EasyPoint : EasyPointMatching {
     internal func
-        points(match event: EasyEventMatching.Event) ->[EasyEventMatching.Point]? {
+        points(match conditions: EasyPointMatching.Conditions) ->[EasyPointMatching.Point]? {
         guard
-            matches(event)
+            matches(conditions)
             else { return nil }
         guard
             let children = self.children,
             children.count > 0
             else { return [self] }
         var
-        points = Array<EasyEventMatching.Point>()
+        points = Array<EasyPointMatching.Point>()
         for child in children {
             guard
-                let childPoints = child.points(match: event)
+                let childPoints = child.points(match: conditions)
                 else { continue }
             points.append(contentsOf: childPoints)
         }
         return points
     }
     
-    func matches(_ event :EasyEventMatching.Event) ->Bool {
+    func matches(_ conditions :EasyPointMatching.Conditions) ->Bool {
         guard let
             predicates = self.predicates
             else { return true }
         for predicate in predicates {
             let
-            object = event.object(to: predicate)
+            object = conditions.object(to: predicate)
             guard
                 predicate.evaluate(with: object)
                 else { return false }
@@ -83,9 +114,10 @@ EasyPoint : EasyPayloadNode {
     }
 }
 
-final public class
+final class
     EasyPointBuilder :
     EasyBasePointBuilder<EasyPoint>,
+    EasyPointBuilding,
     EasyTrackerBuilding,
     EasyChildrenBuilding
 {
@@ -96,14 +128,16 @@ final public class
     
     // MARK:- Trackers
     
-    public var
+    var
     trackersBuffer :[EasyTrackerBuilding.Tracker]? = nil
-    public let
+    var
+    overridesTrackers: Bool = false
+    let
     trackers :EasyTrackerBuilding.Trackers
     
     // MARK:- Children
     
-    public var
+    var
     childrenBuffer :ChildrenBuffer? = nil
     
     // MARK:- Predicates
@@ -112,15 +146,20 @@ final public class
         PredicatesBuffer = ArrayBuilder<Predicate>
     lazy var
     predicatesBuffer :PredicatesBuffer? = nil
-    @discardableResult public func
+    @discardableResult func
         when<Value>(_ key :String, equal expectedValue :Value)
         ->Self where Value : Equatable
     {
         let
         predicate = EqualPredicate(key: key, expectedValue: expectedValue)
+        append(predicate)
+        return self
+    }
+    
+    func
+        append(_ predicate :Predicate) {
         if predicatesBuffer == nil { predicatesBuffer = PredicatesBuffer() }
         predicatesBuffer!.add(predicate)
-        return self
     }
     
     // MARK:- Build
@@ -137,6 +176,7 @@ final public class
         children = try childrenBuffer?.array(),
         point = Point(
             trackers: trackers,
+            overridesTrackers: overridesTrackers,
             payload: payload,
             predicates: predicates,
             children: children
