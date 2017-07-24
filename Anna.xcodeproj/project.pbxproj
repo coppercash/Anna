@@ -59,6 +59,8 @@
 		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEEB15B81F10BF4200871F74 /* ANAPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEB15B71F10BF4200871F74 /* ANAPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB15B91F10CC1700871F74 /* ANAMethod.swift */; };
+		BEF71B1C1F23454E00B20F4A /* SampleCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF71B1B1F23454E00B20F4A /* SampleCodeTests.swift */; };
+		BEF71B1E1F2345C700B20F4A /* ANATSampleCodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF71B1D1F2345C700B20F4A /* ANATSampleCodeTests.m */; };
 		BEF96EF41EFE23FD004C2967 /* NameCollisionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */; };
 		BEF96EF61EFE25BA004C2967 /* InheritanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */; };
 /* End PBXBuildFile section */
@@ -136,6 +138,8 @@
 		BEDB99EA1EBE8DBA006637DC /* ANAManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAManager.h; sourceTree = "<group>"; };
 		BEEB15B71F10BF4200871F74 /* ANAPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAPoint.h; sourceTree = "<group>"; };
 		BEEB15B91F10CC1700871F74 /* ANAMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAMethod.swift; sourceTree = "<group>"; };
+		BEF71B1B1F23454E00B20F4A /* SampleCodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleCodeTests.swift; sourceTree = "<group>"; };
+		BEF71B1D1F2345C700B20F4A /* ANATSampleCodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATSampleCodeTests.m; sourceTree = "<group>"; };
 		BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCollisionTests.swift; sourceTree = "<group>"; };
 		BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InheritanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -200,6 +204,7 @@
 				BE22D35B1F076263007AEE40 /* ANATPointMatchingTests.m */,
 				BE237AFA1F19D907002EB52B /* ANATInheritanceTests.m */,
 				BE237AFC1F19DFE9002EB52B /* ANATTrackerTests.m */,
+				BEF71B1D1F2345C700B20F4A /* ANATSampleCodeTests.m */,
 				BE22D35D1F0766F2007AEE40 /* ANATAnnaTestCase.h */,
 				BE22D35E1F0766F2007AEE40 /* ANATAnnaTestCase.m */,
 				BE237AFE1F19E2B4002EB52B /* ANATBlockTracker.h */,
@@ -270,6 +275,7 @@
 				BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */,
 				BE55D4FC1EFE32650006665A /* TrackerTests.swift */,
 				BE55D5021EFE66060006665A /* ConvenienceTests.swift */,
+				BEF71B1B1F23454E00B20F4A /* SampleCodeTests.swift */,
 				BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */,
 				BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */,
 			);
@@ -557,6 +563,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEF71B1C1F23454E00B20F4A /* SampleCodeTests.swift in Sources */,
 				BE237AFB1F19D907002EB52B /* ANATInheritanceTests.m in Sources */,
 				BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */,
 				BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */,
@@ -569,6 +576,7 @@
 				BE22D35C1F076263007AEE40 /* ANATPointMatchingTests.m in Sources */,
 				BEF96EF41EFE23FD004C2967 /* NameCollisionTests.swift in Sources */,
 				BE55D5031EFE66060006665A /* ConvenienceTests.swift in Sources */,
+				BEF71B1E1F2345C700B20F4A /* ANATSampleCodeTests.m in Sources */,
 				BE22D35F1F0766F2007AEE40 /* ANATAnnaTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
