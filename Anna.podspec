@@ -30,13 +30,14 @@ Anna is an analytics abstraction library which helps separate the analyzing part
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Anna/**/*'
+  s.source_files = 'Anna/**/*.{h,m,swift}', 'Anna_iOS/Anna.h'
+  s.exclude_files = 'Anna/Type.swift'
   
   # s.resource_bundles = {
   #   '${POD_NAME}' => ['${POD_NAME}/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'Anna/**/*.h', 'Anna_iOS/Anna.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end

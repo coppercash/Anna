@@ -1,12 +1,13 @@
 //
 //  AppDelegate.swift
-//  Cocoapods
+//  CocoapodsDemo
 //
-//  Created by William on 27/07/2017.
+//  Created by William on 28/07/2017.
 //  Copyright © 2017 coppercash. All rights reserved.
 //
 
 import UIKit
+import Anna
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        EasyManager.shared.trackers.defaults = [self]
         return true
     }
 
@@ -44,3 +46,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension AppDelegate : EasyTracking {
+    func receive(analyticsEvent event: EasyTracking.Event, dispatchedBy manager: EasyTracking.Manager) {
+        print(event)
+    }
+    
+    func receive(analyticsError error: Error, dispatchedBy manager: EasyTracking.Manager) {
+        print(error)
+    }
+}

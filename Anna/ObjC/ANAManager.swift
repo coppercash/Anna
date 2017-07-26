@@ -80,7 +80,7 @@ ANAManager : ANAEventDispatching {
                 try self.proto.dispatch(ObjCEventSeed(seed))
             }
             catch {
-                self.proto.sendDefaultTrackers(error)
+                try! self.proto.sendDefaultTrackers(error)
             }
         }
     }
