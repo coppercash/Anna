@@ -1,7 +1,11 @@
 language: objective-c
-xcode_workspace: Anna.xcworkspace
-xcode_scheme: Anna_iOS
-xcode_sdk: iphonesimulator10.3
+script:
+    - xctool 
+      -workspace Anna.xcworkspace 
+      -scheme Anna_iOS 
+      clean build test 
+      CODE_SIGN_IDENTITY="" 
+      CODE_SIGNING_REQUIRED=NO
 before_install:
     - gem install cocoapods
     - pod repo update
