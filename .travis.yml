@@ -10,4 +10,4 @@ script:
       -sdk iphonesimulator 
       -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1'
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - bash <(curl -s https://codecov.io/bash) -J 'Anna'
