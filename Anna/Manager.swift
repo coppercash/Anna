@@ -137,6 +137,17 @@ ConfigurationError : Error {
 }
 
 extension
+ConfigurationError : LocalizedError {
+    public var
+    errorDescription: String? {
+        switch self {
+        case .noAvailableTrackers:
+            return "Please, at least, set a default tracker by calling `EasyManager.shared.trackers.defaults = [YOUR_TRACKER]`."
+        }
+    }
+}
+
+extension
 EasyManager : EasyEventDispatching {
     func
         dispatchEvent(with seed: Seed) {
@@ -148,7 +159,7 @@ EasyManager : EasyEventDispatching {
                 try self.dispatch(seed)
             }
             catch {
-                self.sendDefaultTrackers(error)
+                try! self.sendDefaultTrackers(error)
             }
         }
     }
@@ -191,8 +202,11 @@ EasyManager : EasyEventDispatching {
     }
     
     func
-        sendDefaultTrackers(_ error :Error) {
-        for tracker in root.trackers! {
+        sendDefaultTrackers(_ error :Error) throws {
+        guard
+            let trackers = root.trackers
+            else { throw ConfigurationError.noAvailableTrackers }
+        for tracker in trackers {
             tracker.receive(analyticsError: error, dispatchedBy: self)
         }
     }

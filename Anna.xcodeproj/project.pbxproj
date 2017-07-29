@@ -34,7 +34,7 @@
 		BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FC1EFE32650006665A /* TrackerTests.swift */; };
 		BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */; };
 		BE55D5031EFE66060006665A /* ConvenienceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D5021EFE66060006665A /* ConvenienceTests.swift */; };
-		BE65D7671F158A9F0079F9E8 /* ANAAnalyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE65D7661F158A9F0079F9E8 /* ANAAnalyzable.swift */; };
+		BE67454E1F2C11A400751E3E /* ANAAnalyzable.m in Sources */ = {isa = PBXBuildFile; fileRef = BE67454D1F2C11A400751E3E /* ANAAnalyzable.m */; };
 		BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */; };
 		BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3471EEBF486000B0E15 /* Builder.swift */; };
 		BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3481EEBF486000B0E15 /* Buildup.swift */; };
@@ -108,7 +108,7 @@
 		BE55D4FC1EFE32650006665A /* TrackerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
 		BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureTracker.swift; sourceTree = "<group>"; };
 		BE55D5021EFE66060006665A /* ConvenienceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvenienceTests.swift; sourceTree = "<group>"; };
-		BE65D7661F158A9F0079F9E8 /* ANAAnalyzable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAAnalyzable.swift; sourceTree = "<group>"; };
+		BE67454D1F2C11A400751E3E /* ANAAnalyzable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAAnalyzable.m; sourceTree = "<group>"; };
 		BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnaTestCase.swift; sourceTree = "<group>"; };
 		BE80F3471EEBF486000B0E15 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		BE80F3481EEBF486000B0E15 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
@@ -307,7 +307,7 @@
 			children = (
 				BE042E641F0EF73E00E0B44A /* Point */,
 				BE22D3601F076ADB007AEE40 /* ANAAnalyzable.h */,
-				BE65D7661F158A9F0079F9E8 /* ANAAnalyzable.swift */,
+				BE67454D1F2C11A400751E3E /* ANAAnalyzable.m */,
 				BEDB99EA1EBE8DBA006637DC /* ANAManager.h */,
 				BE22D3741F07845C007AEE40 /* ANAManager.swift */,
 				BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */,
@@ -538,12 +538,12 @@
 				BE80F35C1EEBF486000B0E15 /* Method.swift in Sources */,
 				BE80F3591EEBF486000B0E15 /* Event.swift in Sources */,
 				BE042E631F0EEB8E00E0B44A /* ANARegister.swift in Sources */,
+				BE67454E1F2C11A400751E3E /* ANAAnalyzable.m in Sources */,
 				BE80F35D1EEBF486000B0E15 /* Point.swift in Sources */,
 				3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */,
 				BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */,
 				BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */,
 				BE80F3621EEBF486000B0E15 /* Analyzable.swift in Sources */,
-				BE65D7671F158A9F0079F9E8 /* ANAAnalyzable.swift in Sources */,
 				BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */,
 				BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */,
 				BE2B8DC11F19C1BD0071DDC4 /* ANAManager.m in Sources */,
@@ -653,7 +653,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Anna_iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -714,7 +714,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Anna_iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.coppercash.Anna-iOS";

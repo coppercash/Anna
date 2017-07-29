@@ -8,7 +8,7 @@
 
 import Foundation
 
-class
+public class
     ANAPrefix :
     NSObject,
     ANAPrefixing,
@@ -18,7 +18,7 @@ class
     target :ANAAnalyzable
     let
     selector :Selector
-    init
+    public init
     (
         target :ANAAnalyzable,
         selector :Selector
