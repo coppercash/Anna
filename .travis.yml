@@ -2,4 +2,5 @@ language: objective-c
 xcode_workspace: Anna.xcworkspace
 xcode_scheme: Anna_iOS_Tests
 before_install:
-- gem install cocoapods
+    - gem install cocoapods
+    - pod repo update
