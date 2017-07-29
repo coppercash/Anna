@@ -2,7 +2,8 @@
 # Anna
 
 [![Build Status](https://img.shields.io/travis/coppercash/Anna/master.svg)](https://travis-ci.org/coppercash/Anna)
-[![CocoaPods](https://img.shields.io/cocoapods/v/Anna.svg)](https://cocoapods.org/pods/Anna)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Anna.svg)](https://cocoapods.org/pods/Anna)
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 ![Platform](https://img.shields.io/cocoapods/p/Anna.svg)
 ![License MIT](https://img.shields.io/cocoapods/l/Anna.svg)
 ![Language](https://img.shields.io/badge/language-Swift%20|%20ObjC-green.svg)
@@ -22,10 +23,10 @@ There are three roles in Anna:
 
 [Swift](../README.md) | ObjC
 ```objective-c
-@interface Object : NSObject <ANAAnalyzable>
+@interface MYObject : NSObject <ANAAnalyzable>
 - (void)call;
 @end
-@implementation Object
+@implementation MYObject
 
 - (void)call {
     // Pull the trigger
@@ -66,7 +67,7 @@ Tracker *tracker = [[Tracker alloc] init];
 ANAManager.sharedManager.trackers.defaults = @[tracker];
 
 // Given the points registered, this call will trigger an event sent to the configured tracker
-Object *object = [[Object alloc] init];
+MYObject *object = [[MYObject alloc] init];
 [object call];
 
 ```
@@ -116,7 +117,7 @@ Sometimes, there are more than one points in one method. Then, we need to regist
 }
 
 // With a call as following
-[[[Object alloc] init] callWithIndex:0 name:@"Jerry"];
+[[[MYObject alloc] init] callWithIndex:0 name:@"Jerry"];
 
 // We can expect it in the tracker's delegate method
 - (void)receiveAnalyticsEvent:(id<ANAEventBeing>)event

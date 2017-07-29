@@ -2,7 +2,9 @@
 # Anna
 
 [![Build Status](https://img.shields.io/travis/coppercash/Anna/master.svg)](https://travis-ci.org/coppercash/Anna)
-[![CocoaPods](https://img.shields.io/cocoapods/v/Anna.svg)](https://cocoapods.org/pods/Anna)
+[![codecov.io](https://codecov.io/gh/coppercash/Anna/branch/master/graphs/badge.svg)](https://codecov.io/github/coppercash/Anna)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Anna.svg)](https://cocoapods.org/pods/Anna)
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 ![Platform](https://img.shields.io/cocoapods/p/Anna.svg)
 ![License MIT](https://img.shields.io/cocoapods/l/Anna.svg)
 ![Language](https://img.shields.io/badge/language-Swift%20|%20ObjC-green.svg)
