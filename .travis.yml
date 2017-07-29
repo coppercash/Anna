@@ -1,11 +1,13 @@
 language: objective-c
 osx_image: xcode8.3
+before_install:
+    - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
+    - pod repo update
 script:
     - xcodebuild test 
       -workspace Anna.xcworkspace 
       -scheme Anna_iOS 
       -sdk iphonesimulator 
       -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1'
-before_install:
-    - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
-    - pod repo update
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
