@@ -11,51 +11,16 @@
 
 // MARK:- The Most Basic
 
-@interface Object : NSObject <ANAAnalyzable>
+@interface MYObject : NSObject <ANAAnalyzable>
 - (void)call;
+- (void)callWithIndex:(NSInteger)index name:(NSString *)name;
 @end
-@implementation Object
+@implementation MYObject
 
 - (void)call {
     // Pull the trigger
     self.ana.analyze();
 }
-
-+ (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
-    // Register points related to the class
-    registrar
-    .point(^(id<ANAMethodPointBuilding> _) { _
-        .selector(@selector(call))
-        .set(@"theAnswer", @42)
-        ;
-    })
-    ;
-}
-
-@end
-
-@interface Tracker : NSObject <ANATracking>
-@end
-@implementation Tracker
-
-- (void)receiveAnalyticsEvent:(id<ANAEventBeing>)event
-                 dispatchedBy:(id<ANAManaging>)manager {
-    NSLog(@"%@", event[@"theAnswer"]);  // 42
-}
-
-- (void)receiveAnalyticsError:(NSError *)error
-                 dispatchedBy:(id<ANAManaging>)manager {
-    NSLog(@"%@", error);
-}
-
-@end
-
-// MARK:- Multiple Points in One Method
-
-@interface Object1 : NSObject <ANAAnalyzable>
-- (void)callWithIndex:(NSInteger)index name:(NSString *)name;
-@end
-@implementation Object1
 
 - (void)callWithIndex:(NSInteger)index
                  name:(NSString *)name {
@@ -68,6 +33,11 @@
 + (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
     // Register points related to the class
     registrar
+    .point(^(id<ANAMethodPointBuilding> _) { _
+        .selector(@selector(call))
+        .set(@"theAnswer", @42)
+        ;
+    })
     .point(^(id<ANAMethodPointBuilding> _) { _
         .selector(@selector(callWithIndex:name:))
         .point(^(id<ANAPointBuilding> _) { _
@@ -96,6 +66,24 @@
 }
 
 @end
+
+@interface Tracker : NSObject <ANATracking>
+@end
+@implementation Tracker
+
+- (void)receiveAnalyticsEvent:(id<ANAEventBeing>)event
+                 dispatchedBy:(id<ANAManaging>)manager {
+    NSLog(@"%@", event[@"theAnswer"]);  // 42
+}
+
+- (void)receiveAnalyticsError:(NSError *)error
+                 dispatchedBy:(id<ANAManaging>)manager {
+    NSLog(@"%@", error);
+}
+
+@end
+
+// MARK:- Multiple Points in One Method
 
 @interface Tracker1 : NSObject <ANATracking>
 @end
@@ -128,14 +116,14 @@
     ANAManager.sharedManager.trackers.defaults = @[tracker];
     
     // Given the points registered, this call will trigger an event sent to the configured tracker
-    Object *object = [[Object alloc] init];
+    MYObject *object = [[MYObject alloc] init];
     [object call];
 }
 
 - (void)test_multiplePointsInOneMethod {
     ANAManager.sharedManager.trackers.defaults = @[[[Tracker1 alloc] init]];
     // With a call as following
-    [[[Object1 alloc] init] callWithIndex:0 name:@"Jerry"];
+    [[[MYObject alloc] init] callWithIndex:0 name:@"Jerry"];
 }
 
 @end

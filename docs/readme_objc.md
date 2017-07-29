@@ -23,10 +23,10 @@ There are three roles in Anna:
 
 [Swift](../README.md) | ObjC
 ```objective-c
-@interface Object : NSObject <ANAAnalyzable>
+@interface MYObject : NSObject <ANAAnalyzable>
 - (void)call;
 @end
-@implementation Object
+@implementation MYObject
 
 - (void)call {
     // Pull the trigger
@@ -67,7 +67,7 @@ Tracker *tracker = [[Tracker alloc] init];
 ANAManager.sharedManager.trackers.defaults = @[tracker];
 
 // Given the points registered, this call will trigger an event sent to the configured tracker
-Object *object = [[Object alloc] init];
+MYObject *object = [[MYObject alloc] init];
 [object call];
 
 ```
@@ -117,7 +117,7 @@ Sometimes, there are more than one points in one method. Then, we need to regist
 }
 
 // With a call as following
-[[[Object alloc] init] callWithIndex:0 name:@"Jerry"];
+[[[MYObject alloc] init] callWithIndex:0 name:@"Jerry"];
 
 // We can expect it in the tracker's delegate method
 - (void)receiveAnalyticsEvent:(id<ANAEventBeing>)event
