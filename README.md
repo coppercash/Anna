@@ -1,6 +1,10 @@
 
 # Anna
 
+[![Build Status](https://img.shields.io/travis/coppercash/Anna/master.svg)](https://travis-ci.org/coppercash/Anna)
+[![CocoaPods](https://img.shields.io/cocoapods/v/Anna.svg)](https://cocoapods.org/pods/Anna)
+![Platform](https://img.shields.io/cocoapods/p/Anna.svg)
+![License MIT](https://img.shields.io/cocoapods/l/Anna.svg)
 ![Language](https://img.shields.io/badge/language-Swift%20|%20ObjC-green.svg)
 
 Anna is an analytics abstraction library which helps separate the analyzing part of code from the main business logic.
