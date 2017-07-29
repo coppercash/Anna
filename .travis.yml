@@ -1,0 +1,3 @@
+language: objective-c
+xcode_workspace: Anna.xcworkspace
+xcode_scheme: Anna_iOS_Tests
