@@ -2,15 +2,11 @@ PODS:
   - Anna (0.2.0)
 
 DEPENDENCIES:
-  - Anna (from `../../`)
-
-EXTERNAL SOURCES:
-  Anna:
-    :path: "../../"
+  - Anna
 
 SPEC CHECKSUMS:
-  Anna: c5a8f8115de955f182f9cd3abef649109dca646c
+  Anna: 54bdbe2d2da7c706e0edf8b3e6a77e6dd74f25bf
 
-PODFILE CHECKSUM: 3d3176f1d93058b1d11ce3e06ee5d15e88f6bf34
+PODFILE CHECKSUM: fc511ea9cc48e9045943dba8889e02599132f68d
 
 COCOAPODS: 1.2.1
