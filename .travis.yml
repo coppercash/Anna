@@ -1,11 +1,10 @@
 language: objective-c
 script:
-    - xctool 
+    - xcodebuild test 
       -workspace Anna.xcworkspace 
       -scheme Anna_iOS 
-      clean build test 
-      CODE_SIGN_IDENTITY="" 
-      CODE_SIGNING_REQUIRED=NO
+      -sdk iphonesimulator 
+      -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1'
 before_install:
     - gem install cocoapods
     - pod repo update
