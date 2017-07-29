@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D646DE21EF0BDCE00D39AF7 /* Base.swift */; };
 		3D646E071EF20A3B00D39AF7 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34A1EEBF486000B0E15 /* Manager.swift */; };
-		57D01EC76231C5F76F002185 /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
 		BE042E611F0EEA0E00E0B44A /* ANARegister.h in Headers */ = {isa = PBXBuildFile; fileRef = BE042E601F0EEA0E00E0B44A /* ANARegister.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE042E631F0EEB8E00E0B44A /* ANARegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE042E621F0EEB8E00E0B44A /* ANARegister.swift */; };
@@ -76,11 +75,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		29FF85741F8DD26AC94AFBC3 /* Pods-Anna_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D646DE21EF0BDCE00D39AF7 /* Base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
 		3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BE042E601F0EEA0E00E0B44A /* ANARegister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANARegister.h; sourceTree = "<group>"; };
@@ -149,7 +146,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57D01EC76231C5F76F002185 /* Pods_Anna_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,8 +173,6 @@
 		99ACB2654502D3AB72EE245D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				29FF85741F8DD26AC94AFBC3 /* Pods-Anna_iOS.debug.xcconfig */,
-				4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */,
 				592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */,
 				780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */,
 			);
@@ -353,12 +347,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE87DA861EAB608700DA81EB /* Build configuration list for PBXNativeTarget "Anna_iOS" */;
 			buildPhases = (
-				8FE117F669E63E43E5394798 /* [CP] Check Pods Manifest.lock */,
 				BE87DA7B1EAB608700DA81EB /* Sources */,
 				BE87DA7C1EAB608700DA81EB /* Frameworks */,
 				BE87DA7D1EAB608700DA81EB /* Headers */,
 				BE87DA7E1EAB608700DA81EB /* Resources */,
-				109B5BA73FB4F6BCBB1A026A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -447,37 +439,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		109B5BA73FB4F6BCBB1A026A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6610C4B070587EE079603EE4 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		8FE117F669E63E43E5394798 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -606,7 +568,6 @@
 		};
 		BE87DA871EAB608700DA81EB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 29FF85741F8DD26AC94AFBC3 /* Pods-Anna_iOS.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -673,7 +634,6 @@
 		};
 		BE87DA881EAB608700DA81EB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4FED74F0237B24E9DE490607 /* Pods-Anna_iOS.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
