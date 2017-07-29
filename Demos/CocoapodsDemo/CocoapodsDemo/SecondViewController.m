@@ -8,7 +8,6 @@
 
 #import "SecondViewController.h"
 #import <Anna/Anna.h>
-#import <Anna/Anna-Swift.h>
 
 @interface SecondViewController ()
 
@@ -37,6 +36,7 @@
     registrar
     .point(^(id<ANAMethodPointBuilding> _) { _
         .selector(@selector(viewDidLoad))
+        .set(@"from", NSStringFromClass(self))
         ;
     })
     ;

@@ -30,6 +30,7 @@ extension FirstViewController : EasyAnalyzable {
         registrar
         .point { $0
             .selector(#selector(viewDidLoad))
+            .set("from", String(describing: self))
         }
     }
 }

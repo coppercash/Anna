@@ -123,6 +123,13 @@ EasyEvent : EasyEventBeing
     }
 }
 
+extension
+EasyEvent : CustomStringConvertible {
+    var description: String {
+        return self.payload.description
+    }
+}
+
 class
 EasyEventSeedBuilder : EasyEventSeedBuilding {
     var
