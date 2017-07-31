@@ -22,7 +22,7 @@ There are three roles in Anna:
 + The **Tracker**, which conforms the protocol `EasyTracking`.  It receives **events** or error dispatched by the **manager**.
 + The **Manager** (`EasyManager`) works as a bridge between **Analyzable Object** and **Tracker**. Most of the time, we don't need to touch it, unless there is some configuration to be done.
 
-Swift | [ObjC](Docs/readme_objc.md)
+Swift | [ObjC](docs/readme_objc.md)
 ```swift
 class Object : NSObject, EasyAnalyzable {
     func call() {
@@ -69,7 +69,7 @@ object.call()
 
 Sometimes, there are more than one points in one method. Then, we need to register the points recursively, in a tree-like way. And when calling `.analyze()`, we pass in some arguments to determine which point is wanted. When the method in **tracker** gets called, the `event` will contain all the properties set through the point tree path and the arguments passed in.
 
-Swift | [ObjC](Docs/readme_objc.md)
+Swift | [ObjC](docs/readme_objc.md)
 ```swift
 func call(with index :Int, name :String) {
     self.ana.event{ $0
