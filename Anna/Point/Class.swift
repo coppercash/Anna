@@ -34,7 +34,7 @@ public protocol
 }
 
 protocol
-EasyClassPointBeing : class, EasyPointMatching, EasyPayloadNode {
+EasyClassPointBeing : EasyPointMatching, EasyPayloadNode {
     typealias
         Class = String
     typealias
