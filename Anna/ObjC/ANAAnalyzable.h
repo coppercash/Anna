@@ -9,16 +9,21 @@
 #import <Foundation/Foundation.h>
 #import "ANARegister.h"
 
-@class ANAManager;
+NS_ASSUME_NONNULL_BEGIN
+
+@class ANAManager, ANAAnalyst;
 @protocol ANAPrefixing;
 @protocol ANAAnalyzable <NSObject, ANARegistering>
-- (ANAManager * __nonnull)ana_analyticsManager;
-- (id<ANAPrefixing> __nonnull (^ __nonnull)(SEL __nonnull)) ana_context;
+- (ANAAnalyst *)ana_analyst;
+- (ANAManager *)ana_analyticsManager;
+- (id<ANAPrefixing>(^)(SEL))ana_context;
 @end
 
 @interface NSObject (ANAAnalyzable) 
-- (ANAManager * __nonnull)ana_analyticsManager;
-- (id<ANAPrefixing> __nonnull (^ __nonnull)(SEL __nonnull)) ana_context;
+- (ANAManager *)ana_analyticsManager;
+- (id<ANAPrefixing>(^)(SEL))ana_context;
 @end
+
+NS_ASSUME_NONNULL_END
 
 #define ana ana_context(_cmd)

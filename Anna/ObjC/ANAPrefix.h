@@ -8,8 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ANAEventSeedBuilding;
+@class ANAAnalyst;
 @protocol ANAPrefixing
-@property (readonly, nonnull) void(^analyze)();
-@property (readonly, nonnull) id<ANAEventSeedBuilding> event_;
+@property (readonly) void(^analyze)();
+@property (readonly) id<ANAEventSeedBuilding> event_;
+@property (readonly) ANAAnalyst *analyst;
 @end
+
+NS_ASSUME_NONNULL_END

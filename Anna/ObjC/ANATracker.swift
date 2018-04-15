@@ -12,6 +12,9 @@ class ObjCTracker :
     NSObject,
     ANATracking
 {
+    func receiveAnalyticsResult(_ result: Any, dispatchedBy manager: ANAManaging) {
+    }
+    
     typealias Proto = EasyTracking
     let proto :Proto
     init(_ proto :Proto) {

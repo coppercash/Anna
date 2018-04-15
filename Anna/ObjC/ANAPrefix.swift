@@ -66,4 +66,9 @@ public class
             self.eventSeed = seed
         }
     }
+    
+    public var
+    analyst :ANAAnalyst {
+        return target.ana_analyst()
+    }
 }

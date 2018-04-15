@@ -10,21 +10,6 @@
 #import <Anna/Anna.h>
 #import "Anna_iOS_Tests-Swift.h"
 
-@interface ANAMockApplicationDelegate : NSObject <UIApplicationDelegate>
-@end
-
-@implementation ANAMockApplicationDelegate
-
-- (BOOL)            application:(UIApplication *)application
-  didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    
-    NSLog(@"1234");
-    return YES;
-}
-
-@end
-
 @interface ANAPathTests : XCTestCase
 @end
 
@@ -32,7 +17,7 @@
 
 - (void)testExample {
     __auto_type const
-    test = [[ANAPathTestCaseBuilder alloc] init];
+    test = [[ANAPathTestCaseBuilder alloc] initWithXCTestCase:self];
     test.defaultScript = @
     "const match = require('anna').default().match;"
     "match("
@@ -46,6 +31,7 @@
     __auto_type const
     button = [[ANAPathTestingButton alloc] initWithNodeName:@"bt"];
     [test.rootViewController.view addSubview:button];
+    [button.ana.analyst observe];
     [button sendActionsForControlEvents:UIControlEventTouchUpInside];
     
     [test expectResult];
