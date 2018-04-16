@@ -8,47 +8,36 @@
 #import <XCTest/XCTest.h>
 #import <UIKit/UIKit.h>
 #import <Anna/Anna.h>
+#import "Anna_iOS_Tests-Swift.h"
 
 @interface ANAPathTests : XCTestCase
-@property (nonatomic) UIApplication *application;
-@property (nonatomic) ANAManager *manager;
 @end
 
 @implementation ANAPathTests
 
 - (void)testExample {
     __auto_type const
-    fs = self.fileManager;
-    __auto_type const
-    ap = self.application;
-    __auto_type const
-    dl = self.delegate;
+    test = [[ANAPathTestCaseBuilder alloc] initWithXCTestCase:self];
+    test.defaultScript = @
+    "const match = require('anna').default().match;"
+    "match("
+    "  'vc/bt/event',"
+    "  function() { return 42; }"
+    ");"
+    ;
+    test.rootViewController = [[ANAPathTestingViewController alloc] initWithNodeName:@"vc"];
     
-    fs.readContentsAtPath = ^(NSString *path) {
-        return @""
-        "const match = require('anna').default().match;"
-        "match("
-        "  '/UIApplication/ANAAppDelegate/UIViewController/event',"
-        "  function() { return 42; }"
-        ");"
-        ;
-    }
+    [test launch];
     __auto_type const
-    ex = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    __auto_type __block
-    rs = (id)nil;
-    dl.receiveAnalyticsResult = ^(id result, ANAManager *manager) {
-        rs = result;
-        [ex fulfill];
-    };
-    __auto_type const
-    rt = ap.delegate.window.rootViewController;
-    [rt.ana_analyst observeViewController:rt];
-    [ap.delegate.window makeKeyWindow];
+    button = [[ANAPathTestingButton alloc] initWithNodeName:@"bt"];
+    [test.rootViewController.view addSubview:button];
+    [button.ana.analyst observe];
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
     
-    [self waitForExpectationsWithTimeout:1.0
-                                 handler:nil];
-    XCTAssertEqualObjects(rs, @42);
+    [test expectResult];
+    [self waitForExpectations:test.expectations
+                      timeout:1.0];
+    XCTAssertEqualObjects(test.results[0], @42);
 }
 
 @end

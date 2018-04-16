@@ -14,6 +14,8 @@
                  dispatchedBy:(id<ANAManaging> __nonnull)manager;
 - (void)receiveAnalyticsError:(NSError * __nonnull)error
                  dispatchedBy:(id<ANAManaging> __nonnull)manager;
+- (void)receiveAnalyticsResult:(id __nonnull)result
+                 dispatchedBy:(id<ANAManaging> __nonnull)manager;
 @end
 
 @protocol ANATrackerCollecting <NSObject>

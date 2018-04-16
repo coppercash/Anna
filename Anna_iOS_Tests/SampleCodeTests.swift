@@ -31,14 +31,14 @@ class SampleCodeTests: XCTestCase {
         
         class Tracker : EasyTracking {
             public func receive(
-                analyticsEvent event: Event,
-                dispatchedBy manager: Manager
+                analyticsEvent event: EasyTracking.Event,
+                dispatchedBy manager: EasyTracking.Manager
                 ) {
                 print(event["theAnswer"] as! Int)   // 42
             }
             public func receive(
                 analyticsError error: Error,
-                dispatchedBy manager: Manager
+                dispatchedBy manager: EasyTracking.Manager
                 ) {
                 print(error)
             }

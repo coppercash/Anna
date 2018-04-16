@@ -8,11 +8,27 @@
 
 import Foundation
 
+@objc(ANAFileManaging)
+public protocol
+    FileManaging
+{
+    func
+        contents(atPath path: String) -> Data?
+}
+
 public class
     ANAManager :
     NSObject,
     ANAManaging
 {
+    var
+    fileManager :FileManaging! = nil
+    public convenience
+    init(fileManager: FileManaging) {
+        self.init(Proto())
+        self.fileManager = fileManager
+    }
+
     typealias
         Proto = EasyManager
     let
