@@ -11,11 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ANAEventSeedBuilding;
-@class ANAAnalyst;
+@class ANAAnalyzer;
 @protocol ANAPrefixing
 @property (readonly) void(^analyze)();
 @property (readonly) id<ANAEventSeedBuilding> event_;
-@property (readonly) ANAAnalyst *analyst;
+@property (readonly) ANAAnalyzer *analyzer;
 @end
 
 NS_ASSUME_NONNULL_END

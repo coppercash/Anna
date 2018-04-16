@@ -11,10 +11,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ANAManager, ANAAnalyst;
+@class ANAManager, ANAAnalyzer;
 @protocol ANAPrefixing;
 @protocol ANAAnalyzable <NSObject, ANARegistering>
-- (ANAAnalyst *)ana_analyst;
+- (ANAAnalyzer *)ana_analyzer;
 - (ANAManager *)ana_analyticsManager;
 - (id<ANAPrefixing>(^)(SEL))ana_context;
 @end

@@ -49,10 +49,19 @@ PathTestCaseBuilder : NSObject
         }
     }
     var
-    rootViewController :UIViewController? = nil
-    
+    application :UIApplication {
+        return UIApplication.shared
+    }
+    var
+    appDelegate :UIApplicationDelegate = PathTestingAppDelegate()
     func
         launch() {
+        self.application.delegate = self.appDelegate
+        let
+        _ = self.appDelegate.application!(
+            self.application,
+            didFinishLaunchingWithOptions: nil
+        )
     }
     
     func
@@ -100,6 +109,27 @@ PathTestCaseBuilder : Anna.ANATracking
     }
 }
 
+@objc(ANAPathTestingAppDelegate) class
+PathTestingAppDelegate: UIResponder, UIApplicationDelegate
+{
+    var
+    window: UIWindow?
+    
+    func
+        application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
+        ) -> Bool
+    {
+        let
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = UINavigationController(nibName: nil, bundle: nil)
+        window.makeKeyAndVisible()
+        self.window = window
+        return true
+    }
+}
+
 @objc(ANAPathTestingViewController) class
 PathTestingViewController : UIViewController
 {
@@ -134,4 +164,7 @@ PathTestingViewController : UIViewController
         self.nodeName = String(describing: aDecoder)
         super.init(coder: aDecoder)
     }
+    
+    var
+    analyzer :UIControlAnalyzer! = nil
 }

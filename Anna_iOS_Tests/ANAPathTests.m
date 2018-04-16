@@ -25,18 +25,26 @@
     "  function() { return 42; }"
     ");"
     ;
-    test.rootViewController = [[ANAPathTestingViewController alloc] initWithNodeName:@"vc"];
-    
     [test launch];
+    
+    __auto_type const
+    navigation = (UINavigationController *)test.appDelegate.window.rootViewController;
+    __auto_type const
+    controller = [[ANAPathTestingViewController alloc] initWithNodeName:@"vc"];
+    [navigation pushViewController:controller
+                          animated:NO];
     __auto_type const
     button = [[ANAPathTestingButton alloc] initWithNodeName:@"bt"];
-    [test.rootViewController.view addSubview:button];
-    [button.ana.analyst observe];
-    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    button.analyzer = [[ANAUIControlAnalyzer alloc] initWithDelegate:button];
+    [button.analyzer hookControl:button];
+    [controller.view addSubview:button];
+    [NSRunLoop.mainRunLoop runUntilDate:NSDate.distantFuture];
     
     [test expectResult];
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    
     [self waitForExpectations:test.expectations
-                      timeout:1.0];
+                      timeout:100.0];
     XCTAssertEqualObjects(test.results[0], @42);
 }
 

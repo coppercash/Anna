@@ -68,7 +68,7 @@ public class
     }
     
     public var
-    analyst :ANAAnalyst {
-        return target.ana_analyst()
+    analyzer :ANAAnalyzer {
+        return target.ana_analyzer()
     }
 }
