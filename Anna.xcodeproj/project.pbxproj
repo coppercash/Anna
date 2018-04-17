@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		118327675DD132CD9B88D63F /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
+		3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE5A2086EE4400AE10D3 /* PathTests.swift */; };
+		3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE7C208708F700AE10D3 /* AppDelegate.swift */; };
 		3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D646DE21EF0BDCE00D39AF7 /* Base.swift */; };
 		3D646E071EF20A3B00D39AF7 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34A1EEBF486000B0E15 /* Manager.swift */; };
 		3D8F01AA2080AD4300DE8B75 /* ANAPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F01A92080AD4300DE8B75 /* ANAPathTests.m */; };
@@ -69,6 +71,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3D10FE5C2086F96E00AE10D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE87DA751EAB606A00DA81EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D52623D208583D100D287BA;
+			remoteInfo = Anna_iOS_Testee;
+		};
 		BE87DA931EAB615D00DA81EB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BE87DA751EAB606A00DA81EB /* Project object */;
@@ -81,6 +90,8 @@
 /* Begin PBXFileReference section */
 		1EB556A53781E87D9189AEB8 /* Pods-Anna_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D10FE5A2086EE4400AE10D3 /* PathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTests.swift; sourceTree = "<group>"; };
+		3D10FE7C208708F700AE10D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D646DE21EF0BDCE00D39AF7 /* Base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
@@ -185,6 +196,7 @@
 		3D52623F208583D200D287BA /* Anna_iOS_Testee */ = {
 			isa = PBXGroup;
 			children = (
+				3D10FE7C208708F700AE10D3 /* AppDelegate.swift */,
 				3D52624C208583D300D287BA /* Info.plist */,
 			);
 			path = Anna_iOS_Testee;
@@ -307,6 +319,7 @@
 				BEF71B1B1F23454E00B20F4A /* SampleCodeTests.swift */,
 				BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */,
 				BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */,
+				3D10FE5A2086EE4400AE10D3 /* PathTests.swift */,
 				3D8F01A92080AD4300DE8B75 /* ANAPathTests.m */,
 				BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */,
 			);
@@ -432,6 +445,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3D10FE5D2086F96E00AE10D3 /* PBXTargetDependency */,
 				BE87DA941EAB615D00DA81EB /* PBXTargetDependency */,
 			);
 			name = Anna_iOS_Tests;
@@ -450,6 +464,7 @@
 				TargetAttributes = {
 					3D52623D208583D100D287BA = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Manual;
 					};
 					BE87DA7F1EAB608700DA81EB = {
@@ -600,6 +615,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,6 +658,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */,
 				BEF71B1C1F23454E00B20F4A /* SampleCodeTests.swift in Sources */,
 				BE237AFB1F19D907002EB52B /* ANATInheritanceTests.m in Sources */,
 				BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */,
@@ -665,6 +682,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3D10FE5D2086F96E00AE10D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D52623D208583D100D287BA /* Anna_iOS_Testee */;
+			targetProxy = 3D10FE5C2086F96E00AE10D3 /* PBXContainerItemProxy */;
+		};
 		BE87DA941EAB615D00DA81EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BE87DA7F1EAB608700DA81EB /* Anna_iOS */;

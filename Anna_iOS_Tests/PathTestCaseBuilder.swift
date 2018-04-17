@@ -53,19 +53,22 @@ PathTestCaseBuilder : NSObject
         return UIApplication.shared
     }
     var
-    appDelegate :UIApplicationDelegate = PathTestingAppDelegate()
+    rootViewController :UIViewController? = nil
     func
         launch() {
-        self.application.delegate = self.appDelegate
         let
-        _ = self.appDelegate.application!(
+        delegate = PathTestingAppDelegate()
+        delegate.rootViewController = self.rootViewController
+        self.application.delegate = delegate
+        let
+        _ = delegate.application(
             self.application,
             didFinishLaunchingWithOptions: nil
         )
     }
     
     func
-        expectResult() {
+        expect() {
         let
         expectation = self.xcTestCase.expectation(description: "\(self.expectations.count)")
         self.expectations.append(expectation)
@@ -95,10 +98,12 @@ PathTestCaseBuilder : Anna.ANATracking
         _ result: Any,
         dispatchedBy manager: ANAManaging
         ) {
-        self.results[self.currentResultIndex] = result
-        self.currentResultIndex += 1
-        self.expectations[self.currentExpectationIndex].fulfill()
-        self.currentExpectationIndex += 1
+        DispatchQueue.main.async {
+            self.results[self.currentResultIndex] = result
+            self.currentResultIndex += 1
+            self.expectations[self.currentExpectationIndex].fulfill()
+            self.currentExpectationIndex += 1
+        }
     }
     
     // TODO: Remove
@@ -114,6 +119,8 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate
 {
     var
     window: UIWindow?
+    var
+    rootViewController :UIViewController?
     
     func
         application(
@@ -123,7 +130,8 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate
     {
         let
         window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = UINavigationController(nibName: nil, bundle: nil)
+        window.rootViewController = self.rootViewController ??
+            UINavigationController(nibName: nil, bundle: nil)
         window.makeKeyAndVisible()
         self.window = window
         return true
@@ -133,38 +141,30 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate
 @objc(ANAPathTestingViewController) class
 PathTestingViewController : UIViewController
 {
-    let
-    nodeName :String
-    @objc(initWithNodeName:)
-    init(with nodeName :String) {
-        self.nodeName = nodeName
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required
-    init?(coder aDecoder: NSCoder) {
-        self.nodeName = String(describing: aDecoder)
-        super.init(coder: aDecoder)
-    }
+//    init() {
+//        self.nodeName = nodeName
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required
+//    init?(coder aDecoder: NSCoder) {
+//        self.nodeName = String(describing: aDecoder)
+//        super.init(coder: aDecoder)
+//    }
 }
 
 @objc(ANAPathTestingButton) class
-    PathTestingButton : UIButton
+PathTestingButton : UIButton, Anna.Analyzer.Delegate
 {
-    let
-    nodeName :String
-    @objc(initWithNodeName:)
-    init(with nodeName :String) {
-        self.nodeName = nodeName
-        super.init(frame: CGRect.zero)
-    }
-    
-    required
-    init?(coder aDecoder: NSCoder) {
-        self.nodeName = String(describing: aDecoder)
-        super.init(coder: aDecoder)
-    }
-    
+//    init() {
+//        super.init(frame: UIScreen.main.bounds)
+//    }
+//
+//    required
+//    init?(coder aDecoder: NSCoder) {
+//        super.init(coder: aDecoder)
+//    }
+//
     var
     analyzer :UIControlAnalyzer! = nil
 }

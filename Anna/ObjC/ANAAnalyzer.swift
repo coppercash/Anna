@@ -33,8 +33,9 @@ ANAPathConsituting
     
 }
 
+@objc(ANAAnalyzer)
 public class
-    ANAAnalyzer : NSObject
+    Analyzer : NSObject
 {
     public typealias
         Delegate = ANAPathConsituting
@@ -57,11 +58,11 @@ public class
 
 @objc(ANAUIControlAnalyzer)
 public class
-    UIControlAnalyzer : ANAAnalyzer
+    UIControlAnalyzer : Analyzer
 {
     @objc(hookControl:)
     public func
-        hook(control :UIControl)
+        hook(_ control :UIControl)
     {
         control.addTarget(
             self,

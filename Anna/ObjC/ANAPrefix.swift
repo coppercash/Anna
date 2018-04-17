@@ -67,8 +67,8 @@ public class
         }
     }
     
-    public var
-    analyzer :ANAAnalyzer {
-        return target.ana_analyzer()
-    }
+//    public var
+//    analyzer :Analyzer {
+//        return target.ana_analyzer()
+//    }
 }
