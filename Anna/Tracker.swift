@@ -8,6 +8,26 @@
 
 import Foundation
 
+@objc(ANATracking)
+public protocol
+    Tracking
+{
+    typealias
+        Manager = ANAManager
+    @objc(receiveAnalyticsResult:dispatchedByManager:)
+    func
+        receive(
+        analyticsResult :AnyObject,
+        dispatchedBy manager :Manager
+    )
+    @objc(receiveAnalyticsError:dispatchedByManager:)
+    func
+        receive(
+        analyticsError :Error,
+        dispatchedBy manager :Manager
+    )
+}
+
 public protocol
 EasyTracking {
     typealias

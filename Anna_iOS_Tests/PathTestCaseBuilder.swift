@@ -11,7 +11,7 @@ import XCTest
 import Anna
 
 @objc(ANAMockFileManager) class
-MockFileManager : NSObject, Anna.FileManaging
+MockFileManager : NSObject, CoreJS.FileManaging
 {
     var
     defaultScript :String? = nil
@@ -29,14 +29,10 @@ PathTestCaseBuilder : NSObject
     xcTestCase :XCTestCase
     let
     fileManager = MockFileManager()
-    let
-    manager :ANAManager
     @objc(initWithXCTestCase:)
     init(with xcTestCase :XCTestCase) {
         self.xcTestCase = xcTestCase
-        self.manager = ANAManager(
-            fileManager: self.fileManager
-        )
+        super.init()
     }
     
     var
@@ -59,6 +55,13 @@ PathTestCaseBuilder : NSObject
         let
         delegate = PathTestingAppDelegate()
         delegate.rootViewController = self.rootViewController
+        let
+        manager = ANAManager(
+            mainScriptURL: URL(fileURLWithPath: "main.js"),
+            fileManager: self.fileManager
+        )
+        manager.tracker = self
+        delegate.manager = manager
         self.application.delegate = delegate
         let
         _ = delegate.application(
@@ -86,30 +89,24 @@ PathTestCaseBuilder : NSObject
 }
     
 extension
-PathTestCaseBuilder : Anna.ANATracking
+PathTestCaseBuilder : Anna.Tracking
 {
-    func receiveAnalyticsError(
-        _ error: Error,
-        dispatchedBy manager: ANAManaging
-        ) {
-    }
-    
-    func receiveAnalyticsResult(
-        _ result: Any,
-        dispatchedBy manager: ANAManaging
+    func
+        receive(
+        analyticsResult :AnyObject,
+        dispatchedBy manager :Tracking.Manager
         ) {
         DispatchQueue.main.async {
-            self.results[self.currentResultIndex] = result
+            self.results[self.currentResultIndex] = analyticsResult
             self.currentResultIndex += 1
             self.expectations[self.currentExpectationIndex].fulfill()
             self.currentExpectationIndex += 1
         }
     }
     
-    // TODO: Remove
-    func receiveAnalyticsEvent(
-        _ event: ANAEventBeing,
-        dispatchedBy manager: ANAManaging
+    func receive(
+        analyticsError :Error,
+        dispatchedBy manager :Tracking.Manager
         ) {
     }
 }
@@ -121,6 +118,8 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwner
     window: UIWindow?
     var
     rootViewController :UIViewController?
+    var
+    manager :RootAnalyzer.Manager?
     
     func
         application(
@@ -139,7 +138,7 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwner
     
     lazy var
     analyzer :Analyzing = {
-        RootAnalyzer(manager: RootAnalyzer.Manager.sharedManager)
+        RootAnalyzer(manager: self.manager!)
     }()
 }
 

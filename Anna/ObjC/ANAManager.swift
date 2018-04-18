@@ -9,14 +9,6 @@
 import Foundation
 import JavaScriptCore
 
-@objc(ANAFileManaging)
-public protocol
-    FileManaging
-{
-    func
-        contents(atPath path: String) -> Data?
-}
-
 @objc(ANANodeLocator)
 public class
 NodeLocator : NSObject
@@ -44,16 +36,78 @@ NodeLocatorJSExport : JSExport
 extension
 NodeLocator : NodeLocatorJSExport {}
 
+@objc protocol
+    ScriptTrackerJSExport : JSExport
+{
+    func
+        receive(analyticsResult :AnyObject)
+}
+class
+    ScriptTracker : NSObject
+{
+    typealias
+        Manager = ANAManager
+    unowned let
+    manager :Manager
+    var
+    tracker :Tracking?
+    init(with manager :Manager) {
+        self.manager = manager
+    }
+    func
+        receive(analyticsResult: AnyObject) {
+        self.tracker?.receive(
+            analyticsResult: analyticsResult,
+            dispatchedBy: self.manager
+        )
+    }
+    func
+        receive(analyticsError: Error) {
+        self.tracker?.receive(
+            analyticsError: analyticsError,
+            dispatchedBy: self.manager
+        )
+    }
+}
+extension
+ScriptTracker : ScriptTrackerJSExport {}
+
+extension
+    NSError
+{
+    convenience
+    init(with jsValue :JSValue) {
+        var
+        userInfo = [String : String]()
+        if let message = jsValue.forProperty("message").toString() {
+            userInfo[NSLocalizedFailureReasonErrorKey] = message
+        }
+        if let stack = jsValue.forProperty("stack").toString() {
+            userInfo[NSLocalizedDescriptionKey] = stack
+        }
+        self.init(
+            domain: jsValue.forProperty("name").toString(),
+            code: -1,
+            userInfo: userInfo
+        )
+    }
+}
+
 public class
     ANAManager :
     NSObject,
     ANAManaging
 {
     var
-    fileManager :FileManaging! = nil
+    fileManager :FileManaging! = nil,
+    mainScriptURL :URL! = nil
     public convenience
-    init(fileManager: FileManaging) {
+    init(
+        mainScriptURL :URL,
+        fileManager :FileManaging
+        ) {
         self.init(Proto())
+        self.mainScriptURL = mainScriptURL
         self.fileManager = fileManager
     }
     
@@ -73,18 +127,39 @@ public class
     
     let
     scriptQ = DispatchQueue(label: "anna.script")
+    lazy var
+    scriptTracker :ScriptTracker = {
+        return ScriptTracker(with: self)
+    }()
     
     var
-    scriptContext :JSContext? = nil
+    scriptContext :CoreJS.Context? = nil
     func
         resolvedScriptContext()
-        -> JSContext
+        -> CoreJS.Context
     {
         if let context = self.scriptContext {
             return context
         }
         let
-        context = JSContext()!
+        dependencies = CoreJS.Dependencies()
+        dependencies.fileManager = self.fileManager
+        let
+        context = CoreJS.Context.run(
+            self.mainScriptURL,
+            with: dependencies
+            )!
+
+        // Load
+        //
+        let
+        tracker = self.scriptTracker
+        context.exceptionHandler = { (context, error) in
+            guard let error = error else { return }
+            let
+            analyticsError = NSError(with: error)
+            tracker.receive(analyticsError: analyticsError)
+        }
         self.scriptContext = context
         return context
     }
@@ -102,11 +177,15 @@ public class
         context = self.resolvedScriptContext(),
         manager = context
             .globalObject
-            .objectForKeyedSubscript("Anna")
+            .forProperty("Anna")
             .invokeMethod(
                 "default",
                 withArguments: []
         )!
+        manager.setValue(
+            self.scriptTracker,
+            forProperty: "tracker"
+        )
         self.scriptManager = manager
         return manager
     }
@@ -157,6 +236,9 @@ public class
             )
         }
     }
+    
+    public weak var
+    tracker :Tracking? = nil
     
     typealias
         Proto = EasyManager
