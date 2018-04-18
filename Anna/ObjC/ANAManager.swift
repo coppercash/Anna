@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import JavaScriptCore
 
 @objc(ANAFileManaging)
 public protocol
@@ -15,6 +16,33 @@ public protocol
     func
         contents(atPath path: String) -> Data?
 }
+
+@objc(ANANodeLocator)
+public class
+NodeLocator : NSObject
+{
+    let
+    ownerID :NSNumber,
+    name :NSString
+    init(
+        ownerID :NSNumber,
+        name :NSString
+        ) {
+        self.ownerID = ownerID
+        self.name = name
+    }
+}
+
+@objc protocol
+NodeLocatorJSExport : JSExport
+{
+    var
+    ownerID :NSNumber { get }
+    var
+    name :NSString { get }
+}
+extension
+NodeLocator : NodeLocatorJSExport {}
 
 public class
     ANAManager :
@@ -28,7 +56,108 @@ public class
         self.init(Proto())
         self.fileManager = fileManager
     }
+    
+    public typealias
+    NodeLocator = Anna.NodeLocator
+    func
+        nodeLocator(
+        with name :String,
+        ownerID :ObjectIdentifier
+        ) -> NodeLocator
+    {
+        return NodeLocator(
+            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
+            name: (name as NSString)
+        )
+    }
+    
+    let
+    scriptQ = DispatchQueue(label: "anna.script")
+    
+    var
+    scriptContext :JSContext? = nil
+    func
+        resolvedScriptContext()
+        -> JSContext
+    {
+        if let context = self.scriptContext {
+            return context
+        }
+        let
+        context = JSContext()!
+        self.scriptContext = context
+        return context
+    }
+    
+    var
+    scriptManager :JSValue? = nil
+    func
+        resolvedScriptManager()
+        -> JSValue
+    {
+        if let manager = self.scriptManager {
+            return manager
+        }
+        let
+        context = self.resolvedScriptContext(),
+        manager = context
+            .globalObject
+            .objectForKeyedSubscript("Anna")
+            .invokeMethod(
+                "default",
+                withArguments: []
+        )!
+        self.scriptManager = manager
+        return manager
+    }
 
+    func
+        registerRootNode(
+        by locator :NodeLocator
+        )
+    {
+        self.scriptQ.async {
+            let
+            manager = self.resolvedScriptManager()
+            manager.invokeMethod(
+                "registerRootNode",
+                withArguments: [locator,]
+            )
+        }
+    }
+
+    func
+        registerNode(
+        by locator :NodeLocator,
+        under parentLocator :NodeLocator
+        )
+    {
+        self.scriptQ.async {
+            let
+            manager = self.resolvedScriptManager()
+            manager.invokeMethod(
+                "registerNode",
+                withArguments: [locator, parentLocator,]
+            )
+        }
+    }
+    
+    func
+        recordEvent(
+        with properties :[String: AnyObject],
+        locator :NodeLocator
+        )
+    {
+        self.scriptQ.async {
+            let
+            manager = self.resolvedScriptManager()
+            manager.invokeMethod(
+                "recordEvent",
+                withArguments: [properties, locator,]
+            )
+        }
+    }
+    
     typealias
         Proto = EasyManager
     let

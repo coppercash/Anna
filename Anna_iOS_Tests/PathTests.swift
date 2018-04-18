@@ -22,17 +22,34 @@ class PathTests: XCTestCase {
         class
         Controller : PathTestingViewController
         {
+            class
+                Button : PathTestingButton
+            {
+                override func
+                    didMoveToSuperview() {
+                    guard let _ = self.superview else {
+                        return
+                    }
+                    let
+                    analyzer = UIControlAnalyzer(with: self)
+                    analyzer.hook(self)
+                    self.analyzer = analyzer
+                }
+                override func
+                    pathNodeName() -> String {
+                    return "bt"
+                }
+            }
             var
             button :UIButton? = nil
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
+                
+                self.analyzer = Analyzer(with: self)
+                
                 let
-                button = PathTestingButton()
-                let
-                analyzer = UIControlAnalyzer(with: button)
-                analyzer.hook(button)
-                button.analyzer = analyzer
+                button = Button()
                 self.view.addSubview(button)
                 self.button = button
             }
@@ -40,6 +57,10 @@ class PathTests: XCTestCase {
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 self.button?.sendActions(for: .touchUpInside)
+            }
+            override func
+                pathNodeName() -> String {
+                return "vc"
             }
         }
         test.rootViewController = Controller()

@@ -10,6 +10,7 @@
 		118327675DD132CD9B88D63F /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
 		3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE5A2086EE4400AE10D3 /* PathTests.swift */; };
 		3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE7C208708F700AE10D3 /* AppDelegate.swift */; };
+		3D10FE7F20872EC100AE10D3 /* UIResponder+PathConstituting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE7E20872EC100AE10D3 /* UIResponder+PathConstituting.swift */; };
 		3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D646DE21EF0BDCE00D39AF7 /* Base.swift */; };
 		3D646E071EF20A3B00D39AF7 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34A1EEBF486000B0E15 /* Manager.swift */; };
 		3D8F01AA2080AD4300DE8B75 /* ANAPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F01A92080AD4300DE8B75 /* ANAPathTests.m */; };
@@ -92,6 +93,7 @@
 		2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D10FE5A2086EE4400AE10D3 /* PathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTests.swift; sourceTree = "<group>"; };
 		3D10FE7C208708F700AE10D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3D10FE7E20872EC100AE10D3 /* UIResponder+PathConstituting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+PathConstituting.swift"; sourceTree = "<group>"; };
 		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D646DE21EF0BDCE00D39AF7 /* Base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
@@ -366,6 +368,7 @@
 				BE042E601F0EEA0E00E0B44A /* ANARegister.h */,
 				BE042E621F0EEB8E00E0B44A /* ANARegister.swift */,
 				BE2595612083772B0007910F /* ANAAnalyzer.swift */,
+				3D10FE7E20872EC100AE10D3 /* UIResponder+PathConstituting.swift */,
 			);
 			path = ObjC;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				BE042E6D1F0EF9C900E0B44A /* ANAClass.swift in Sources */,
 				BE3127D11EF5657100DA452A /* Selector.swift in Sources */,
 				BE80F3641EEBF486000B0E15 /* Type.swift in Sources */,
+				3D10FE7F20872EC100AE10D3 /* UIResponder+PathConstituting.swift in Sources */,
 				BEC00D9A1F07B3BA0060DCDF /* ANAEventSeed.swift in Sources */,
 				BE80F3611EEBF486000B0E15 /* Register.swift in Sources */,
 				BE80F35B1EEBF486000B0E15 /* Class.swift in Sources */,

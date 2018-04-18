@@ -115,7 +115,7 @@ PathTestCaseBuilder : Anna.ANATracking
 }
 
 @objc(ANAPathTestingAppDelegate) class
-PathTestingAppDelegate: UIResponder, UIApplicationDelegate
+PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwner
 {
     var
     window: UIWindow?
@@ -136,35 +136,33 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate
         self.window = window
         return true
     }
+    
+    lazy var
+    analyzer :Analyzing = {
+        RootAnalyzer(manager: RootAnalyzer.Manager.sharedManager)
+    }()
 }
 
 @objc(ANAPathTestingViewController) class
-PathTestingViewController : UIViewController
+PathTestingViewController : UIViewController, AnalyzerOwner
 {
-//    init() {
-//        self.nodeName = nodeName
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required
-//    init?(coder aDecoder: NSCoder) {
-//        self.nodeName = String(describing: aDecoder)
-//        super.init(coder: aDecoder)
-//    }
+    var
+    _analyzer :Analyzing!
+    var
+    analyzer :Analyzing {
+        get { return self._analyzer }
+        set { self._analyzer = newValue }
+    }
 }
 
 @objc(ANAPathTestingButton) class
-PathTestingButton : UIButton, Anna.Analyzer.Delegate
+PathTestingButton : UIButton, AnalyzerOwner
 {
-//    init() {
-//        super.init(frame: UIScreen.main.bounds)
-//    }
-//
-//    required
-//    init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//    }
-//
     var
-    analyzer :UIControlAnalyzer! = nil
+    _analyzer :Analyzing!
+    var
+    analyzer :Analyzing {
+        get { return self._analyzer }
+        set { self._analyzer = newValue }
+    }
 }
