@@ -1,0 +1,19 @@
+{
+  "name": "anna",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/chai": "^4.0.0",
+    "@types/mocha": "^2.2.41",
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2",
+    "ts-node": "^3.1.0",
+    "typescript": "^2.8.3"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec --compilers ts:ts-node/register 'src/**/*.spec.ts'"
+  },
+  "author": "william",
+  "license": "ISC"
+}
