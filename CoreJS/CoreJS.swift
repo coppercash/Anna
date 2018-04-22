@@ -45,7 +45,8 @@ extension
         context = JSContext()
         let
         r = context?.evaluateScript("eval(\'var a = 123; a;\')")
-//        context?.evaluateScript(<#T##script: String!##String!#>, withSourceURL: mainScriptURL)
+        let
+        a = context?.evaluateScript("new Set([1, 2, 3]);")
         return context
     }
 }

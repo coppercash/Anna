@@ -1,16 +1,29 @@
 import * as Identity from './identity';
+import * as Match from './match';
 
-export interface Tracking {
-  receiveResult(result :any);
+export interface Tracking 
+{
+  receiveResult(result :any) :void;
 }
 
-export class Anna
+export interface Loading 
 {
-  identities = new Identity.Tree();
+  matchTasks(
+    namespace :string, 
+    manager? :Anna
+  ) :void;
+}
+
+export class Anna implements Identity.Loading
+{
+  identities :Identity.Tree;
+  loader :Loading;
   tracker :Tracking = null;
 
-  constructor() 
+  constructor(loader :Loading) 
   {
+    this.identities = new Identity.Tree(this);
+    this.loader = loader;
   }
 
   rootNodeID(ownerID :number) :Identity.NodeID 
@@ -27,61 +40,66 @@ export class Anna
     id :Identity.NodeID, 
     parentID? :Identity.NodeID
   ) {
-    this.identities.registerNode(id, parentID)
+    this.identities.registerNode(id, parentID);
   }
 
-  //    registerNode(
-  //        locator :Path.NodeLocator, 
-  //        parentLocator :Path.NodeLocator
-  //    )
-  //    {
-  //        let
-  //        registered = identities.nodeByLocator(locator)
-  //        if (registered) {
-  //            return
-  //        }
-  //        let 
-  //        parent = identities.nodeByLocator(parentLocator)
-  //        if (!(parent)) {
-  //            throw Error('Can not find registered parent node for node named ' + locator.name)
-  //        }
-  //        let
-  //        node = Path.Node(
-  //            name: locator.name, 
-  //            parent: parent
-  //        )
-  //        parent.setChildByName(node.name, node)
-  //        let
-  //        matchings = parent.matchingNodesWithName(node.name)
-  //        node.addMatchingNodes(matchings)
-  //        identities.addNodeByLocator(locator, node)
-  //    }
-  //
-  //    unregisterNode(locator :Path.NodeLocator)
-  //    {
-  //        identities.removeNodeByLocator(locator)
-  //    }
-  //
+  unregisterNode(
+    id :Identity.NodeID
+  ) {
+    this.identities.unregisterNode(id);
+  }
+  
   recordEvent(
+    name :string,
     properties :Identity.Event.Properties,
     nodeID :Identity.NodeID
   )
   {
     let
-    node = this.identities.node(nodeID);
-    node.recordEvent(properties);
+    identities = this.identities, tracker = this.tracker;
     let
-    tasks = node.matchingEventTasks()
-    if (!(tasks && tasks.length > 0)) {
-      throw Error('Node named ' + node.name + 'is not registered with any events')
+    node = identities.node(nodeID);
+    node.recordEvent(name, properties);
+    let
+    tasks = node.tasksMatchingEvent(name);
+    if (!(
+      tasks && tasks.length > 0
+    )) {
+      throw new Error(`${ nodeID } is not registered with any events`);
     }
-    for (let task of tasks) {
+    for ( let 
+      task of tasks
+    ) {
       let
-      result = task.resultByMapping(node)
-      if (this.tracker) {
-        this.tracker.receiveResult(result)
+      result = task.resultByMapping(node);
+      if (tracker) {
+        tracker.receiveResult(result);
       }
     }
+  }
+
+  matchTasks(
+    namespace :string
+  ) :Identity.Loading.Tasks {
+    let
+    builder = new Match.Builder();
+    this.task.match = (path :string, map :Match.Task.Map) => {
+      builder.addMatchTask(path, map);
+    };
+    this.loader.matchTasks(namespace, this);
+    return builder.build();
+  }
+
+  task :TaskBuilders = new TaskBuilders();
+}
+
+type Map = Match.Task.Map;
+export class TaskBuilders
+{
+  match : (path :string, map :Map) => void;
+  constructor() 
+  {
+    this.match = null;
   }
 }
 

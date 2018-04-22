@@ -12,7 +12,7 @@
     "typescript": "^2.8.3"
   },
   "scripts": {
-    "test": "mocha --reporter spec --compilers ts:ts-node/register 'src/**/*.spec.ts'"
+    "test": "mocha --full-trace --reporter spec --compilers ts:ts-node/register 'src/**/*.spec.ts'"
   },
   "author": "william",
   "license": "ISC"
