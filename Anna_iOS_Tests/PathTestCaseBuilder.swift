@@ -15,10 +15,26 @@ MockFileManager : NSObject, CoreJS.FileManaging
 {
     var
     defaultScript :String? = nil
+    let
+    fileManager = FileManager.default
     func
         contents(atPath path: String) -> Data?
     {
-        return self.defaultScript?.data(using: .utf8)
+        let
+        components = path.components(separatedBy: "/")
+        if
+            components.count >= 2,
+            components[components.count - 2] == "tasks"
+        {
+            return self.defaultScript?.data(using: .utf8)
+        }
+        return fileManager.contents(atPath: path)
+    }
+    func
+        fileExists(
+        atPath path: String
+        ) -> Bool {
+        return fileManager.fileExists(atPath: path)
     }
 }
 
@@ -29,6 +45,15 @@ PathTestCaseBuilder : NSObject
     xcTestCase :XCTestCase
     let
     fileManager = MockFileManager()
+    lazy var
+    dependency :Dependency = {
+        let
+        dep = Dependency()
+        dep.fileManager = self.fileManager
+        dep.workDirecotryURL = Bundle(for: type(of: self)).bundleURL
+        dep.coreJSScriptURL = URL(fileURLWithPath: "core.js")
+        return dep;
+    }()
     @objc(initWithXCTestCase:)
     init(with xcTestCase :XCTestCase) {
         self.xcTestCase = xcTestCase
@@ -56,10 +81,7 @@ PathTestCaseBuilder : NSObject
         delegate = PathTestingAppDelegate()
         delegate.rootViewController = self.rootViewController
         let
-        manager = ANAManager(
-            mainScriptURL: URL(fileURLWithPath: "main.js"),
-            fileManager: self.fileManager
-        )
+        manager = ANAManager(self.dependency)
         manager.tracker = self
         delegate.manager = manager
         self.application.delegate = delegate

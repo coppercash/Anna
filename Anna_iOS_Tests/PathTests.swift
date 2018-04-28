@@ -69,7 +69,7 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 1.0
+            timeout: 10.0
         )
         
         XCTAssertEqual(test.results[0] as! Int, 42)

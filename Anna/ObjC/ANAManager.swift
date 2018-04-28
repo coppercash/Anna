@@ -93,6 +93,16 @@ extension
     }
 }
 
+@objc(ANADependency)
+public class
+    Dependency : NSObject
+{
+    public var
+    fileManager :FileManaging! = nil,
+    workDirecotryURL :URL! = nil,
+    coreJSScriptURL :URL! = nil
+}
+
 public class
     ANAManager :
     NSObject,
@@ -100,15 +110,14 @@ public class
 {
     var
     fileManager :FileManaging! = nil,
-    mainScriptURL :URL! = nil
+    dependency :Dependency! = nil
     public convenience
     init(
-        mainScriptURL :URL,
-        fileManager :FileManaging
+        _ dependency :Dependency
         ) {
         self.init(Proto())
-        self.mainScriptURL = mainScriptURL
-        self.fileManager = fileManager
+        self.fileManager = dependency.fileManager
+        self.dependency = dependency
     }
     
     public typealias
@@ -142,26 +151,35 @@ public class
             return context
         }
         let
-        dependencies = CoreJS.Dependencies()
-        dependencies.fileManager = self.fileManager
-        let
         context = CoreJS.Context.run(
-            self.mainScriptURL,
-            with: dependencies
+            in: self.dependency.workDirecotryURL,
+            with: self.fileManager,
+            exceptionHandler:
+            { [weak self] (context, error) in
+                guard let error = error else { return }
+                self?.handle(scriptError: error)
+            }
             )!
-
-        // Load
-        //
-        let
-        tracker = self.scriptTracker
-        context.exceptionHandler = { (context, error) in
-            guard let error = error else { return }
-            let
-            analyticsError = NSError(with: error)
-            tracker.receive(analyticsError: analyticsError)
-        }
         self.scriptContext = context
         return context
+    }
+    
+    func
+        handle(scriptResult :JSValue)
+    {
+        self.tracker?.receive(
+            analyticsResult: scriptResult,
+            dispatchedBy: self
+        )
+    }
+    
+    func
+        handle(scriptError :JSValue)
+    {
+        self.tracker?.receive(
+            analyticsError: NSError(with: scriptError),
+            dispatchedBy: self
+        )
     }
     
     var
@@ -174,19 +192,20 @@ public class
             return manager
         }
         let
-        context = self.resolvedScriptContext(),
+        callback : @convention(block) (JSValue) -> Void = {
+            [weak self] (result :JSValue) in
+            self?.handle(scriptResult: result)
+        };
+        let
+        context = self.resolvedScriptContext();
+        let
         manager = context
-            .globalObject
-            .forProperty("Anna")
-            .invokeMethod(
-                "default",
-                withArguments: []
-        )!
-        manager.setValue(
-            self.scriptTracker,
-            forProperty: "tracker"
-        )
-        self.scriptManager = manager
+            .evaluateScript("CoreJS._require('anna').Anna.withTrack")
+            .call(withArguments: [
+                unsafeBitCast(callback, to: AnyObject.self)
+                ]
+            )!;
+        print(context.evaluateScript("Object.keys").call(withArguments: [manager]).toString())
         return manager
     }
 
@@ -196,11 +215,11 @@ public class
         )
     {
         self.scriptQ.async {
-            let
-            manager = self.resolvedScriptManager()
-            manager.invokeMethod(
+            self.resolvedScriptManager().invokeMethod(
                 "registerRootNode",
-                withArguments: [locator,]
+                withArguments: [
+                    locator.ownerID
+                ]
             )
         }
     }
@@ -212,27 +231,34 @@ public class
         )
     {
         self.scriptQ.async {
-            let
-            manager = self.resolvedScriptManager()
-            manager.invokeMethod(
+            self.resolvedScriptManager().invokeMethod(
                 "registerNode",
-                withArguments: [locator, parentLocator,]
+                withArguments: [
+                    locator.ownerID,
+                    locator.name,
+                    parentLocator.ownerID,
+                    parentLocator.name
+                ]
             )
         }
     }
     
     func
         recordEvent(
+        named name :String,
         with properties :[String: AnyObject],
         locator :NodeLocator
         )
     {
         self.scriptQ.async {
-            let
-            manager = self.resolvedScriptManager()
-            manager.invokeMethod(
+            self.resolvedScriptManager().invokeMethod(
                 "recordEvent",
-                withArguments: [properties, locator,]
+                withArguments: [
+                    name,
+                    properties,
+                    locator.ownerID,
+                    locator.name
+                ]
             )
         }
     }

@@ -9,11 +9,19 @@
     "chai": "^4.0.2",
     "mocha": "^3.4.2",
     "ts-node": "^3.1.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "browserify": "^14.1.0",
+    "gulp": "^3.9.1",
+    "gulp-cached": "^1.1.0",
+    "gulp-typescript": "^3.1.5",
+    "gulp-util": "^3.0.8",
+    "tsify": "^3.0.1",
+    "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
     "test": "mocha --full-trace --reporter spec --compilers ts:ts-node/register 'src/**/*.spec.ts'"
   },
   "author": "william",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }

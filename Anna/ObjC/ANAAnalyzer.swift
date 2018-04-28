@@ -107,6 +107,7 @@ public class
         }
         
         // Register self
+        //
         let
         manager = analyzer.resolvedManager(),
         name = analyzer.resolvedName(),
@@ -256,6 +257,7 @@ public class
     
     func
         recordEventOnPath(
+        named name :String,
         with properties :[String: AnyObject]
         ) {
         let
@@ -265,6 +267,7 @@ public class
         let
         manager = analyzer.resolvedManager()
         manager.recordEvent(
+            named: name,
             with: properties,
             locator: analyzer.lastRegisteredLocator!
         )
@@ -292,6 +295,7 @@ public class
         event :UIEvent
         ) {
         self.recordEventOnPath(
+            named :"uievent",
             with: [
                 "uievent-type": NSNumber(value: event.type.rawValue),
                 "uievent-subtype": NSNumber(value: event.subtype.rawValue),
