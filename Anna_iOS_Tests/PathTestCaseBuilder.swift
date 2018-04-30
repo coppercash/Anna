@@ -52,9 +52,11 @@ PathTestCaseBuilder : NSObject
         dep = Dependency()
         dep.fileManager = self.fileManager
         let
-        bundle = Bundle(for: type(of: self))
-        dep.workDirecotryURL = bundle.bundleURL
-        dep.coreJSScriptURL = bundle.url(
+        bundle = Bundle(for: type(of: self)),
+        anna = Bundle(path: bundle.path(forResource: "anna_test", ofType: nil)!)!,
+        node_modules = Bundle(path: anna.path(forResource: "node_modules", ofType: nil)!)!
+        dep.workDirecotryURL = anna.bundleURL
+        dep.coreJSScriptURL = node_modules.url(
             forResource: "index",
             withExtension: "js",
             subdirectory: "core"

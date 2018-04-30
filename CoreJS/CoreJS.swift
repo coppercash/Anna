@@ -33,16 +33,13 @@ class
     weak var
     context :JSContext?
     let
-    fileManager :FileManaging,
-    workDirectoryURL :URL
+    fileManager :FileManaging
     init(
         context :JSContext,
-        fileManager :FileManaging,
-        workDirectoryURL :URL
+        fileManager :FileManaging
         ) {
         self.context = context
         self.fileManager = fileManager
-        self.workDirectoryURL = workDirectoryURL
     }
     func
         contains(
@@ -58,47 +55,64 @@ class
     }
     func
         resolvedPath(
-        _ id :JSValue,
-        _ source :JSValue,
-        _ main :JSValue
+        _ js_id :JSValue,
+        _ js_parent :JSValue,
+        _ js_main :JSValue
         ) -> String! {
         let
-        workDir = self.workDirectoryURL,
         fileManager = self.fileManager
         guard
-            id.isString,
-            var
-            sub = id.toString(),
-            (source.isString || source.isNull),
+            js_id.isString,
             let
-            parent = source.toString()
+            id = js_id.toString(),
+            (js_parent.isString || js_parent.isNull),
+            (js_main.isString || js_main.isNull)
             else { return nil }
-        
-        if sub.hasPrefix("/") {
-            return sub
-        }
-        else if sub.hasPrefix("./") {
-            let
-            start = sub.index(sub.startIndex, offsetBy: 2)
-            sub = sub.substring(from: start)
-        }
-        sub = (sub as NSString).deletingPathExtension
         let
-        cd = source.isNull ? workDir.path : (parent as NSString).deletingLastPathComponent
-        var
-        filename = ((cd as NSString)
-            .appendingPathComponent(sub) as NSString)
-            .appendingPathExtension("js")!
-        if fileManager.fileExists(atPath: filename) {
-            return filename
+        parent = js_parent.isString ? js_parent.toString() : nil
+
+        if id.hasPrefix("/") {
+            return id
         }
-        filename = ((cd as NSString)
-            .appendingPathComponent(sub) as NSString)
-            .appendingPathComponent("index.js")
         
-        if fileManager.fileExists(atPath: filename) {
-            return filename
+        let
+        cd :String
+        if let
+            parent = parent {
+            cd = (parent as NSString).deletingLastPathComponent
         }
+        else {
+            return nil
+        }
+        //
+        // cd is a folder
+        // id is either './name', '../name.js' or '.././../'
+        
+        if
+            id.hasSuffix(".js") {
+            return (cd as NSString).appendingPathComponent(id)
+        }
+        let
+        name = (id as NSString).deletingPathExtension
+        //
+        // id is a folder or a file without extension
+
+        let
+        lookup = [
+            ((cd as NSString)
+                .appendingPathComponent(name) as NSString)
+                .appendingPathExtension("js")!,
+            (((cd as NSString)
+                .appendingPathComponent("node_modules") as NSString)
+                .appendingPathComponent(name) as NSString)
+                .appendingPathComponent("index.js")
+        ]
+        for path in lookup {
+            if fileManager.fileExists(atPath: path) {
+                return path
+            }
+        }
+        
         return nil
     }
     func
@@ -189,8 +203,7 @@ extension
         let
         native = Native(
             context: context,
-            fileManager: fileManager,
-            workDirectoryURL :workDirectoryURL
+            fileManager: fileManager
         )
         let
         data = fileManager.contents(atPath: mainScriptURL.path)!,

@@ -63,10 +63,10 @@
 		BEAAB59C1EC135FC00C0EBF9 /* ANAPrefix.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB59A1EC135FC00C0EBF9 /* ANAPrefix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEC00D981F07B0A40060DCDF /* ANAPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC00D971F07B0A40060DCDF /* ANAPrefix.swift */; };
 		BEC00D9A1F07B3BA0060DCDF /* ANAEventSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC00D991F07B3BA0060DCDF /* ANAEventSeed.swift */; };
-		BEC320352096C72400206AD1 /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = BEC320342096C72400206AD1 /* index.js */; };
-		BEC320372096C73C00206AD1 /* anna in Resources */ = {isa = PBXBuildFile; fileRef = BEC320362096C73C00206AD1 /* anna */; };
-		BEC3203B2096C8EB00206AD1 /* core in Resources */ = {isa = PBXBuildFile; fileRef = BEC3203A2096C8EB00206AD1 /* core */; };
-		BEC3203D2096ECC400206AD1 /* tasks in Resources */ = {isa = PBXBuildFile; fileRef = BEC3203C2096ECC300206AD1 /* tasks */; };
+		BEC320402096F4EA00206AD1 /* anna in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC3203F2096F4E900206AD1 /* anna */; };
+		BEC320422096F51100206AD1 /* core in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC320412096F51100206AD1 /* core */; };
+		BEC320442096F66300206AD1 /* index.js in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320342096C72400206AD1 /* index.js */; };
+		BEC320472096F6A800206AD1 /* tasks in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320462096F6A700206AD1 /* tasks */; };
 		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEEB15B81F10BF4200871F74 /* ANAPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEB15B71F10BF4200871F74 /* ANAPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB15B91F10CC1700871F74 /* ANAMethod.swift */; };
@@ -92,6 +92,32 @@
 			remoteInfo = Anna_iOS;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BEC3203E2096F47900206AD1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = anna_test/node_modules;
+			dstSubfolderSpec = 7;
+			files = (
+				BEC320422096F51100206AD1 /* core in CopyFiles */,
+				BEC320402096F4EA00206AD1 /* anna in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BEC320432096F65100206AD1 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = anna_test;
+			dstSubfolderSpec = 7;
+			files = (
+				BEC320472096F6A800206AD1 /* tasks in Copy Files */,
+				BEC320442096F66300206AD1 /* index.js in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1EB556A53781E87D9189AEB8 /* Pods-Anna_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -164,9 +190,9 @@
 		BEC00D971F07B0A40060DCDF /* ANAPrefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAPrefix.swift; sourceTree = "<group>"; };
 		BEC00D991F07B3BA0060DCDF /* ANAEventSeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAEventSeed.swift; sourceTree = "<group>"; };
 		BEC320342096C72400206AD1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
-		BEC320362096C73C00206AD1 /* anna */ = {isa = PBXFileReference; lastKnownFileType = folder; name = anna; path = Anna/core/built/anna; sourceTree = SOURCE_ROOT; };
-		BEC3203A2096C8EB00206AD1 /* core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = core; path = CoreJS/built/core; sourceTree = SOURCE_ROOT; };
-		BEC3203C2096ECC300206AD1 /* tasks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tasks; sourceTree = "<group>"; };
+		BEC3203F2096F4E900206AD1 /* anna */ = {isa = PBXFileReference; lastKnownFileType = folder; name = anna; path = ../Anna/core/built/anna; sourceTree = "<group>"; };
+		BEC320412096F51100206AD1 /* core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = core; path = ../CoreJS/built/core; sourceTree = "<group>"; };
+		BEC320462096F6A700206AD1 /* tasks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tasks; sourceTree = "<group>"; };
 		BEDB99EA1EBE8DBA006637DC /* ANAManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAManager.h; sourceTree = "<group>"; };
 		BEEB15B71F10BF4200871F74 /* ANAPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAPoint.h; sourceTree = "<group>"; };
 		BEEB15B91F10CC1700871F74 /* ANAMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAMethod.swift; sourceTree = "<group>"; };
@@ -328,9 +354,9 @@
 		BE87DA8E1EAB615D00DA81EB /* Anna_iOS_Tests */ = {
 			isa = PBXGroup;
 			children = (
-				BEC3203C2096ECC300206AD1 /* tasks */,
-				BEC3203A2096C8EB00206AD1 /* core */,
-				BEC320362096C73C00206AD1 /* anna */,
+				BEC320412096F51100206AD1 /* core */,
+				BEC3203F2096F4E900206AD1 /* anna */,
+				BEC320462096F6A700206AD1 /* tasks */,
 				BEC320342096C72400206AD1 /* index.js */,
 				BE22D35A1F076263007AEE40 /* ObjC */,
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
@@ -467,6 +493,8 @@
 				BE87DA8B1EAB615C00DA81EB /* Resources */,
 				9249D5954B2E3FE0BB9D4FAD /* [CP] Embed Pods Frameworks */,
 				CB5ECD57CE02264F2B4584FA /* [CP] Copy Pods Resources */,
+				BEC3203E2096F47900206AD1 /* CopyFiles */,
+				BEC320432096F65100206AD1 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -544,10 +572,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEC320372096C73C00206AD1 /* anna in Resources */,
-				BEC3203B2096C8EB00206AD1 /* core in Resources */,
-				BEC320352096C72400206AD1 /* index.js in Resources */,
-				BEC3203D2096ECC400206AD1 /* tasks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

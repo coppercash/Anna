@@ -52,7 +52,7 @@ class Module
       (main ? main.id : null)
     );
     if (!(path)) {
-      throw new Error(`Cannot resolve path for ${ id } required by ${ parent.id }.`);
+      throw new Error(`Cannot resolve path for ${ id } required by ${ parent ? parent.id : 'main' }.`);
     }
 
     let
