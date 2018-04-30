@@ -287,7 +287,7 @@ public class
         control.addTarget(
             self,
             action: #selector(handle(control:event:)),
-            for: .allEvents)
+            for: .touchUpInside)
     }
     
     func

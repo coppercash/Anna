@@ -128,7 +128,7 @@ PathTestCaseBuilder : Anna.Tracking
         dispatchedBy manager :Tracking.Manager
         ) {
         DispatchQueue.main.async {
-            self.results[self.currentResultIndex] = analyticsResult
+            self.results.insert(analyticsResult, at: self.currentResultIndex)
             self.currentResultIndex += 1
             self.expectations[self.currentExpectationIndex].fulfill()
             self.currentExpectationIndex += 1

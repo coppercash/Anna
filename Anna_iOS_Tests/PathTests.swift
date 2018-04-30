@@ -73,6 +73,6 @@ class PathTests: XCTestCase {
             timeout: 99999999.0
         )
         
-//        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test.results[0] as! Int, 42)
     }
 }

@@ -143,7 +143,7 @@ public class
     }
     
     func
-        handle(scriptResult :JSValue)
+        handle(scriptResult :AnyObject)
     {
         self.tracker?.receive(
             analyticsResult: scriptResult,
@@ -185,8 +185,8 @@ public class
             }
             )!
         let
-        receive : @convention(block) (JSValue) -> Void = {
-            [weak self] (result :JSValue) in
+        receive : @convention(block) (AnyObject) -> Void = {
+            [weak self] (result :AnyObject) in
             self?.handle(scriptResult: result)
         },
         inject : @convention(block) (JSValue, JSValue) -> Void = {
