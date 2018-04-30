@@ -1,1 +1,1 @@
-module.exports = require('anna').Anna.withCallbacks;
+module.exports = require('anna').Anna.execute;

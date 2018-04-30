@@ -198,7 +198,7 @@ extension
         exceptionHandler : @escaping ((JSContext?, JSValue?) -> Void)
         ) ->JSValue! {
         let
-        context = JSContext()!
+        context = self
         context.exceptionHandler = exceptionHandler
         let
         native = Native(

@@ -66,7 +66,7 @@
 		BEC320402096F4EA00206AD1 /* anna in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC3203F2096F4E900206AD1 /* anna */; };
 		BEC320422096F51100206AD1 /* core in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC320412096F51100206AD1 /* core */; };
 		BEC320442096F66300206AD1 /* index.js in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320342096C72400206AD1 /* index.js */; };
-		BEC320472096F6A800206AD1 /* tasks in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320462096F6A700206AD1 /* tasks */; };
+		BEC320472096F6A800206AD1 /* task in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320462096F6A700206AD1 /* task */; };
 		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEEB15B81F10BF4200871F74 /* ANAPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEB15B71F10BF4200871F74 /* ANAPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB15B91F10CC1700871F74 /* ANAMethod.swift */; };
@@ -111,7 +111,7 @@
 			dstPath = anna_test;
 			dstSubfolderSpec = 7;
 			files = (
-				BEC320472096F6A800206AD1 /* tasks in Copy Files */,
+				BEC320472096F6A800206AD1 /* task in Copy Files */,
 				BEC320442096F66300206AD1 /* index.js in Copy Files */,
 			);
 			name = "Copy Files";
@@ -192,7 +192,7 @@
 		BEC320342096C72400206AD1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
 		BEC3203F2096F4E900206AD1 /* anna */ = {isa = PBXFileReference; lastKnownFileType = folder; name = anna; path = ../Anna/core/built/anna; sourceTree = "<group>"; };
 		BEC320412096F51100206AD1 /* core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = core; path = ../CoreJS/built/core; sourceTree = "<group>"; };
-		BEC320462096F6A700206AD1 /* tasks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tasks; sourceTree = "<group>"; };
+		BEC320462096F6A700206AD1 /* task */ = {isa = PBXFileReference; lastKnownFileType = folder; path = task; sourceTree = "<group>"; };
 		BEDB99EA1EBE8DBA006637DC /* ANAManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAManager.h; sourceTree = "<group>"; };
 		BEEB15B71F10BF4200871F74 /* ANAPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAPoint.h; sourceTree = "<group>"; };
 		BEEB15B91F10CC1700871F74 /* ANAMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAMethod.swift; sourceTree = "<group>"; };
@@ -356,7 +356,7 @@
 			children = (
 				BEC320412096F51100206AD1 /* core */,
 				BEC3203F2096F4E900206AD1 /* anna */,
-				BEC320462096F6A700206AD1 /* tasks */,
+				BEC320462096F6A700206AD1 /* task */,
 				BEC320342096C72400206AD1 /* index.js */,
 				BE22D35A1F076263007AEE40 /* ObjC */,
 				BE87DA911EAB615D00DA81EB /* Info.plist */,

@@ -172,8 +172,10 @@ public class
         let
         context = self.resolvedScriptContext();
         let
+        workDir = self.dependency.workDirecotryURL!
+        let
         construct = context.run(
-            in: self.dependency.workDirecotryURL,
+            in: workDir,
             with: self.fileManager,
             mainScriptURL: self.dependency.coreJSScriptURL,
             exceptionHandler:
@@ -196,13 +198,14 @@ public class
                 global.deleteProperty(key.toString())
             }
             else {
-                global.defineProperty(key.toString(), descriptor: value)
+                global.setValue(value, forProperty: key.toString())
             }
         }
         let
         manager = construct.call(withArguments: [
-            unsafeBitCast(receive, to: AnyObject.self),
-            unsafeBitCast(inject, to: AnyObject.self)
+            (workDir.path as NSString).appendingPathComponent("task"),
+            unsafeBitCast(inject, to: AnyObject.self),
+            unsafeBitCast(receive, to: AnyObject.self)
             ]
             )!
         

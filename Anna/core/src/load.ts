@@ -8,10 +8,13 @@ export namespace RequiringLoader
 }
 export class RequiringLoader implements Identity.Loading
 {
+  taskDirectoryPath :string;
   inject :RequiringLoader.Inject;
   constructor(
+    taskDirectoryPath :string,
     inject :RequiringLoader.Inject
   ) {
+    this.taskDirectoryPath = taskDirectoryPath;
     this.inject = inject;
   }
 
@@ -19,7 +22,9 @@ export class RequiringLoader implements Identity.Loading
     namespace :string
   ) :Identity.Loading.Tasks {
     let
-    path = `tasks/index.js`;
+    taskDirectoryPath = this.taskDirectoryPath;
+    let
+    path = `${ taskDirectoryPath }/index.js`;
     let
     builder = new Match.Builder();
     this.preRequire(builder);

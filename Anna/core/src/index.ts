@@ -15,12 +15,13 @@ export class Anna
   }
 
   static
-  withCallbacks(
-    receive :Track.InPlaceTracker.Receive,
-    inject :Load.RequiringLoader.Inject
+  execute(
+    taskDirectoryPath :string,
+    inject :Load.RequiringLoader.Inject,
+    receive :Track.InPlaceTracker.Receive
   ) : Anna {
     let
-    manager = new Anna(new Load.RequiringLoader(inject));
+    manager = new Anna(new Load.RequiringLoader(taskDirectoryPath, inject));
     manager.tracker = new Track.InPlaceTracker(receive);
     return manager
   }
