@@ -44,37 +44,35 @@ class
         self.fileManager = fileManager
         self.workDirectoryURL = workDirectoryURL
     }
-    
+    func
+        contains(
+        _ id :JSValue
+        ) -> NSNumber {
+        return (false as NSNumber)
+    }
+    func
+        moduleExports(
+        _ id :JSValue
+        ) -> JSExport! {
+        return nil
+    }
     func
         resolvedPath(
-        _ identifier :JSValue,
-        _ source :JSValue
-        ) -> String? {
-        guard let
-            context = context
-            else { return nil }
+        _ id :JSValue,
+        _ source :JSValue,
+        _ main :JSValue
+        ) -> String! {
         let
         workDir = self.workDirectoryURL,
         fileManager = self.fileManager
-        let
-        raise = {
-            context.exception = JSValue(
-                newErrorFromMessage:
-                "Cannot resolve path of '\(identifier.toString()!)' for '\(source.toString()!)'.",
-                in: context
-            )
-        }
         guard
-            identifier.isString,
+            id.isString,
             var
-            sub = identifier.toString(),
+            sub = id.toString(),
             (source.isString || source.isNull),
             let
             parent = source.toString()
-            else {
-                raise()
-                return nil
-        }
+            else { return nil }
         
         if sub.hasPrefix("/") {
             return sub
@@ -101,26 +99,21 @@ class
         if fileManager.fileExists(atPath: filename) {
             return filename
         }
-        raise()
         return nil
     }
-    
     func
         load(
-        _ identifier :JSValue,
-        _ source :JSValue
-        ) -> JSValue? {
+        _ jspath :JSValue,
+        _ exports :JSValue,
+        _ require :JSValue,
+        _ module :JSValue
+        ) {
         guard let
             context = context
-            else { return nil }
-
-        guard let
-            path = self.resolvedPath(
-                identifier,
-                source
-            )
-            else { return nil }
+            else { return }
         guard
+            let
+            path = jspath.toString(),
             let
             data = self.fileManager.contents(atPath: path),
             let
@@ -129,44 +122,67 @@ class
         {
             context.exception = JSValue(
                 newErrorFromMessage:
-                "Cannot read file at path \(path).",
+                "Cannot read file at path \(jspath.toString()!).",
                 in: context
             )
-            return nil
+            return
         }
         let
         decorated =
         """
-        CoreJS._local_require('\(path)', function (exports, require, module) {
+        (function () {
+        return (function (exports, require, module) {
         \(script)
         });
+        })();
         """
-        
-        return self.context?.evaluateScript(
+        let
+        _ = context.evaluateScript(
             decorated,
             withSourceURL: URL(fileURLWithPath: path)
-        )
+            ).call(withArguments: [
+                exports,
+                require,
+                module
+                ])
     }
 }
 @objc protocol
     NativeJSExport : JSExport
 {
     func
+        contains(
+        _ id :JSValue
+        ) -> NSNumber
+    func
+        moduleExports(
+        _ id :JSValue
+        ) -> JSExport!
+    func
+        resolvedPath(
+        _ id :JSValue,
+        _ parent :JSValue,
+        _ main :JSValue
+        ) -> String!
+    func
         load(
-        _ identifier :JSValue,
-        _ source :JSValue
-        ) -> JSValue?
+        _ path :JSValue,
+        _ exports :JSValue,
+        _ require :JSValue,
+        _ module :JSValue
+    )
 }
 
 extension
-    CoreJS.Context
+    JSContext
 {
-    class func
+    func
         run(
         in workDirectoryURL :URL,
         with fileManager :FileManaging,
+        mainScriptURL :URL,
         exceptionHandler : @escaping ((JSContext?, JSValue?) -> Void)
-        ) -> CoreJS.Context? {
+        ) ->JSValue! {
         let
         context = JSContext()!
         context.exceptionHandler = exceptionHandler
@@ -177,60 +193,34 @@ extension
             workDirectoryURL :workDirectoryURL
         )
         let
-        script =
-        """
-function CoreJS(context, native) {
-  function CoreJS(native) {
-    const cache = {};
-    this._local_require = function (filename, evaluate) {
-
-      const cached = cache[filename];
-      if (cached) { return cached.exports; }
-
-      const module = {
-        filename: filename
-      };
-      cache[filename] = module;
-
-      var threw = true;
-      try {
-        module.exports = {};
-        const require = function(identifier) {
-          native.load(identifier, filename);
-        }
-        evaluate(module.exports, require, module);
-        threw = false;
-      }
-      finally {
-        if (threw) {
-          delete cache[filename];
-        }
-      }
-      return module.exports;
-    };
-
-    const require = function(identifier) {
-      return native.load(identifier, null);
-    };
-    require.cache = cache;
-
-    this._require = require;
-    this._cache = cache;
-    this._native = native;
-    context.CoreJS = this;
-  }
-  this.CoreJS = new CoreJS(native);
-};
-CoreJS;
+        data = fileManager.contents(atPath: mainScriptURL.path)!,
+        script = String(data: data, encoding: .utf8)
+        context.evaluateScript(
+            """
+const module = { exports: {} };
+const exports = module.exports;
 """
-        let
-        _ = context
-            .evaluateScript(script)
-            .call(withArguments: [
-                context.globalObject,
-                native
-                ]
         )
-        return context
+        context.evaluateScript(
+            script,
+            withSourceURL: mainScriptURL
+        )
+        let
+        index = (workDirectoryURL.path as NSString)
+            .appendingPathComponent("index.js")
+        let
+        exports = context
+            .evaluateScript("module.exports.run")
+            .call(withArguments: [
+                index,
+                native
+                ])
+        context.evaluateScript(
+            """
+delete exports;
+delete module;
+"""
+)
+        return exports
     }
 }

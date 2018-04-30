@@ -42,10 +42,44 @@ export class Anna
     this.identities.registerNode(id, parentID);
   }
 
+  registerNodeRaw(
+    ownerID :number,
+    name :string,
+    parentOwnerID? :number,
+    parentName? :string
+  ) {
+    let
+    identities = this.identities;
+    let
+    id = identities.nodeID(ownerID, name);
+    var
+    parentID = null;
+    if (
+      parentOwnerID &&
+      parentName
+    ) {
+      parentID = identities.nodeID(parentOwnerID, parentName);
+    }
+    this.registerNode(id, parentID);
+  }
+
   unregisterNode(
     id :Identity.NodeID
   ) {
     this.identities.unregisterNode(id);
+  }
+
+  recordEventRaw(
+    name :string,
+    properties :Identity.Event.Properties,
+    nodeOwnerID :number,
+    nodeName :string
+  ) {
+    let
+    identities = this.identities;
+    let
+    nodeID = identities.nodeID(nodeOwnerID, nodeName);
+    this.recordEvent(name, properties, nodeID);
   }
   
   recordEvent(

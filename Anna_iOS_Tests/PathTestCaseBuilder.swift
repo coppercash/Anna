@@ -20,15 +20,16 @@ MockFileManager : NSObject, CoreJS.FileManaging
     func
         contents(atPath path: String) -> Data?
     {
-        let
-        components = path.components(separatedBy: "/")
-        if
-            components.count >= 2,
-            components[components.count - 2] == "tasks"
-        {
-            return self.defaultScript?.data(using: .utf8)
-        }
         return fileManager.contents(atPath: path)
+//        let
+//        components = path.components(separatedBy: "/")
+//        if
+//            components.count >= 2,
+//            components[components.count - 2] == "tasks"
+//        {
+//            return self.defaultScript?.data(using: .utf8)
+//        }
+//        return fileManager.contents(atPath: path)
     }
     func
         fileExists(
@@ -50,8 +51,14 @@ PathTestCaseBuilder : NSObject
         let
         dep = Dependency()
         dep.fileManager = self.fileManager
-        dep.workDirecotryURL = Bundle(for: type(of: self)).bundleURL
-        dep.coreJSScriptURL = URL(fileURLWithPath: "core.js")
+        let
+        bundle = Bundle(for: type(of: self))
+        dep.workDirecotryURL = bundle.bundleURL
+        dep.coreJSScriptURL = bundle.url(
+            forResource: "index",
+            withExtension: "js",
+            subdirectory: "core"
+        )
         return dep;
     }()
     @objc(initWithXCTestCase:)

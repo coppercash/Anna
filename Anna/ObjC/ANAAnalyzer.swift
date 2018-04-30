@@ -110,13 +110,14 @@ public class
         //
         let
         manager = analyzer.resolvedManager(),
-        name = analyzer.resolvedName(),
         objID = ObjectIdentifier(analyzer),
-        locator = manager.nodeLocator(
-            with: name,
+        locator = manager.rootNodeLocator(
             ownerID: objID
         )
-        manager.registerRootNode(by: locator)
+        manager.registerNode(
+            by: locator,
+            under: nil
+        )
         
         // Mark registered
         //

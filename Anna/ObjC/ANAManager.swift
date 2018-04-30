@@ -120,20 +120,6 @@ public class
         self.dependency = dependency
     }
     
-    public typealias
-    NodeLocator = Anna.NodeLocator
-    func
-        nodeLocator(
-        with name :String,
-        ownerID :ObjectIdentifier
-        ) -> NodeLocator
-    {
-        return NodeLocator(
-            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
-            name: (name as NSString)
-        )
-    }
-    
     let
     scriptQ = DispatchQueue(label: "anna.script")
     lazy var
@@ -142,24 +128,16 @@ public class
     }()
     
     var
-    scriptContext :CoreJS.Context? = nil
+    scriptContext :JSContext? = nil
     func
         resolvedScriptContext()
-        -> CoreJS.Context
+        -> JSContext
     {
         if let context = self.scriptContext {
             return context
         }
         let
-        context = CoreJS.Context.run(
-            in: self.dependency.workDirecotryURL,
-            with: self.fileManager,
-            exceptionHandler:
-            { [weak self] (context, error) in
-                guard let error = error else { return }
-                self?.handle(scriptError: error)
-            }
-            )!
+        context = JSContext()!
         self.scriptContext = context
         return context
     }
@@ -192,53 +170,101 @@ public class
             return manager
         }
         let
-        callback : @convention(block) (JSValue) -> Void = {
-            [weak self] (result :JSValue) in
-            self?.handle(scriptResult: result)
-        };
-        let
         context = self.resolvedScriptContext();
         let
-        manager = context
-            .evaluateScript("CoreJS._require('anna').Anna.withTrack")
-            .call(withArguments: [
-                unsafeBitCast(callback, to: AnyObject.self)
-                ]
-            )!;
-        print(context.evaluateScript("Object.keys").call(withArguments: [manager]).toString())
+        construct = context.run(
+            in: self.dependency.workDirecotryURL,
+            with: self.fileManager,
+            mainScriptURL: self.dependency.coreJSScriptURL,
+            exceptionHandler:
+            { [weak self] (context, error) in
+                guard let error = error else { return }
+                self?.handle(scriptError: error)
+            }
+            )!
+        let
+        receive : @convention(block) (JSValue) -> Void = {
+            [weak self] (result :JSValue) in
+            self?.handle(scriptResult: result)
+        },
+        inject : @convention(block) (JSValue, JSValue) -> Void = {
+            [weak context] (key :JSValue, value :JSValue) in
+            guard let
+                global = context?.globalObject
+                else { return }
+            if (value.isUndefined) {
+                global.deleteProperty(key.toString())
+            }
+            else {
+                global.defineProperty(key.toString(), descriptor: value)
+            }
+        }
+        let
+        manager = construct.call(withArguments: [
+            unsafeBitCast(receive, to: AnyObject.self),
+            unsafeBitCast(inject, to: AnyObject.self)
+            ]
+            )!
+        
+        self.scriptManager = manager
         return manager
     }
 
+    public typealias
+        NodeLocator = Anna.NodeLocator
     func
-        registerRootNode(
-        by locator :NodeLocator
-        )
+        rootNodeLocator(
+        ownerID :ObjectIdentifier
+        ) -> NodeLocator
     {
-        self.scriptQ.async {
-            self.resolvedScriptManager().invokeMethod(
-                "registerRootNode",
-                withArguments: [
-                    locator.ownerID
-                ]
-            )
-        }
+        return NodeLocator(
+            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
+            name: "ana-root"
+        )
     }
-
+    
+    func
+        nodeLocator(
+        with name :String,
+        ownerID :ObjectIdentifier
+        ) -> NodeLocator
+    {
+        return NodeLocator(
+            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
+            name: (name as NSString)
+        )
+    }
+    
     func
         registerNode(
         by locator :NodeLocator,
-        under parentLocator :NodeLocator
+        under parentLocator :NodeLocator?
         )
     {
+        let
+        manager = self.resolvedScriptManager()
         self.scriptQ.async {
-            self.resolvedScriptManager().invokeMethod(
-                "registerNode",
-                withArguments: [
+            let
+            arguments :[Any]
+            if let
+                parentLocator = parentLocator
+            {
+                arguments = [
                     locator.ownerID,
                     locator.name,
                     parentLocator.ownerID,
                     parentLocator.name
                 ]
+            }
+            else {
+                arguments = [
+                    locator.ownerID,
+                    locator.name
+                ]
+            }
+            manager.invokeMethod(
+                "registerNodeRaw",
+                withArguments: arguments
             )
         }
     }
@@ -250,9 +276,11 @@ public class
         locator :NodeLocator
         )
     {
+        let
+        manager = self.resolvedScriptManager()
         self.scriptQ.async {
-            self.resolvedScriptManager().invokeMethod(
-                "recordEvent",
+            manager.invokeMethod(
+                "recordEventRaw",
                 withArguments: [
                     name,
                     properties,
