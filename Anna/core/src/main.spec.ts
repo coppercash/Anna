@@ -1,53 +1,16 @@
-import { Anna, Tracking, Loading } from './main';
+import { Anna } from './index';
+import { InPlaceTracker as Tracker } from './track'
+import { InPlaceLoader as Loader } from './load'
 
 import * as mocha from 'mocha';
 import * as chai from 'chai';
 const expect = chai.expect;
 
-type Receive = (result :any) => void;
-class Tracker implements Tracking 
-{
-  receive :Receive;
-  constructor(
-    receive :Receive
-  ) {
-    this.receive = receive;
-  }
-  receiveResult(
-    result :any
-  ) :void {
-    this.receive(result);
-  }
-}
-
-type Load = (path :string, manager :Anna) => void;
-class Loader implements Loading 
-{
-  load :Load;
-  constructor(
-    load :Load = null
-  ) {
-    this.load = load;
-  }
-  matchTasks(
-    namespace :string, 
-    manager :Anna
-  ) {
-    let
-    load = this.load;
-    if (!(load)) { return; }
-    load(namespace, manager);
-  }
-}
-  
-
 describe('Anna', () => {
 
   it('should record event on root' , (done) => {
     let
-    anna = new Anna(new Loader((namespace, manager) => {
-      let
-      match = manager.task.match;
+    anna = new Anna(new Loader((match) => {
       match('/appear', (n) => { return n.events[0].properties.answer; })
     }));
     anna.tracker = new Tracker((result) => {
@@ -62,9 +25,7 @@ describe('Anna', () => {
 
   it('should record event on sub node' , (done) => {
     let
-    anna = new Anna(new Loader((namespace, manager) => {
-      let
-      match = manager.task.match;
+    anna = new Anna(new Loader((match) => {
       match('/foo/bar/tap', (n) => { return n.events[0].properties.answer; })
     }));
     anna.tracker = new Tracker((result) => {
@@ -85,9 +46,7 @@ describe('Anna', () => {
 
   it('should record event on non-absolute path' , (done) => {
     let
-    anna = new Anna(new Loader((namespace, manager) => {
-      let
-      match = manager.task.match;
+    anna = new Anna(new Loader((match) => {
       match('foo/bar/tap', (n) => { return n.events[0].properties.answer; })
     }));
     var
@@ -125,7 +84,7 @@ describe('Anna', () => {
 
   it('should unregister node' , () => {
     let
-    anna = new Anna(new Loader());
+    anna = new Anna(new Loader(() => {}));
     var
     index = 0;
     let

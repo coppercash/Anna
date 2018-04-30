@@ -1,29 +1,28 @@
 import * as Identity from './identity';
-import * as Match from './match';
+import * as Track from './track';
+import * as Load from './load';
 
-export interface Tracking 
-{
-  receiveResult(result :any) :void;
-}
-
-export interface Loading 
-{
-  matchTasks(
-    namespace :string, 
-    manager? :Anna
-  ) :void;
-}
-
-export class Anna implements Identity.Loading
+export class Anna
 {
   identities :Identity.Tree;
-  loader :Loading;
-  tracker :Tracking = null;
+  loader :Identity.Loading;
+  tracker :Track.Tracking = null;
 
-  constructor(loader :Loading) 
+  constructor(loader :Identity.Loading) 
   {
-    this.identities = new Identity.Tree(this);
+    this.identities = new Identity.Tree(loader);
     this.loader = loader;
+  }
+
+  static
+  withCallbacks(
+    receive :Track.InPlaceTracker.Receive,
+    inject :Load.RequiringLoader.Inject
+  ) : Anna {
+    let
+    manager = new Anna(new Load.RequiringLoader(inject));
+    manager.tracker = new Track.InPlaceTracker(receive);
+    return manager
   }
 
   rootNodeID(ownerID :number) :Identity.NodeID 
@@ -76,30 +75,6 @@ export class Anna implements Identity.Loading
         tracker.receiveResult(result);
       }
     }
-  }
-
-  matchTasks(
-    namespace :string
-  ) :Identity.Loading.Tasks {
-    let
-    builder = new Match.Builder();
-    this.task.match = (path :string, map :Match.Task.Map) => {
-      builder.addMatchTask(path, map);
-    };
-    this.loader.matchTasks(namespace, this);
-    return builder.build();
-  }
-
-  task :TaskBuilders = new TaskBuilders();
-}
-
-type Map = Match.Task.Map;
-export class TaskBuilders
-{
-  match : (path :string, map :Map) => void;
-  constructor() 
-  {
-    this.match = null;
   }
 }
 

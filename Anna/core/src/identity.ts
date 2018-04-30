@@ -5,7 +5,6 @@ export interface Loading
 {
   matchTasks(namespace :string) :Loading.Tasks
 }
-
 export namespace Loading
 {
   export type Tasks = Match.Stage;
