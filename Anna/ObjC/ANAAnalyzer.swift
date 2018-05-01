@@ -7,25 +7,41 @@
 
 import Foundation
 
-@objc(ANAAnalyzerOwner)
+@objc(ANAAnalyzerOwning)
 public protocol
-    AnalyzerOwner
+    AnalyzerOwning
 {
     @objc(ana_analyzer)
     var
-    analyzer :Analyzing { get }
+    analyzer :Analyzing? { get }
 }
-//
-//extension
-//    NSObject : AnalyzerOwner
-//{
-//    public var
-//    ana_analyzer: ANAAnalyzer {
-//        get {
-//            
-//        }
-//    }
-//}
+
+@objc(ANAAnalyzerHolding)
+public protocol
+    AnalyzerHolding : AnalyzerOwning
+{
+    @objc(ana_analyzer)
+    var
+    analyzer :Analyzing? { get set }
+}
+
+@objc(ANAReporting)
+public protocol
+Reporting
+{
+    typealias
+        Recorder = Analyzer
+    weak var
+    recorder :Recorder? { get set }
+}
+
+@objc(ANAHookable)
+public protocol
+    Hookable
+{
+    func
+        tokenByAddingObserver() -> Reporting
+}
 
 @objc(ANAAnalyzing)
 public protocol
@@ -48,11 +64,7 @@ PathConstituting
     @objc(ana_parentPathNode)
     func
         parentConsititutor() -> PathConstituting?
-    @objc(ana_pathNodeName)
-    func
-        pathNodeName() -> String
 }
-
 
 public class
     BaseAnalyzer : NSObject
@@ -61,6 +73,27 @@ public class
         Manager = ANAManager
     var
     lastRegisteredLocator :Manager.NodeLocator? = nil
+    
+    var
+    subAnalyzers :[String : Analyzing] = [:]
+    
+    class func
+        resolvedSubAnalyzer(
+        named name :String,
+        under parent :(BaseAnalyzer & PathConstituting)
+        ) ->Analyzing
+    {
+        if let sub = parent.subAnalyzers[name] {
+            return sub
+        }
+        let
+        sub = Analyzer(
+            with: name,
+            delegate: parent
+        )
+        parent.subAnalyzers[name] = sub
+        return sub
+    }
 }
 
 @objc(ANARootAnalyzer)
@@ -90,7 +123,7 @@ public class
         resolvedName()
         -> String
     {
-        return "root"
+        return "ana-root"
     }
     
     public func
@@ -124,6 +157,24 @@ public class
         analyzer.lastRegisteredLocator = locator
         return locator
     }
+    
+    public func
+        resolvedSubAnalyzer(named name: String) -> Analyzing {
+        return type(of: self).resolvedSubAnalyzer(named: name, under: self)
+    }
+}
+
+extension
+    RootAnalyzer : PathConstituting, AnalyzerOwning
+{
+    public var
+    analyzer: Analyzing? {
+        return self
+    }
+    public func
+        parentConsititutor() -> PathConstituting? {
+        return self
+    }
 }
 
 @objc(ANAAnalyzer)
@@ -132,19 +183,33 @@ public class
 {
     public typealias
         Delegate = PathConstituting
-    var
-    delegate :Delegate
-    @objc(initWithDelegate:)
+    let
+    name :String
+    weak var
+    delegate :Delegate?
+    @objc(initWithName:delegate:)
     public init
-        (with delegate: Delegate)
-    {
+        (
+        with name :String,
+        delegate :Delegate
+        ) {
+        self.name = name
         self.delegate = delegate
     }
     
-    public func
-        observe()
-    {
-        
+    @objc(analyzerHookingDelegate:naming:)
+    public class func
+        hooking(
+        delegate :(Delegate & Hookable),
+        naming name :String
+        ) -> Self {
+        let
+        analyzer = self.init(
+            with: name,
+            delegate: delegate
+        )
+        analyzer.hook(delegate)
+        return analyzer
     }
     
     var
@@ -161,7 +226,7 @@ public class
         }
         
         let
-        parent = analyzer.resolvedParentOwner()?.analyzer
+        parent = analyzer.resolvedParentOwner()?.analyzer!
         analyzer.parent = parent
         // TODO: catch nil
         return parent
@@ -169,17 +234,19 @@ public class
     
     func
         resolvedParentOwner()
-        -> AnalyzerOwner?
+        -> AnalyzerOwning?
     {
-        let
-        analyzer = self
+        guard let
+            delegate = self.delegate
+            else { return nil }
+        // TODO: throw
         var
-        next = analyzer.delegate.parentConsititutor()
+        next = delegate.parentConsititutor()
         while true {
             guard let consititutor = next else {
                 return nil
             }
-            if let owner = consititutor as? AnalyzerOwner {
+            if let owner = consititutor as? AnalyzerOwning {
                 return owner
             }
             next = consititutor.parentConsititutor()
@@ -212,7 +279,7 @@ public class
         resolvedName()
         -> String
     {
-        return self.delegate.pathNodeName()
+        return self.name
     }
 
     public func
@@ -256,10 +323,44 @@ public class
         return locator
     }
     
+    @objc(resolvedSubAnalyzerNamed:)
+    public func
+        resolvedSubAnalyzer(named name: String) -> Analyzing {
+        return type(of: self).resolvedSubAnalyzer(named: name, under: self)
+    }
+    
+    var
+    tokens = Array<Reporting>()
+    public func
+        hook(_ hookee : Hookable) {
+        let
+        token = hookee.tokenByAddingObserver()
+        token.recorder = self
+        tokens.append(token)
+    }
+    
+    @objc(takePlaceOfAnalyzer:)
+    public func
+        takePlace(of analyzer :Analyzer) {
+        if analyzer === self { return }
+        for token in analyzer.tokens {
+            token.recorder = self
+            self.tokens.append(token)
+        }
+        analyzer.tokens.removeAll()
+    }
+    
+    public func
+        detach() {
+        self.tokens.removeAll()
+    }
+    
+    public typealias
+        Properties = [String: AnyObject]
     func
         recordEventOnPath(
         named name :String,
-        with properties :[String: AnyObject]
+        with properties :Properties
         ) {
         let
         analyzer = self
@@ -275,32 +376,16 @@ public class
     }
 }
 
-@objc(ANAUIControlAnalyzer)
-public class
-    UIControlAnalyzer : Analyzer
+extension
+    Analyzer : PathConstituting, AnalyzerOwning
 {
-    @objc(hookControl:)
-    public func
-        hook(
-        _ control :UIControl
-        ) {
-        control.addTarget(
-            self,
-            action: #selector(handle(control:event:)),
-            for: .touchUpInside)
+    public var
+    analyzer: Analyzing? {
+        return self
     }
-    
-    func
-        handle(
-        control :UIControl,
-        event :UIEvent
-        ) {
-        self.recordEventOnPath(
-            named :"uievent",
-            with: [
-                "uievent-type": NSNumber(value: event.type.rawValue),
-                "uievent-subtype": NSNumber(value: event.subtype.rawValue),
-            ]
-        )
+    public func
+        parentConsititutor() -> PathConstituting? {
+        return self
     }
 }
+

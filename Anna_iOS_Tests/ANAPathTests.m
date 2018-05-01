@@ -18,7 +18,7 @@
 - (void)testExample {
     __auto_type const
     test = [[ANAPathTestCaseBuilder alloc] initWithXCTestCase:self];
-    test.defaultScript = @
+    test.task = @
     "const match = require('anna').default().match;"
     "match("
     "  'vc/bt/event',"

@@ -14,22 +14,21 @@ import Anna
 MockFileManager : NSObject, CoreJS.FileManaging
 {
     var
-    defaultScript :String? = nil
+    task :String? = nil
     let
     fileManager = FileManager.default
     func
         contents(atPath path: String) -> Data?
     {
+        let
+        components = path.components(separatedBy: "/")
+        if
+            components.count >= 2,
+            components[components.count - 2] == "task"
+        {
+            return self.task?.data(using: .utf8)
+        }
         return fileManager.contents(atPath: path)
-//        let
-//        components = path.components(separatedBy: "/")
-//        if
-//            components.count >= 2,
-//            components[components.count - 2] == "tasks"
-//        {
-//            return self.defaultScript?.data(using: .utf8)
-//        }
-//        return fileManager.contents(atPath: path)
     }
     func
         fileExists(
@@ -70,12 +69,12 @@ PathTestCaseBuilder : NSObject
     }
     
     var
-    defaultScript :String? {
+    task :String? {
         get {
-            return self.fileManager.defaultScript
+            return self.fileManager.task
         }
         set {
-            self.fileManager.defaultScript = newValue
+            self.fileManager.task = newValue
         }
     }
     var
@@ -102,10 +101,12 @@ PathTestCaseBuilder : NSObject
     }
     
     func
-        expect() {
-        let
-        expectation = self.xcTestCase.expectation(description: "\(self.expectations.count)")
-        self.expectations.append(expectation)
+        expect(for times :Int = 1) {
+        for _ in 0..<times {
+            let
+            expectation = self.xcTestCase.expectation(description: "\(self.expectations.count)")
+            self.expectations.append(expectation)
+        }
     }
     
     var
@@ -143,7 +144,7 @@ PathTestCaseBuilder : Anna.Tracking
 }
 
 @objc(ANAPathTestingAppDelegate) class
-PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwner
+PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwning
 {
     var
     window: UIWindow?
@@ -168,31 +169,42 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwner
     }
     
     lazy var
-    analyzer :Analyzing = {
+    analyzer :Analyzing? = {
         RootAnalyzer(manager: self.manager!)
     }()
 }
 
 @objc(ANAPathTestingViewController) class
-PathTestingViewController : UIViewController, AnalyzerOwner
+PathTestingViewController : UIViewController, AnalyzerOwning
 {
     var
-    _analyzer :Analyzing!
-    var
-    analyzer :Analyzing {
-        get { return self._analyzer }
-        set { self._analyzer = newValue }
-    }
+    analyzer :Analyzing?
 }
 
 @objc(ANAPathTestingButton) class
-PathTestingButton : UIButton, AnalyzerOwner
+PathTestingButton : UIButton, AnalyzerOwning
 {
     var
-    _analyzer :Analyzing!
+    analyzer :Analyzing?
+}
+
+@objc(ANAPathTestingTableView) class
+    PathTestingTableView : UITableView, AnalyzerOwning
+{
     var
-    analyzer :Analyzing {
-        get { return self._analyzer }
-        set { self._analyzer = newValue }
-    }
+    analyzer :Analyzing?
+}
+
+@objc(ANAPathTestingTableViewCell) class
+    PathTestingTableViewCell : UITableViewCell, AnalyzerHolding
+{
+    var
+    analyzer :Analyzing?
+}
+
+@objc(ANAPathTestingView) class
+    PathTestingView : UIView, AnalyzerOwning
+{
+    var
+    analyzer :Analyzing?
 }

@@ -14,9 +14,4 @@ extension
         parentConsititutor() -> PathConstituting? {
         return self.next
     }
-    
-    open func
-        pathNodeName() -> String {
-        return String(describing: type(of: self))
-    }
 }

@@ -26,3 +26,5 @@ FOUNDATION_EXPORT const unsigned char AnnaVersionString[];
 #import <Anna/ANAClass.h>
 #import <Anna/ANAMethod.h>
 #import <Anna/ANAPoint.h>
+#import <Anna/ANAUITableViewDelegate.h>
+#import <Anna/ANAUITableViewDataSource.h>

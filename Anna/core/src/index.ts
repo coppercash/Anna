@@ -99,7 +99,7 @@ export class Anna
     if (!(
       tasks && tasks.length > 0
     )) {
-      throw new Error(`${ nodeID } is not registered with any events`);
+      throw new Error(`${ nodeID } is not registered with any events named ${ name }.`);
     }
     for ( let 
       task of tasks
