@@ -112,7 +112,7 @@ export class Anna
     ) {
       let
       result = task.resultByMapping(node);
-      if (tracker) {
+      if (tracker && (result !== undefined)) {
         tracker.receiveResult(result);
       }
     }

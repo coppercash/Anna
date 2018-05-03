@@ -17,9 +17,9 @@ extension
 }
 
 class
-    UIControlObserver : BaseObserver<UIControl>
+    UIControlObserver : AbstractUIViewObserver<UIControl>
 {
-    init
+    override init
         (observee: UIControl) {
         super.init(observee: observee)
         observee.addTarget(

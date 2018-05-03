@@ -337,10 +337,12 @@ public class
         }
     }
     
+    typealias
+    Properties = [String : String]
     func
         recordEvent(
         named name :String,
-        with properties :[String: AnyObject],
+        with properties :Propertiez,
         locator :NodeLocator
         )
     {

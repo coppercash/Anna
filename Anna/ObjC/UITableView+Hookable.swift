@@ -56,7 +56,7 @@ class
         }
     }
 }
-
+/*
 class
     UITableViewDataSourceObserver : BaseObserver<NSObject & UITableViewDataSource>
 {
@@ -75,7 +75,7 @@ class
     }
     
 }
-
+*/
 class
     Proxy<Target : NSObjectProtocol> : NSObject
 {

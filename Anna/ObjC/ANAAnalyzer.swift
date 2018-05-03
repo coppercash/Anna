@@ -312,9 +312,11 @@ public class
             guard let consititutor = next else {
                 return nil
             }
-            if let owner = consititutor as? AnalyzerOwning {
-                return owner
-            }
+            if let
+                owner = consititutor as? AnalyzerOwning,
+                let
+                _ = owner.analyzer as? AnalyzerParenting
+            { return owner }
             next = consititutor.parentConsititutor()
         }
     }
@@ -406,7 +408,18 @@ public class
         let
         token = hookee.tokenByAddingObserver()
         token.recorder = self
-        tokens.append(token)
+        self.tokens.append(token)
+    }
+    
+    public func
+        observe(
+        _ observee :NSObject,
+        for keyPath :String
+        ) {
+        let
+        token = KVObserver(observee, keyPath)
+        token.recorder = self
+        self.tokens.append(token)
     }
     
     @objc(takePlaceOfAnalyzer:)
@@ -425,12 +438,19 @@ public class
         self.tokens.removeAll()
     }
     
-    public typealias
-        Properties = [String: AnyObject]
+    struct
+        Event
+    {
+        typealias
+            Properties = NSObject.Propertiez
+        let
+        name :String,
+        properties :Properties?
+    }
     func
         recordEventOnPath(
         named name :String,
-        with properties :Properties
+        with properties :Event.Properties? = nil
         ) {
         let
         analyzer = self
@@ -438,9 +458,10 @@ public class
         _ = analyzer.nodeLocatorByAppendingPath()
         let
         manager = analyzer.resolvedManager()
+        
         manager.recordEvent(
             named: name,
-            with: properties,
+            with: properties?.toJSExpressive() ?? [:],
             locator: analyzer.lastRegisteredLocator!
         )
     }
@@ -473,3 +494,17 @@ extension
     }
 }
 
+extension
+    Dictionary
+    where Key == String, Value : Any
+{
+    func
+        toJSExpressive() -> Analyzer.Manager.Properties {
+        var
+        buffer = [String : String]()
+        for (key, value) in self {
+            buffer[key] = String(describing: value)
+        }
+        return buffer
+    }
+}

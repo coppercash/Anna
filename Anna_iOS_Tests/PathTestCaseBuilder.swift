@@ -215,4 +215,20 @@ PathTestingButton : UIButton, AnalyzerOwning
 {
     var
     analyzer :Analyzing?
+    
+    override func setNeedsDisplay() {
+        super.setNeedsDisplay()
+    }
+    
+    override func setNeedsLayout() {
+        super.setNeedsLayout()
+    }
+    
+    override func didMoveToWindow() {
+        
+    }
+    
+    override func didMoveToSuperview() {
+        
+    }
 }

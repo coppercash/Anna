@@ -236,12 +236,20 @@ class PathTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         test.task =
         """
+        match(
+        'vw/ana-appeared',
+        function(node) { console.log(node.snapshot()); }
+        );
+        """
+            /*
+        """
         const Q = require('../reader');
         match(
-        'vc/vw/ana-property-updated',
+        'vw/ana-value-updated',
         Q.whenViewVisible('text', '42', function(node) { return node.name; })
         );
         """
+ */
         class
             Controller : PathTestingViewController
         {
@@ -249,6 +257,8 @@ class PathTests: XCTestCase {
                 loadView() {
                 self.view = PathTestingView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
             }
+            var
+            label :UILabel? = nil
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
@@ -260,8 +270,17 @@ class PathTests: XCTestCase {
                 superview.addSubview(label)
                 
                 let
-                analyzer = Analyzer.hooking(delegate: view, naming: "vw")
-//                analyzer.observe(label, for: "text")
+                analyzer = Analyzer.hooking(delegate: superview, naming: "vw")
+                analyzer.observe(label, for: "text")
+                superview.analyzer = analyzer
+                
+                self.label = label
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                self.label?.text = "42"
+                self.view?.isHidden = true
             }
         }
         test.rootViewController = Controller()
@@ -270,9 +289,9 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 1.0
+            timeout: 9999999.0
         )
         
-        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test.results[0] as! String, "42")
     }
 }

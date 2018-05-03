@@ -55,11 +55,13 @@ extension
 public extension
     NSObject
 {
+    typealias
+        Propertiez = [String : Any]
     @objc(ana_forwardRecordingEventNamed:withProperties:)
     func
         forwardRecordingEvent(
         named event:String,
-        properties :Analyzer.Properties? = nil
+        properties :Propertiez? = nil
         ) {
         var
         buffer :[TrampolineArgument.Key: Any] = [
@@ -129,23 +131,29 @@ class
     let
     decorator :AnyClass?
     init(observee: Observee, decorator :AnyClass? = nil) {
+        self.observee = observee
         self.decorator = decorator
         super.init()
-        self.observee = observee
-        observee.addObserver(
-            self,
-            forKeyPath: #keyPath(NSObject.trampoline),
-            options: .new,
-            context: nil
-        )
+        for (keyPath, options) in self.keyPaths {
+            observee.addObserver(
+                self,
+                forKeyPath: keyPath,
+                options: options,
+                context: nil
+            )
+        }
         decorator?.decorate(object: observee)
     }
     
     deinit {
-        self.observee?.removeObserver(
-            self,
-            forKeyPath: #keyPath(NSObject.trampoline)
-        )
+        if let observee = self.observee {
+            for (keyPath, _) in self.keyPaths {
+                observee.removeObserver(
+                    self,
+                    forKeyPath: keyPath
+                )
+            }
+        }
     }
     
     override func
@@ -159,29 +167,47 @@ class
             let
             recorder = self.recorder,
             let
-            arguments = change?[.newKey] as? NSSet
+            event = change?.toEvent()
             else { return }
-        
+        recorder.recordEventOnPath(
+            named: event.name,
+            with: event.properties
+        )
+    }
+    
+    var
+    keyPaths : [String: NSKeyValueObservingOptions] {
+        return [
+            #keyPath(NSObject.trampoline): .new,
+        ]
+    }
+}
+
+
+
+extension Dictionary
+    where Key == NSKeyValueChangeKey, Value : Any
+{
+    func
+        toEvent() -> Analyzer.Event? {
+        guard let arguments = self[.newKey] as? NSSet
+            else { return nil }
         var
         event :String? = nil,
-        properties :Analyzer.Properties = [:]
+        properties :Analyzer.Event.Properties? = nil
         for arg in arguments {
             guard let arg = arg as? TrampolineArgument else { continue }
             switch arg.key {
             case .event:
                 event = arg.value as? String
             case .properties:
-                properties = arg.value as! Analyzer.Properties
+                properties = arg.value as? Analyzer.Event.Properties
             }
-            
-            guard let
-                name = event
-                else { return }
-            recorder.recordEventOnPath(
-                named: name,
-                with: properties
-            )
         }
+        guard let
+            name = event
+            else { return nil }
+
+        return Analyzer.Event(name: name, properties: properties)
     }
 }
-
