@@ -1,10 +1,12 @@
 
 interface Native
 {
-  contains(id :Module.ID) : boolean
-  moduleExports(id :Module.ID) :Module.Exports
-  resolvedPath(id :Module.ID, parent :Module.ID, main :Module.ID) :string
-  load(path :string, exports :Module.Exports, require :Module.Require, module :Module) :void
+  contains(id :Module.ID) : boolean;
+  moduleExports(id :Module.ID) :Module.Exports;
+  resolvedPath(id :Module.ID, parent :Module.ID, main :Module.ID) : string;
+  load(path :string, exports :Module.Exports, require :Module.Require, module :Module) :void;
+  log(message :string) : void;
+  injectGlobal(key :string, value :any) : void;
 }
 
 namespace Module
@@ -99,6 +101,15 @@ class Core {
     native :Native
   ) {
     this.native = native;
+    this.makeConsole();
+  }
+
+  makeConsole() {
+    let
+    native = this.native;
+    let
+    console = { log: (message :string) => { native.log(message); } };
+    native.injectGlobal('console', console);
   }
 
   require(

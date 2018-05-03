@@ -15,6 +15,7 @@ export class Tree
   private static
   rootName = 'ana-root';
 
+  root :Node = null;
   identities :{ [id: number]: { [id: string]: Node; }; } = {};
   loader :Loading;
 
@@ -39,7 +40,9 @@ export class Tree
     parentID? :NodeID
   ) {
     let
-    registered = this.node(nodeID);
+    tree = this;
+    let
+    registered = tree.node(nodeID);
     if (registered) {
       throw new Error(`${ nodeID } has already been registered.`);
     }
@@ -47,7 +50,7 @@ export class Tree
     var
     parent :Node = null;
     if (parentID) {
-      parent = this.node(parentID);
+      parent = tree.node(parentID);
       if (!parent) {
         throw new Error(`Cannot find parent ${ parentID }.`);
       }
@@ -58,25 +61,34 @@ export class Tree
       }
     }
 
-    var
-    byName = this.identities[nodeID.ownerID];
+    let
+    node = parent ? parent.fork(nodeID) : new Node(nodeID, null, tree.rootMatching());
+
+    let
+    byName = tree.identities[nodeID.ownerID];
     if (!byName) {
       byName = {};
-      this.identities[nodeID.ownerID] = byName;
+      tree.identities[nodeID.ownerID] = byName;
     }
-    let
-    node = parent ? parent.fork(nodeID) : new Node(nodeID, null, this.rootMatching());
     byName[nodeID.name] = node;
+    if (nodeID.name == Tree.rootName) {
+      tree.root = node;
+    }
   }
 
-  unregisterNode(
+  deregisterNode(
     nodeID :NodeID
   ) {
     let
     identities = this.identities;
     let
     node = this.node(nodeID);
-    node.children.forEach(x => this.unregisterNode(x.id));
+    if (!(
+      node
+    )) {
+      throw new Error(`Cannot deregister unregistered node ${ nodeID }`);
+    }
+    node.children.forEach(x => this.deregisterNode(x.id));
     let
     owners = identities[nodeID.ownerID];
     delete owners[nodeID.name];
@@ -104,9 +116,12 @@ export class Tree
     return node;
   }
 
-  rootMatching() :Match.Stage
-  {
+  rootMatching() : Match.Stage {
     return this.loader.matchTasks('');
+  }
+
+  snapshot() : string {
+    return this.root.snapshot();
   }
 }
 
@@ -155,23 +170,25 @@ export class Node implements Markup.Markable
     nodeID :NodeID
   ) :Node {
     let
-    node = this, children = this.children;
+    node = this, children = this.children, subordinates = this.subordinates;
     let 
     matching = node.stageMatching(nodeID.name);
     let
     child = new Node(nodeID, node, matching);
     children.add(child);
+    subordinates.push(child);
+    
     return child;
   }
 
   delete()
   {
     let
-    parent = this.parent;
+    parent = this.parent, deleting = this;
     if (!(
       parent
     )) { return; }
-    parent
+    parent.children.delete(this);
   }
 
   recordEvent(
@@ -200,10 +217,14 @@ export class Node implements Markup.Markable
   }
 
   markup(
-    indent :string = ''
+    indent :string = '',
+    alone :boolean = false
   ) :string {
     let
     id = this.id, properties = this.properties, matching = this.matching, subordinates = this.subordinates;
+    if (alone) {
+      return Markup.markup(id.name, properties, [], indent);
+    }
     let
     children = new Array<Markup.Markable>();
     children.push(matching);
@@ -229,14 +250,14 @@ export class Node implements Markup.Markable
     if (!(
       parent
     )) {
-      return [node.markup(), ''];
+      return [node.markup('', true), ''];
     }
     let
     ancestors = parent.upMarkedAncestors();
     let
     indent = `${ ancestors[1] }  `;
     let
-    markup = ancestors[0] + `\n` + node.markup(indent);
+    markup = ancestors[0] + '\n' + node.markup(indent, true);
     return [markup, indent];
   }
 

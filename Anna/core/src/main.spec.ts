@@ -82,7 +82,7 @@ describe('Anna', () => {
     anna.recordEvent('tap', {answer: 24}, ids[4]);
   });
 
-  it('should unregister node' , () => {
+  it('should deregister node' , () => {
     let
     anna = new Anna(new Loader(() => {}));
     var
@@ -106,7 +106,7 @@ describe('Anna', () => {
       parent = id;
     }
 
-    anna.unregisterNode(ids[1]);
+    anna.deregisterNode(ids[1]);
     anna.registerNode(ids[3], ids[0]);
   });
 

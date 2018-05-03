@@ -64,10 +64,21 @@ export class Anna
     this.registerNode(id, parentID);
   }
 
-  unregisterNode(
+  deregisterNode(
     id :Identity.NodeID
   ) {
-    this.identities.unregisterNode(id);
+    this.identities.deregisterNode(id);
+  }
+
+  deregisterNodeRaw(
+    nodeOwnerID :number,
+    nodeName :string
+  ) { 
+    let
+    identities = this.identities;
+    let
+    nodeID = identities.nodeID(nodeOwnerID, nodeName);
+    this.deregisterNode(nodeID);
   }
 
   recordEventRaw(
@@ -96,11 +107,6 @@ export class Anna
     node.recordEvent(name, properties);
     let
     tasks = node.tasksMatchingEvent(name);
-    if (!(
-      tasks && tasks.length > 0
-    )) {
-      throw new Error(`${ nodeID } is not registered with any events named ${ name }.`);
-    }
     for ( let 
       task of tasks
     ) {
@@ -110,6 +116,10 @@ export class Anna
         tracker.receiveResult(result);
       }
     }
+  }
+
+  logSnapshot() {
+    console.log(this.identities.snapshot());
   }
 }
 

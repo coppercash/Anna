@@ -15,6 +15,19 @@ public struct
         Context = JSContext
     public typealias
         FileManaging = Anna.FileManaging
+    public typealias
+        Logging = Anna.Logging
+
+    @objc(CJSDependency)
+    public class
+        Dependency : NSObject
+    {
+        public var
+        coreModuleURL :URL? = nil,
+        fileManager :FileManaging? = nil,
+        logger :Logging? = nil,
+        handleException : ((JSContext?, JSValue?) -> Void)? = nil
+    }
 }
 
 @objc(CJSFileManaging)
@@ -27,6 +40,14 @@ public protocol
         fileExists(atPath path: String) -> Bool
 }
 
+@objc(CJSLogging)
+public protocol
+    Logging
+{
+    func
+        log(_ string :String)
+}
+
 class
     Native : NSObject, NativeJSExport
 {
@@ -34,6 +55,8 @@ class
     context :JSContext?
     let
     fileManager :FileManaging
+    var
+    logger :Logging? = nil
     init(
         context :JSContext,
         fileManager :FileManaging
@@ -160,6 +183,26 @@ class
                 module
                 ])
     }
+    func
+        injectGlobal(
+        _ key :String,
+        _ value :JSValue
+        ) {
+        guard let global = self.context?.globalObject
+            else { return }
+        if value.isUndefined {
+            global.deleteProperty(key)
+        }
+        else {
+            global.setValue(value, forProperty: key)
+        }
+    }
+    func
+        log(
+        _ string :String
+        ) {
+        self.logger?.log(string)
+    }
 }
 @objc protocol
     NativeJSExport : JSExport
@@ -185,6 +228,15 @@ class
         _ require :JSValue,
         _ module :JSValue
     )
+    func
+        injectGlobal(
+        _ key :String,
+        _ value :JSValue
+    )
+    func
+        log(
+        _ string :String
+    )
 }
 
 extension
@@ -192,19 +244,22 @@ extension
 {
     func
         run(
-        in workDirectoryURL :URL,
-        with fileManager :FileManaging,
-        mainScriptURL :URL,
-        exceptionHandler : @escaping ((JSContext?, JSValue?) -> Void)
+        _ moduleURL :URL,
+        with dependency :CoreJS.Dependency? = nil
         ) ->JSValue! {
         let
         context = self
-        context.exceptionHandler = exceptionHandler
+        context.name = "CoreJS"
+        context.exceptionHandler = dependency?.handleException
+        let
+        fileManager = dependency!.fileManager!,
+        mainScriptURL = dependency!.coreModuleURL!.appendingPathComponent("index.js")
         let
         native = Native(
             context: context,
             fileManager: fileManager
         )
+        native.logger = dependency?.logger
         let
         data = fileManager.contents(atPath: mainScriptURL.path)!,
         script = String(data: data, encoding: .utf8)
@@ -219,7 +274,7 @@ const exports = module.exports;
             withSourceURL: mainScriptURL
         )
         let
-        index = (workDirectoryURL.path as NSString)
+        index = (moduleURL.path as NSString)
             .appendingPathComponent("index.js")
         let
         exports = context

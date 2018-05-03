@@ -1,4 +1,4 @@
-//
+
 //  PathTests.swift
 //  Anna_iOS_Tests
 //
@@ -34,7 +34,7 @@ class PathTests: XCTestCase {
                 self.button = {
                     let
                     button = PathTestingButton()
-                    button.analyzer = Analyzer.hooking(delegate: self, naming: "bt")
+                    button.analyzer = Analyzer.hooking(delegate: button, naming: "bt")
                     return button
                 }()
                 self.view.addSubview(self.button!)
@@ -166,7 +166,7 @@ class PathTests: XCTestCase {
         test.task =
         """
         match(
-        'vc/alpha/delta/gamma/anna-view-appeared',
+        'vc/delta/gamma/ui-control-event',
         function() { return 42; }
         );
         """
@@ -201,7 +201,7 @@ class PathTests: XCTestCase {
                 }
                 let
                 button = PathTestingButton(frame: superview.bounds)
-                button.analyzer = Analyzer.hooking(delegate: self, naming: "bt")
+                button.analyzer = Analyzer.hooking(delegate: button, naming: "gamma")
                 self.gamma = button
                 superview.addSubview(button)
             }
@@ -212,7 +212,56 @@ class PathTests: XCTestCase {
                 self.beta?.removeFromSuperview()
                 self.beta = nil
                 self.view?.addSubview(self.delta!)
-                self.gamma?.sendActions(for: .touchUpInside)
+                // Wait for the autoreleasing pool release beta
+                //
+                DispatchQueue.main.async {
+                    self.gamma?.sendActions(for: .touchUpInside)
+                }
+            }
+        }
+        test.rootViewController = Controller()
+        
+        test.expect()
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 999999.0
+        )
+        
+        XCTAssertEqual(test.results[0] as! Int, 42)
+    }
+    
+    func test_dataExposuredOnView() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        test.task =
+        """
+        const Q = require('../reader');
+        match(
+        'vc/vw/ana-property-updated',
+        Q.whenViewVisible('text', '42', function(node) { return node.name; })
+        );
+        """
+        class
+            Controller : PathTestingViewController
+        {
+            override func
+                loadView() {
+                self.view = PathTestingView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+            }
+            override func
+                viewDidLoad() {
+                super.viewDidLoad()
+                
+                let
+                superview = self.view as! PathTestingView
+                let
+                label = UILabel(frame: superview.bounds)
+                superview.addSubview(label)
+                
+                let
+                analyzer = Analyzer.hooking(delegate: view, naming: "vw")
+//                analyzer.observe(label, for: "text")
             }
         }
         test.rootViewController = Controller()

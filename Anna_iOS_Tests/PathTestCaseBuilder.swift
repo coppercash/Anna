@@ -38,6 +38,15 @@ MockFileManager : NSObject, CoreJS.FileManaging
     }
 }
 
+class
+Logger : NSObject, CoreJS.Logging
+{
+    func
+        log(_ string: String) {
+        print(string)
+    }
+}
+
 @objc(ANAPathTestCaseBuilder) class
 PathTestCaseBuilder : NSObject
 {
@@ -54,12 +63,9 @@ PathTestCaseBuilder : NSObject
         bundle = Bundle(for: type(of: self)),
         anna = Bundle(path: bundle.path(forResource: "anna_test", ofType: nil)!)!,
         node_modules = Bundle(path: anna.path(forResource: "node_modules", ofType: nil)!)!
-        dep.workDirecotryURL = anna.bundleURL
-        dep.coreJSScriptURL = node_modules.url(
-            forResource: "index",
-            withExtension: "js",
-            subdirectory: "core"
-        )
+        dep.moduleURL = anna.bundleURL
+        dep.coreModuleURL = node_modules.url(forResource: "core", withExtension: nil)
+        dep.logger = Logger()
         return dep;
     }()
     @objc(initWithXCTestCase:)
@@ -140,6 +146,8 @@ PathTestCaseBuilder : Anna.Tracking
         analyticsError :Error,
         dispatchedBy manager :Tracking.Manager
         ) {
+        print((analyticsError as NSError).localizedFailureReason!)
+        print(analyticsError.localizedDescription)
     }
 }
 

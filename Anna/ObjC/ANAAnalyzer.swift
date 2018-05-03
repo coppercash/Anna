@@ -47,14 +47,9 @@ public protocol
 public protocol
 Analyzing
 {
-    typealias
-        Manager = ANAManager
-    func
-        resolvedManager()
-        -> Manager
-    func
-        nodeLocatorByAppendingPath()
-        -> Manager.NodeLocator
+    // Keep this empty
+    // no promised action after being registered
+    //
 }
 
 @objc(ANAPathConstituting)
@@ -66,6 +61,26 @@ PathConstituting
         parentConsititutor() -> PathConstituting?
 }
 
+protocol
+    AnalyzerParenting : class
+{
+    typealias
+        Manager = ANAManager
+    func
+        resolvedManager()
+        -> Manager
+    func
+        nodeLocatorByAppendingPath()
+        -> Manager.NodeLocator
+    typealias
+        Notification = () -> Void
+    func
+        notifyOnReseting(
+        _ locator :NodeLocator,
+        byCalling callback : @escaping Notification
+    )
+}
+
 public class
     BaseAnalyzer : NSObject
 {
@@ -73,7 +88,10 @@ public class
         Manager = ANAManager
     var
     lastRegisteredLocator :Manager.NodeLocator? = nil
-    
+    deinit {
+        self.resetLastRegisteredLocator()
+    }
+
     var
     subAnalyzers :[String : Analyzing] = [:]
     
@@ -94,13 +112,41 @@ public class
         parent.subAnalyzers[name] = sub
         return sub
     }
+    
+    var
+    notifications :[AnalyzerParenting.Notification] = []
+    func
+        notifyLastRegisteredLocatorReset() {
+        for note in self.notifications {
+            note()
+        }
+        self.notifications.removeAll()
+    }
+    
+    func
+        notifyOnReseting(
+        _ locator :NodeLocator,
+        byCalling callback : @escaping AnalyzerParenting.Notification
+        ) {
+        self.notifications.append(callback)
+    }
+    
+    func
+        resetLastRegisteredLocator() {
+        self.lastRegisteredLocator = nil
+        self.notifyLastRegisteredLocatorReset()
+    }
+    
+    func
+        deregisterLastLocator() {
+    }
 }
 
 @objc(ANARootAnalyzer)
 public class
-    RootAnalyzer : BaseAnalyzer, Analyzing
+    RootAnalyzer : BaseAnalyzer, AnalyzerParenting, Analyzing
 {
-    var
+    let
     manager :Manager
     
     @objc(initWithManager:)
@@ -111,7 +157,7 @@ public class
     {
         self.manager = manager
     }
-    
+
     public func
         resolvedManager()
         -> Manager
@@ -162,6 +208,21 @@ public class
         resolvedSubAnalyzer(named name: String) -> Analyzing {
         return type(of: self).resolvedSubAnalyzer(named: name, under: self)
     }
+    
+    override func
+        deregisterLastLocator() {
+        if let locator = self.lastRegisteredLocator {
+            self.manager.deregisterNode(by: locator)
+        }
+    }
+
+//    override func
+//        resetLastRegisteredLocator() {
+//        if let locator = self.lastRegisteredLocator {
+//            self.manager.deregisterNode(by: locator)
+//        }
+//        super.resetLastRegisteredLocator()
+//    }
 }
 
 extension
@@ -179,7 +240,7 @@ extension
 
 @objc(ANAAnalyzer)
 public class
-    Analyzer : BaseAnalyzer, Analyzing
+    Analyzer : BaseAnalyzer, AnalyzerParenting, Analyzing
 {
     public typealias
         Delegate = PathConstituting
@@ -196,7 +257,10 @@ public class
         self.name = name
         self.delegate = delegate
     }
-    
+    deinit {
+        self.deregisterLastLocator()
+    }
+
     @objc(analyzerHookingDelegate:naming:)
     public class func
         hooking(
@@ -212,23 +276,25 @@ public class
         return analyzer
     }
     
-    var
-    parent :Analyzing? = nil
+//    weak var
+//    parent :AnalyzerParenting? = nil
     func
         resolvedParent()
-        -> Analyzing?
+        -> AnalyzerParenting?
     {
         let
         analyzer = self
         
-        if let parent = analyzer.parent {
-            return parent
-        }
+//        if let parent = analyzer.parent {
+//            return parent
+//        }
         
-        let
-        parent = analyzer.resolvedParentOwner()?.analyzer!
-        analyzer.parent = parent
-        // TODO: catch nil
+        // TODO: catch nil, remove casting
+        guard let
+            parent = analyzer.resolvedParentOwner()?.analyzer as? AnalyzerParenting
+            else { return nil }
+        analyzer.manager = parent.resolvedManager()
+        
         return parent
     }
     
@@ -308,7 +374,7 @@ public class
         manager = analyzer.resolvedManager(),
         name = analyzer.resolvedName(),
         objID = ObjectIdentifier(analyzer),
-        locator = manager.nodeLocator(
+        locator = parentLocator.forked(
             with: name,
             ownerID: objID
         )
@@ -320,6 +386,10 @@ public class
         // Mark registered
         //
         analyzer.lastRegisteredLocator = locator
+        parent.notifyOnReseting(parentLocator) { [weak analyzer] in
+            analyzer?.resetLastRegisteredLocator()
+        }
+
         return locator
     }
     
@@ -374,6 +444,20 @@ public class
             locator: analyzer.lastRegisteredLocator!
         )
     }
+    
+    override func
+        deregisterLastLocator() {
+        if let locator = self.lastRegisteredLocator {
+            self.resolvedManager().deregisterNode(by: locator)
+        }
+    }
+//    override func
+//        resetLastRegisteredLocator() {
+//        if let locator = self.lastRegisteredLocator {
+//            self.resolvedManager().deregisterNode(by: locator)
+//        }
+//        super.resetLastRegisteredLocator()
+//    }
 }
 
 extension

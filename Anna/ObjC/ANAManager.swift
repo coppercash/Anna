@@ -14,27 +14,77 @@ public class
 NodeLocator : NSObject
 {
     let
-    ownerID :NSNumber,
-    name :NSString
+    ownerID :UInt,
+    name :String
     init(
-        ownerID :NSNumber,
-        name :NSString
+        ownerID :UInt,
+        name :String
         ) {
         self.ownerID = ownerID
         self.name = name
     }
+    
+    //        return NodeLocator(
+    //            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
+    //            name: "ana-root"
+    //        )
+    class func
+        root(owningBy ownerID :ObjectIdentifier) -> Self {
+        return self.init(
+            ownerID: UInt(bitPattern: ownerID),
+            name: "ana-root"
+        )
+    }
+    
+//    weak var
+//    parent :NodeLocator? = nil
+//    var
+//    children :[String: NodeLocator] = [:]
+    func
+        forked(
+        with name :String,
+        ownerID :ObjectIdentifier
+        ) -> NodeLocator {
+//        let
+//        parent = self
+//
+//        if let child = parent.children[name]
+//        { return child }
+        
+        let
+        child = NodeLocator(
+            ownerID: UInt(bitPattern: ownerID),
+            name: name
+        )
+        
+//        child.parent = parent
+//        parent.children[name] = child
+        
+        return child
+    }
+    
+//    func
+//        delete() {
+//        guard let parent = self.parent
+//            else { return }
+//        parent.children.removeValue(forKey: self.name)
+//    }
+    
+//    deinit {
+//        print(self.name)
+//    }
 }
 
-@objc protocol
-NodeLocatorJSExport : JSExport
-{
-    var
-    ownerID :NSNumber { get }
-    var
-    name :NSString { get }
-}
-extension
-NodeLocator : NodeLocatorJSExport {}
+//@objc protocol
+//NodeLocatorJSExport : JSExport
+//{
+//    var
+//    ownerID :NSNumber { get }
+//    var
+//    name :NSString { get }
+//}
+//extension
+//NodeLocator : NodeLocatorJSExport {}
 
 @objc protocol
     ScriptTrackerJSExport : JSExport
@@ -95,12 +145,10 @@ extension
 
 @objc(ANADependency)
 public class
-    Dependency : NSObject
+    Dependency : CoreJS.Dependency
 {
     public var
-    fileManager :FileManaging! = nil,
-    workDirecotryURL :URL! = nil,
-    coreJSScriptURL :URL! = nil
+    moduleURL :URL! = nil
 }
 
 public class
@@ -109,14 +157,12 @@ public class
     ANAManaging
 {
     var
-    fileManager :FileManaging! = nil,
     dependency :Dependency! = nil
     public convenience
     init(
         _ dependency :Dependency
         ) {
         self.init(Proto())
-        self.fileManager = dependency.fileManager
         self.dependency = dependency
     }
     
@@ -172,17 +218,18 @@ public class
         let
         context = self.resolvedScriptContext();
         let
-        workDir = self.dependency.workDirecotryURL!
+        module = self.dependency.moduleURL!
         let
-        construct = context.run(
-            in: workDir,
-            with: self.fileManager,
-            mainScriptURL: self.dependency.coreJSScriptURL,
-            exceptionHandler:
+        dependency = self.dependency!
+        dependency.handleException =
             { [weak self] (context, error) in
                 guard let error = error else { return }
                 self?.handle(scriptError: error)
-            }
+        }
+        let
+        construct = context.run(
+            module,
+            with: dependency
             )!
         let
         receive : @convention(block) (AnyObject) -> Void = {
@@ -203,7 +250,7 @@ public class
         }
         let
         manager = construct.call(withArguments: [
-            (workDir.path as NSString).appendingPathComponent("task"),
+            (module.path as NSString).appendingPathComponent("task"),
             unsafeBitCast(inject, to: AnyObject.self),
             unsafeBitCast(receive, to: AnyObject.self)
             ]
@@ -220,23 +267,24 @@ public class
         ownerID :ObjectIdentifier
         ) -> NodeLocator
     {
-        return NodeLocator(
-            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
-            name: "ana-root"
-        )
+        return NodeLocator.root(owningBy: ownerID)
+//        return NodeLocator(
+//            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
+//            name: "ana-root"
+//        )
     }
     
-    func
-        nodeLocator(
-        with name :String,
-        ownerID :ObjectIdentifier
-        ) -> NodeLocator
-    {
-        return NodeLocator(
-            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
-            name: (name as NSString)
-        )
-    }
+//    func
+//        nodeLocator(
+//        with name :String,
+//        ownerID :ObjectIdentifier
+//        ) -> NodeLocator
+//    {
+//        return NodeLocator(
+//            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
+//            name: (name as NSString)
+//        )
+//    }
     
     func
         registerNode(
@@ -273,6 +321,23 @@ public class
     }
     
     func
+        deregisterNode(
+        by locator :NodeLocator
+        ) {
+        let
+        manager = self.resolvedScriptManager()
+        self.scriptQ.async {
+            manager.invokeMethod(
+                "deregisterNodeRaw",
+                withArguments: [
+                    locator.ownerID,
+                    locator.name
+                ]
+            )
+        }
+    }
+    
+    func
         recordEvent(
         named name :String,
         with properties :[String: AnyObject],
@@ -290,6 +355,19 @@ public class
                     locator.ownerID,
                     locator.name
                 ]
+            )
+        }
+    }
+    
+    public func
+        logSnapshot()
+    {
+        let
+        manager = self.resolvedScriptManager()
+        self.scriptQ.async {
+            manager.invokeMethod(
+                "logSnapshot",
+                withArguments: []
             )
         }
     }
