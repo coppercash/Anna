@@ -32,7 +32,7 @@ class
     override var
     keyPaths: [String : NSKeyValueObservingOptions] {
         return super.keyPaths.merging([
-            #keyPath(UIView.isVisible): .new
+            #keyPath(UIView.isVisible): [.new, .initial]
         ]) { $0.0 }
     }
 

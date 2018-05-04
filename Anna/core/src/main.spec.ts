@@ -18,7 +18,7 @@ describe('Anna', () => {
       done();
     });
     let 
-    id = anna.rootNodeID(7);
+    id = anna.nodeID(7, 'root');
     anna.registerNode(id);
     anna.recordEvent('appear', {answer: 42}, id);
   });
@@ -33,7 +33,7 @@ describe('Anna', () => {
       done();
     });
     let 
-    root = anna.rootNodeID(7);
+    root = anna.nodeID(7, 'root');
     anna.registerNode(root);
     let
     foo = anna.nodeID(77, 'foo');
@@ -68,7 +68,7 @@ describe('Anna', () => {
         return anna.nodeID(index++, x);
       });
     let 
-    root = anna.rootNodeID(7);
+    root = anna.nodeID(7, 'root');
     anna.registerNode(root);
     var
     parent = root;
@@ -95,7 +95,7 @@ describe('Anna', () => {
         return anna.nodeID(index++, x);
       });
     let 
-    root = anna.rootNodeID(7);
+    root = anna.nodeID(7, 'root');
     anna.registerNode(root);
     var
     parent = root;

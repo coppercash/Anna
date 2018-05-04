@@ -26,11 +26,6 @@ export class Anna
     return manager
   }
 
-  rootNodeID(ownerID :number) :Identity.NodeID 
-  {
-    return this.identities.rootNodeID(ownerID);
-  }
-
   nodeID(ownerID :number, name :string) :Identity.NodeID
   {
     return this.identities.nodeID(ownerID, name);

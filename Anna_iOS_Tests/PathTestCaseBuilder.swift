@@ -178,8 +178,15 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwning
     
     lazy var
     analyzer :Analyzing? = {
-        RootAnalyzer(manager: self.manager!)
+        RootAnalyzer(manager: self.manager!, name: "root")
     }()
+}
+
+@objc(ANAPathTestingNavigationController) class
+    PathTestingNavigationController : UINavigationController, AnalyzerOwning
+{
+    var
+    analyzer :Analyzing?
 }
 
 @objc(ANAPathTestingViewController) class

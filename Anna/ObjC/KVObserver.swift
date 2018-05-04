@@ -18,7 +18,7 @@ class
                 observee.addObserver(
                     self,
                     forKeyPath: self.keyPath,
-                    options: [.old, .new],
+                    options: [.old, .new, .initial],
                     context: nil
                 )
             }

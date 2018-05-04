@@ -5,6 +5,10 @@ declare let require : (name :string) => any;
 export namespace RequiringLoader 
 {
   export type Inject = (key :string, value :any) => void;
+  export type Match = (
+      path :string | string[], 
+      map :Match.Task.Map
+    ) => void 
 }
 export class RequiringLoader implements Identity.Loading
 {
@@ -27,19 +31,29 @@ export class RequiringLoader implements Identity.Loading
     path = `${ taskDirectoryPath }/index.js`;
     let
     builder = new Match.Builder();
-    this.preRequire(builder);
+    let
+    match :RequiringLoader.Match = (path, map) => {
+      let
+      paths :string[]
+      if (path instanceof Array) {
+        paths = path
+      }
+      else {
+        paths = [path]
+      }
+      for (let path of paths) {
+        builder.addMatchTask(path, map);
+      }
+    }
+    this.preRequire(match);
     require(path);
     this.postRequire();
     return builder.build();
   }
 
-  preRequire(builder :Match.Builder) {
+  preRequire(match :RequiringLoader.Match) {
     let 
     inject = this.inject;
-    let
-    match = (path :string, map :Match.Task.Map) : void => {
-      builder.addMatchTask(path, map);
-    }
     inject('match', match);
   }
 

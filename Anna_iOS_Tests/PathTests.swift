@@ -231,25 +231,17 @@ class PathTests: XCTestCase {
         XCTAssertEqual(test.results[0] as! Int, 42)
     }
     
-    func test_dataExposuredOnView() {
+    func test_dataDisplaysOnView() {
         let
         test = PathTestCaseBuilder(with: self)
         test.task =
         """
+        const T = require('../tool');
         match(
-        'vw/ana-appeared',
-        function(node) { console.log(node.snapshot()); }
+        ['vw/ana-value-updated', 'vw/ana-appeared'],
+        T.whenDisplays('text', function(node, value) { return value; })
         );
         """
-            /*
-        """
-        const Q = require('../reader');
-        match(
-        'vw/ana-value-updated',
-        Q.whenViewVisible('text', '42', function(node) { return node.name; })
-        );
-        """
- */
         class
             Controller : PathTestingViewController
         {
@@ -280,7 +272,6 @@ class PathTests: XCTestCase {
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 self.label?.text = "42"
-                self.view?.isHidden = true
             }
         }
         test.rootViewController = Controller()
@@ -289,9 +280,102 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 9999999.0
+            timeout: 1.0
         )
         
         XCTAssertEqual(test.results[0] as! String, "42")
+    }
+    
+    func test_dataDisplaysOnViewController() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        test.task =
+        """
+        const T = require('../tool');
+        match(
+        ['vc/ana-value-updated', 'vc/ana-appeared'],
+        T.whenDisplays('text', function(node, value) { return value; })
+        );
+        """
+        class
+            Controller : PathTestingViewController
+        {
+            var
+            label :UILabel? = nil
+            override func
+                viewDidLoad() {
+                super.viewDidLoad()
+                let
+                analyzer = Analyzer.hooking(delegate: self, naming: "vc")
+                self.analyzer = analyzer
+                
+                
+                let
+                superview = self.view!
+                let
+                label = UILabel(frame: superview.bounds)
+                superview.addSubview(label)
+                self.label = label
+                
+                analyzer.observe(label, for: "text")
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                self.label?.text = "42"
+            }
+        }
+        test.rootViewController = Controller()
+        
+        test.expect()
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 1.0
+        )
+        
+        XCTAssertEqual(test.results[0] as! String, "42")
+    }
+    
+    func test_navigatedControllers() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        test.task =
+        """
+        match(
+        '/nv/ms/dt/ana-appeared',
+        function() { return 42; }
+        );
+        """
+        class
+            Navigation : PathTestingNavigationController
+        {
+            override func
+                viewDidLoad() {
+                self.analyzer = Analyzer.hooking(delegate: self, naming: "nv")
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                let
+                master = PathTestingViewController()
+                master.analyzer = Analyzer.hooking(delegate: master, naming: "ms")
+                self.pushViewController(master, animated: false)
+                let
+                detail = PathTestingViewController()
+                detail.analyzer = Analyzer.hooking(delegate: detail, naming: "dt")
+                self.pushViewController(detail, animated: false)
+            }
+        }
+        test.rootViewController = Navigation()
+        
+        test.expect()
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 1.0
+        )
+        
+        XCTAssertEqual(test.results[0] as! Int, 42)
     }
 }

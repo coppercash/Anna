@@ -9,9 +9,8 @@
 import Foundation
 import JavaScriptCore
 
-@objc(ANANodeLocator)
-public class
-NodeLocator : NSObject
+class
+NodeLocator 
 {
     let
     ownerID :UInt,
@@ -24,15 +23,14 @@ NodeLocator : NSObject
         self.name = name
     }
     
-    //        return NodeLocator(
-    //            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
-    //            name: "ana-root"
-    //        )
     class func
-        root(owningBy ownerID :ObjectIdentifier) -> Self {
+        root(
+        ownerID :ObjectIdentifier,
+        name :String
+        ) -> Self {
         return self.init(
             ownerID: UInt(bitPattern: ownerID),
-            name: "ana-root"
+            name: name
         )
     }
     
@@ -74,17 +72,6 @@ NodeLocator : NSObject
 //        print(self.name)
 //    }
 }
-
-//@objc protocol
-//NodeLocatorJSExport : JSExport
-//{
-//    var
-//    ownerID :NSNumber { get }
-//    var
-//    name :NSString { get }
-//}
-//extension
-//NodeLocator : NodeLocatorJSExport {}
 
 @objc protocol
     ScriptTrackerJSExport : JSExport
@@ -260,31 +247,19 @@ public class
         return manager
     }
 
-    public typealias
+    typealias
         NodeLocator = Anna.NodeLocator
     func
         rootNodeLocator(
-        ownerID :ObjectIdentifier
+        ownerID :ObjectIdentifier,
+        name :String
         ) -> NodeLocator
     {
-        return NodeLocator.root(owningBy: ownerID)
-//        return NodeLocator(
-//            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
-//            name: "ana-root"
-//        )
+        return NodeLocator.root(
+            ownerID: ownerID,
+            name: name
+        )
     }
-    
-//    func
-//        nodeLocator(
-//        with name :String,
-//        ownerID :ObjectIdentifier
-//        ) -> NodeLocator
-//    {
-//        return NodeLocator(
-//            ownerID: NSNumber(value: UInt(bitPattern: ownerID)),
-//            name: (name as NSString)
-//        )
-//    }
     
     func
         registerNode(

@@ -7,6 +7,15 @@
 
 import Foundation
 
+@objc(ANAAnalyzing)
+public protocol
+    Analyzing
+{
+    // Keep this empty
+    // no promised action after being registered
+    //
+}
+
 @objc(ANAAnalyzerOwning)
 public protocol
     AnalyzerOwning
@@ -43,15 +52,6 @@ public protocol
         tokenByAddingObserver() -> Reporting
 }
 
-@objc(ANAAnalyzing)
-public protocol
-Analyzing
-{
-    // Keep this empty
-    // no promised action after being registered
-    //
-}
-
 @objc(ANAPathConstituting)
 public protocol
 PathConstituting
@@ -67,10 +67,10 @@ protocol
     typealias
         Manager = ANAManager
     func
-        resolvedManager()
+        resolvedManager() throws
         -> Manager
     func
-        nodeLocatorByAppendingPath()
+        nodeLocatorByAppendingPath() throws
         -> Manager.NodeLocator
     typealias
         Notification = () -> Void
@@ -138,7 +138,7 @@ public class
     }
     
     func
-        deregisterLastLocator() {
+        deregisterLastLocator() throws {
     }
 }
 
@@ -147,18 +147,21 @@ public class
     RootAnalyzer : BaseAnalyzer, AnalyzerParenting, Analyzing
 {
     let
-    manager :Manager
+    manager :Manager,
+    name :String
     
-    @objc(initWithManager:)
+    @objc(initWithManager:name:)
     public
     init(
-        manager :Manager
+        manager :Manager,
+        name :String
         )
     {
         self.manager = manager
+        self.name = name
     }
 
-    public func
+    func
         resolvedManager()
         -> Manager
     {
@@ -166,13 +169,6 @@ public class
     }
     
     func
-        resolvedName()
-        -> String
-    {
-        return "ana-root"
-    }
-    
-    public func
         nodeLocatorByAppendingPath()
         -> Manager.NodeLocator
     {
@@ -191,7 +187,8 @@ public class
         manager = analyzer.resolvedManager(),
         objID = ObjectIdentifier(analyzer),
         locator = manager.rootNodeLocator(
-            ownerID: objID
+            ownerID: objID,
+            name: self.name
         )
         manager.registerNode(
             by: locator,
@@ -204,25 +201,17 @@ public class
         return locator
     }
     
-    public func
+    func
         resolvedSubAnalyzer(named name: String) -> Analyzing {
         return type(of: self).resolvedSubAnalyzer(named: name, under: self)
     }
     
     override func
-        deregisterLastLocator() {
+        deregisterLastLocator() throws {
         if let locator = self.lastRegisteredLocator {
             self.manager.deregisterNode(by: locator)
         }
     }
-
-//    override func
-//        resetLastRegisteredLocator() {
-//        if let locator = self.lastRegisteredLocator {
-//            self.manager.deregisterNode(by: locator)
-//        }
-//        super.resetLastRegisteredLocator()
-//    }
 }
 
 extension
@@ -258,7 +247,7 @@ public class
         self.delegate = delegate
     }
     deinit {
-        self.deregisterLastLocator()
+        try? self.deregisterLastLocator()
     }
 
     @objc(analyzerHookingDelegate:naming:)
@@ -276,68 +265,55 @@ public class
         return analyzer
     }
     
-//    weak var
-//    parent :AnalyzerParenting? = nil
     func
-        resolvedParent()
-        -> AnalyzerParenting?
+        resolvedParent() throws
+        -> AnalyzerParenting
     {
         let
         analyzer = self
-        
-//        if let parent = analyzer.parent {
-//            return parent
-//        }
-        
-        // TODO: catch nil, remove casting
-        guard let
-            parent = analyzer.resolvedParentOwner()?.analyzer as? AnalyzerParenting
-            else { return nil }
-        analyzer.manager = parent.resolvedManager()
-        
+        let
+        parent = try analyzer._resolvedParent()
+        analyzer.manager = try parent.resolvedManager()
         return parent
     }
     
     func
-        resolvedParentOwner()
-        -> AnalyzerOwning?
+        _resolvedParent() throws
+        -> AnalyzerParenting
     {
         guard let
             delegate = self.delegate
-            else { return nil }
-        // TODO: throw
+            else { throw ParentError.noDelegate(name: self.resolvedName()) }
         var
+        last = delegate,
         next = delegate.parentConsititutor()
         while true {
-            guard let consititutor = next else {
-                return nil
-            }
+            guard let consititutor = next
+                else { throw ParentError.brokenChain(breaking: String(describing: type(of: last))) }
             if let
                 owner = consititutor as? AnalyzerOwning,
                 let
-                _ = owner.analyzer as? AnalyzerParenting
-            { return owner }
+                parent = owner.analyzer as? AnalyzerParenting
+            { return parent }
+            last = consititutor
             next = consititutor.parentConsititutor()
         }
     }
     
     var
     manager :Manager? = nil
-    public func
-        resolvedManager()
+    func
+        resolvedManager() throws
         -> Manager
     {
         let
         analyzer = self
-        
-        if let manager = analyzer.manager {
-            return manager
-        }
+        if let manager = analyzer.manager
+        { return manager }
         let
-        parent = analyzer.resolvedParent()!
-        // TODO: remove forced unpack
+        parent = try analyzer.resolvedParent()
         let
-        manager = parent.resolvedManager()
+        manager = try parent.resolvedManager()
         analyzer.manager = manager
         // TODO: catch nil
         return manager
@@ -350,8 +326,8 @@ public class
         return self.name
     }
 
-    public func
-        nodeLocatorByAppendingPath()
+    func
+        nodeLocatorByAppendingPath() throws
         -> Manager.NodeLocator
     {
         let
@@ -366,14 +342,13 @@ public class
         // Notify all ancestors to register themself
         //
         let
-        parent = analyzer.resolvedParent()!,
-        parentLocator = parent.nodeLocatorByAppendingPath()
-        // TODO: remove forced unpack
+        parent = try analyzer.resolvedParent(),
+        parentLocator = try parent.nodeLocatorByAppendingPath()
 
         // Register self
         //
         let
-        manager = analyzer.resolvedManager(),
+        manager = try analyzer.resolvedManager(),
         name = analyzer.resolvedName(),
         objID = ObjectIdentifier(analyzer),
         locator = parentLocator.forked(
@@ -422,8 +397,7 @@ public class
         self.tokens.append(token)
     }
     
-    @objc(takePlaceOfAnalyzer:)
-    public func
+    func
         takePlace(of analyzer :Analyzer) {
         if analyzer === self { return }
         for token in analyzer.tokens {
@@ -433,7 +407,7 @@ public class
         analyzer.tokens.removeAll()
     }
     
-    public func
+    func
         detach() {
         self.tokens.removeAll()
     }
@@ -454,31 +428,30 @@ public class
         ) {
         let
         analyzer = self
-        let
-        _ = analyzer.nodeLocatorByAppendingPath()
-        let
-        manager = analyzer.resolvedManager()
+        
+        guard let
+            locator = try? analyzer.nodeLocatorByAppendingPath(),
+            let
+            manager = try? analyzer.resolvedManager()
+            else {
+                return
+        }
         
         manager.recordEvent(
             named: name,
             with: properties?.toJSExpressive() ?? [:],
-            locator: analyzer.lastRegisteredLocator!
+            locator: locator
         )
     }
     
     override func
-        deregisterLastLocator() {
+        deregisterLastLocator() throws {
         if let locator = self.lastRegisteredLocator {
-            self.resolvedManager().deregisterNode(by: locator)
+            let
+            manager = try self.resolvedManager()
+            manager.deregisterNode(by: locator)
         }
     }
-//    override func
-//        resetLastRegisteredLocator() {
-//        if let locator = self.lastRegisteredLocator {
-//            self.resolvedManager().deregisterNode(by: locator)
-//        }
-//        super.resetLastRegisteredLocator()
-//    }
 }
 
 extension
@@ -508,3 +481,24 @@ extension
         return buffer
     }
 }
+
+enum
+    ParentError : Error
+{
+    case noDelegate(name :String)
+    case brokenChain(breaking :String)
+}
+extension
+    ParentError : LocalizedError
+{
+    public var
+    errorDescription: String? {
+        switch self {
+        case .noDelegate(name: let name):
+            return "Analyzer '\(name)' has no delegate to resolve a parent."
+        case .brokenChain(breaking: let breaking):
+            return "Path chain is broken, because node '\(breaking)' has no parent."
+        }
+    }
+}
+

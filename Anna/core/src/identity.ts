@@ -12,9 +12,6 @@ export namespace Loading
 
 export class Tree
 {
-  private static
-  rootName = 'ana-root';
-
   root :Node = null;
   identities :{ [id: number]: { [id: string]: Node; }; } = {};
   loader :Loading;
@@ -23,11 +20,6 @@ export class Tree
     loader :Loading
   ) {
     this.loader = loader;
-  }
-
-  rootNodeID(ownerID :number) :NodeID
-  {
-    return this.nodeID(ownerID, Tree.rootName);
   }
 
   nodeID(ownerID :number, name :string) :NodeID
@@ -56,7 +48,7 @@ export class Tree
       }
     }
     else {
-      if (nodeID.name != Tree.rootName) {
+      if (tree.root) {
         throw new Error(`To be registerd, ${ nodeID } must have a parent.`);
       }
     }
@@ -71,7 +63,8 @@ export class Tree
       tree.identities[nodeID.ownerID] = byName;
     }
     byName[nodeID.name] = node;
-    if (nodeID.name == Tree.rootName) {
+
+    if (!(parent)) {
       tree.root = node;
     }
   }
@@ -79,6 +72,8 @@ export class Tree
   deregisterNode(
     nodeID :NodeID
   ) {
+    let
+    tree = this;
     let
     identities = this.identities;
     let
@@ -99,6 +94,9 @@ export class Tree
     }
 
     node.delete();
+    if (node === tree.root) {
+      tree.root = null;
+    }
   }
 
   node(nodeID :NodeID) :Node
