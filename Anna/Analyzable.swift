@@ -1,33 +1,42 @@
 //
-//  Sender.swift
-//  Anna
+//  Analyzable.swift
+//  Anna_iOS
 //
-//  Created by William on 10/06/2017.
-//
+//  Created by William on 2018/5/5.
 //
 
 import Foundation
 
+@objc(ANAAnalyzable)
 public protocol
-EasyAnalyzable : class, EasyRegistering {
-    typealias
-        Manager = EasyManager
-    var
-    analyticsManager :Manager { get }
-    typealias
-        Prefix = EasyPrefix
-    var
-    ana :Prefix { get }
+    Analyzable : AnalyzerHolding
+{
 }
 
-public extension
-EasyAnalyzable {
-    var
-    ana :Prefix {
-        return EasyPrefix(target: self)
-    }
-    var
-    analyticsManager :Manager {
-       return EasyManager.shared
-    }
+@objc(ANAAnalyzing)
+public protocol
+    Analyzing
+{
+    // Keep this empty
+    // no promised action after being registered
+    //
 }
+
+@objc(ANAAnalyzerOwning)
+public protocol
+    AnalyzerOwning
+{
+    @objc(ana_analyzer)
+    var
+    analyzer :Analyzing? { get }
+}
+
+@objc(ANAAnalyzerHolding)
+public protocol
+    AnalyzerHolding : AnalyzerOwning
+{
+    @objc(ana_analyzer)
+    var
+    analyzer :Analyzing? { get set }
+}
+

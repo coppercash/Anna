@@ -1,12 +1,20 @@
 PODS:
-  - Anna (0.2.0)
+  - Anna (0.3.0):
+    - Anna/core (= 0.3.0)
+    - Anna/corejs (= 0.3.0)
+  - Anna/core (0.3.0)
+  - Anna/corejs (0.3.0)
 
 DEPENDENCIES:
-  - Anna
+  - Anna (from `../..`)
+
+EXTERNAL SOURCES:
+  Anna:
+    :path: "../.."
 
 SPEC CHECKSUMS:
-  Anna: 54bdbe2d2da7c706e0edf8b3e6a77e6dd74f25bf
+  Anna: b776ad7a0d2b0d56f734e19ca8ff1f3ffae905ac
 
-PODFILE CHECKSUM: fc511ea9cc48e9045943dba8889e02599132f68d
+PODFILE CHECKSUM: 2e657c5acb5f77c1232297ea24c4e869d38052bf
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.5.0

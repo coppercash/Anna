@@ -8,5 +8,5 @@ target 'CocoapodsDemo' do
   use_frameworks!
 
   # Pods for Cocoapods
-  pod 'Anna'
+  pod 'Anna', :path => '../..'
 end

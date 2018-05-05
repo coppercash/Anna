@@ -7,39 +7,25 @@
 //
 
 #import "SecondViewController.h"
-#import <Anna/Anna.h>
+#import <Anna/Anna-Swift.h>
 
-@interface SecondViewController ()
-
+@interface SecondViewController () <ANAAnalyzable>
 @end
 
 @implementation SecondViewController
+@synthesize ana_analyzer;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.ana.analyze();
+    self.ana_analyzer =
+    [ANAAnalyzer analyzerHookingDelegate:self
+                                  naming:@"second_view_controller"];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-@end
-
-@interface SecondViewController (ANAAnalyzable) <ANAAnalyzable>
-@end
-@implementation SecondViewController (ANAAnalyzable)
-
-+ (void)ana_registerAnalyticsPointsWithRegistrar:(id<ANARegistrationRecording>)registrar {
-    registrar
-    .point(^(id<ANAMethodPointBuilding> _) { _
-        .selector(@selector(viewDidLoad))
-        .set(@"from", NSStringFromClass(self))
-        ;
-    })
-    ;
 }
 
 @end

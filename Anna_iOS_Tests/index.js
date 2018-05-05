@@ -1,1 +1,1 @@
-module.exports = require('anna').Anna.execute;
+module.exports = require('anna').Manager.execute;

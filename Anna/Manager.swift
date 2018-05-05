@@ -1,214 +1,297 @@
-//
+
 //  Manager.swift
 //  Anna
 //
-//  Created by William on 22/04/2017.
+//  Created by William on 01/07/2017.
 //
 //
 
 import Foundation
+import JavaScriptCore
 
-public protocol
-EasyManaging {
-    typealias
-        Event = EasyEventBeing
-    typealias
-        Trackers = EasyTrackerConfiguring & EasyTrackerCollecting
-    var
-    trackers :Trackers { get }
-}
-
-public class
-EasyManager : EasyManaging
+class
+NodeLocator 
 {
     let
-    configQueue :DispatchQueue,
-    queue :DispatchQueue
+    ownerID :UInt,
+    name :String
+    init(
+        ownerID :UInt,
+        name :String
+        ) {
+        self.ownerID = ownerID
+        self.name = name
+    }
     
+    class func
+        root(
+        ownerID :ObjectIdentifier,
+        name :String
+        ) -> Self {
+        return self.init(
+            ownerID: UInt(bitPattern: ownerID),
+            name: name
+        )
+    }
+    
+//    weak var
+//    parent :NodeLocator? = nil
+//    var
+//    children :[String: NodeLocator] = [:]
+    func
+        forked(
+        with name :String,
+        ownerID :ObjectIdentifier
+        ) -> NodeLocator {
+//        let
+//        parent = self
+//
+//        if let child = parent.children[name]
+//        { return child }
+        
+        let
+        child = NodeLocator(
+            ownerID: UInt(bitPattern: ownerID),
+            name: name
+        )
+        
+//        child.parent = parent
+//        parent.children[name] = child
+        
+        return child
+    }
+    
+//    func
+//        delete() {
+//        guard let parent = self.parent
+//            else { return }
+//        parent.children.removeValue(forKey: self.name)
+//    }
+    
+//    deinit {
+//        print(self.name)
+//    }
+}
+
+
+@objc(ANADependency)
+public class
+    Dependency : CoreJS.Dependency
+{
+    public var
+    moduleURL :URL! = nil
+}
+
+@objc(ANAManager)
+public class
+    Manager : NSObject
+{
+    public var
+    tracker :Tracking? = nil
+    public let
+    dependency :Dependency
     public init
-        () {
-        self.configQueue = DispatchQueue(
-            label: "Anna.config",
-            attributes: .concurrent
-        )
-        self.queue = DispatchQueue (
-            label: "Anna.main",
-            target: configQueue
-        )
+        (
+        _ dependency :Dependency
+        ) {
+        self.dependency = dependency
     }
     
-    // MARK:- Point
-    
-    typealias
-        Root = EasyRootPoint
     let
-    root :Root = Root()
-    
-    // MARK:- Tracker
-    
-    lazy internal(set) public var
-    trackers :EasyManaging.Trackers = {
-        return EasyTrackerConfigurator(host: self)
-    }()
-}
-
-// MARK: - Singleton
-
-extension
-EasyManager {
-    public static let
-    shared = EasyManager()
-}
-
-// MARK: - Load Points
-
-extension
-EasyClassPointBuilder : EasyRegistrationRecording {}
-extension
-EasyManager {
-    typealias
-        Registrant = EasyRegistering.Type
-    typealias
-        ClassPointBuilder = EasyClassPointBuilder
-    func loadPoints(for cls :Registrant) throws {
-        guard root.classPoint(for: cls) == nil else { return }
-        let
-        builder = ClassPointBuilder(trackers: trackers)
-        builder.classBuffer = cls
-        let
-        point = try builder.point()
-        
-        // Register the newly loaded point and all its super points
-        //
-        var
-        current :EasyClassPoint? = point,
-        currentBuilder :ClassPointBuilder? = builder
-        while
-            let point = current,
-            let cls = currentBuilder?.classBuffer
-        {
-            point.parent = root
-            root.setClassPoint(point, for: cls)
-            current = point.superClassPoint
-            currentBuilder = currentBuilder?.superClassPointBuilder
-        }
-    }
-}
-
-// MARK: - Receive & Dispatch
-
-public enum
-MatchingError : Error {
-    case noMatchingPoint(class :String, method :String)
-    case tooManyMatchingPoints(count :Int)
-}
-
-extension
-MatchingError : LocalizedError {
-    public var
-    errorDescription: String? {
-        switch self {
-        case .noMatchingPoint(class: let cls, method: let method):
-            return "No matching point found on class \(cls) for method \(method)."
-        case .tooManyMatchingPoints(count: let count):
-            return "Too many matching points found. Expected one but found \(count)."
-        }
-    }
-}
-
-extension
-MatchingError : Equatable {
-    public static func
-        == (lhs: MatchingError, rhs: MatchingError) ->Bool {
-        switch (lhs, rhs) {
-        case (.noMatchingPoint, .noMatchingPoint):
-            return true
-        case (.tooManyMatchingPoints, .tooManyMatchingPoints):
-            return true
-        default:
-            return false;
-        }
-    }
-}
-
-public enum
-ConfigurationError : Error {
-   case noAvailableTrackers
-}
-
-extension
-ConfigurationError : LocalizedError {
-    public var
-    errorDescription: String? {
-        switch self {
-        case .noAvailableTrackers:
-            return "Please, at least, set a default tracker by calling `EasyManager.shared.trackers.defaults = [YOUR_TRACKER]`."
-        }
-    }
-}
-
-extension
-EasyManager : EasyEventDispatching {
+    scriptQ = DispatchQueue(label: "anna.script")
+    var
+    scriptContext :JSContext? = nil
     func
-        dispatchEvent(with seed: Seed) {
-        queue.async {
-            do {
-                // Try to load points if they have not been loaded
-                //
-                try self.loadPoints(for: seed.registrant)
-                try self.dispatch(seed)
+        resolvedScriptContext()
+        -> JSContext
+    {
+        if let context = self.scriptContext {
+            return context
+        }
+        let
+        context = JSContext()!
+        self.scriptContext = context
+        return context
+    }
+    
+    func
+        handle(scriptResult :Any)
+    {
+        self.tracker?.receive(
+            analyticsResult: scriptResult,
+            dispatchedBy: self
+        )
+    }
+    
+    func
+        handle(scriptError :JSValue)
+    {
+        self.tracker?.receive(
+            analyticsError: NSError(with: scriptError),
+            dispatchedBy: self
+        )
+    }
+    
+    var
+    scriptManager :JSValue? = nil
+    func
+        resolvedScriptManager()
+        throws -> JSValue
+    {
+        if let manager = self.scriptManager {
+            return manager
+        }
+        let
+        context = self.resolvedScriptContext();
+        let
+        module = self.dependency.moduleURL!
+        let
+        dependency = self.dependency
+        dependency.handleException =
+            { [weak self] (context, error) in
+                guard let error = error else { return }
+                self?.handle(scriptError: error)
+        }
+        let
+        construct = try! context.run(
+            module,
+            with: dependency
+            )!
+        let
+        receive : @convention(block) (Any) -> Void = {
+            [weak self] (result :Any) in
+            self?.handle(scriptResult: result)
+        },
+        inject : @convention(block) (JSValue, JSValue) -> Void = {
+            [weak context] (key :JSValue, value :JSValue) in
+            guard let
+                global = context?.globalObject
+                else { return }
+            if (value.isUndefined) {
+                global.deleteProperty(key.toString())
             }
-            catch {
-                try! self.sendDefaultTrackers(error)
+            else {
+                global.setValue(value, forProperty: key.toString())
             }
         }
-    }
-    
-    typealias
-        Point = EasyPoint
-    func
-        dispatch(_ seed :EasyPointMatchable & EasyPayloadCarrier) throws {
-        
-        // Find point
-        //
-        let
-        points :[EasyPayloadNode]! = root.points(match: seed)
-        guard points.count > 0 else {
-            throw MatchingError.noMatchingPoint(
-                class: String(describing: seed.cls),
-                method: seed.method
+        guard let
+            manager = construct.call(withArguments: [
+                (module.path as NSString).appendingPathComponent("task"),
+                unsafeBitCast(inject, to: AnyObject.self),
+                unsafeBitCast(receive, to: AnyObject.self)
+                ]
             )
-        }
-        guard points.count <= 1 else {
-            throw MatchingError.tooManyMatchingPoints(count: points.count)
-        }
-        guard let point = points?.first else { return }
+            else { throw ScriptError.managerUnconstructable }
         
-        // Dispatch the event with point to every tracker tracks the point
-        //
-        let merged = try point.mergedFromRoot()
-        guard
-            let trackers = merged.trackers,
-            trackers.count > 0
-            else { throw ConfigurationError.noAvailableTrackers }
+        self.scriptManager = manager
+        return manager
+    }
+
+    typealias
+        NodeLocator = Anna.NodeLocator
+    func
+        rootNodeLocator(
+        ownerID :ObjectIdentifier,
+        name :String
+        ) -> NodeLocator
+    {
+        return NodeLocator.root(
+            ownerID: ownerID,
+            name: name
+        )
+    }
+    
+    func
+        registerNode(
+        by locator :NodeLocator,
+        under parentLocator :NodeLocator?
+        )
+    {
         let
-        event = try EasyEvent(seed: seed, point: merged)
-        for tracker in trackers {
-            tracker.receive(
-                analyticsEvent: event,
-                dispatchedBy: self
+        manager = try! self.resolvedScriptManager()
+        self.scriptQ.async {
+            let
+            arguments :[Any]
+            if let
+                parentLocator = parentLocator
+            {
+                arguments = [
+                    locator.ownerID,
+                    locator.name,
+                    parentLocator.ownerID,
+                    parentLocator.name
+                ]
+            }
+            else {
+                arguments = [
+                    locator.ownerID,
+                    locator.name
+                ]
+            }
+            manager.invokeMethod(
+                "registerNodeRaw",
+                withArguments: arguments
             )
         }
     }
     
     func
-        sendDefaultTrackers(_ error :Error) throws {
-        guard
-            let trackers = root.trackers
-            else { throw ConfigurationError.noAvailableTrackers }
-        for tracker in trackers {
-            tracker.receive(analyticsError: error, dispatchedBy: self)
+        deregisterNode(
+        by locator :NodeLocator
+        ) {
+        let
+        manager = try! self.resolvedScriptManager()
+        self.scriptQ.async {
+            manager.invokeMethod(
+                "deregisterNodeRaw",
+                withArguments: [
+                    locator.ownerID,
+                    locator.name
+                ]
+            )
+        }
+    }
+    
+    typealias
+    Properties = [String : String]
+    func
+        recordEvent(
+        named name :String,
+        with properties :Propertiez,
+        locator :NodeLocator
+        )
+    {
+        let
+        manager = try! self.resolvedScriptManager()
+        self.scriptQ.async {
+            manager.invokeMethod(
+                "recordEventRaw",
+                withArguments: [
+                    name,
+                    properties,
+                    locator.ownerID,
+                    locator.name
+                ]
+            )
+        }
+    }
+    
+    public func
+        logSnapshot()
+    {
+        let
+        manager = try! self.resolvedScriptManager()
+        self.scriptQ.async {
+            manager.invokeMethod(
+                "logSnapshot",
+                withArguments: []
+            )
         }
     }
 }
-    
+
+enum
+    ScriptError : Error
+{
+   case managerUnconstructable
+}

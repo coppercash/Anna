@@ -14,7 +14,6 @@ class FirstViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.ana.analyze()
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,14 +22,4 @@ class FirstViewController: UIViewController {
     }
 
 
-}
-
-extension FirstViewController : EasyAnalyzable {
-    static func registerAnalyticsPoints(with registrar: EasyRegistering.Registrar) {
-        registrar
-        .point { $0
-            .selector(#selector(viewDidLoad))
-            .set("from", String(describing: self))
-        }
-    }
 }

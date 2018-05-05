@@ -8,6 +8,11 @@
 import Foundation
 import JavaScriptCore
 
+enum FileError : Error
+{
+    case coreNotFound
+}
+
 public struct
     CoreJS
 {
@@ -27,8 +32,33 @@ public struct
         fileManager :FileManaging? = nil,
         logger :Logging? = nil,
         handleException : ((JSContext?, JSValue?) -> Void)? = nil
+        
+        func
+            resolvedCoreModuleURL() throws -> URL {
+            if let
+                url = self.coreModuleURL
+            { return url }
+            let
+            bundle = Bundle(for: type(of: self))
+            guard let
+                url = bundle.url(
+                    forResource: "corejs",
+                    withExtension: "bundle"
+                )
+                else { throw FileError.coreNotFound }
+            return url
+        }
+        
+        func
+            resolvedFileManager() -> FileManaging {
+            return self.fileManager ?? FileManager.default
+        }
     }
 }
+
+extension
+    FileManager : CoreJS.FileManaging
+{ }
 
 @objc(CJSFileManaging)
 public protocol
@@ -245,21 +275,21 @@ extension
     func
         run(
         _ moduleURL :URL,
-        with dependency :CoreJS.Dependency? = nil
-        ) ->JSValue! {
+        with dependency :CoreJS.Dependency = Dependency()
+        ) throws ->JSValue! {
         let
         context = self
         context.name = "CoreJS"
-        context.exceptionHandler = dependency?.handleException
+        context.exceptionHandler = dependency.handleException
         let
-        fileManager = dependency!.fileManager!,
-        mainScriptURL = dependency!.coreModuleURL!.appendingPathComponent("index.js")
+        fileManager = dependency.resolvedFileManager(),
+        mainScriptURL = try dependency.resolvedCoreModuleURL().appendingPathComponent("index.js")
         let
         native = Native(
             context: context,
             fileManager: fileManager
         )
-        native.logger = dependency?.logger
+        native.logger = dependency.logger
         let
         data = fileManager.contents(atPath: mainScriptURL.path)!,
         script = String(data: data, encoding: .utf8)
@@ -290,5 +320,26 @@ delete module;
 """
 )
         return exports
+    }
+}
+
+extension
+    NSError
+{
+    convenience
+    init(with jsValue :JSValue) {
+        var
+        userInfo = [String : String]()
+        if let message = jsValue.forProperty("message").toString() {
+            userInfo[NSLocalizedFailureReasonErrorKey] = message
+        }
+        if let stack = jsValue.forProperty("stack").toString() {
+            userInfo[NSLocalizedDescriptionKey] = stack
+        }
+        self.init(
+            domain: jsValue.forProperty("name").toString(),
+            code: -1,
+            userInfo: userInfo
+        )
     }
 }

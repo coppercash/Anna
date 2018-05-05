@@ -95,7 +95,7 @@ PathTestCaseBuilder : NSObject
         delegate = PathTestingAppDelegate()
         delegate.rootViewController = self.rootViewController
         let
-        manager = ANAManager(self.dependency)
+        manager = Manager(self.dependency)
         manager.tracker = self
         delegate.manager = manager
         self.application.delegate = delegate
@@ -131,8 +131,8 @@ PathTestCaseBuilder : Anna.Tracking
 {
     func
         receive(
-        analyticsResult :AnyObject,
-        dispatchedBy manager :Tracking.Manager
+        analyticsResult :Any,
+        dispatchedBy manager :Manager
         ) {
         DispatchQueue.main.async {
             self.results.insert(analyticsResult, at: self.currentResultIndex)
@@ -144,7 +144,7 @@ PathTestCaseBuilder : Anna.Tracking
     
     func receive(
         analyticsError :Error,
-        dispatchedBy manager :Tracking.Manager
+        dispatchedBy manager :Manager
         ) {
         print((analyticsError as NSError).localizedFailureReason!)
         print(analyticsError.localizedDescription)
@@ -159,7 +159,7 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwning
     var
     rootViewController :UIViewController?
     var
-    manager :RootAnalyzer.Manager?
+    manager :Manager?
     
     func
         application(
