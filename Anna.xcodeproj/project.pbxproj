@@ -210,8 +210,8 @@
 				BE195B2F209D7F6800111F15 /* UITableView */,
 				BE195B31209D7F6800111F15 /* UIControl */,
 				BE195B34209D7F6800111F15 /* UIView+Hookable.swift */,
-				BE195B2C209D7F6800111F15 /* ANAUIView.m */,
 				BE195B33209D7F6800111F15 /* ANAUIView.h */,
+				BE195B2C209D7F6800111F15 /* ANAUIView.m */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -244,8 +244,8 @@
 			isa = PBXGroup;
 			children = (
 				BE195B37209D7F6800111F15 /* UIViewController+Hookable.swift */,
-				BE195B36209D7F6800111F15 /* ANAUIViewController.m */,
 				BE195B38209D7F6800111F15 /* ANAUIViewController.h */,
+				BE195B36209D7F6800111F15 /* ANAUIViewController.m */,
 			);
 			path = UIViewController;
 			sourceTree = "<group>";

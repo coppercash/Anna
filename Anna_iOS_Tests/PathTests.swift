@@ -51,7 +51,7 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 1.0
+            timeout: 999.0
         )
         
         XCTAssertEqual(test.results[0] as! Int, 42)
@@ -64,11 +64,11 @@ class PathTests: XCTestCase {
         """
         match(
         'vc/tb/sc_0/rw_0/ui-table-will-display-row',
-        function() { return '0_0'; }
+        function(node) { return '0_0'; }
         );
         match(
         'vc/tb/sc_3/rw_7/ui-table-will-display-row',
-        function() { return '3_7'; }
+        function(node) { return '3_7'; }
         );
         """
         class
@@ -83,23 +83,13 @@ class PathTests: XCTestCase {
                 table.delegate = self
                 table.dataSource = self
                 table.register(PathTestingTableViewCell.self, forCellReuseIdentifier: "r")
-                table.analyzer = {
-                    let
-                    ana = Analyzer.hooking(delegate: table, naming: "tb")
-                    return ana
-                }()
+                table.analyzer = Analyzer.hooking(delegate: table, naming: "tb")
                 return table
             }()
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer = {
-                    let
-                    ana = Analyzer.hooking(delegate: self, naming: "vc")
-                    ana.hook(self)
-                    return ana
-                }()
-                
+                self.analyzer = Analyzer.hooking(delegate: self, naming: "vc")
                 self.view.addSubview(self.table)
                 
             }
@@ -153,7 +143,7 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 1.0
+            timeout: 999.0
         )
         
         XCTAssertEqual(test.results[0] as! String, "0_0")

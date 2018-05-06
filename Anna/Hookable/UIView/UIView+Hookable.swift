@@ -10,33 +10,21 @@ import Foundation
 extension
     UIView : Hookable
 {
-    @objc(ana_tokenByAddingObserver)
     public func
         tokenByAddingObserver() -> Reporting {
-        return UIViewObserver(observee: self)
+        return UIViewObserver(observee: self, owned: false)
+    }
+    
+    public func
+        tokenByAddingOwnedObserver() -> Reporting {
+        return UIViewObserver(observee: self, owned: true)
     }
 }
 
 class
-    AbstractUIViewObserver<Observee : UIView> : BaseObserver<Observee>
+    UIViewObserver<View> : HookingObserver<View>
+    where View : UIView
 {
-    var
-    isViewVisible :Bool = false
-    init
-        (observee: Observee) {
-        super.init(
-            observee: observee,
-            decorator: ANAUIView.self
-        )
-    }
-    
-    override var
-    keyPaths: [String : NSKeyValueObservingOptions] {
-        return super.keyPaths.merging([
-            #keyPath(UIView.isVisible): [.new, .initial]
-        ]) { $0.0 }
-    }
-
     override func
         observeValue(
         forKeyPath keyPath: String?,
@@ -56,30 +44,41 @@ class
                 guard let view = object as? UIView else { return }
                 self.recordVisibility(view.isVisible)
             default:
-                return super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+                return super.observeValue(
+                    forKeyPath: keyPath,
+                    of: object,
+                    change: change,
+                    context: context
+                )
             }
         }
     }
-
+    var
+    isViewVisible :Bool = false
     func
         recordVisibility(
         _ isVisible :Bool
         ) {
-        guard isVisible != self.isViewVisible else {
-            return
-        }
+        guard isVisible != self.isViewVisible else { return }
         self.isViewVisible = isVisible
-        guard let recorder = self.recorder else { return }
-        recorder.recordEventOnPath(
-            named: "ana-appeared",
+        let
+        event = isVisible ? "ana-appeared" : "ana-disappeared"
+        self.recorder?.recordEventOnPath(
+            named: event,
             with: nil
         )
     }
+    class override var
+    keyPaths :[String: NSKeyValueObservingOptions] {
+        return super.keyPaths.merging([
+            #keyPath(UIView.isVisible): [.new, .initial]
+        ]) { $0.0 }
+    }
+    class override var
+    decorator :AnyClass {
+        return ANAUIView.self
+    }
 }
-
-class
-    UIViewObserver : AbstractUIViewObserver<UIView>
-{}
 
 extension
     UIView

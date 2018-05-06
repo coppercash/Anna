@@ -10,12 +10,14 @@ import UIKit
 extension
     UITableViewCell
 {
-    @objc(ana_tokenByAddingObserver)
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UITableViewCellObserver(observee: self)
+        return UITableViewCellObserver(observee: self, owned: false)
     }
-    
+    public override func
+        tokenByAddingOwnedObserver() -> Reporting {
+        return UITableViewCellObserver(observee: self, owned: true)
+    }
     func
         tableViewDelegateByLookingUp() -> (UITableViewDelegate & NSObject)? {
         var
@@ -33,10 +35,6 @@ extension
 }
 
 class
-    UITableViewCellObserver : BaseObserver<UITableViewCell>
-{
-    init
-        (observee: UITableViewCell) {
-        super.init(observee: observee)
-    }
-}
+    UITableViewCellObserver<Observee> : HookingObserver<Observee>
+    where Observee : UITableViewCell
+{ }

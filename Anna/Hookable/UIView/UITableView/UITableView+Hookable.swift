@@ -10,10 +10,13 @@ import UIKit
 extension
     UITableView
 {
-    @objc(ana_tokenByAddingObserver)
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UITableViewObserver(observee: self)
+        return UITableViewObserver(observee: self, owned: false)
+    }
+    public override func
+        tokenByAddingOwnedObserver() -> Reporting {
+        return UITableViewObserver(observee: self, owned: true)
     }
 }
 
@@ -21,62 +24,41 @@ extension
 // https://github.com/BigZaphod/Chameleon/blob/master/UIKit/Classes/UITableView.m
 //
 class
-    UITableViewObserver : BaseObserver<UITableView>
+    UITableViewObserver<Observee> : UIViewObserver<Observee>
+    where Observee : UITableView
 {
     var
     dataSource :UITableViewDataSourceProxy? = nil,
     delegate :UITableViewDelegateProxy? = nil
-    init(observee: UITableView) {
-        if let dataSource = observee.dataSource as? (UITableViewDataSource & NSObject) {
-            self.dataSource = UITableViewDataSourceProxy(dataSource)
-            // Reset `UITableView._dataSourceHas`
-            //
-            observee.dataSource = self.dataSource
-        }
-        if let delegate = observee.delegate as? (UITableViewDelegate & NSObject) {
-            self.delegate = UITableViewDelegateProxy(delegate)
+    override func
+        observe(_ observee: Observee) {
+        super.observe(observee)
+        let
+        dataSource = observee.dataSource as! (UITableViewDataSource & NSObject)
+        self.dataSource = UITableViewDataSourceProxy(dataSource)
+        observee.dataSource = self.dataSource
+        
+        let
+        delegate = observee.delegate as! (UITableViewDelegate & NSObject)
+        self.delegate = UITableViewDelegateProxy(delegate)
+        observee.delegate = self.delegate
+    }
+    override func
+        deobserve(_ observee: Observee) {
+        super.deobserve(observee)
+        if let delegate = self.delegate?.target {
             // Reset `UITableView._delegateHas`
             //
-            observee.delegate = self.delegate
+            observee.delegate = delegate
         }
-        super.init(observee: observee)
-    }
-    
-    deinit {
-        if let observee = self.observee {
-            if let delegate = self.delegate?.target {
-                // Reset `UITableView._delegateHas`
-                //
-                observee.delegate = delegate
-            }
-            if let dataSource = self.dataSource?.target {
-                // Reset `UITableView._dataSourceHas`
-                //
-                observee.dataSource = dataSource
-            }
+        if let dataSource = self.dataSource?.target {
+            // Reset `UITableView._dataSourceHas`
+            //
+            observee.dataSource = dataSource
         }
-    }
-}
-/*
-class
-    UITableViewDataSourceObserver : BaseObserver<NSObject & UITableViewDataSource>
-{
-    init
-        (observee: NSObject & UITableViewDataSource) {
-        super.init(observee: observee, decorator: ANAUITableViewDataSource.self)
     }
 }
 
-class
-    UITableViewDelegateObserver : BaseObserver<NSObject & UITableViewDelegate>
-{
-    init
-        (observee: NSObject & UITableViewDelegate) {
-        super.init(observee: observee, decorator: ANAUITableViewDelegate.self)
-    }
-    
-}
-*/
 class
     Proxy<Target : NSObjectProtocol> : NSObject
 {

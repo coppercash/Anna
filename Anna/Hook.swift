@@ -10,6 +10,7 @@ import Foundation
 extension
     NSObject
 {
+    @objc(ana_decorateObject:)
     class func
         decorate(object :NSObject) {
         let
@@ -23,6 +24,7 @@ extension
         self.decorate(base)
         object_getClass(self).decorate(object_getClass(base))
     }
+    @objc(ana_decorate:)
     class func
         decorate(_ decorated :AnyClass) {
         let
@@ -52,13 +54,13 @@ extension
     }
 }
 
-public extension
+extension
     NSObject
 {
-    typealias
+    public typealias
         Propertiez = [String : Any]
     @objc(ana_forwardRecordingEventNamed:withProperties:)
-    func
+    public func
         forwardRecordingEvent(
         named event:String,
         properties :Propertiez? = nil
@@ -121,6 +123,83 @@ class
 }
 
 class
+    DecoratingObserver<Observee> : ReportingObserver<Observee>
+    where Observee : NSObject
+{
+    let
+    decorator :AnyClass
+    init(
+        decorator :AnyClass,
+        keyPaths :[String: NSKeyValueObservingOptions],
+        observee :Observee,
+        owned :Bool = false
+        ) {
+        self.decorator = decorator
+        super.init(
+            keyPaths: keyPaths,
+            observee: observee,
+            owned: owned
+        )
+    }
+    override func
+        observe(_ observee: Observee) {
+        super.observe(observee)
+        self.decorator.decorate(object: observee)
+    }
+    override func
+        observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey : Any]?,
+        context: UnsafeMutableRawPointer?
+        ) {
+        guard let event = change?.toEvent() else {
+            return super.observeValue(
+                forKeyPath: keyPath,
+                of: object,
+                change: change,
+                context: context
+            )
+        }
+        self.recorder?.recordEventOnPath(
+            named: event.name,
+            with: event.properties
+        )
+    }
+}
+
+class
+    HookingObserver<Observee> : DecoratingObserver<Observee>
+    where Observee : NSObject
+{
+    required
+    init(
+        observee :Observee,
+        owned :Bool
+        ) {
+        let
+        clazz = type(of: self)
+        super.init(
+            decorator: clazz.decorator,
+            keyPaths: clazz.keyPaths,
+            observee: observee,
+            owned: owned
+        )
+    }
+    class var
+    keyPaths :[String: NSKeyValueObservingOptions] {
+        return [
+            #keyPath(NSObject.trampoline): .new,
+        ]
+    }
+    class var
+    decorator :AnyClass {
+        return Observee.self
+    }
+}
+
+/*
+class
     BaseObserver<Observee : NSObject> : NSObject, Reporting
 {
     weak var
@@ -182,7 +261,7 @@ class
         ]
     }
 }
-
+*/
 
 
 extension Dictionary

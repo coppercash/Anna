@@ -21,8 +21,12 @@ Reporting
 public protocol
     Hookable
 {
-    @objc(ana_tokenByAddingObserver) func
+    @objc(ana_tokenByAddingObserver)
+    func
         tokenByAddingObserver() -> Reporting
+    @objc(ana_tokenByAddingOwnedObserver)
+    func
+        tokenByAddingOwnedObserver() -> Reporting
 }
 
 @objc(ANAPathConstituting)
@@ -350,7 +354,7 @@ public class
     public func
         hook(_ hookee : Hookable) {
         let
-        token = hookee.tokenByAddingObserver()
+        token = hookee.tokenByAddingOwnedObserver()
         token.recorder = self
         self.tokens.append(token)
     }

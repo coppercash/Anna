@@ -10,33 +10,38 @@ import UIKit
 extension
     UIControl
 {
-    @objc(ana_tokenByAddingObserver)
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UIControlObserver(observee: self)
+        return UIControlObserver(observee: self, owned: false)
+    }
+    public override func
+        tokenByAddingOwnedObserver() -> Reporting {
+        return UIControlObserver(observee: self, owned: true)
     }
 }
 
 class
-    UIControlObserver : AbstractUIViewObserver<UIControl>
+    UIControlObserver<Observee> : UIViewObserver<Observee>
+    where Observee : UIControl
 {
-    override init
-        (observee: UIControl) {
-        super.init(observee: observee)
+    override func
+        observe(_ observee: Observee) {
+        super.observe(observee)
         observee.addTarget(
             self,
             action: #selector(handleTouchUpInside(on:with:)),
             for: .touchUpInside
         )
     }
-    deinit {
-        self.observee?.removeTarget(
+    override func
+        deobserve(_ observee: Observee) {
+        super.deobserve(observee)
+        observee.removeTarget(
             self,
             action: #selector(handleTouchUpInside(on:with:)),
             for: .touchUpInside
         )
     }
-    
     func
         handleTouchUpInside(
         on control :UIControl,

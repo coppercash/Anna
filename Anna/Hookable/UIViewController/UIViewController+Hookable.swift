@@ -10,23 +10,20 @@ import UIKit
 extension
     UIViewController : Hookable
 {
-    @objc(ana_tokenByAddingObserver)
     public func
         tokenByAddingObserver() -> Reporting {
-        return UIViewControllerObserver(observee: self)
+        return UIViewControllerObserver(observee: self, owned: false)
+    }
+    public func
+        tokenByAddingOwnedObserver() -> Reporting {
+        return UIViewControllerObserver(observee: self, owned: true)
     }
 }
 
 class
-    UIViewControllerObserver : BaseObserver<UIViewController>
+    UIViewControllerObserver<ViewController> : HookingObserver<ViewController>
+    where ViewController : UIViewController
 {
-    init
-        (observee: UIViewController) {
-        super.init(
-            observee: observee,
-            decorator: ANAUIViewController.self
-        )
-    }
     override func
         observeValue(
         forKeyPath keyPath: String?,
@@ -43,5 +40,9 @@ class
         default:
             return super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
+    }
+    class override var
+    decorator :AnyClass {
+        return ANAUIViewController.self
     }
 }
