@@ -28,15 +28,18 @@ export let whenDisplays = (
         (event.name == 'ana-value-updated') &&
         (event.properties['key-path'] == keyPath) 
       ) {
-        if (!(value === undefined)) { continue; }
+        if (!(value == undefined)) { continue; }
         value = event.properties['value'];
       }
       if (
         (isVisible !== undefined) &&
-        (value !== undefined)
+        (value != undefined)
       ) { break; }
     }
-    if (!(isVisible === true)) {
+    if (!(
+      (isVisible === true) &&
+      (value != undefined)
+    )) {
       return undefined;
     } 
     else {

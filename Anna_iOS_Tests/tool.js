@@ -14,17 +14,18 @@ exports.whenDisplays = function (keyPath, map) {
             }
             else if ((event_1.name == 'ana-value-updated') &&
                 (event_1.properties['key-path'] == keyPath)) {
-                if (!(value === undefined)) {
+                if (!(value == undefined)) {
                     continue;
                 }
                 value = event_1.properties['value'];
             }
             if ((isVisible !== undefined) &&
-                (value !== undefined)) {
+                (value != undefined)) {
                 break;
             }
         }
-        if (!(isVisible === true)) {
+        if (!((isVisible === true) &&
+            (value != undefined))) {
             return undefined;
         }
         else {

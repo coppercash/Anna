@@ -41,7 +41,7 @@ protocol
         resolvedManager() throws
         -> Manager
     func
-        nodeLocatorByAppendingPath() throws
+        resolvedNodeLocatorByAppendingPath() throws
         -> Manager.NodeLocator
     typealias
         Notification = () -> Void
@@ -138,7 +138,7 @@ public class
     }
     
     func
-        nodeLocatorByAppendingPath()
+        resolvedNodeLocatorByAppendingPath()
         -> Manager.NodeLocator
     {
         let
@@ -296,7 +296,7 @@ public class
     }
 
     func
-        nodeLocatorByAppendingPath() throws
+        resolvedNodeLocatorByAppendingPath() throws
         -> Manager.NodeLocator
     {
         let
@@ -312,7 +312,7 @@ public class
         //
         let
         parent = try analyzer.resolvedParent(),
-        parentLocator = try parent.nodeLocatorByAppendingPath()
+        parentLocator = try parent.resolvedNodeLocatorByAppendingPath()
 
         // Register self
         //
@@ -396,18 +396,45 @@ public class
         with properties :Event.Properties? = nil
         ) {
         let
+        analyzer = self,
+        expressable = properties?.toJSExpressable() ?? [:]
+        try! analyzer.resolveContext { (manager, locator) in
+            manager.recordEvent(
+                named: name,
+                with: expressable,
+                locator: locator
+            )
+        }
+    }
+    typealias
+        NodeContextResolution = (
+        _ manager :Manager,
+        _ parent :NodeLocator
+        ) -> Void
+    var
+    deferredNodeContextRequirings :[NodeContextResolution] = []
+    func
+        resolveContext(
+        then : @escaping NodeContextResolution
+        ) throws {
+        let
         analyzer = self
-        
-        let
-        locator = try! analyzer.nodeLocatorByAppendingPath()
-        let
-        manager = try! analyzer.resolvedManager()
-
-        manager.recordEvent(
-            named: name,
-            with: properties?.toJSExpressive() ?? [:],
-            locator: locator
-        )
+        analyzer.deferredNodeContextRequirings.append(then)
+        guard let
+            locator = try? analyzer.resolvedNodeLocatorByAppendingPath(),
+            let
+            manager = try? analyzer.resolvedManager()
+            else
+        {
+            guard analyzer.deferredNodeContextRequirings.count < 7 else {
+                throw ParentError.tooManyDeferredContextRequirings(node: analyzer.name)
+            }
+            return
+        }
+        for resolve in analyzer.deferredNodeContextRequirings {
+            resolve(manager, locator)
+        }
+        analyzer.deferredNodeContextRequirings.removeAll()
     }
     
     override func
@@ -438,13 +465,8 @@ extension
     where Key == String, Value : Any
 {
     func
-        toJSExpressive() -> Manager.Properties {
-        var
-        buffer = [String : String]()
-        for (key, value) in self {
-            buffer[key] = String(describing: value)
-        }
-        return buffer
+        toJSExpressable() -> Manager.Properties {
+        return self
     }
 }
 
@@ -453,6 +475,7 @@ enum
 {
     case noDelegate(name :String)
     case brokenChain(breaking :String)
+    case tooManyDeferredContextRequirings(node :String)
 }
 extension
     ParentError : LocalizedError
@@ -464,7 +487,8 @@ extension
             return "Analyzer '\(name)' has no delegate to resolve a parent."
         case .brokenChain(breaking: let breaking):
             return "Path chain is broken, because node '\(breaking)' has no parent."
+        case .tooManyDeferredContextRequirings(node: let node):
+            return "Too many deferred node context requirings on node '\(node)'."
         }
     }
 }
-

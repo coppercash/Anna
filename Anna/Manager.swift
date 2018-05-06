@@ -253,7 +253,7 @@ public class
     }
     
     typealias
-    Properties = [String : String]
+    Properties = [String : Any]
     func
         recordEvent(
         named name :String,
