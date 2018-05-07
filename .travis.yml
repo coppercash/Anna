@@ -13,5 +13,5 @@ after_success:
     - bash <(curl -s https://codecov.io/bash) -J 'Anna'
 notifications:
   slack:
-    on_success: change
-    on_failure: change
+    on_success: never
+    on_failure: never
