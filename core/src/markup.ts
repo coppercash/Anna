@@ -29,7 +29,7 @@ export function markup(
   buffer = `${ indent }<${ name }${ buffer }`;
 
   if (children.length == 0) {
-    buffer = `${ buffer }${ closed ? '/>' : '>' }`
+    buffer = `${ buffer }${ closed ? ' />' : '>' }`
     return buffer;
   }
 

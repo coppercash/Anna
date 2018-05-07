@@ -153,10 +153,10 @@ public class
                 self?.handle(scriptError: error)
         }
         let
-        construct = try! context.run(
+        construct = try context.run(
             module,
             with: dependency
-            )!
+            )
         let
         receive : @convention(block) (Any) -> Void = {
             [weak self] (result :Any) in
@@ -175,7 +175,7 @@ public class
             }
         }
         guard let
-            manager = construct.call(withArguments: [
+            manager = construct?.call(withArguments: [
                 (module.path as NSString).appendingPathComponent("task"),
                 unsafeBitCast(inject, to: AnyObject.self),
                 unsafeBitCast(receive, to: AnyObject.self)
