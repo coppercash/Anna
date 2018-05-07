@@ -152,7 +152,7 @@ PathTestCaseBuilder : Anna.Tracking
 }
 
 @objc(ANAPathTestingAppDelegate) class
-PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwning
+PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
 {
     var
     window: UIWindow?
@@ -160,7 +160,10 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwning
     rootViewController :UIViewController?
     var
     manager :Manager?
-    
+    lazy var
+    analyzer :Analyzing? = {
+        RootAnalyzer(manager: self.manager!, name: "root")
+    }()
     func
         application(
         _ application: UIApplication,
@@ -175,67 +178,62 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, AnalyzerOwning
         self.window = window
         return true
     }
-    
-    lazy var
-    analyzer :Analyzing? = {
-        RootAnalyzer(manager: self.manager!, name: "root")
-    }()
 }
 
 @objc(ANAPathTestingNavigationController) class
-    PathTestingNavigationController : UINavigationController, AnalyzerOwning
+    PathTestingNavigationController : UINavigationController, Analyzable
 {
     var
     analyzer :Analyzing?
 }
 
 @objc(ANAPathTestingViewController) class
-PathTestingViewController : UIViewController, AnalyzerOwning
+PathTestingViewController : UIViewController, Analyzable
 {
     var
     analyzer :Analyzing?
 }
 
 @objc(ANAPathTestingButton) class
-PathTestingButton : UIButton, AnalyzerOwning
+PathTestingButton : UIButton, Analyzable
 {
     var
     analyzer :Analyzing?
 }
 
 @objc(ANAPathTestingTableView) class
-    PathTestingTableView : UITableView, AnalyzerOwning
+    PathTestingTableView : UITableView, Analyzable
 {
     var
     analyzer :Analyzing?
 }
 
 @objc(ANAPathTestingTableViewCell) class
-    PathTestingTableViewCell : UITableViewCell, AnalyzerHolding
+    PathTestingTableViewCell : UITableViewCell, AnalyzerWritable
 {
     var
     analyzer :Analyzing?
 }
 
 @objc(ANAPathTestingView) class
-    PathTestingView : UIView, AnalyzerOwning
+    PathTestingView : UIView, Analyzable
 {
     var
     analyzer :Analyzing?
-    
-    override func setNeedsDisplay() {
+    override func
+        setNeedsDisplay() {
         super.setNeedsDisplay()
     }
-    
-    override func setNeedsLayout() {
+    override func
+        setNeedsLayout() {
         super.setNeedsLayout()
     }
-    
-    override func didMoveToWindow() {
-        
+    override func
+        didMoveToWindow() {
+        super.didMoveToWindow()
     }
-    
-    override func didMoveToSuperview() {
-        
+    override func
+        didMoveToSuperview() {
+        super.didMoveToWindow()
     }
 }

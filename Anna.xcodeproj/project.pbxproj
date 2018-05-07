@@ -11,6 +11,16 @@
 		3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE5A2086EE4400AE10D3 /* PathTests.swift */; };
 		3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE7C208708F700AE10D3 /* AppDelegate.swift */; };
 		3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8701AB20883D1E0014E312 /* CoreJS.swift */; };
+		3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5D9209FEACE005F0572 /* ANAUIView.m */; };
+		3DB2E5E7209FEACE005F0572 /* UITableViewCell+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */; };
+		3DB2E5E8209FEACE005F0572 /* UITableView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */; };
+		3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DF209FEACE005F0572 /* UIControl+Hookable.swift */; };
+		3DB2E5EA209FEACE005F0572 /* ANAUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB2E5E0209FEACE005F0572 /* ANAUIView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DB2E5EB209FEACE005F0572 /* UIView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5E1209FEACE005F0572 /* UIView+Hookable.swift */; };
+		3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5E3209FEACE005F0572 /* ANAUIViewController.m */; };
+		3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */; };
+		3DB2E5EE209FEACE005F0572 /* ANAUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DB2E5F0209FEAF6005F0572 /* UIResponder+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */; };
 		3DB8B85F209C3518003B671B /* tool.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DB8B85E209C3517003B671B /* tool.js */; };
 		3DB8B860209C3548003B671B /* tool.js in Copy Files */ = {isa = PBXBuildFile; fileRef = 3DB8B85E209C3517003B671B /* tool.js */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
@@ -20,15 +30,6 @@
 		BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0B209D7D6900111F15 /* Hook.swift */; };
 		BE195B1D209D7D6A00111F15 /* Analyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0D209D7D6900111F15 /* Analyzer.swift */; };
 		BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B24209D7E8A00111F15 /* Tracker.swift */; };
-		BE195B39209D7F6800111F15 /* ANAUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE195B2C209D7F6800111F15 /* ANAUIView.m */; };
-		BE195B3A209D7F6800111F15 /* UITableViewCell+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B2E209D7F6800111F15 /* UITableViewCell+Hookable.swift */; };
-		BE195B3B209D7F6800111F15 /* UITableView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B30209D7F6800111F15 /* UITableView+Hookable.swift */; };
-		BE195B3C209D7F6800111F15 /* UIControl+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B32209D7F6800111F15 /* UIControl+Hookable.swift */; };
-		BE195B3D209D7F6800111F15 /* ANAUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = BE195B33209D7F6800111F15 /* ANAUIView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE195B3E209D7F6800111F15 /* UIView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B34209D7F6800111F15 /* UIView+Hookable.swift */; };
-		BE195B3F209D7F6800111F15 /* ANAUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE195B36209D7F6800111F15 /* ANAUIViewController.m */; };
-		BE195B40209D7F6800111F15 /* UIViewController+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B37209D7F6800111F15 /* UIViewController+Hookable.swift */; };
-		BE195B41209D7F6800111F15 /* ANAUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = BE195B38209D7F6800111F15 /* ANAUIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE195B43209D844F00111F15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B42209D844F00111F15 /* Analyzable.swift */; };
 		BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -91,6 +92,16 @@
 		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D8701AB20883D1E0014E312 /* CoreJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreJS.swift; sourceTree = "<group>"; };
+		3DB2E5D9209FEACE005F0572 /* ANAUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIView.m; sourceTree = "<group>"; };
+		3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5DF209FEACE005F0572 /* UIControl+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5E0209FEACE005F0572 /* ANAUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIView.h; sourceTree = "<group>"; };
+		3DB2E5E1209FEACE005F0572 /* UIView+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5E3209FEACE005F0572 /* ANAUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIViewController.m; sourceTree = "<group>"; };
+		3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIViewController.h; sourceTree = "<group>"; };
+		3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Hookable.swift"; sourceTree = "<group>"; };
 		3DB8B85E209C3517003B671B /* tool.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tool.js; sourceTree = "<group>"; };
 		3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -101,15 +112,6 @@
 		BE195B0B209D7D6900111F15 /* Hook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hook.swift; sourceTree = "<group>"; };
 		BE195B0D209D7D6900111F15 /* Analyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analyzer.swift; sourceTree = "<group>"; };
 		BE195B24209D7E8A00111F15 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
-		BE195B2C209D7F6800111F15 /* ANAUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIView.m; sourceTree = "<group>"; };
-		BE195B2E209D7F6800111F15 /* UITableViewCell+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Hookable.swift"; sourceTree = "<group>"; };
-		BE195B30209D7F6800111F15 /* UITableView+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Hookable.swift"; sourceTree = "<group>"; };
-		BE195B32209D7F6800111F15 /* UIControl+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Hookable.swift"; sourceTree = "<group>"; };
-		BE195B33209D7F6800111F15 /* ANAUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIView.h; sourceTree = "<group>"; };
-		BE195B34209D7F6800111F15 /* UIView+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Hookable.swift"; sourceTree = "<group>"; };
-		BE195B36209D7F6800111F15 /* ANAUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIViewController.m; sourceTree = "<group>"; };
-		BE195B37209D7F6800111F15 /* UIViewController+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Hookable.swift"; sourceTree = "<group>"; };
-		BE195B38209D7F6800111F15 /* ANAUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIViewController.h; sourceTree = "<group>"; };
 		BE195B42209D844F00111F15 /* Analyzable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analyzable.swift; sourceTree = "<group>"; };
 		BE3D83BC2081E33200A1D17D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		BE3D83BE2081E33C00A1D17D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -172,6 +174,63 @@
 			path = CoreJS;
 			sourceTree = "<group>";
 		};
+		3DB2E5D7209FEACE005F0572 /* UIResponder */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5D8209FEACE005F0572 /* UIView */,
+				3DB2E5E2209FEACE005F0572 /* UIViewController */,
+				3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */,
+			);
+			path = UIResponder;
+			sourceTree = "<group>";
+		};
+		3DB2E5D8209FEACE005F0572 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5DA209FEACE005F0572 /* UITableViewCell */,
+				3DB2E5DC209FEACE005F0572 /* UITableView */,
+				3DB2E5DE209FEACE005F0572 /* UIControl */,
+				3DB2E5E1209FEACE005F0572 /* UIView+Hookable.swift */,
+				3DB2E5E0209FEACE005F0572 /* ANAUIView.h */,
+				3DB2E5D9209FEACE005F0572 /* ANAUIView.m */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
+		3DB2E5DA209FEACE005F0572 /* UITableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */,
+			);
+			path = UITableViewCell;
+			sourceTree = "<group>";
+		};
+		3DB2E5DC209FEACE005F0572 /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */,
+			);
+			path = UITableView;
+			sourceTree = "<group>";
+		};
+		3DB2E5DE209FEACE005F0572 /* UIControl */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5DF209FEACE005F0572 /* UIControl+Hookable.swift */,
+			);
+			path = UIControl;
+			sourceTree = "<group>";
+		};
+		3DB2E5E2209FEACE005F0572 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */,
+				3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */,
+				3DB2E5E3209FEACE005F0572 /* ANAUIViewController.m */,
+			);
+			path = UIViewController;
+			sourceTree = "<group>";
+		};
 		4531771AA090ADCF6D936D6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,57 +256,9 @@
 		BE195B2A209D7F6800111F15 /* Hookable */ = {
 			isa = PBXGroup;
 			children = (
-				BE195B2B209D7F6800111F15 /* UIView */,
-				BE195B35209D7F6800111F15 /* UIViewController */,
+				3DB2E5D7209FEACE005F0572 /* UIResponder */,
 			);
 			path = Hookable;
-			sourceTree = "<group>";
-		};
-		BE195B2B209D7F6800111F15 /* UIView */ = {
-			isa = PBXGroup;
-			children = (
-				BE195B2D209D7F6800111F15 /* UITableViewCell */,
-				BE195B2F209D7F6800111F15 /* UITableView */,
-				BE195B31209D7F6800111F15 /* UIControl */,
-				BE195B34209D7F6800111F15 /* UIView+Hookable.swift */,
-				BE195B33209D7F6800111F15 /* ANAUIView.h */,
-				BE195B2C209D7F6800111F15 /* ANAUIView.m */,
-			);
-			path = UIView;
-			sourceTree = "<group>";
-		};
-		BE195B2D209D7F6800111F15 /* UITableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				BE195B2E209D7F6800111F15 /* UITableViewCell+Hookable.swift */,
-			);
-			path = UITableViewCell;
-			sourceTree = "<group>";
-		};
-		BE195B2F209D7F6800111F15 /* UITableView */ = {
-			isa = PBXGroup;
-			children = (
-				BE195B30209D7F6800111F15 /* UITableView+Hookable.swift */,
-			);
-			path = UITableView;
-			sourceTree = "<group>";
-		};
-		BE195B31209D7F6800111F15 /* UIControl */ = {
-			isa = PBXGroup;
-			children = (
-				BE195B32209D7F6800111F15 /* UIControl+Hookable.swift */,
-			);
-			path = UIControl;
-			sourceTree = "<group>";
-		};
-		BE195B35209D7F6800111F15 /* UIViewController */ = {
-			isa = PBXGroup;
-			children = (
-				BE195B37209D7F6800111F15 /* UIViewController+Hookable.swift */,
-				BE195B38209D7F6800111F15 /* ANAUIViewController.h */,
-				BE195B36209D7F6800111F15 /* ANAUIViewController.m */,
-			);
-			path = UIViewController;
 			sourceTree = "<group>";
 		};
 		BE87DA741EAB606A00DA81EB = {
@@ -321,9 +332,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DB2E5EA209FEACE005F0572 /* ANAUIView.h in Headers */,
 				BE87DA851EAB608700DA81EB /* Anna.h in Headers */,
-				BE195B3D209D7F6800111F15 /* ANAUIView.h in Headers */,
-				BE195B41209D7F6800111F15 /* ANAUIViewController.h in Headers */,
+				3DB2E5EE209FEACE005F0572 /* ANAUIViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,19 +543,20 @@
 			files = (
 				BE195B1A209D7D6A00111F15 /* Manager.swift in Sources */,
 				BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */,
+				3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */,
+				3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */,
+				3DB2E5EB209FEACE005F0572 /* UIView+Hookable.swift in Sources */,
+				3DB2E5F0209FEAF6005F0572 /* UIResponder+Hookable.swift in Sources */,
+				3DB2E5E7209FEACE005F0572 /* UITableViewCell+Hookable.swift in Sources */,
+				3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */,
 				BE195B15209D7D6A00111F15 /* UIResponder+PathConstituting.swift in Sources */,
-				BE195B3A209D7F6800111F15 /* UITableViewCell+Hookable.swift in Sources */,
 				BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */,
-				BE195B3E209D7F6800111F15 /* UIView+Hookable.swift in Sources */,
 				3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */,
-				BE195B3F209D7F6800111F15 /* ANAUIViewController.m in Sources */,
-				BE195B3C209D7F6800111F15 /* UIControl+Hookable.swift in Sources */,
-				BE195B3B209D7F6800111F15 /* UITableView+Hookable.swift in Sources */,
+				3DB2E5E8209FEACE005F0572 /* UITableView+Hookable.swift in Sources */,
 				BE195B43209D844F00111F15 /* Analyzable.swift in Sources */,
+				3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */,
 				BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */,
 				BE195B1D209D7D6A00111F15 /* Analyzer.swift in Sources */,
-				BE195B39209D7F6800111F15 /* ANAUIView.m in Sources */,
-				BE195B40209D7F6800111F15 /* UIViewController+Hookable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

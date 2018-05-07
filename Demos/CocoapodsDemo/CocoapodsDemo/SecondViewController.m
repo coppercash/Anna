@@ -18,9 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.ana_analyzer =
-    [ANAAnalyzer analyzerHookingDelegate:self
-                                  naming:@"second_view_controller"];
+    [self ana_becomeAnalysisObjectNamed:@"second_view_controller"];
 }
 
 - (void)didReceiveMemoryWarning {

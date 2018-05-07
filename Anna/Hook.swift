@@ -127,9 +127,9 @@ class
     where Observee : NSObject
 {
     let
-    decorator :AnyClass
+    decorator :AnyClass?
     init(
-        decorator :AnyClass,
+        decorator :AnyClass?,
         keyPaths :[String: NSKeyValueObservingOptions],
         observee :Observee,
         owned :Bool = false
@@ -144,7 +144,7 @@ class
     override func
         observe(_ observee: Observee) {
         super.observe(observee)
-        self.decorator.decorate(object: observee)
+        self.decorator?.decorate(object: observee)
     }
     override func
         observeValue(
@@ -193,9 +193,7 @@ class
         ]
     }
     class var
-    decorator :AnyClass {
-        return Observee.self
-    }
+    decorator :AnyClass? { return nil }
 }
 
 /*

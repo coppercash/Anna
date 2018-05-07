@@ -9,31 +9,60 @@ import Foundation
 
 @objc(ANAAnalyzable)
 public protocol
-    Analyzable : AnalyzerHolding
+    Analyzable : AnalyzerWritable & Hookable
 {
+    @objc(ana_becomeAnalysisObjectNamed:)
+    func
+        becomeAnalysisObject(named name :String)
+}
+
+public extension
+    NSObject
+{
+    @objc(ana_becomeAnalysisObjectNamed:)
+    public func
+        becomeAnalysisObject(
+        named name :String
+        ) {
+        let
+        writable = self as! AnalyzerWritable,
+        delegate = (self as! Analyzer.Delegate & Hookable),
+        analyzer = Analyzer(
+            with: name,
+            delegate: delegate
+        )
+        analyzer.hook(owner: delegate)
+        writable.analyzer = analyzer
+    }
 }
 
 @objc(ANAAnalyzing)
 public protocol
     Analyzing
 {
-    // Keep this empty
-    // no promised action after being registered
-    //
+    @objc(hook:)
+    func
+        hook(_ hookee :Hookable)
+    @objc(observe:for:)
+    func
+        observe(
+        _ observee :NSObject,
+        for keyPath :String
+    )
 }
 
-@objc(ANAAnalyzerOwning)
+@objc(ANAAnalyzerReadable)
 public protocol
-    AnalyzerOwning
+    AnalyzerReadable
 {
     @objc(ana_analyzer)
     var
     analyzer :Analyzing? { get }
 }
 
-@objc(ANAAnalyzerHolding)
+@objc(ANAAnalyzerWritable)
 public protocol
-    AnalyzerHolding : AnalyzerOwning
+    AnalyzerWritable : AnalyzerReadable
 {
     @objc(ana_analyzer)
     var

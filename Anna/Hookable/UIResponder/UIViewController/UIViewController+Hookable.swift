@@ -8,13 +8,13 @@
 import UIKit
 
 extension
-    UIViewController : Hookable
+    UIViewController 
 {
-    public func
+    public override func
         tokenByAddingObserver() -> Reporting {
         return UIViewControllerObserver(observee: self, owned: false)
     }
-    public func
+    public override func
         tokenByAddingOwnedObserver() -> Reporting {
         return UIViewControllerObserver(observee: self, owned: true)
     }
@@ -34,15 +34,21 @@ class
         guard let event = change?.toEvent() else { return }
         switch event.name {
         case String(describing: #selector(UIViewController.viewDidAppear(_:))):
-            self.recorder?.recordEventOnPath(named: "ana-appeared")
+            self.recorder?.recordEventOnPath(
+                named: "ana-appeared",
+                with: nil
+            )
         case String(describing: #selector(UIViewController.viewDidDisappear(_:))):
-            self.recorder?.recordEventOnPath(named: "ana-disappeared")
+            self.recorder?.recordEventOnPath(
+                named: "ana-disappeared",
+                with: nil
+            )
         default:
             return super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
     class override var
-    decorator :AnyClass {
+    decorator :AnyClass? {
         return ANAUIViewController.self
     }
 }

@@ -35,6 +35,9 @@ extension
 }
 
 class
-    UITableViewCellObserver<Observee> : HookingObserver<Observee>
+    UITableViewCellObserver<Observee> : UIViewObserver<Observee>
     where Observee : UITableViewCell
-{ }
+{
+    class override var
+    decorator :AnyClass? { return nil }
+}

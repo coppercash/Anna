@@ -8,22 +8,21 @@
 import Foundation
 
 extension
-    UIView : Hookable
+    UIView
 {
-    public func
+    public override func
         tokenByAddingObserver() -> Reporting {
         return UIViewObserver(observee: self, owned: false)
     }
-    
-    public func
+    public override func
         tokenByAddingOwnedObserver() -> Reporting {
         return UIViewObserver(observee: self, owned: true)
     }
 }
 
 class
-    UIViewObserver<View> : HookingObserver<View>
-    where View : UIView
+    UIViewObserver<Observee> : UIResponderObserver<Observee>
+    where Observee : UIView
 {
     override func
         observeValue(
@@ -75,7 +74,7 @@ class
         ]) { $0.0 }
     }
     class override var
-    decorator :AnyClass {
+    decorator :AnyClass? {
         return ANAUIView.self
     }
 }

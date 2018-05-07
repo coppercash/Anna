@@ -28,13 +28,12 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                
-                self.analyzer = Analyzer.hooking(delegate: self, naming: "vc")
+                self.becomeAnalysisObject(named: "vc")
                 
                 self.button = {
                     let
                     button = PathTestingButton()
-                    button.analyzer = Analyzer.hooking(delegate: button, naming: "bt")
+                    button.becomeAnalysisObject(named: "bt")
                     return button
                 }()
                 self.view.addSubview(self.button!)
@@ -51,7 +50,7 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 999.0
+            timeout: 1.0
         )
         
         XCTAssertEqual(test.results[0] as! Int, 42)
@@ -83,13 +82,13 @@ class PathTests: XCTestCase {
                 table.delegate = self
                 table.dataSource = self
                 table.register(PathTestingTableViewCell.self, forCellReuseIdentifier: "r")
-                table.analyzer = Analyzer.hooking(delegate: table, naming: "tb")
+                table.becomeAnalysisObject(named: "tb")
                 return table
             }()
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer = Analyzer.hooking(delegate: self, naming: "vc")
+                self.becomeAnalysisObject(named: "vc")
                 self.view.addSubview(self.table)
                 
             }
@@ -143,7 +142,7 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 999.0
+            timeout: 1.0
         )
         
         XCTAssertEqual(test.results[0] as! String, "0_0")
@@ -170,14 +169,14 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer = Analyzer.hooking(delegate: self, naming: "vc")
-                
+                self.becomeAnalysisObject(named: "vc")
+
                 var
                 superview = self.view!
                 for name in ["alpha", "beta", "delta"] {
                     let
                     view = PathTestingView(frame: superview.bounds)
-                    view.analyzer = Analyzer.hooking(delegate: view, naming: name)
+                    view.becomeAnalysisObject(named: name)
                     superview.addSubview(view)
                     superview = view
                     switch name {
@@ -191,7 +190,7 @@ class PathTests: XCTestCase {
                 }
                 let
                 button = PathTestingButton(frame: superview.bounds)
-                button.analyzer = Analyzer.hooking(delegate: button, naming: "gamma")
+                button.becomeAnalysisObject(named: "gamma")
                 self.gamma = button
                 superview.addSubview(button)
             }
@@ -215,7 +214,7 @@ class PathTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 999999.0
+            timeout: 1.0
         )
         
         XCTAssertEqual(test.results[0] as! Int, 42)
@@ -251,11 +250,9 @@ class PathTests: XCTestCase {
                 label = UILabel(frame: superview.bounds)
                 superview.addSubview(label)
                 
-                let
-                analyzer = Analyzer.hooking(delegate: superview, naming: "vw")
-                analyzer.observe(label, for: "text")
-                superview.analyzer = analyzer
-                
+                superview.becomeAnalysisObject(named: "vw")
+                superview.analyzer?.observe(label, for: "text")
+
                 self.label = label
             }
             override func
@@ -295,11 +292,8 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                let
-                analyzer = Analyzer.hooking(delegate: self, naming: "vc")
-                self.analyzer = analyzer
-                
-                
+                self.becomeAnalysisObject(named: "vc")
+
                 let
                 superview = self.view!
                 let
@@ -307,7 +301,7 @@ class PathTests: XCTestCase {
                 superview.addSubview(label)
                 self.label = label
                 
-                analyzer.observe(label, for: "text")
+                self.analyzer?.observe(label, for: "text")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -342,18 +336,18 @@ class PathTests: XCTestCase {
         {
             override func
                 viewDidLoad() {
-                self.analyzer = Analyzer.hooking(delegate: self, naming: "nv")
+                self.becomeAnalysisObject(named: "nv")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 let
                 master = PathTestingViewController()
-                master.analyzer = Analyzer.hooking(delegate: master, naming: "ms")
+                master.becomeAnalysisObject(named: "ms")
                 self.pushViewController(master, animated: false)
                 let
                 detail = PathTestingViewController()
-                detail.analyzer = Analyzer.hooking(delegate: detail, naming: "dt")
+                detail.becomeAnalysisObject(named: "dt")
                 self.pushViewController(detail, animated: false)
             }
         }

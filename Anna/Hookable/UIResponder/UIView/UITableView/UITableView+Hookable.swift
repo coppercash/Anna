@@ -119,7 +119,7 @@ class
         cell = self.target.tableView(tableView, cellForRowAt: indexPath)
         
         guard let
-            owner = tableView as? AnalyzerOwning,
+            owner = tableView as? AnalyzerReadable,
             let
             analyzable = tableView.delegate as? AnalyzableTableViewDelegate
             else { return cell }
@@ -137,13 +137,13 @@ class
             row = analyzable.tableView(tableView, analyzerNameForRowAt: indexPath) {
             analyzer = analyzer.resolvedSubAnalyzer(named: row) as! Analyzer
             if let
-                holder = cell as? AnalyzerHolding {
+                holder = cell as? AnalyzerWritable {
                 if let
                     old = holder.analyzer {
                     analyzer.takePlace(of: old as! Analyzer)
                 }
                 else {
-                    analyzer.hook(cell)
+                    analyzer.hook(owner: cell)
                 }
                 holder.analyzer = analyzer
             }

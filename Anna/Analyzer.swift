@@ -12,9 +12,22 @@ public protocol
 Reporting
 {
     typealias
-        Recorder = Analyzer
+        Recorder = Recording
     weak var
     recorder :Recorder? { get set }
+}
+
+@objc(ANARecording)
+public protocol
+    Recording
+{
+    typealias
+    Properties = NSObject.Propertiez
+    func
+        recordEventOnPath(
+        named name :String,
+        with properties :Properties?
+    )
 }
 
 @objc(ANAHookable)
@@ -57,8 +70,16 @@ protocol
 }
 
 public class
-    BaseAnalyzer : NSObject
+    BaseAnalyzer : NSObject, Recording, Analyzing
 {
+    let
+    name :String
+    init(
+        name :String
+        ) {
+        self.name = name
+    }
+    
     var
     lastRegisteredLocator :Manager.NodeLocator? = nil
     deinit {
@@ -95,7 +116,6 @@ public class
         }
         self.notifications.removeAll()
     }
-    
     func
         notifyOnReseting(
         _ locator :NodeLocator,
@@ -109,20 +129,122 @@ public class
         self.lastRegisteredLocator = nil
         self.notifyLastRegisteredLocatorReset()
     }
-    
     func
         deregisterLastLocator() throws {
+    }
+    func
+        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
+        throw ParentError.abstractMethod(name: #function)
+    }
+    func
+        resolvedManager() throws -> Manager {
+        throw ParentError.abstractMethod(name: #function)
+    }
+
+    var
+    tokens = Array<Reporting>()
+    public func
+        hook(_ hookee :Hookable) {
+        let
+        token = hookee.tokenByAddingObserver()
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    func
+        hook(owner :Hookable) {
+        let
+        token = owner.tokenByAddingOwnedObserver()
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    public func
+        observe(
+        _ observee :NSObject,
+        for keyPath :String
+        ) {
+        let
+        token = KVObserver(observee, keyPath)
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    func
+        takePlace(of analyzer :Analyzer) {
+        if analyzer === self { return }
+        for token in analyzer.tokens {
+            token.recorder = self
+            self.tokens.append(token)
+        }
+        analyzer.tokens.removeAll()
+    }
+    func
+        detach() {
+        self.tokens.removeAll()
+    }
+    
+    struct
+        Event
+    {
+        typealias
+            Properties = NSObject.Propertiez
+        let
+        name :String,
+        properties :Properties?
+    }
+    public func
+        recordEventOnPath(
+        named name :String,
+        with properties :Properties? = nil
+        ) {
+        let
+        analyzer = self,
+        expressable = properties?.toJSExpressable() ?? [:]
+        try! analyzer.resolveContext { (manager, locator) in
+            manager.recordEvent(
+                named: name,
+                with: expressable,
+                locator: locator
+            )
+        }
+    }
+    typealias
+        NodeContextResolution = (
+        _ manager :Manager,
+        _ parent :NodeLocator
+        ) -> Void
+    var
+    deferredNodeContextRequirings :[NodeContextResolution] = []
+    func
+        resolveContext(
+        then : @escaping NodeContextResolution
+        ) throws {
+        let
+        analyzer = self
+        analyzer.deferredNodeContextRequirings.append(then)
+        guard let
+            locator = try? analyzer.resolvedNodeLocatorByAppendingPath(),
+            let
+            manager = try? analyzer.resolvedManager()
+            else
+        {
+            guard analyzer.deferredNodeContextRequirings.count < 7 else {
+                throw ParentError.tooManyDeferredContextRequirings(node: analyzer.name)
+            }
+            return
+        }
+        for resolve in analyzer.deferredNodeContextRequirings {
+            resolve(manager, locator)
+        }
+        analyzer.deferredNodeContextRequirings.removeAll()
     }
 }
 
 @objc(ANARootAnalyzer)
 public class
-    RootAnalyzer : BaseAnalyzer, AnalyzerParenting, Analyzing
+    RootAnalyzer : BaseAnalyzer, AnalyzerParenting
 {
     let
-    manager :Manager,
-    name :String
-    
+    manager :Manager
+
     @objc(initWithManager:name:)
     public
     init(
@@ -131,20 +253,16 @@ public class
         )
     {
         self.manager = manager
-        self.name = name
+        super.init(name: name)
     }
 
-    func
-        resolvedManager()
-        -> Manager
-    {
+    override func
+        resolvedManager() throws -> Manager {
         return self.manager
     }
     
-    func
-        resolvedNodeLocatorByAppendingPath()
-        -> Manager.NodeLocator
-    {
+    override func
+        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
         let
         analyzer = self
         
@@ -157,7 +275,7 @@ public class
         // Register self
         //
         let
-        manager = analyzer.resolvedManager(),
+        manager = try analyzer.resolvedManager(),
         objID = ObjectIdentifier(analyzer),
         locator = manager.rootNodeLocator(
             ownerID: objID,
@@ -188,12 +306,10 @@ public class
 }
 
 extension
-    RootAnalyzer : PathConstituting, AnalyzerOwning
+    RootAnalyzer : PathConstituting, AnalyzerReadable
 {
     public var
-    analyzer: Analyzing? {
-        return self
-    }
+    analyzer: Analyzing? { return self }
     public func
         parentConsititutor() -> PathConstituting? {
         return self
@@ -202,12 +318,10 @@ extension
 
 @objc(ANAAnalyzer)
 public class
-    Analyzer : BaseAnalyzer, AnalyzerParenting, Analyzing
+    Analyzer : BaseAnalyzer, AnalyzerParenting
 {
     public typealias
         Delegate = PathConstituting
-    let
-    name :String
     weak var
     delegate :Delegate?
     @objc(initWithName:delegate:)
@@ -216,13 +330,14 @@ public class
         with name :String,
         delegate :Delegate
         ) {
-        self.name = name
         self.delegate = delegate
+        super.init(name: name)
     }
     deinit {
         try? self.deregisterLastLocator()
     }
 
+    /*
     @objc(analyzerHookingDelegate:naming:)
     public class func
         hooking(
@@ -237,6 +352,7 @@ public class
         analyzer.hook(delegate)
         return analyzer
     }
+ */
     
     func
         resolvedParent() throws
@@ -264,7 +380,7 @@ public class
             guard let consititutor = next
                 else { throw ParentError.brokenChain(breaking: String(describing: type(of: last))) }
             if let
-                owner = consititutor as? AnalyzerOwning,
+                owner = consititutor as? AnalyzerReadable,
                 let
                 parent = owner.analyzer as? AnalyzerParenting
             { return parent }
@@ -275,10 +391,8 @@ public class
     
     var
     manager :Manager? = nil
-    func
-        resolvedManager() throws
-        -> Manager
-    {
+    override func
+        resolvedManager() throws -> Manager {
         let
         analyzer = self
         if let manager = analyzer.manager
@@ -299,10 +413,8 @@ public class
         return self.name
     }
 
-    func
-        resolvedNodeLocatorByAppendingPath() throws
-        -> Manager.NodeLocator
-    {
+    override func
+        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
         let
         analyzer = self
 
@@ -349,98 +461,6 @@ public class
         return type(of: self).resolvedSubAnalyzer(named: name, under: self)
     }
     
-    var
-    tokens = Array<Reporting>()
-    public func
-        hook(_ hookee : Hookable) {
-        let
-        token = hookee.tokenByAddingOwnedObserver()
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    
-    public func
-        observe(
-        _ observee :NSObject,
-        for keyPath :String
-        ) {
-        let
-        token = KVObserver(observee, keyPath)
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    
-    func
-        takePlace(of analyzer :Analyzer) {
-        if analyzer === self { return }
-        for token in analyzer.tokens {
-            token.recorder = self
-            self.tokens.append(token)
-        }
-        analyzer.tokens.removeAll()
-    }
-    
-    func
-        detach() {
-        self.tokens.removeAll()
-    }
-    
-    struct
-        Event
-    {
-        typealias
-            Properties = NSObject.Propertiez
-        let
-        name :String,
-        properties :Properties?
-    }
-    func
-        recordEventOnPath(
-        named name :String,
-        with properties :Event.Properties? = nil
-        ) {
-        let
-        analyzer = self,
-        expressable = properties?.toJSExpressable() ?? [:]
-        try! analyzer.resolveContext { (manager, locator) in
-            manager.recordEvent(
-                named: name,
-                with: expressable,
-                locator: locator
-            )
-        }
-    }
-    typealias
-        NodeContextResolution = (
-        _ manager :Manager,
-        _ parent :NodeLocator
-        ) -> Void
-    var
-    deferredNodeContextRequirings :[NodeContextResolution] = []
-    func
-        resolveContext(
-        then : @escaping NodeContextResolution
-        ) throws {
-        let
-        analyzer = self
-        analyzer.deferredNodeContextRequirings.append(then)
-        guard let
-            locator = try? analyzer.resolvedNodeLocatorByAppendingPath(),
-            let
-            manager = try? analyzer.resolvedManager()
-            else
-        {
-            guard analyzer.deferredNodeContextRequirings.count < 7 else {
-                throw ParentError.tooManyDeferredContextRequirings(node: analyzer.name)
-            }
-            return
-        }
-        for resolve in analyzer.deferredNodeContextRequirings {
-            resolve(manager, locator)
-        }
-        analyzer.deferredNodeContextRequirings.removeAll()
-    }
-    
     override func
         deregisterLastLocator() throws {
         if let locator = self.lastRegisteredLocator {
@@ -452,12 +472,10 @@ public class
 }
 
 extension
-    Analyzer : PathConstituting, AnalyzerOwning
+    Analyzer : PathConstituting, AnalyzerReadable
 {
     public var
-    analyzer: Analyzing? {
-        return self
-    }
+    analyzer: Analyzing? { return self }
     public func
         parentConsititutor() -> PathConstituting? {
         return self
@@ -477,6 +495,7 @@ extension
 enum
     ParentError : Error
 {
+    case abstractMethod(name :String)
     case noDelegate(name :String)
     case brokenChain(breaking :String)
     case tooManyDeferredContextRequirings(node :String)
@@ -487,6 +506,8 @@ extension
     public var
     errorDescription: String? {
         switch self {
+        case .abstractMethod(name: let name):
+            return "Must not call abstract method '\(name)'."
         case .noDelegate(name: let name):
             return "Analyzer '\(name)' has no delegate to resolve a parent."
         case .brokenChain(breaking: let breaking):
