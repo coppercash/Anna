@@ -71,7 +71,7 @@ class
     keyPaths :[String: NSKeyValueObservingOptions] {
         return super.keyPaths.merging([
             #keyPath(UIView.isVisible): [.new, .initial]
-        ]) { $0.0 }
+        ]) { (key, _) in return key }
     }
     class override var
     decorator :AnyClass? {

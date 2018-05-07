@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Anna/Anna.h>
 #import <Anna/Anna-Swift.h>
 
 @interface Tracker : NSObject <ANATracking>

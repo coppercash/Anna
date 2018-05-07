@@ -22,7 +22,7 @@ extension
             base != stated
             else { return }
         self.decorate(base)
-        object_getClass(self).decorate(object_getClass(base))
+        object_getClass(self)?.decorate(object_getClass(base)!)
     }
     @objc(ana_decorate:)
     class func

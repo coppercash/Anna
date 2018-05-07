@@ -15,12 +15,12 @@
 		BE5EEE0C1F2AA42D000C9015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE5EEE0B1F2AA42D000C9015 /* Assets.xcassets */; };
 		BE5EEE0F1F2AA42D000C9015 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE5EEE0D1F2AA42D000C9015 /* LaunchScreen.storyboard */; };
 		BE5EEE1B1F2AA5A4000C9015 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5EEE1A1F2AA5A4000C9015 /* SecondViewController.m */; };
-		F4C5EA45D1B27C414C281135 /* Pods_CocoapodsDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A7D268F1C4D5C7590C0B33 /* Pods_CocoapodsDemo.framework */; };
+		CAE4FDEEA29D7A66246A4C05 /* Pods_CocoapodsDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D42C20F2F83A430CBAE3E8F /* Pods_CocoapodsDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4D42C20F2F83A430CBAE3E8F /* Pods_CocoapodsDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoapodsDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F282CAD044A8ECA93C9363A /* Pods-CocoapodsDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoapodsDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-CocoapodsDemo/Pods-CocoapodsDemo.release.xcconfig"; sourceTree = "<group>"; };
-		96A7D268F1C4D5C7590C0B33 /* Pods_CocoapodsDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoapodsDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE195B44209D8F2C00111F15 /* analytics.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = analytics.bundle; sourceTree = "<group>"; };
 		BE195B46209D983D00111F15 /* Tracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
 		BE195B47209D983D00111F15 /* Tracker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tracker.m; sourceTree = "<group>"; };
@@ -42,7 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4C5EA45D1B27C414C281135 /* Pods_CocoapodsDemo.framework in Frameworks */,
+				CAE4FDEEA29D7A66246A4C05 /* Pods_CocoapodsDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +52,7 @@
 		80A33A3F603710FDE30CF6B1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				96A7D268F1C4D5C7590C0B33 /* Pods_CocoapodsDemo.framework */,
+				4D42C20F2F83A430CBAE3E8F /* Pods_CocoapodsDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -349,14 +349,14 @@
 			baseConfigurationReference = E5CE06A7871696A2516BB26D /* Pods-CocoapodsDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				INFOPLIST_FILE = CocoapodsDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.coppercash.CocoapodsDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "CocoapodsDemo/CocoapodsDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -365,13 +365,13 @@
 			baseConfigurationReference = 7F282CAD044A8ECA93C9363A /* Pods-CocoapodsDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				INFOPLIST_FILE = CocoapodsDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.coppercash.CocoapodsDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "CocoapodsDemo/CocoapodsDemo-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

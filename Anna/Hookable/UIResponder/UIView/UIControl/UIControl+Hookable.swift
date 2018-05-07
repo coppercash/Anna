@@ -42,7 +42,7 @@ class
             for: .touchUpInside
         )
     }
-    func
+    @objc func
         handleTouchUpInside(
         on control :UIControl,
         with event :UIEvent
