@@ -362,4 +362,52 @@ class PathTests: XCTestCase {
         
         XCTAssertEqual(test.results[0] as! Int, 42)
     }
+    
+    func test_tabController() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        test.task =
+        """
+        match(
+        '/tb/one/ana-appeared',
+        function() { return 42; }
+        );
+        match(
+        '/tb/two/ana-appeared',
+        function() { return 43; }
+        );
+        """
+        class
+            TabBar : PathTestingTabBarController
+        {
+            override func
+                viewDidLoad() {
+                let
+                controllers = ["one", "two"].map { (name :String) -> PathTestingViewController in
+                    let
+                    controller = PathTestingViewController()
+                    controller.becomeAnalysisObject(named: name)
+                    return controller
+                }
+                self.viewControllers = controllers
+                self.becomeAnalysisObject(named: "tb")
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                self.selectedIndex = 1
+            }
+        }
+        test.rootViewController = TabBar()
+        
+        test.expect(for: 2)
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 1.0
+        )
+        
+        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test.results[1] as! Int, 43)
+    }
 }

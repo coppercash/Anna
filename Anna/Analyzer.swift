@@ -46,9 +46,12 @@ public protocol
 public protocol
 PathConstituting
 {
-    @objc(ana_parentPathNode)
+    @objc(ana_parentConsititutorForChild:requiredByDescendant:)
     func
-        parentConsititutor() -> PathConstituting?
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredBy descendant :PathConstituting
+        ) -> PathConstituting?
 }
 
 protocol
@@ -311,7 +314,10 @@ extension
     public var
     analyzer: Analyzing? { return self }
     public func
-        parentConsititutor() -> PathConstituting? {
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredBy descendant :PathConstituting
+        ) -> PathConstituting? {
         return self
     }
 }
@@ -375,7 +381,10 @@ public class
             else { throw ParentError.noDelegate(name: self.resolvedName()) }
         var
         last = delegate,
-        next = delegate.parentConsititutor()
+        next = delegate.parentConsititutor(
+            for: last,
+            requiredBy: delegate
+        )
         while true {
             guard let consititutor = next
                 else { throw ParentError.brokenChain(breaking: String(describing: type(of: last))) }
@@ -384,8 +393,11 @@ public class
                 let
                 parent = owner.analyzer as? AnalyzerParenting
             { return parent }
+            next = consititutor.parentConsititutor(
+                for: last,
+                requiredBy: delegate
+            )
             last = consititutor
-            next = consititutor.parentConsititutor()
         }
     }
     
@@ -477,7 +489,10 @@ extension
     public var
     analyzer: Analyzing? { return self }
     public func
-        parentConsititutor() -> PathConstituting? {
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredBy descendant :PathConstituting
+        ) -> PathConstituting? {
         return self
     }
 }

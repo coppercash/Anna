@@ -11,7 +11,10 @@ extension
     UIResponder : PathConstituting
 {
     open func
-        parentConsititutor() -> PathConstituting? {
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredBy descendant :PathConstituting
+        ) -> PathConstituting? {
         return self.next
     }
 }
@@ -20,7 +23,10 @@ extension
     UIViewController
 {
     open override func
-        parentConsititutor() -> PathConstituting? {
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredBy descendant :PathConstituting
+        ) -> PathConstituting? {
         if let
             navigation = self.navigationController {
             var
@@ -36,7 +42,10 @@ extension
             return navigation
         }
         else {
-            return super.parentConsititutor()
+            return super.parentConsititutor(
+                for: child,
+                requiredBy: descendant
+            )
         }
     }
 }

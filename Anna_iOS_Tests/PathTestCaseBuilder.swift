@@ -187,6 +187,13 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
     analyzer :Analyzing?
 }
 
+@objc(ANAPathTestingTabBarController) class
+    PathTestingTabBarController : UITabBarController, Analyzable
+{
+    var
+    analyzer :Analyzing?
+}
+
 @objc(ANAPathTestingViewController) class
 PathTestingViewController : UIViewController, Analyzable
 {
