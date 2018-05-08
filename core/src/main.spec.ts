@@ -137,4 +137,68 @@ describe('Anna', () => {
     anna.registerNode([80, 800, 8000], 'bar', 7);
   });
 
+  it('should reload tasks if configured' , (done) => {
+    let
+    config = {debug: true};
+    var
+    time = 0;
+    let
+    anna = new Anna(new Loader((match) => {
+      let
+      delta = time;
+      match('/appear', () => { 
+        return 42 + delta; 
+      })
+    }), config);
+    anna.tracker = new Tracker((result) => {
+      switch (time) {
+        case 0:
+          expect(result).to.equal(42);
+          break
+        case 1:
+          expect(result).to.equal(43);
+          break
+        case 2:
+          expect(result).to.equal(44);
+          break
+      }
+      time += 1;
+      if (!(time < 3)) {
+        done();
+      }
+    });
+    anna.registerNode(7, 'root');
+    for (var i = 0; i < 3; i += 1) {
+      anna.recordEvent('appear', {}, 7);
+    }
+  });
+
+  it('should not reload tasks if not configured' , (done) => {
+    let
+    config = {debug: false};
+    var
+    time = 0;
+    let
+    anna = new Anna(new Loader((match) => {
+      let
+      delta = time;
+      match('/appear', () => { return 42 + delta; })
+    }), config);
+    anna.tracker = new Tracker((result) => {
+      switch (time) {
+        case 0:
+        case 1:
+        case 2:
+          expect(result).to.equal(42);
+      }
+      time += 1;
+      if (!(time < 3)) {
+        done();
+      }
+    });
+    anna.registerNode(7, 'root');
+    for (var i = 0; i < 3; i += 1) {
+      anna.recordEvent('appear', {}, 7);
+    }
+  });
 });

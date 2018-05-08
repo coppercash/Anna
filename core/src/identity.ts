@@ -14,14 +14,7 @@ export class Tree
 {
   root :Node = null;
   identities :Identity = new Identity();
-  loader :Loading;
 
-  constructor(
-    loader :Loading
-  ) {
-    this.loader = loader;
-  }
-  
   nodeID(
     ownerIDs :number[]
   ) : NodeID {
@@ -58,7 +51,7 @@ export class Tree
     let
     node = parent ? 
       parent.fork(nodeID, name) : 
-      new Node(nodeID, name, null, tree.rootMatching());
+      new Node(nodeID, name, null);
 
     tree.setNode(node, nodeID);
     if (!(parent)) {
@@ -88,7 +81,7 @@ export class Tree
       node.delete();
       tree.removeNode(nodeID);
       if (node === tree.root) {
-        tree.root = null;
+        delete tree.root
       }
     }
   }
@@ -149,8 +142,36 @@ export class Tree
     parent.removeChild(ownerIDs[ownerIDs.length - 1]);
   }
 
-  rootMatching() : Match.Stage {
-    return this.loader.matchTasks('');
+  addMatchTasks(
+    tasks :Match.Stage
+  ) {
+    let
+    root = this.root;
+    if (!(root)) {
+      throw new Error(`Cannot add match tasks to a identity tree without a root node.`);
+    }
+    root.traverseWithStage(
+      tasks, 
+      (node, stage) => { 
+        node.matching.merge(stage); 
+      }
+    );
+  }
+
+  subtractMatchTasks(
+    tasks :Match.Stage
+  ) {
+    let
+    root = this.root;
+    if (!(root)) {
+      throw new Error(`Cannot subtract match tasks from a identity tree without a root node.`);
+    }
+    root.traverseWithStage(
+      tasks, 
+      (node, stage) => { 
+        node.matching.drop(stage); 
+      }
+    );
   }
 
   snapshot() : string {
@@ -282,7 +303,7 @@ export class Node implements Markup.Markable
   events :Event[] = [];
   parent :Node;
   children :Set<Node> = new Set<Node>();
-  matching :Match.Stage;
+  matching :Match.Stage = Match.Stage.empty();
   
   _indexAmongSiblings :number = Number.MAX_SAFE_INTEGER;
 
@@ -290,12 +311,10 @@ export class Node implements Markup.Markable
     id :NodeID,
     name :string,
     parent :Node,
-    matching :Match.Stage
   ) {
     this.id = id;
     this.name = name;
     this.parent = parent;
-    this.matching = matching;
   }
 
   fork(
@@ -304,13 +323,14 @@ export class Node implements Markup.Markable
   ) :Node {
     let
     node = this, children = this.children, subordinates = this.subordinates;
-    let 
-    matching = node.stageMatching(name);
     let
-    child = new Node(nodeID, name, node, matching);
+    child = new Node(nodeID, name, node);
     child._indexAmongSiblings = children.size;
     children.add(child);
     subordinates.push(child);
+    let 
+    matching = node.stageMatching(name);
+    child.matching.merge(matching);
     
     return child;
   }
@@ -341,13 +361,35 @@ export class Node implements Markup.Markable
     name :string
   ) :Match.Task[]
   {
-    return this.matching.tasksMatching(name);
+    let
+    tasks = this.matching.tasksMatching(name);
+    return Array.from(tasks);
   }
 
   stageMatching(
     name :string
   ) :Match.Stage {
     return this.matching.matching(name);
+  }
+
+  traverseWithStage(
+    stage :Match.Stage,
+    handle :(node :Node, stage :Match.Stage) => void
+  ) {
+    let
+    children = this.children;
+    handle(this, stage);
+    let
+    iteration = children.values();
+    var
+    current = iteration.next().value;
+    while (current) {
+      let
+      match = stage.matching(current.name);
+      current.traverseWithStage(match, handle);
+
+      current = iteration.next().value;
+    }
   }
 
   markup(
@@ -483,8 +525,13 @@ export class Event implements Markup.Markable
     children = new Array<Markup.Markable>();
     let
     tasks = matching.tasksMatching(this.name);
-    if (tasks.length > 0) {
-      children.push(new Markup.ArrayMarker('tasks', tasks));
+    if (tasks.size > 0) {
+      children.push(
+        new Markup.ArrayMarker(
+          'tasks', 
+          Array.from(tasks)
+        )
+      );
     }
     return new Markup.ObjectMarker(this.name, this.properties, children);
   }

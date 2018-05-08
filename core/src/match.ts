@@ -20,10 +20,13 @@ export class Stage implements Markup.Markable
   {
     return new Stage(Node.emtpy(), Node.emtpy());
   }
+  get isEmpty() :boolean {
+    return this.matches.isEmpty && this.orphans.isEmpty;
+  }
 
   tasksMatching(
     name :string
-  ) :Task[] {
+  ) :Set<Task> {
     let
     matches = this.matches;
     let
@@ -31,7 +34,7 @@ export class Stage implements Markup.Markable
     if (!(
       child
     )) {
-      return [];
+      return new Set();
     }
     return child.tasks;
   }
@@ -53,6 +56,20 @@ export class Stage implements Markup.Markable
     return new Stage(merged, orphans);
   }
 
+  merge(
+    another :Stage
+  ) {
+    this.matches.merge(another.matches);
+    this.orphans.merge(another.orphans);
+  }
+
+  drop(
+    another :Stage
+  ) {
+    this.matches.drop(another.matches);
+    this.orphans.drop(another.orphans);
+  }
+
   markup(
     indent :string = ''
   ) :string {
@@ -64,11 +81,11 @@ type Children = { [name :string] : Node; };
 class Node implements Markup.Markable
 {
   children :Children;
-  tasks :Task[];
+  tasks :Set<Task>;
 
   constructor(
     children :Children,
-    tasks :Task[]
+    tasks :Set<Task>
   ) {
     this.children = children;
     this.tasks = tasks;
@@ -77,43 +94,98 @@ class Node implements Markup.Markable
   static
   emtpy()
   {
-    return new Node({}, []);
+    return new Node({}, new Set());
+  }
+  get isEmpty() :boolean {
+    return (Object.keys(this.children).length == 0) && this.tasks.size == 0;
   }
 
   copied()
   {
     let
-    node = this;
+    tasks = this.tasks, children = this.children;
     let
-    children :Children = {};
+    cCopy :Children = {};
     for (let 
-      name in node.children
+      name in children
     ) {
-      children[name] = node.children[name].copied();
+      cCopy[name] = children[name].copied();
     }
     let
-    tasks = [ ...node.tasks ];
-    return new Node(children, tasks);
+    tCopy = new Set(tasks);
+    return new Node(cCopy, tCopy);
   }
 
-  merge(another :Node)
-  {
+  merge(
+    another :Node
+  ) {
     let
-    node = this;
+    tasks = this.tasks, children = this.children;
+
+    let
+    union = new Set(tasks);
+    let
+    iterableTasks = another.tasks.values();
+    var
+    task = iterableTasks.next().value;
+    while (task) {
+      union.add(task);
+      task = iterableTasks.next().value;
+    }
+    this.tasks = union;
+
     for (let 
       name in another.children
     ) {
       let
       others = another.children[name];
-      if (name in node.children) {
-        node.children[name].merge(others);
+      let
+      mine = children[name];
+      if (mine) {
+        mine.merge(others);
       }
       else {
-        node.children[name] = others;
+        children[name] = others.copied();
       }
     }
   }
 
+  drop(
+    another :Node
+  ) {
+    let
+    tasks = this.tasks, children = this.children;
+
+    let
+    diff = new Set(tasks);
+    let
+    iterableTasks = tasks.values();
+    var
+    task = iterableTasks.next().value;
+    while (task) {
+      diff.delete(task);
+      task = iterableTasks.next().value;
+    }
+    this.tasks = diff;
+
+    for (let 
+      name in another.children
+    ) {
+      let 
+      others = another.children[name];
+      let
+      mine = children[name];
+      if (!(mine)) { continue; }
+      mine.drop(others);
+      if (mine.isEmpty) {
+        delete children[name];
+      }
+    }
+  }
+
+  /**
+   * Insert a node to the position in the tree where the path describes.
+   */
   insert(
     path :string[]
   ) {
@@ -163,10 +235,10 @@ class Node implements Markup.Markable
     return node.children[name].descendant(path.slice(1));
   }
 
-  appendTask(
+  addTask(
     task :Task
   ) {
-    this.tasks.push(task);
+    this.tasks.add(task);
   }
 
   private static
@@ -194,15 +266,15 @@ class Node implements Markup.Markable
         branches
       ));
     }
-    if (tasks.length > 0) {
+    if (tasks.size > 0) {
       markedChildren.push(new Markup.ArrayMarker(
         'tasks',
-        tasks
+        Array.from(tasks)
       ));
     }
 
     if (!(
-      (childrenCount + tasks.length) > 0
+      (childrenCount + tasks.size) > 0
     )) {
       return '';
     }
@@ -234,7 +306,7 @@ export class Builder
     node = matches.descendant(segments);
     let
     task = new Task(map, path);
-    node.appendTask(task);
+    node.addTask(task);
   }
 
   build() :Stage 

@@ -2,38 +2,52 @@ import * as Identity from './identity';
 import * as Track from './track';
 import * as Load from './load';
 
+namespace Manager {
+  export type Config = { [key :string]: any };
+}
 export class Manager
 {
   identities :Identity.Tree;
   loader :Identity.Loading;
   tracker :Track.Tracking = null;
+  config :Manager.Config;
 
-  constructor(loader :Identity.Loading) 
-  {
-    this.identities = new Identity.Tree(loader);
+  constructor(
+    loader :Identity.Loading, 
+    config? :Manager.Config
+  ) {
+    this.identities = new Identity.Tree();
     this.loader = loader;
+    this.config = config || {};
   }
 
   static
   execute(
     taskDirectoryPath :string,
     inject :Load.RequiringLoader.Inject,
-    receive :Track.InPlaceTracker.Receive
+    receive :Track.InPlaceTracker.Receive,
+    config? :Manager.Config
   ) : Manager {
     let
-    manager = new Manager(new Load.RequiringLoader(taskDirectoryPath, inject));
+    manager = new Manager(
+      new Load.RequiringLoader(taskDirectoryPath, inject),
+      config
+    );
     manager.tracker = new Track.InPlaceTracker(receive);
     return manager
   }
 
   nodeID(
-    ownerIDs :number[] | number
+    id :Identity.NodeID | number[] | number, 
   ) : Identity.NodeID {
-    if (ownerIDs instanceof Array) {
-      return this.identities.nodeID(ownerIDs)
+    if (id instanceof Identity.NodeID) {
+      return id;
     }
-    else if (typeof ownerIDs == 'number') {
-      return this.identities.nodeID([ownerIDs as number]);
+    else if (id instanceof Array) {
+      return this.identities.nodeID(id);
+    }
+    else if (typeof id == 'number') {
+      return this.identities.nodeID([id]);
     }
     else {
       return null;
@@ -45,28 +59,19 @@ export class Manager
     name :string,
     parentID? :Identity.NodeID | number[] | number
   ) {
-    if (!(
-      id instanceof Identity.NodeID 
-    )) {
-      id = this.nodeID(id);
-    }
-    if (!(
-      parentID instanceof Identity.NodeID 
-    )) {
-      parentID = this.nodeID(parentID);
-    }
-    this.identities.registerNode(id, name, parentID);
+    this.identities.registerNode(
+      this.nodeID(id), 
+      name, 
+      this.nodeID(parentID)
+    );
   }
 
   deregisterNodes(
     id :Identity.NodeID | number[] | number
   ) {
-    if (!(
-      id instanceof Identity.NodeID 
-    )) {
-      id = this.nodeID(id);
-    }
-    this.identities.deregisterNodes(id);
+    this.identities.deregisterNodes(
+      this.nodeID(id)
+    );
   }
 
   recordEvent(
@@ -76,28 +81,40 @@ export class Manager
   )
   {
     let
-    identities = this.identities, tracker = this.tracker;
-    if (!(
-      nodeID instanceof Identity.NodeID 
-    )) {
-      nodeID = this.nodeID(nodeID);
-    }
+    identities = this.identities, 
+      tracker = this.tracker, 
+      config = this.config, 
+      loader = this.loader;
+    nodeID = this.nodeID(nodeID);
     let
     node = identities.node(nodeID);
-    if (!(
-      node
-    )) {
-      let
-      keyPath :string;
-      if (name == 'ana-value-updated') {
-        keyPath = `(${ properties['key-path'] })`;
-      }
-      else {
-        keyPath = '';
-      }
-      throw new Error(`Cannot record event '${ name }${ keyPath }' on unregistered node '${ nodeID }'.`);
+    if (!(node)) { 
+      throw RecordingError.eventOnUnregistered(
+        name,
+        properties,
+        nodeID
+      )
     }
     node.recordEvent(name, properties);
+
+    let
+    namespace = null;
+    let
+    every = identities.root.matching;
+    let
+    added = every.isEmpty ? null : every;
+    if (!(added)) {
+      let
+      tasks = loader.matchTasks(namespace);
+      identities.addMatchTasks(tasks);
+    }
+    else if (config.debug) {
+      identities.subtractMatchTasks(added);
+      let
+      tasks = loader.matchTasks(namespace);
+      identities.addMatchTasks(tasks);
+    }
+
     let
     tasks = node.tasksMatchingEvent(name);
     for ( let 
@@ -113,6 +130,25 @@ export class Manager
 
   logSnapshot() {
     console.log(this.identities.snapshot());
+  }
+}
+
+class RecordingError {
+  static
+  eventOnUnregistered(
+    name :string,
+    properties :Identity.Event.Properties,
+    nodeID :Identity.NodeID
+  ) : Error {
+    let
+    keyValue :string;
+    if (name == 'ana-value-updated') {
+      keyValue = `(${ properties['key-path'] }: ${ properties['value'] })`;
+    }
+    else {
+      keyValue = '';
+    }
+    return Error(`Cannot record event '${ name }${ keyValue }' on unregistered node '${ nodeID }'.`);
   }
 }
 
