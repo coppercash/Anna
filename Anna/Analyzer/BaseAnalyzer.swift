@@ -1,58 +1,11 @@
 //
-//  Analyzer.swift
+//  BaseAnalyzer.swift
 //  Anna_iOS
 //
-//  Created by William on 2018/4/15.
+//  Created by William on 2018/5/10.
 //
 
 import Foundation
-
-@objc(ANAReporting)
-public protocol
-Reporting
-{
-    typealias
-        Recorder = Recording
-    weak var
-    recorder :Recorder? { get set }
-}
-
-@objc(ANARecording)
-public protocol
-    Recording
-{
-    typealias
-    Properties = NSObject.Propertiez
-    func
-        recordEventOnPath(
-        named name :String,
-        with properties :Properties?
-    )
-}
-
-@objc(ANAHookable)
-public protocol
-    Hookable
-{
-    @objc(ana_tokenByAddingObserver)
-    func
-        tokenByAddingObserver() -> Reporting
-    @objc(ana_tokenByAddingOwnedObserver)
-    func
-        tokenByAddingOwnedObserver() -> Reporting
-}
-
-@objc(ANAPathConstituting)
-public protocol
-PathConstituting
-{
-    @objc(ana_parentConsititutorForChild:requiredByDescendant:)
-    func
-        parentConsititutor(
-        for child :PathConstituting,
-        requiredBy descendant :PathConstituting
-        ) -> PathConstituting?
-}
 
 protocol
     AnalyzerParenting : class
@@ -88,7 +41,7 @@ public class
     deinit {
         self.resetLastRegisteredLocator()
     }
-
+    
     var
     childAnalyzer :[AnyHashable : Analyzer] = [:]
     
@@ -145,7 +98,7 @@ public class
         resolvedManager() throws -> Manager {
         throw ParentError.abstractMethod(name: #function)
     }
-
+    
     struct
         Event
     {
@@ -251,19 +204,19 @@ public class
         another.deferredNodeContextRequirings.append(contentsOf: analyzer.deferredNodeContextRequirings)
         analyzer.deferredNodeContextRequirings.removeAll()
     }
-//    func
-//        takePlace(of analyzer :Analyzer) {
-//        if analyzer === self { return }
-//        for token in analyzer.tokens {
-//            token.recorder = self
-//            self.tokens.append(token)
-//        }
-//        analyzer.tokens.removeAll()
-//    }
-//    func
-//        detach() {
-//        self.tokens.removeAll()
-//    }
+    //    func
+    //        takePlace(of analyzer :Analyzer) {
+    //        if analyzer === self { return }
+    //        for token in analyzer.tokens {
+    //            token.recorder = self
+    //            self.tokens.append(token)
+    //        }
+    //        analyzer.tokens.removeAll()
+    //    }
+    //    func
+    //        detach() {
+    //        self.tokens.removeAll()
+    //    }
     
     typealias
         NodeContextResolution = (
@@ -305,226 +258,9 @@ extension
     public func
         parentConsititutor(
         for child :PathConstituting,
-        requiredBy descendant :PathConstituting
+        requiredFrom descendant :PathConstituting
         ) -> PathConstituting? {
         return self
-    }
-}
-
-@objc(ANARootAnalyzer)
-public class
-    RootAnalyzer : BaseAnalyzer, AnalyzerParenting
-{
-    let
-    manager :Manager
-
-    @objc(initWithManager:name:)
-    public
-    init(
-        manager :Manager,
-        name :String
-        )
-    {
-        self.manager = manager
-        super.init(name: name)
-    }
-
-    override func
-        resolvedManager() throws -> Manager {
-        return self.manager
-    }
-    
-    override func
-        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
-        let
-        analyzer = self
-        
-        // Register node for self if hasn't yet
-        //
-        if let locator = analyzer.lastRegisteredLocator {
-            return locator
-        }
-        
-        // Register self
-        //
-        let
-        manager = try analyzer.resolvedManager(),
-        objID = ObjectIdentifier(analyzer),
-        locator = manager.rootNodeLocator(
-            ownerID: objID,
-            name: self.name
-        )
-        manager.registerNode(
-            by: locator,
-            under: nil
-        )
-        
-        // Mark registered
-        //
-        analyzer.lastRegisteredLocator = locator
-        return locator
-    }
-    
-    override func
-        deregisterLastLocator() throws {
-        if let locator = self.lastRegisteredLocator {
-            self.manager.deregisterNode(by: locator)
-        }
-    }
-}
-
-@objc(ANAAnalyzer)
-public class
-    Analyzer : BaseAnalyzer, AnalyzerParenting
-{
-    public typealias
-        Delegate = PathConstituting
-    weak var
-    delegate :Delegate?
-    @objc(initWithName:delegate:)
-    public init
-        (
-        with name :String,
-        delegate :Delegate
-        ) {
-        self.delegate = delegate
-        super.init(name: name)
-    }
-    deinit {
-        try? self.deregisterLastLocator()
-    }
-
-    /*
-    @objc(analyzerHookingDelegate:naming:)
-    public class func
-        hooking(
-        delegate :(Delegate & Hookable),
-        naming name :String
-        ) -> Self {
-        let
-        analyzer = self.init(
-            with: name,
-            delegate: delegate
-        )
-        analyzer.hook(delegate)
-        return analyzer
-    }
- */
-    
-    func
-        resolvedParent() throws
-        -> AnalyzerParenting
-    {
-        let
-        analyzer = self
-        let
-        parent = try analyzer._resolvedParent()
-        analyzer.manager = try parent.resolvedManager()
-        return parent
-    }
-    
-    func
-        _resolvedParent() throws
-        -> AnalyzerParenting
-    {
-        guard let
-            delegate = self.delegate
-            else { throw ParentError.noDelegate(name: self.resolvedName()) }
-        var
-        last = delegate,
-        next = delegate.parentConsititutor(
-            for: last,
-            requiredBy: delegate
-        )
-        while true {
-            guard let consititutor = next
-                else { throw ParentError.brokenChain(breaking: String(describing: type(of: last))) }
-            if let
-                owner = consititutor as? AnalyzerReadable,
-                let
-                parent = owner.analyzer as? AnalyzerParenting
-            { return parent }
-            next = consititutor.parentConsititutor(
-                for: last,
-                requiredBy: delegate
-            )
-            last = consititutor
-        }
-    }
-    
-    var
-    manager :Manager? = nil
-    override func
-        resolvedManager() throws -> Manager {
-        let
-        analyzer = self
-        if let manager = analyzer.manager
-        { return manager }
-        let
-        parent = try analyzer.resolvedParent()
-        let
-        manager = try parent.resolvedManager()
-        analyzer.manager = manager
-        // TODO: catch nil
-        return manager
-    }
-    
-    func
-        resolvedName()
-        -> String
-    {
-        return self.name
-    }
-
-    override func
-        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
-        let
-        analyzer = self
-
-        // Register node for self if hasn't yet
-        //
-        if let locator = analyzer.lastRegisteredLocator {
-            return locator
-        }
-
-        // Notify all ancestors to register themself
-        //
-        let
-        parent = try analyzer.resolvedParent(),
-        parentLocator = try parent.resolvedNodeLocatorByAppendingPath()
-
-        // Register self
-        //
-        let
-        manager = try analyzer.resolvedManager(),
-        name = analyzer.resolvedName(),
-        objID = ObjectIdentifier(analyzer),
-        locator = parentLocator.forked(
-            with: name,
-            ownerID: objID
-        )
-        manager.registerNode(
-            by: locator,
-            under: parentLocator
-        )
-       
-        // Mark registered
-        //
-        analyzer.lastRegisteredLocator = locator
-        parent.notifyOnReseting(parentLocator) { [weak analyzer] in
-            analyzer?.resetLastRegisteredLocator()
-        }
-
-        return locator
-    }
-    
-    override func
-        deregisterLastLocator() throws {
-        if let locator = self.lastRegisteredLocator {
-            let
-            manager = try self.resolvedManager()
-            manager.deregisterNode(by: locator)
-        }
     }
 }
 

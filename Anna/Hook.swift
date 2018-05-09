@@ -7,6 +7,41 @@
 
 import Foundation
 
+@objc(ANAReporting)
+public protocol
+    Reporting
+{
+    typealias
+        Recorder = Recording
+    weak var
+    recorder :Recorder? { get set }
+}
+
+@objc(ANARecording)
+public protocol
+    Recording
+{
+    typealias
+        Properties = NSObject.Propertiez
+    func
+        recordEventOnPath(
+        named name :String,
+        with properties :Properties?
+    )
+}
+
+@objc(ANAHookable)
+public protocol
+    Hookable
+{
+    @objc(ana_tokenByAddingObserver)
+    func
+        tokenByAddingObserver() -> Reporting
+    @objc(ana_tokenByAddingOwnedObserver)
+    func
+        tokenByAddingOwnedObserver() -> Reporting
+}
+
 extension
     NSObject
 {
@@ -195,72 +230,6 @@ class
     class var
     decorator :AnyClass? { return nil }
 }
-
-/*
-class
-    BaseObserver<Observee : NSObject> : NSObject, Reporting
-{
-    weak var
-    recorder: Reporting.Recorder?
-    
-    weak var
-    observee :Observee?
-    let
-    decorator :AnyClass?
-    init(observee: Observee, decorator :AnyClass? = nil) {
-        self.observee = observee
-        self.decorator = decorator
-        super.init()
-        for (keyPath, options) in self.keyPaths {
-            observee.addObserver(
-                self,
-                forKeyPath: keyPath,
-                options: options,
-                context: nil
-            )
-        }
-        decorator?.decorate(object: observee)
-    }
-    
-    deinit {
-        if let observee = self.observee {
-            for (keyPath, _) in self.keyPaths {
-                observee.removeObserver(
-                    self,
-                    forKeyPath: keyPath
-                )
-            }
-        }
-    }
-    
-    override func
-        observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-        ) {
-        guard
-            let
-            recorder = self.recorder,
-            let
-            event = change?.toEvent()
-            else { return }
-        recorder.recordEventOnPath(
-            named: event.name,
-            with: event.properties
-        )
-    }
-    
-    var
-    keyPaths : [String: NSKeyValueObservingOptions] {
-        return [
-            #keyPath(NSObject.trampoline): .new,
-        ]
-    }
-}
-*/
-
 
 extension Dictionary
     where Key == NSKeyValueChangeKey, Value : Any

@@ -26,12 +26,14 @@
 		3DB8B860209C3548003B671B /* tool.js in Copy Files */ = {isa = PBXBuildFile; fileRef = 3DB8B85E209C3517003B671B /* tool.js */; };
 		3DF1813320A28BAD008E6B25 /* ANAUITableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DF1813420A28BAD008E6B25 /* ANAUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */; };
+		3DF1817020A41479008E6B25 /* Analyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1816F20A41479008E6B25 /* Analyzer.swift */; };
+		3DF1817220A41490008E6B25 /* BaseAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1817120A41490008E6B25 /* BaseAnalyzer.swift */; };
+		3DF1817420A41499008E6B25 /* RootAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1817320A41499008E6B25 /* RootAnalyzer.swift */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
 		BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B04209D7D6900111F15 /* KVObserver.swift */; };
 		BE195B15209D7D6A00111F15 /* UIResponder+PathConstituting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B05209D7D6900111F15 /* UIResponder+PathConstituting.swift */; };
 		BE195B1A209D7D6A00111F15 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0A209D7D6900111F15 /* Manager.swift */; };
 		BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0B209D7D6900111F15 /* Hook.swift */; };
-		BE195B1D209D7D6A00111F15 /* Analyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0D209D7D6900111F15 /* Analyzer.swift */; };
 		BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B24209D7E8A00111F15 /* Tracker.swift */; };
 		BE195B43209D844F00111F15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B42209D844F00111F15 /* Analyzable.swift */; };
 		BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */; };
@@ -109,6 +111,9 @@
 		3DB8B85E209C3517003B671B /* tool.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tool.js; sourceTree = "<group>"; };
 		3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUITableViewCell.h; sourceTree = "<group>"; };
 		3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUITableViewCell.m; sourceTree = "<group>"; };
+		3DF1816F20A41479008E6B25 /* Analyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analyzer.swift; sourceTree = "<group>"; };
+		3DF1817120A41490008E6B25 /* BaseAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAnalyzer.swift; sourceTree = "<group>"; };
+		3DF1817320A41499008E6B25 /* RootAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAnalyzer.swift; sourceTree = "<group>"; };
 		3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -116,7 +121,6 @@
 		BE195B05209D7D6900111F15 /* UIResponder+PathConstituting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIResponder+PathConstituting.swift"; sourceTree = "<group>"; };
 		BE195B0A209D7D6900111F15 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		BE195B0B209D7D6900111F15 /* Hook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hook.swift; sourceTree = "<group>"; };
-		BE195B0D209D7D6900111F15 /* Analyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analyzer.swift; sourceTree = "<group>"; };
 		BE195B24209D7E8A00111F15 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		BE195B42209D844F00111F15 /* Analyzable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analyzable.swift; sourceTree = "<group>"; };
 		BE3D83BC2081E33200A1D17D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -239,6 +243,16 @@
 			path = UIViewController;
 			sourceTree = "<group>";
 		};
+		3DF1816E20A41479008E6B25 /* Analyzer */ = {
+			isa = PBXGroup;
+			children = (
+				3DF1816F20A41479008E6B25 /* Analyzer.swift */,
+				3DF1817120A41490008E6B25 /* BaseAnalyzer.swift */,
+				3DF1817320A41499008E6B25 /* RootAnalyzer.swift */,
+			);
+			path = Analyzer;
+			sourceTree = "<group>";
+		};
 		4531771AA090ADCF6D936D6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,8 +337,8 @@
 			isa = PBXGroup;
 			children = (
 				BE195B2A209D7F6800111F15 /* Hookable */,
+				3DF1816E20A41479008E6B25 /* Analyzer */,
 				BE195B42209D844F00111F15 /* Analyzable.swift */,
-				BE195B0D209D7D6900111F15 /* Analyzer.swift */,
 				BE195B0A209D7D6900111F15 /* Manager.swift */,
 				BE195B24209D7E8A00111F15 /* Tracker.swift */,
 				BE195B0B209D7D6900111F15 /* Hook.swift */,
@@ -553,6 +567,7 @@
 			files = (
 				BE195B1A209D7D6A00111F15 /* Manager.swift in Sources */,
 				BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */,
+				3DF1817220A41490008E6B25 /* BaseAnalyzer.swift in Sources */,
 				3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */,
 				3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */,
 				3DB2E5EB209FEACE005F0572 /* UIView+Hookable.swift in Sources */,
@@ -562,12 +577,13 @@
 				3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */,
 				BE195B15209D7D6A00111F15 /* UIResponder+PathConstituting.swift in Sources */,
 				BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */,
+				3DF1817020A41479008E6B25 /* Analyzer.swift in Sources */,
 				3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */,
+				3DF1817420A41499008E6B25 /* RootAnalyzer.swift in Sources */,
 				3DB2E5E8209FEACE005F0572 /* UITableView+Hookable.swift in Sources */,
 				BE195B43209D844F00111F15 /* Analyzable.swift in Sources */,
 				3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */,
 				BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */,
-				BE195B1D209D7D6A00111F15 /* Analyzer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

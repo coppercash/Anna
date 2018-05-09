@@ -74,15 +74,15 @@ NodeLocator
 }
 
 
-@objc(ANADependency)
+@objc(ANADependency) @objcMembers
 public class
     Dependency : CoreJS.Dependency
 {
     public var
-    moduleURL :URL! = nil
+    moduleURL :URL? = nil
 }
 
-@objc(ANAManager)
+@objc(ANAManager) @objcMembers
 public class
     Manager : NSObject
 {
@@ -90,6 +90,7 @@ public class
     tracker :Tracking? = nil
     public let
     dependency :Dependency
+    @objc(initWithDependency:)
     public init
         (
         _ dependency :Dependency
@@ -143,8 +144,9 @@ public class
         }
         let
         context = self.resolvedScriptContext();
-        let
-        module = self.dependency.moduleURL!
+        guard let
+            module = self.dependency.moduleURL
+            else { throw ScriptError.mainModuleURLNotSpecified }
         let
         dependency = self.dependency
         dependency.handleException =
@@ -276,6 +278,7 @@ public class
         }
     }
     
+    @objc
     public func
         logSnapshot()
     {
@@ -293,5 +296,6 @@ public class
 enum
     ScriptError : Error
 {
-   case managerUnconstructable
+    case mainModuleURLNotSpecified
+    case managerUnconstructable
 }

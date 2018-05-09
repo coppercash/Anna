@@ -23,7 +23,7 @@ public struct
     public typealias
         Logging = Anna.Logging
 
-    @objc(CJSDependency)
+    @objc(CJSDependency) @objcMembers
     public class
         Dependency : NSObject
     {

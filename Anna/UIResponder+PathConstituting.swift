@@ -13,7 +13,7 @@ extension
     open func
         parentConsititutor(
         for child :PathConstituting,
-        requiredBy descendant :PathConstituting
+        requiredFrom descendant :PathConstituting
         ) -> PathConstituting? {
         return self.next
     }
@@ -25,26 +25,35 @@ extension
     open override func
         parentConsititutor(
         for child :PathConstituting,
-        requiredBy descendant :PathConstituting
+        requiredFrom descendant :PathConstituting
         ) -> PathConstituting? {
+        let
+        controller = self;
         if let
             navigation = self.navigationController {
+            let
+            siblings = navigation.viewControllers
             var
-            current :UIViewController? = nil;
-            for v in navigation.viewControllers.reversed() {
-                if let _ = current {
-                    return v
-                }
-                else if (v === self) {
-                    current = v;
+            index :Int? = nil
+            for i in stride(from: 0, to: siblings.count, by: 1).reversed() {
+                if siblings[i] === controller {
+                    index = i
+                    break
                 }
             }
-            return navigation
+            if let
+                index = index
+            {
+                return index > 0 ? siblings[index - 1] : navigation
+            }
+            else {
+                return siblings.last ?? navigation
+            }
         }
         else {
             return super.parentConsititutor(
                 for: child,
-                requiredBy: descendant
+                requiredFrom: descendant
             )
         }
     }
@@ -56,7 +65,7 @@ UITableViewCell
     open override func
         parentConsititutor(
         for child :PathConstituting,
-        requiredBy descendant :PathConstituting
+        requiredFrom descendant :PathConstituting
         ) -> PathConstituting? {
         return nil
     }

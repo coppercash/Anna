@@ -81,3 +81,15 @@ public protocol
     analyzer :Analyzing? { get set }
 }
 
+@objc(ANAPathConstituting)
+public protocol
+    PathConstituting
+{
+    @objc(ana_parentConsititutorForChild:requiredFromDescendant:)
+    func
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredFrom descendant :PathConstituting
+        ) -> PathConstituting?
+}
+

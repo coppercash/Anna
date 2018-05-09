@@ -166,19 +166,6 @@ export class Node implements Markup.Markable
     this.matching = matching;
   }
 
-  get indexAmongSiblings() : number {
-    return this._indexAmongSiblings;
-  }
-  get nodeName() : string {
-    return this.id.name;
-  }
-  get parentNode() : Node {
-    return this.parent;
-  }
-  get attributes() : Markup.Markable.Properties {
-    return this.properties;
-  }
-
   fork(
     nodeID :NodeID
   ) :Node {
@@ -287,6 +274,34 @@ export class Node implements Markup.Markable
     let
     ancestors = parent.upMarkedAncestors();
     return ancestors[0] + '\n' + this.markup(`${ ancestors[1]}  `);
+  }
+
+  get indexAmongSiblings() : number {
+    return this._indexAmongSiblings;
+  }
+  get nodeName() : string {
+    return this.id.name;
+  }
+  get parentNode() : Node {
+    return this.parent;
+  }
+  get attributes() : Markup.Markable.Properties {
+    return this.properties;
+  }
+
+  latestValueForKeyPath(
+    keyPath :string
+  ) : any {
+    for (let
+      event of this.events
+    ) {
+      if (!(
+        (event.name == 'ana-value-updated') &&
+        (event.properties['key-path'] == keyPath)
+      )) { continue; }
+      return event.properties['value'];
+    }
+    return undefined;
   }
 }
 
