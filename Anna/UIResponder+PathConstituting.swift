@@ -49,3 +49,15 @@ extension
         }
     }
 }
+
+extension
+UITableViewCell
+{
+    open override func
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredBy descendant :PathConstituting
+        ) -> PathConstituting? {
+        return nil
+    }
+}

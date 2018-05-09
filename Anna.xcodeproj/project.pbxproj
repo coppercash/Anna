@@ -21,8 +21,11 @@
 		3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */; };
 		3DB2E5EE209FEACE005F0572 /* ANAUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DB2E5F0209FEAF6005F0572 /* UIResponder+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */; };
+		3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E79C20A26734005F0572 /* TableViewTests.swift */; };
 		3DB8B85F209C3518003B671B /* tool.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DB8B85E209C3517003B671B /* tool.js */; };
 		3DB8B860209C3548003B671B /* tool.js in Copy Files */ = {isa = PBXBuildFile; fileRef = 3DB8B85E209C3517003B671B /* tool.js */; };
+		3DF1813320A28BAD008E6B25 /* ANAUITableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DF1813420A28BAD008E6B25 /* ANAUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
 		BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B04209D7D6900111F15 /* KVObserver.swift */; };
 		BE195B15209D7D6A00111F15 /* UIResponder+PathConstituting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B05209D7D6900111F15 /* UIResponder+PathConstituting.swift */; };
@@ -102,7 +105,10 @@
 		3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Hookable.swift"; sourceTree = "<group>"; };
 		3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIViewController.h; sourceTree = "<group>"; };
 		3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E79C20A26734005F0572 /* TableViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTests.swift; sourceTree = "<group>"; };
 		3DB8B85E209C3517003B671B /* tool.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tool.js; sourceTree = "<group>"; };
+		3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUITableViewCell.h; sourceTree = "<group>"; };
+		3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUITableViewCell.m; sourceTree = "<group>"; };
 		3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -201,6 +207,8 @@
 			isa = PBXGroup;
 			children = (
 				3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */,
+				3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */,
+				3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */,
 			);
 			path = UITableViewCell;
 			sourceTree = "<group>";
@@ -305,6 +313,7 @@
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 				3D10FE5A2086EE4400AE10D3 /* PathTests.swift */,
+				3DB2E79C20A26734005F0572 /* TableViewTests.swift */,
 				BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */,
 			);
 			path = Anna_iOS_Tests;
@@ -332,9 +341,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DB2E5EA209FEACE005F0572 /* ANAUIView.h in Headers */,
 				BE87DA851EAB608700DA81EB /* Anna.h in Headers */,
+				3DB2E5EA209FEACE005F0572 /* ANAUIView.h in Headers */,
 				3DB2E5EE209FEACE005F0572 /* ANAUIViewController.h in Headers */,
+				3DF1813320A28BAD008E6B25 /* ANAUITableViewCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,6 +557,7 @@
 				3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */,
 				3DB2E5EB209FEACE005F0572 /* UIView+Hookable.swift in Sources */,
 				3DB2E5F0209FEAF6005F0572 /* UIResponder+Hookable.swift in Sources */,
+				3DF1813420A28BAD008E6B25 /* ANAUITableViewCell.m in Sources */,
 				3DB2E5E7209FEACE005F0572 /* UITableViewCell+Hookable.swift in Sources */,
 				3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */,
 				BE195B15209D7D6A00111F15 /* UIResponder+PathConstituting.swift in Sources */,
@@ -566,6 +577,7 @@
 			files = (
 				3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */,
 				BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */,
+				3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

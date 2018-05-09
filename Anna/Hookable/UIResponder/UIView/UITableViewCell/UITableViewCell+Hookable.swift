@@ -39,5 +39,23 @@ class
     where Observee : UITableViewCell
 {
     class override var
-    decorator :AnyClass? { return nil }
+    decorator :AnyClass? {
+        return ANAUITableViewCell.self
+    }
+}
+
+extension
+    UITableViewCell
+{
+    @objc(ana_prepareAnalyzerForReuse)
+    public func
+        prepareAnalyzerForReuse() {
+        guard
+            let
+            analyzable = self as? AnalyzerReadable,
+            let
+            analyzer = analyzable.analyzer as? Analyzer
+            else { return }
+        analyzer.stopForwardingEvents()
+    }
 }

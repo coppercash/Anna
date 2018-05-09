@@ -84,53 +84,20 @@ class
 }
 
 class
-    KVObserver : NSObject, Reporting
+    KVObserver<Observee> : ReportingObserver<Observee>
+    where Observee : NSObject
 {
-    weak var
-    recorder: Reporting.Recorder? = nil {
-        didSet {
-            guard let observee = self.observee else { return }
-            if let _ = self.recorder {
-                observee.addObserver(
-                    self,
-                    forKeyPath: self.keyPath,
-                    options: [.old, .new, .initial],
-                    context: nil
-                )
-            }
-            else {
-                observee.removeObserver(
-                    self,
-                    forKeyPath: self.keyPath
-                )
-            }
-        }
-    }
-    
-    weak var
-    observee :NSObject?
-    let
-    keyPath :String
     init(
-        _ observee :NSObject,
-        _ keyPath :String
+        keyPath :String,
+        observee :Observee,
+        owned :Bool
         ) {
-        self.observee = observee
-        self.keyPath = keyPath
-        super.init()
+        super.init(
+            keyPaths: [keyPath: [.new]],
+            observee: observee,
+            owned: owned
+        )
     }
-    deinit {
-        if
-            let _ = self.recorder,
-            let observee = self.observee
-        {
-            observee.removeObserver(
-                self,
-                forKeyPath: self.keyPath
-            )
-        }
-    }
-    
     override func
         observeValue(
         forKeyPath keyPath: String?,
@@ -139,8 +106,16 @@ class
         context: UnsafeMutableRawPointer?
         ) {
         guard
-            let
-            recorder = self.recorder,
+            keyPath == self.keyPaths.first?.key
+            else {
+                return super.observeValue(
+                    forKeyPath: keyPath,
+                    of: object,
+                    change: change,
+                    context: context
+                )
+        }
+        guard
             let
             keyPath = keyPath,
             let
@@ -156,7 +131,7 @@ class
             "value" : after
         ]
         guard let before = change[.oldKey] else {
-            recorder.recordEventOnPath(
+            self.recorder?.recordEventOnPath(
                 named: name,
                 with: properties
             )
@@ -167,7 +142,7 @@ class
             let after = after as? NSObject,
             before == after
         { return }
-        recorder.recordEventOnPath(
+        self.recorder?.recordEventOnPath(
             named: name,
             with: properties
         )

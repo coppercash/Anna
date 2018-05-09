@@ -117,56 +117,64 @@ class
         ) -> UITableViewCell {
         let
         cell = self.target.tableView(tableView, cellForRowAt: indexPath)
-        
-        guard let
-            owner = tableView as? AnalyzerReadable,
+        guard
             let
-            analyzable = tableView.delegate as? AnalyzableTableViewDelegate
-            else { return cell }
-        
-        // TODO: Remove the force casting to ANAAnalyzer
-        var
-        analyzer = owner.analyzer as! Analyzer
-        
+            analyzable = cell as? AnalyzerReadable,
+            let
+            dummy = analyzable.analyzer as? Analyzer
+        else { return cell }
+
+        let
+        owner = tableView as! AnalyzerReadable,
+        table = owner.analyzer as! Analyzer
+        let
+        parent :Analyzer
         if let
-            section = analyzable.tableView?(tableView, analyzerNameFor: indexPath.section) {
-           analyzer = analyzer.resolvedSubAnalyzer(named: section) as! Analyzer
+            delegate = tableView.delegate as? AnalyzableGroupedTableViewDelegate,
+            let
+            identifier = delegate.tableView(tableView, analyzableGroupIdentifierForRowAt: indexPath)
+        {
+            parent = table.resolvedChildAnalyzer(
+                named: String(describing: identifier),
+                with: identifier
+            )
         }
-        
-        if let
-            row = analyzable.tableView(tableView, analyzerNameForRowAt: indexPath) {
-            analyzer = analyzer.resolvedSubAnalyzer(named: row) as! Analyzer
-            if let
-                holder = cell as? AnalyzerWritable {
-                if let
-                    old = holder.analyzer {
-                    analyzer.takePlace(of: old as! Analyzer)
-                }
-                else {
-                    analyzer.hook(owner: cell)
-                }
-                holder.analyzer = analyzer
-            }
+        else {
+            parent = table
         }
-        
+        let
+        row = parent.resolvedChildAnalyzer(
+            named: dummy.name,
+            with: indexPath
+        )
+        dummy.startForwardingEvents(to: row)
+        dummy.flushDeferredEvents(to: row)
+
         return cell
     }
 }
 
-@objc(ANAAnalyzableTableViewDelegate)
+@objc(ANAAnalyzableGroupedTableViewDelegate)
 public protocol
-    AnalyzableTableViewDelegate
+    AnalyzableGroupedTableViewDelegate
 {
-    @objc(tableView:analyzerNameForRowAtIndexPath:)
+    // TODO: Remove
+//    @objc(tableView:analyzerNameForRowAtIndexPath:)
+//    func
+//        tableView(
+//        _ tableView: UITableView,
+//        analyzerNameForRowAt indexPath: IndexPath
+//        ) -> String?
+//    @objc(tableView:analyzerNameForSection:)
+//    optional func
+//        tableView(
+//        _ tableView: UITableView,
+//        analyzerNameFor section: Int
+//        ) -> String?
+    @objc(tableView:analyzableGroupIdentifierForRowAtIndexPath:)
     func
         tableView(
         _ tableView: UITableView,
-        analyzerNameForRowAt indexPath: IndexPath
-        ) -> String?
-    @objc(tableView:analyzerNameForSection:)
-    optional func
-        tableView(
-        _ tableView: UITableView,
-        analyzerNameFor section: Int
-        ) -> String?
+        analyzableGroupIdentifierForRowAt indexPath: IndexPath
+        ) -> AnyHashable?
 }

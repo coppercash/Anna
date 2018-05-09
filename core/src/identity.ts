@@ -153,6 +153,8 @@ export class Node implements Markup.Markable
   parent :Node;
   children :Set<Node> = new Set<Node>();
   matching :Match.Stage;
+  
+  _indexAmongSiblings :number = Number.MAX_SAFE_INTEGER;
 
   constructor(
     id :NodeID,
@@ -164,6 +166,19 @@ export class Node implements Markup.Markable
     this.matching = matching;
   }
 
+  get indexAmongSiblings() : number {
+    return this._indexAmongSiblings;
+  }
+  get nodeName() : string {
+    return this.id.name;
+  }
+  get parentNode() : Node {
+    return this.parent;
+  }
+  get attributes() : Markup.Markable.Properties {
+    return this.properties;
+  }
+
   fork(
     nodeID :NodeID
   ) :Node {
@@ -173,6 +188,7 @@ export class Node implements Markup.Markable
     matching = node.stageMatching(nodeID.name);
     let
     child = new Node(nodeID, node, matching);
+    child._indexAmongSiblings = children.size;
     children.add(child);
     subordinates.push(child);
     
@@ -290,6 +306,12 @@ export class Event implements Markup.Markable
     buffer = { ...properties };
     buffer.class = Event.className;
     this.properties = buffer;
+  }
+  get nodeName() : string {
+    return this.name;
+  }
+  get attributes() : Event.Properties {
+    return this.properties;
   }
 
   markup(

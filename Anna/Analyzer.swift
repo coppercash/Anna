@@ -90,24 +90,26 @@ public class
     }
 
     var
-    subAnalyzers :[String : Analyzing] = [:]
+    childAnalyzer :[AnyHashable : Analyzer] = [:]
     
-    class func
-        resolvedSubAnalyzer(
+    func
+        resolvedChildAnalyzer(
         named name :String,
-        under parent :(BaseAnalyzer & PathConstituting)
-        ) ->Analyzing
+        with identifier :AnyHashable
+        ) ->Analyzer
     {
-        if let sub = parent.subAnalyzers[name] {
-            return sub
-        }
         let
-        sub = Analyzer(
+        parent = self;
+        if let
+            child = parent.childAnalyzer[identifier]
+        { return child }
+        let
+        child = Analyzer(
             with: name,
             delegate: parent
         )
-        parent.subAnalyzers[name] = sub
-        return sub
+        parent.childAnalyzer[identifier] = child
+        return child
     }
     
     var
@@ -144,46 +146,6 @@ public class
         throw ParentError.abstractMethod(name: #function)
     }
 
-    var
-    tokens = Array<Reporting>()
-    public func
-        hook(_ hookee :Hookable) {
-        let
-        token = hookee.tokenByAddingObserver()
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    func
-        hook(owner :Hookable) {
-        let
-        token = owner.tokenByAddingOwnedObserver()
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    public func
-        observe(
-        _ observee :NSObject,
-        for keyPath :String
-        ) {
-        let
-        token = KVObserver(observee, keyPath)
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    func
-        takePlace(of analyzer :Analyzer) {
-        if analyzer === self { return }
-        for token in analyzer.tokens {
-            token.recorder = self
-            self.tokens.append(token)
-        }
-        analyzer.tokens.removeAll()
-    }
-    func
-        detach() {
-        self.tokens.removeAll()
-    }
-    
     struct
         Event
     {
@@ -209,6 +171,100 @@ public class
             )
         }
     }
+    var
+    tokens = Array<Reporting>()
+    public func
+        hook(_ hookee :Hookable) {
+        let
+        token = hookee.tokenByAddingObserver()
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    func
+        hook(owner :Hookable) {
+        let
+        token = owner.tokenByAddingOwnedObserver()
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    public func
+        observe(
+        _ observee :NSObject,
+        for keyPath :String
+        ) {
+        let
+        token = KVObserver(
+            keyPath: keyPath,
+            observee: observee,
+            owned: false
+        )
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    public func
+        observe(
+        owner :NSObject,
+        for keyPath :String
+        ) {
+        let
+        token = KVObserver(
+            keyPath: keyPath,
+            observee: owner,
+            owned: true
+        )
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    public func
+        update(
+        _ value :Any,
+        for keyPath :String
+        ) {
+        self.recordEventOnPath(
+            named: "ana-value-updated",
+            with: [
+                "key-path": keyPath,
+                "value": value
+            ]
+        )
+    }
+    func
+        startForwardingEvents(
+        to recorder: Recording
+        ) {
+        for token in self.tokens {
+            token.recorder = recorder
+        }
+    }
+    func
+        stopForwardingEvents() {
+        for token in self.tokens {
+            token.recorder = self
+        }
+    }
+    func
+        flushDeferredEvents(
+        to another: BaseAnalyzer
+        ) {
+        let
+        analyzer = self
+        another.deferredNodeContextRequirings.append(contentsOf: analyzer.deferredNodeContextRequirings)
+        analyzer.deferredNodeContextRequirings.removeAll()
+    }
+//    func
+//        takePlace(of analyzer :Analyzer) {
+//        if analyzer === self { return }
+//        for token in analyzer.tokens {
+//            token.recorder = self
+//            self.tokens.append(token)
+//        }
+//        analyzer.tokens.removeAll()
+//    }
+//    func
+//        detach() {
+//        self.tokens.removeAll()
+//    }
+    
     typealias
         NodeContextResolution = (
         _ manager :Manager,
@@ -238,6 +294,20 @@ public class
             resolve(manager, locator)
         }
         analyzer.deferredNodeContextRequirings.removeAll()
+    }
+}
+
+extension
+    BaseAnalyzer : PathConstituting, AnalyzerReadable
+{
+    public var
+    analyzer: Analyzing? { return self }
+    public func
+        parentConsititutor(
+        for child :PathConstituting,
+        requiredBy descendant :PathConstituting
+        ) -> PathConstituting? {
+        return self
     }
 }
 
@@ -295,30 +365,11 @@ public class
         return locator
     }
     
-    func
-        resolvedSubAnalyzer(named name: String) -> Analyzing {
-        return type(of: self).resolvedSubAnalyzer(named: name, under: self)
-    }
-    
     override func
         deregisterLastLocator() throws {
         if let locator = self.lastRegisteredLocator {
             self.manager.deregisterNode(by: locator)
         }
-    }
-}
-
-extension
-    RootAnalyzer : PathConstituting, AnalyzerReadable
-{
-    public var
-    analyzer: Analyzing? { return self }
-    public func
-        parentConsititutor(
-        for child :PathConstituting,
-        requiredBy descendant :PathConstituting
-        ) -> PathConstituting? {
-        return self
     }
 }
 
@@ -467,12 +518,6 @@ public class
         return locator
     }
     
-    @objc(resolvedSubAnalyzerNamed:)
-    public func
-        resolvedSubAnalyzer(named name: String) -> Analyzing {
-        return type(of: self).resolvedSubAnalyzer(named: name, under: self)
-    }
-    
     override func
         deregisterLastLocator() throws {
         if let locator = self.lastRegisteredLocator {
@@ -480,20 +525,6 @@ public class
             manager = try self.resolvedManager()
             manager.deregisterNode(by: locator)
         }
-    }
-}
-
-extension
-    Analyzer : PathConstituting, AnalyzerReadable
-{
-    public var
-    analyzer: Analyzing? { return self }
-    public func
-        parentConsititutor(
-        for child :PathConstituting,
-        requiredBy descendant :PathConstituting
-        ) -> PathConstituting? {
-        return self
     }
 }
 

@@ -40,13 +40,25 @@ public extension
 public protocol
     Analyzing
 {
-    @objc(hook:)
+    @objc(hookObject:)
     func
         hook(_ hookee :Hookable)
-    @objc(observe:for:)
+    @objc(observeObject:forKeyPath:)
     func
         observe(
         _ observee :NSObject,
+        for keyPath :String
+    )
+    @objc(observeOwner:forKeyPath:)
+    func
+        observe(
+        owner :NSObject,
+        for keyPath :String
+    )
+    @objc(updateValue:forKeyPath:)
+    func
+        update(
+        _ value :Any,
         for keyPath :String
     )
 }
