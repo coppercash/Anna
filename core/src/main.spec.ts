@@ -17,10 +17,8 @@ describe('Anna', () => {
       expect(result).to.equal(42);
       done();
     });
-    let 
-    id = anna.nodeID(7, 'root');
-    anna.registerNode(id);
-    anna.recordEvent('appear', {answer: 42}, id);
+    anna.registerNode(7, 'root');
+    anna.recordEvent('appear', {answer: 42}, 7);
   });
 
   it('should record event on sub node' , (done) => {
@@ -32,16 +30,10 @@ describe('Anna', () => {
       expect(result).to.equal(43);
       done();
     });
-    let 
-    root = anna.nodeID(7, 'root');
-    anna.registerNode(root);
-    let
-    foo = anna.nodeID(77, 'foo');
-    anna.registerNode(foo, root);
-    let
-    bar = anna.nodeID(777, 'bar');
-    anna.registerNode(bar, foo);
-    anna.recordEvent('tap', {answer: 43}, bar);
+    anna.registerNode(7, 'root');
+    anna.registerNode(77, 'foo', 7);
+    anna.registerNode(777, 'bar', 77);
+    anna.recordEvent('tap', {answer: 43}, 777);
   });
 
   it('should record event on non-absolute path' , (done) => {
@@ -61,53 +53,88 @@ describe('Anna', () => {
     var
     index = 0;
     let
-    ids = '/foo/bar/pass/foo/bar'
+    names = '/foo/bar/pass/foo/bar'
       .split('/')
-      .slice(1)
-      .map((x) => {
-        return anna.nodeID(index++, x);
-      });
-    let 
-    root = anna.nodeID(7, 'root');
-    anna.registerNode(root);
+      .slice(1);
+    anna.registerNode(7, 'root');
     var
-    parent = root;
+    parent = 7;
+    var
+    index = 70;
     for (let 
-      id of ids
+      name of names
     ) {
-      anna.registerNode(id, parent);
-      parent = id;
+      anna.registerNode(index, name, parent);
+      parent = index;
+      index += 1;
     }
-    anna.recordEvent('tap', {answer: 42}, ids[1]);
-    anna.recordEvent('tap', {answer: 24}, ids[4]);
+    anna.recordEvent('tap', {answer: 42}, 71);
+    anna.recordEvent('tap', {answer: 24}, 74);
   });
 
   it('should deregister node' , () => {
     let
     anna = new Anna(new Loader(() => {}));
-    var
-    index = 0;
     let
-    ids = '/alpha/beta/delta/gamma'
+    names = '/alpha/beta/delta/gamma'
       .split('/')
-      .slice(1)
-      .map((x) => {
-        return anna.nodeID(index++, x);
-      });
-    let 
-    root = anna.nodeID(7, 'root');
-    anna.registerNode(root);
+      .slice(1);
+    anna.registerNode(7, 'root');
     var
-    parent = root;
+    parent = 7;
+    var
+    index = 70;
     for (let 
-      id of ids
+      name of names
     ) {
-      anna.registerNode(id, parent);
-      parent = id;
+      anna.registerNode(index, name, parent);
+      parent = index;
+      index += 1;
     }
 
-    anna.deregisterNode(ids[1]);
-    anna.registerNode(ids[3], ids[0]);
+    anna.deregisterNodes(71);
+    anna.registerNode(73, 'gamma', 70);
+  });
+
+  it('should record event on reusable node' , (done) => {
+    let
+    anna = new Anna(new Loader((match) => {
+      match('foo/tap', (n) => { return n.events[0].properties.answer; })
+      match('foo/bar/tap', (n) => { return n.events[0].properties.answer; })
+    }));
+    var
+    count = 0;
+    anna.tracker = new Tracker((result) => {
+      switch (count) {
+        case 0:
+          expect(result).to.equal(42);
+          break;
+        case 1:
+          expect(result).to.equal(43);
+          break;
+        default:
+          break;
+      }
+      count += 1;
+      if (count == 2) {
+        done();
+      }
+    });
+    anna.registerNode(7, 'root');
+    anna.registerNode([70, 700], 'foo', 7);
+    anna.registerNode([80, 800, 8000], 'bar', [70, 700]);
+    anna.recordEvent('tap', {answer: 42}, [70, 700]);
+    anna.recordEvent('tap', {answer: 43}, [80, 800, 8000]);
+  });
+
+  it('should deregister reusable node' , () => {
+    let
+    anna = new Anna(new Loader(() => {}));
+    anna.registerNode(7, 'root');
+    anna.registerNode([70, 700], 'foo', 7)
+    anna.registerNode([80, 800, 8000], 'bar', [70, 700]);
+    anna.deregisterNodes(70);
+    anna.registerNode([80, 800, 8000], 'bar', 7);
   });
 
 });

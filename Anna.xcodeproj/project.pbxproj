@@ -37,6 +37,7 @@
 		BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B24209D7E8A00111F15 /* Tracker.swift */; };
 		BE195B43209D844F00111F15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B42209D844F00111F15 /* Analyzable.swift */; };
 		BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */; };
+		BE4010E020A9909E0056BF29 /* FocusPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4010DF20A9909E0056BF29 /* FocusPath.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE87DA801EAB608700DA81EB /* Anna.framework */; };
 		BEC320402096F4EA00206AD1 /* anna in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC3203F2096F4E900206AD1 /* anna */; };
@@ -126,6 +127,7 @@
 		BE3D83BC2081E33200A1D17D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		BE3D83BE2081E33C00A1D17D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTestCaseBuilder.swift; sourceTree = "<group>"; };
+		BE4010DF20A9909E0056BF29 /* FocusPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusPath.swift; sourceTree = "<group>"; };
 		BE87DA801EAB608700DA81EB /* Anna.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Anna.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE87DA831EAB608700DA81EB /* Anna.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Anna.h; sourceTree = "<group>"; };
 		BE87DA841EAB608700DA81EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -246,8 +248,8 @@
 		3DF1816E20A41479008E6B25 /* Analyzer */ = {
 			isa = PBXGroup;
 			children = (
-				3DF1816F20A41479008E6B25 /* Analyzer.swift */,
 				3DF1817120A41490008E6B25 /* BaseAnalyzer.swift */,
+				3DF1816F20A41479008E6B25 /* Analyzer.swift */,
 				3DF1817320A41499008E6B25 /* RootAnalyzer.swift */,
 			);
 			path = Analyzer;
@@ -339,6 +341,7 @@
 				BE195B2A209D7F6800111F15 /* Hookable */,
 				3DF1816E20A41479008E6B25 /* Analyzer */,
 				BE195B42209D844F00111F15 /* Analyzable.swift */,
+				BE4010DF20A9909E0056BF29 /* FocusPath.swift */,
 				BE195B0A209D7D6900111F15 /* Manager.swift */,
 				BE195B24209D7E8A00111F15 /* Tracker.swift */,
 				BE195B0B209D7D6900111F15 /* Hook.swift */,
@@ -584,6 +587,7 @@
 				BE195B43209D844F00111F15 /* Analyzable.swift in Sources */,
 				3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */,
 				BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */,
+				BE4010E020A9909E0056BF29 /* FocusPath.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

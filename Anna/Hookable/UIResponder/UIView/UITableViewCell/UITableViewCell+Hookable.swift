@@ -56,6 +56,7 @@ extension
             let
             analyzer = analyzable.analyzer as? Analyzer
             else { return }
-        analyzer.stopForwardingEvents()
+        analyzer.resolvedContext = nil
+        analyzer.resolvedParentship = nil
     }
 }

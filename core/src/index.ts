@@ -26,77 +26,62 @@ export class Manager
     return manager
   }
 
-  nodeID(ownerID :number, name :string) :Identity.NodeID
-  {
-    return this.identities.nodeID(ownerID, name);
+  nodeID(
+    ownerIDs :number[] | number
+  ) : Identity.NodeID {
+    if (ownerIDs instanceof Array) {
+      return this.identities.nodeID(ownerIDs)
+    }
+    else if (typeof ownerIDs == 'number') {
+      return this.identities.nodeID([ownerIDs as number]);
+    }
+    else {
+      return null;
+    }
   }
 
   registerNode(
-    id :Identity.NodeID, 
-    parentID? :Identity.NodeID
-  ) {
-    this.identities.registerNode(id, parentID);
-  }
-
-  registerNodeRaw(
-    ownerID :number,
+    id :Identity.NodeID | number[] | number, 
     name :string,
-    parentOwnerID? :number,
-    parentName? :string
+    parentID? :Identity.NodeID | number[] | number
   ) {
-    let
-    identities = this.identities;
-    let
-    id = identities.nodeID(ownerID, name);
-    var
-    parentID = null;
-    if (
-      parentOwnerID &&
-      parentName
-    ) {
-      parentID = identities.nodeID(parentOwnerID, parentName);
+    if (!(
+      id instanceof Identity.NodeID 
+    )) {
+      id = this.nodeID(id);
     }
-    this.registerNode(id, parentID);
+    if (!(
+      parentID instanceof Identity.NodeID 
+    )) {
+      parentID = this.nodeID(parentID);
+    }
+    this.identities.registerNode(id, name, parentID);
   }
 
-  deregisterNode(
-    id :Identity.NodeID
+  deregisterNodes(
+    id :Identity.NodeID | number[] | number
   ) {
-    this.identities.deregisterNode(id);
+    if (!(
+      id instanceof Identity.NodeID 
+    )) {
+      id = this.nodeID(id);
+    }
+    this.identities.deregisterNodes(id);
   }
 
-  deregisterNodeRaw(
-    nodeOwnerID :number,
-    nodeName :string
-  ) { 
-    let
-    identities = this.identities;
-    let
-    nodeID = identities.nodeID(nodeOwnerID, nodeName);
-    this.deregisterNode(nodeID);
-  }
-
-  recordEventRaw(
-    name :string,
-    properties :Identity.Event.Properties,
-    nodeOwnerID :number,
-    nodeName :string
-  ) {
-    let
-    identities = this.identities;
-    let
-    nodeID = identities.nodeID(nodeOwnerID, nodeName);
-    this.recordEvent(name, properties, nodeID);
-  }
-  
   recordEvent(
     name :string,
     properties :Identity.Event.Properties,
-    nodeID :Identity.NodeID
+    nodeID :Identity.NodeID | number[] | number
   )
   {
     let
     identities = this.identities, tracker = this.tracker;
+    if (!(
+      nodeID instanceof Identity.NodeID 
+    )) {
+      nodeID = this.nodeID(nodeID);
+    }
     let
     node = identities.node(nodeID);
     node.recordEvent(name, properties);

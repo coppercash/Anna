@@ -9,10 +9,10 @@ import Foundation
 
 @objc(ANAAnalyzer)
 public class
-    Analyzer : BaseAnalyzer, AnalyzerParenting
+    Analyzer : BaseAnalyzer, IdentityContextResolving
 {
     public typealias
-        Delegate = PathConstituting
+        Delegate = FocusPathConstituting
     weak var
     delegate :Delegate?
     @objc(initWithName:delegate:)
@@ -24,123 +24,153 @@ public class
         self.delegate = delegate
         super.init(name: name)
     }
-    deinit {
-        try? self.deregisterLastLocator()
-    }
 
-    func
-        resolvedParent() throws
-        -> AnalyzerParenting
-    {
-        let
-        analyzer = self
-        let
-        parent = try analyzer._resolvedParent()
-        analyzer.manager = try parent.resolvedManager()
-        return parent
-    }
+    // MARK: - Focus Path
     
     func
-        _resolvedParent() throws
-        -> AnalyzerParenting
-    {
+        parenthoodByLookingUp() throws -> (IdentityContextResolving, Bool)? {
         guard let
             delegate = self.delegate
-            else { throw ParentError.noDelegate(name: self.resolvedName()) }
+            else { return nil }
         var
-        last = delegate,
-        next = delegate.parentConsititutor(
-            for: last,
-            requiredFrom: delegate
+        isParentOwning = false,
+        next = delegate.parentConstitutor(
+            isOwning: &isParentOwning
         )
-        while true {
-            guard let consititutor = next
-                else { throw ParentError.brokenChain(breaking: String(describing: type(of: last))) }
+        while let
+            current = next
+        {
             if let
-                owner = consititutor as? AnalyzerReadable,
-                let
-                parent = owner.analyzer as? AnalyzerParenting
-            { return parent }
-            next = consititutor.parentConsititutor(
-                for: last,
-                requiredFrom: delegate
+                owner = current as? AnalyzerReadable
+            {
+                guard let
+                    parent = owner.analyzer as? IdentityContextResolving
+                    else { throw ContextError.unsetupAnalysisObject }
+                return (parent, isParentOwning)
+            }
+            var
+            isOwning = false
+            next = current.parentConstitutor(
+                isOwning: &isOwning
             )
-            last = consititutor
+            isParentOwning = isParentOwning && isOwning
         }
+        return nil
     }
     
     var
-    manager :Manager? = nil
-    override func
-        resolvedManager() throws -> Manager {
-        let
-        analyzer = self
-        if let manager = analyzer.manager
-        { return manager }
-        let
-        parent = try analyzer.resolvedParent()
-        let
-        manager = try parent.resolvedManager()
-        analyzer.manager = manager
-        // TODO: catch nil
-        return manager
+    deferredParenthoodResolutions :[ParenthoodCallback] = []
+    weak var
+    resolvedParentAnalyzer :IdentityContextResolving? = nil
+    var
+    resolvedParentship :Bool? = nil
+    var
+    resolvedParenthood :FocusParenthood? {
+        get {
+            guard let
+                parent = self.resolvedParentAnalyzer,
+                let
+                parentship = self.resolvedParentship
+                else { return nil }
+            return FocusParenthood(
+                parent: parent,
+                child: self,
+                isOwning: parentship
+            )
+        }
+        set {
+            self.resolvedParentAnalyzer = newValue?.parent
+            self.resolvedParentship = newValue?.isOwning
+        }
     }
-    
+    typealias
+        ParenthoodCallback = (FocusParenthood) throws -> Void
     func
-        resolvedName()
-        -> String
-    {
-        return self.name
-    }
-
-    override func
-        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
+        resolveParenthood(then callback : @escaping ParenthoodCallback) throws {
         let
         analyzer = self
-
-        // Register node for self if hasn't yet
-        //
-        if let locator = analyzer.lastRegisteredLocator {
-            return locator
-        }
-
-        // Notify all ancestors to register themself
-        //
+        if let
+            parenthood = analyzer.resolvedParenthood
+        { return try callback(parenthood) }
+        
+        guard let
+            (parent, isParentOwning) = try self.parenthoodByLookingUp()
+            else { return analyzer.deferredParenthoodResolutions.append(callback) }
         let
-        parent = try analyzer.resolvedParent(),
-        parentLocator = try parent.resolvedNodeLocatorByAppendingPath()
-
-        // Register self
-        //
+        parenthood = FocusParenthood(
+            parent: parent,
+            child: analyzer,
+            isOwning: isParentOwning
+        )
+        analyzer.resolvedParenthood = parenthood
+        try callback(parenthood)
+    }
+    func
+        flushDeferredResolutions() throws {
+        guard let
+            parenthood = self.resolvedParenthood
+            else { throw ParentError.unresolvedParenthood }
         let
-        manager = try analyzer.resolvedManager(),
-        name = analyzer.resolvedName(),
-        objID = ObjectIdentifier(analyzer),
-        locator = parentLocator.forked(
-            with: name,
-            ownerID: objID
-        )
-        manager.registerNode(
-            by: locator,
-            under: parentLocator
-        )
-       
-        // Mark registered
-        //
-        analyzer.lastRegisteredLocator = locator
-        parent.notifyOnReseting(parentLocator) { [weak analyzer] in
-            analyzer?.resetLastRegisteredLocator()
+        resolutions = self.deferredParenthoodResolutions
+        for resolve in resolutions {
+            try resolve(parenthood)
         }
-
-        return locator
+        self.deferredParenthoodResolutions.removeAll()
     }
     
-    override func
-        deregisterLastLocator() throws {
-        if let locator = self.lastRegisteredLocator {
+    // MARK: - Identity Context
+    
+    typealias
+        ContextCallback = IdentityContextResolving.Callback
+    func
+        resolveContext(
+        then callback : @escaping ContextCallback
+        ) throws {
+        let
+        analyzer = self,
+        name = self.name
+        if let
+            context = analyzer.resolvedContext
+        { return try callback(context) }
+        
+        try analyzer.resolveParenthood { [weak analyzer] parenthood in
             let
-            manager = try self.resolvedManager()
-            manager.deregisterNode(by: locator)
+            (parent, child, isOwning) = (
+                parenthood.parent,
+                parenthood.child,
+                parenthood.isOwning
+            )
+            try parent.resolveContext { [weak analyzer, weak parent] pContext in
+                let
+                (manager, parentID, suffix) = (
+                    pContext.manager,
+                    pContext.identifier,
+                    pContext.suffix
+                )
+                let
+                identifier = isOwning ?
+                    NodeID(owner: child) + suffix :
+                    NodeID(owner: child)
+                manager.registerNode(
+                    by: identifier,
+                    named: name,
+                    under: parentID
+                )
+                
+                let
+                context = IdentityContext(
+                    manager: manager,
+                    parentID: parentID,
+                    identifier: identifier,
+                    suffix: (isOwning ? suffix : NodeID.empty())
+                )
+                analyzer?.resolvedContext = context
+                parent?.notifyOnResetingContext { [weak analyzer] in
+                    analyzer?.resolvedContext = nil
+                }
+                
+                try callback(context)
+            }
         }
     }
 }

@@ -9,11 +9,10 @@ import Foundation
 
 @objc(ANARootAnalyzer) @objcMembers
 public class
-    RootAnalyzer : BaseAnalyzer, AnalyzerParenting
+    RootAnalyzer : BaseAnalyzer, IdentityContextResolving
 {
     public let
     manager :Manager
-    
     @objc(initWithManager:name:)
     public
     init(
@@ -25,46 +24,35 @@ public class
         super.init(name: name)
     }
     
-    override func
-        resolvedManager() throws -> Manager {
-        return self.manager
-    }
+    // MARK: - Context
     
-    override func
-        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
+    typealias
+        ContextCallback = IdentityContextResolving.Callback
+    func
+        resolveContext(
+        then callback : @escaping ContextCallback
+        ) throws {
         let
-        analyzer = self
-        
-        // Register node for self if hasn't yet
-        //
-        if let locator = analyzer.lastRegisteredLocator {
-            return locator
-        }
-        
-        // Register self
-        //
+        analyzer = self,
+        name = self.name,
+        manager = self.manager
+        if let
+            context = analyzer.resolvedContext
+        { return try callback(context) }
         let
-        manager = try analyzer.resolvedManager(),
-        objID = ObjectIdentifier(analyzer),
-        locator = manager.rootNodeLocator(
-            ownerID: objID,
-            name: self.name
-        )
+        identifier = NodeID(owner: self)
         manager.registerNode(
-            by: locator,
+            by: identifier,
+            named: name,
             under: nil
         )
-        
-        // Mark registered
-        //
-        analyzer.lastRegisteredLocator = locator
-        return locator
-    }
-    
-    override func
-        deregisterLastLocator() throws {
-        if let locator = self.lastRegisteredLocator {
-            self.manager.deregisterNode(by: locator)
-        }
+        let
+        context = IdentityContext(
+            manager: manager,
+            parentID: nil,
+            identifier: identifier,
+            suffix: NodeID.empty()
+        )
+        return try callback(context)
     }
 }

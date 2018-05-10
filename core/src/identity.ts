@@ -13,7 +13,7 @@ export namespace Loading
 export class Tree
 {
   root :Node = null;
-  identities :{ [id: number]: { [id: string]: Node; }; } = {};
+  identities :Identity = new Identity();
   loader :Loading;
 
   constructor(
@@ -21,14 +21,16 @@ export class Tree
   ) {
     this.loader = loader;
   }
-
-  nodeID(ownerID :number, name :string) :NodeID
-  {
-    return new NodeID(ownerID, name);
+  
+  nodeID(
+    ownerIDs :number[]
+  ) : NodeID {
+    return new NodeID(ownerIDs)
   }
 
   registerNode(
     nodeID :NodeID, 
+    name :string,
     parentID? :NodeID
   ) {
     let
@@ -54,22 +56,17 @@ export class Tree
     }
 
     let
-    node = parent ? parent.fork(nodeID) : new Node(nodeID, null, tree.rootMatching());
+    node = parent ? 
+      parent.fork(nodeID, name) : 
+      new Node(nodeID, name, null, tree.rootMatching());
 
-    let
-    byName = tree.identities[nodeID.ownerID];
-    if (!byName) {
-      byName = {};
-      tree.identities[nodeID.ownerID] = byName;
-    }
-    byName[nodeID.name] = node;
-
+    tree.setNode(node, nodeID);
     if (!(parent)) {
       tree.root = node;
     }
   }
 
-  deregisterNode(
+  deregisterNodes(
     nodeID :NodeID
   ) {
     let
@@ -77,41 +74,79 @@ export class Tree
     let
     identities = this.identities;
     let
-    node = this.node(nodeID);
+    nodes = identities.nodes(nodeID.ownerIDs);
     if (!(
-      node
+      nodes.length > 0
     )) {
-      throw new Error(`Cannot deregister unregistered node ${ nodeID }`);
+      throw new Error(`No nodes were registered with ${ nodeID }`);
     }
-    node.children.forEach(x => this.deregisterNode(x.id));
-    let
-    owners = identities[nodeID.ownerID];
-    delete owners[nodeID.name];
-    if (!(
-      Object.keys(owners).length > 0
-    )) {
-      delete identities[nodeID.ownerID];
-    }
+    for (let
+      node of nodes
+    ) {
+      node.children.forEach(x => this.deregisterNodes(x.id));
 
-    node.delete();
-    if (node === tree.root) {
-      tree.root = null;
+      node.delete();
+      tree.removeNode(nodeID);
+      if (node === tree.root) {
+        tree.root = null;
+      }
     }
   }
 
-  node(nodeID :NodeID) :Node
-  {
+  node(
+    nodeID :NodeID
+  ) : Node {
+    let 
+    identity = this.identities.descendant(nodeID.ownerIDs);
+    return identity ? identity.node : null;
+  }
+
+  setNode(
+    node :Node, 
+    nodeID :NodeID
+  ) {
     let
-    byName = this.identities[nodeID.ownerID];
-    if (!byName) {
-      return null;
+    ownerIDs = nodeID.ownerIDs;
+    var
+    index = 0;
+    var
+    identity :Identity = this.identities;
+    while (index < ownerIDs.length) {
+      let
+      ownerID = ownerIDs[index];
+      var
+      child = identity.child(ownerID);
+      if (!(
+        child
+      )) { 
+        child = new Identity();
+        identity.setChild(child, ownerID);
+      }
+      identity = child;
+      index += 1;
     }
+    identity.node = node;
+  }
+
+  removeNode(
+    nodeID :NodeID
+  ) {
     let
-    node = byName[nodeID.name];
-    if (!node) {
-      return null;
+    ownerIDs = nodeID.ownerIDs;
+    var
+    index = 1;
+    var
+    parent :Identity = this.identities;
+    var
+    identity :Identity = parent.child(nodeID.ownerIDs[0]);
+    while (index < ownerIDs.length) {
+      let
+      ownerID = ownerIDs[index];
+      parent = identity;
+      identity = identity.child(ownerID);
+      index += 1;
     }
-    return node;
+    parent.removeChild(ownerIDs[ownerIDs.length - 1]);
   }
 
   rootMatching() : Match.Stage {
@@ -125,19 +160,113 @@ export class Tree
 
 export class NodeID
 {
-  ownerID :number;
-  name :string;
+  ownerIDs :number[];
 
   constructor(
-    ownerID :number,
-    name :string
+    ownerIDs :number[]
   ) {
-    this.ownerID = ownerID;
-    this.name = name;
+    this.ownerIDs = ownerIDs;
   }
 
   toString = () : string => {
-    return `Node(${ this.name }\\${ this.ownerID })`;
+    let
+    ownerIDs = this.ownerIDs;
+    var
+    buffer = `Node(${ ownerIDs[0] }`;
+    var
+    index = 1;
+    while (index < ownerIDs.length) {
+      buffer += `\\${ ownerIDs[index] }`;
+      index += 1;
+    }
+    buffer += ')';
+    return buffer;
+  }
+}
+
+class Identity implements Markup.Markable {
+  node :Node = null;
+  children :{ [ownerID :number] : Identity } = {};
+
+  child(
+    ownerID :number
+  ) : Identity {
+    return this.children[ownerID];
+  }
+
+  setChild(
+    child :Identity,
+    ownerID :number
+  ) {
+    this.children[ownerID] = child;
+  }
+
+  removeChild(
+    ownerID :number
+  ) {
+    delete this.children[ownerID];
+  }
+
+  descendant(
+    ownerIDs :number[]
+  ) : Identity {
+    var
+    index = 0;
+    var
+    identity :Identity = this;
+    while (index < ownerIDs.length) {
+      let
+      ownerID = ownerIDs[index];
+      identity = identity.child(ownerID);
+      if (!(
+        identity
+      )) { break; }
+      index += 1;
+    }
+    return identity;
+  }
+
+  nodes(
+    ownerIDs :number[]
+  ) : Node[] {
+    var
+    buffer = new Array<Node>();
+    this.descendant(ownerIDs).collectNodes(buffer);
+    return buffer;
+  }
+
+  collectNodes(
+    buffer :Node[]
+  ) {
+    let
+    node = this.node, children = this.children;
+    if (node) {
+      buffer.push(node);
+    }
+    for (let 
+      key in children
+    ) {
+      let
+      child = children[key];
+      child.collectNodes(buffer);
+    }
+  }
+
+  markup(
+    indent :string = '',
+  ) :string {
+    let
+    node = this.node;
+    let
+    name = node ? node.name : '_';
+    var
+    children = new Array<Markup.Markable>();
+    for (let
+      key in this.children
+    ) {
+      children.push(this.children[key]);
+    }
+    return Markup.markup(name, {}, children, indent, true);
   }
 }
 
@@ -147,6 +276,7 @@ export class Node implements Markup.Markable
   className = 'ana-node';
 
   id :NodeID;
+  name :string;
   properties :Markup.Markable.Properties = { class: Node.className };
   subordinates :Markup.Markable[] = [];
   events :Event[] = [];
@@ -158,23 +288,26 @@ export class Node implements Markup.Markable
 
   constructor(
     id :NodeID,
+    name :string,
     parent :Node,
     matching :Match.Stage
   ) {
     this.id = id;
+    this.name = name;
     this.parent = parent;
     this.matching = matching;
   }
 
   fork(
-    nodeID :NodeID
+    nodeID :NodeID,
+    name :string
   ) :Node {
     let
     node = this, children = this.children, subordinates = this.subordinates;
     let 
-    matching = node.stageMatching(nodeID.name);
+    matching = node.stageMatching(name);
     let
-    child = new Node(nodeID, node, matching);
+    child = new Node(nodeID, name, node, matching);
     child._indexAmongSiblings = children.size;
     children.add(child);
     subordinates.push(child);
@@ -222,9 +355,9 @@ export class Node implements Markup.Markable
     alone :boolean = false
   ) :string {
     let
-    id = this.id, properties = this.properties, matching = this.matching, subordinates = this.subordinates;
+    name = this.name, properties = this.properties, matching = this.matching, subordinates = this.subordinates;
     if (alone) {
-      return Markup.markup(id.name, properties, [], indent);
+      return Markup.markup(name, properties, [], indent);
     }
     let
     children = new Array<Markup.Markable>();
@@ -241,7 +374,7 @@ export class Node implements Markup.Markable
         children.push(sub);
       }
     }
-    return Markup.markup(id.name, properties, children, indent);
+    return Markup.markup(name, properties, children, indent);
   }
 
   upMarkedAncestors() :[string, string]
@@ -280,7 +413,7 @@ export class Node implements Markup.Markable
     return this._indexAmongSiblings;
   }
   get nodeName() : string {
-    return this.id.name;
+    return this.name;
   }
   get parentNode() : Node {
     return this.parent;

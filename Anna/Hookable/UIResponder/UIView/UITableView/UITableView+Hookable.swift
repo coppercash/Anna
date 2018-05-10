@@ -121,42 +121,74 @@ class
             let
             analyzable = cell as? AnalyzerReadable,
             let
-            dummy = analyzable.analyzer as? Analyzer
+            row = analyzable.analyzer as? Analyzer
         else { return cell }
 
         let
-        owner = tableView as! AnalyzerReadable,
+        owner = tableView as! UITableView & AnalyzerReadable,
         table = owner.analyzer as! Analyzer
         let
         parent :Analyzer
+        let
+        identifier = indexPath.section
         if let
-            delegate = tableView.delegate as? AnalyzableGroupedTableViewDelegate,
-            let
-            identifier = delegate.tableView(tableView, analyzableGroupIdentifierForRowAt: indexPath)
+            resolved = table.childAnalyzer[identifier]
         {
-            parent = table.resolvedChildAnalyzer(
-                named: String(describing: identifier),
-                with: identifier
-            )
+            parent = resolved
         }
         else {
-            parent = table
+            if let
+                delegate = tableView.delegate as? SectionAnalyzableTableViewDelegate,
+                let
+                name = delegate.tableView(
+                    owner,
+                    analyticNameFor: indexPath.section
+                )
+            {
+                parent = table.resolvedChildAnalyzer(
+                    named: name,
+                    with: identifier
+                )
+                delegate.tableView?(
+                    owner,
+                    didCreate: parent,
+                    for: indexPath.section
+                )
+            }
+            else {
+                parent = table
+            }
         }
-        let
-        row = parent.resolvedChildAnalyzer(
-            named: dummy.name,
-            with: indexPath
-        )
-        dummy.startForwardingEvents(to: row)
-        dummy.flushDeferredEvents(to: row)
-
+        try! parent.resolveContext { [weak parent] (context) in
+            guard let
+                parent = parent
+                else { return }
+            let
+            (manager, parentID, identifier) = (
+                context.manager,
+                context.identifier,
+                NodeID(owner: row)
+            )
+            row.resolvedContext = IdentityContext(
+                manager: manager,
+                parentID: parentID,
+                identifier: identifier,
+                suffix: NodeID(owner: cell)
+            )
+            row.resolvedParenthood = BaseAnalyzer.FocusParenthood(
+                parent: parent,
+                child: row,
+                isOwning: true
+            )
+            try row.flushDeferredResolutions()
+        }
         return cell
     }
 }
 
-@objc(ANAAnalyzableGroupedTableViewDelegate)
+@objc(ANASectionAnalyzableTableViewDelegate)
 public protocol
-    AnalyzableGroupedTableViewDelegate
+    SectionAnalyzableTableViewDelegate
 {
     // TODO: Remove
 //    @objc(tableView:analyzerNameForRowAtIndexPath:)
@@ -171,10 +203,17 @@ public protocol
 //        _ tableView: UITableView,
 //        analyzerNameFor section: Int
 //        ) -> String?
-    @objc(tableView:analyzableGroupIdentifierForRowAtIndexPath:)
+    @objc(tableView:didCreateAnalyzer:forSection:)
+    optional func
+        tableView(
+        _ tableView: UITableView & AnalyzerReadable,
+        didCreate analyzer :Analyzing,
+        for section :Int
+        ) -> Void
+    @objc(tableView:analyticNameForSection:)
     func
         tableView(
-        _ tableView: UITableView,
-        analyzableGroupIdentifierForRowAt indexPath: IndexPath
-        ) -> AnyHashable?
+        _ tableView: UITableView & AnalyzerReadable,
+        analyticNameFor section :Int
+        ) -> String?
 }

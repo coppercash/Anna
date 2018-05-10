@@ -9,70 +9,20 @@
 import Foundation
 import JavaScriptCore
 
-class
-NodeLocator 
+typealias
+    NodeID = Array<UInt>
+extension
+    Array
+    where Element == UInt
 {
-    let
-    ownerID :UInt,
-    name :String
-    init(
-        ownerID :UInt,
-        name :String
-        ) {
-        self.ownerID = ownerID
-        self.name = name
+    init(owner: AnyObject) {
+        self.init(arrayLiteral: UInt(bitPattern: ObjectIdentifier(owner)))
     }
-    
-    class func
-        root(
-        ownerID :ObjectIdentifier,
-        name :String
-        ) -> Self {
-        return self.init(
-            ownerID: UInt(bitPattern: ownerID),
-            name: name
-        )
+    static func
+        empty() -> [Element] {
+        return []
     }
-    
-//    weak var
-//    parent :NodeLocator? = nil
-//    var
-//    children :[String: NodeLocator] = [:]
-    func
-        forked(
-        with name :String,
-        ownerID :ObjectIdentifier
-        ) -> NodeLocator {
-//        let
-//        parent = self
-//
-//        if let child = parent.children[name]
-//        { return child }
-        
-        let
-        child = NodeLocator(
-            ownerID: UInt(bitPattern: ownerID),
-            name: name
-        )
-        
-//        child.parent = parent
-//        parent.children[name] = child
-        
-        return child
-    }
-    
-//    func
-//        delete() {
-//        guard let parent = self.parent
-//            else { return }
-//        parent.children.removeValue(forKey: self.name)
-//    }
-    
-//    deinit {
-//        print(self.name)
-//    }
 }
-
 
 @objc(ANADependency) @objcMembers
 public class
@@ -189,24 +139,11 @@ public class
         return manager
     }
 
-    typealias
-        NodeLocator = Anna.NodeLocator
-    func
-        rootNodeLocator(
-        ownerID :ObjectIdentifier,
-        name :String
-        ) -> NodeLocator
-    {
-        return NodeLocator.root(
-            ownerID: ownerID,
-            name: name
-        )
-    }
-    
     func
         registerNode(
-        by locator :NodeLocator,
-        under parentLocator :NodeLocator?
+        by identifier :NodeID,
+        named name :String,
+        under parentID :NodeID?
         )
     {
         let
@@ -215,41 +152,37 @@ public class
             let
             arguments :[Any]
             if let
-                parentLocator = parentLocator
+                parentID = parentID
             {
                 arguments = [
-                    locator.ownerID,
-                    locator.name,
-                    parentLocator.ownerID,
-                    parentLocator.name
+                    identifier,
+                    name,
+                    parentID
                 ]
             }
             else {
                 arguments = [
-                    locator.ownerID,
-                    locator.name
+                    identifier,
+                    name
                 ]
             }
             manager.invokeMethod(
-                "registerNodeRaw",
+                "registerNode",
                 withArguments: arguments
             )
         }
     }
     
     func
-        deregisterNode(
-        by locator :NodeLocator
+        deregisterNodes(
+        by identifier :NodeID
         ) {
         let
         manager = try! self.resolvedScriptManager()
         self.scriptQ.async {
             manager.invokeMethod(
-                "deregisterNodeRaw",
-                withArguments: [
-                    locator.ownerID,
-                    locator.name
-                ]
+                "deregisterNodes",
+                withArguments: [identifier]
             )
         }
     }
@@ -260,19 +193,18 @@ public class
         recordEvent(
         named name :String,
         with properties :Propertiez,
-        locator :NodeLocator
+        onNodeBy identifier :NodeID
         )
     {
         let
         manager = try! self.resolvedScriptManager()
         self.scriptQ.async {
             manager.invokeMethod(
-                "recordEventRaw",
+                "recordEvent",
                 withArguments: [
                     name,
                     properties,
-                    locator.ownerID,
-                    locator.name
+                    identifier
                 ]
             )
         }

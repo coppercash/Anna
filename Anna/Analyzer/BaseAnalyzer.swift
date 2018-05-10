@@ -7,21 +7,43 @@
 
 import Foundation
 
-protocol
-    AnalyzerParenting : class
+class
+    IdentityContext
 {
-    func
-        resolvedManager() throws
-        -> Manager
-    func
-        resolvedNodeLocatorByAppendingPath() throws
-        -> Manager.NodeLocator
+    let
+    manager :Manager,
+    parentID :NodeID?,
+    identifier :NodeID,
+    suffix :NodeID
+    init(
+        manager :Manager,
+        parentID :NodeID?,
+        identifier :NodeID,
+        suffix :NodeID
+        ) {
+        self.manager = manager
+        self.parentID = parentID
+        self.identifier = identifier
+        self.suffix = suffix
+    }
+}
+
+protocol
+    IdentityContextResolving : class
+{
     typealias
-        Notification = () -> Void
+        Callback = (IdentityContext) throws -> Void
     func
-        notifyOnReseting(
-        _ locator :NodeLocator,
-        byCalling callback : @escaping Notification
+        resolveContext(
+        then callback : @escaping Callback
+    ) throws
+    var
+    resolvedContext :IdentityContext? { get }
+    typealias
+        Notify = () -> Void
+    func
+        notifyOnResetingContext(
+        _ notify : @escaping Notify
     )
 }
 
@@ -36,68 +58,59 @@ public class
         self.name = name
     }
     
-    var
-    lastRegisteredLocator :Manager.NodeLocator? = nil
     deinit {
-        self.resetLastRegisteredLocator()
+        try? self.deregisterIdentityNodes()
     }
     
-    var
-    childAnalyzer :[AnyHashable : Analyzer] = [:]
     
-    func
-        resolvedChildAnalyzer(
-        named name :String,
-        with identifier :AnyHashable
-        ) ->Analyzer
-    {
-        let
-        parent = self;
-        if let
-            child = parent.childAnalyzer[identifier]
-        { return child }
-        let
-        child = Analyzer(
-            with: name,
-            delegate: parent
-        )
-        parent.childAnalyzer[identifier] = child
-        return child
-    }
+    // MARK: - Focus Path
     
-    var
-    notifications :[AnalyzerParenting.Notification] = []
-    func
-        notifyLastRegisteredLocatorReset() {
-        for note in self.notifications {
-            note()
+    class
+    FocusParenthood {
+        let
+        parent :IdentityContextResolving,
+        child :BaseAnalyzer,
+        isOwning :Bool
+        init(
+            parent :IdentityContextResolving,
+            child :BaseAnalyzer,
+            isOwning :Bool
+            ) {
+            self.parent = parent
+            self.child = child
+            self.isOwning = isOwning
         }
-        self.notifications.removeAll()
+    }
+
+    // MARK: - Identity Context
+    var
+    resolvedContext :IdentityContext? = nil {
+        didSet {
+            for notify in self.contextResetingNotifications {
+                notify()
+            }
+            self.contextResetingNotifications.removeAll()
+        }
+    }
+    var
+    contextResetingNotifications :[IdentityContextResolving.Notify] = []
+    func
+        notifyOnResetingContext(_ notify : @escaping IdentityContextResolving.Notify) {
+        self.contextResetingNotifications.append(notify)
     }
     func
-        notifyOnReseting(
-        _ locator :NodeLocator,
-        byCalling callback : @escaping AnalyzerParenting.Notification
-        ) {
-        self.notifications.append(callback)
+        deregisterIdentityNodes() throws {
+        guard let
+            contextResolver = self as? IdentityContextResolving,
+            let
+            manager = contextResolver.resolvedContext?.manager
+            else { throw ContextError.unresolvedManager }
+        let
+        id = NodeID(owner: self)
+        manager.deregisterNodes(by: id)
     }
-    
-    func
-        resetLastRegisteredLocator() {
-        self.lastRegisteredLocator = nil
-        self.notifyLastRegisteredLocatorReset()
-    }
-    func
-        deregisterLastLocator() throws {
-    }
-    func
-        resolvedNodeLocatorByAppendingPath() throws -> Manager.NodeLocator {
-        throw ParentError.abstractMethod(name: #function)
-    }
-    func
-        resolvedManager() throws -> Manager {
-        throw ParentError.abstractMethod(name: #function)
-    }
+
+    // MARK: - Event Recording
     
     struct
         Event
@@ -114,13 +127,16 @@ public class
         with properties :Properties? = nil
         ) {
         let
-        analyzer = self,
+        contextResolver = self as! IdentityContextResolving,
         expressable = properties?.toJSExpressable() ?? [:]
-        try! analyzer.resolveContext { (manager, locator) in
+        
+        try! contextResolver.resolveContext { (context) in
+            let
+            manager = context.manager
             manager.recordEvent(
                 named: name,
                 with: expressable,
-                locator: locator
+                onNodeBy: context.identifier
             )
         }
     }
@@ -181,85 +197,41 @@ public class
             ]
         )
     }
-    func
-        startForwardingEvents(
-        to recorder: Recording
-        ) {
-        for token in self.tokens {
-            token.recorder = recorder
-        }
-    }
-    func
-        stopForwardingEvents() {
-        for token in self.tokens {
-            token.recorder = self
-        }
-    }
-    func
-        flushDeferredEvents(
-        to another: BaseAnalyzer
-        ) {
-        let
-        analyzer = self
-        another.deferredNodeContextRequirings.append(contentsOf: analyzer.deferredNodeContextRequirings)
-        analyzer.deferredNodeContextRequirings.removeAll()
-    }
-    //    func
-    //        takePlace(of analyzer :Analyzer) {
-    //        if analyzer === self { return }
-    //        for token in analyzer.tokens {
-    //            token.recorder = self
-    //            self.tokens.append(token)
-    //        }
-    //        analyzer.tokens.removeAll()
-    //    }
-    //    func
-    //        detach() {
-    //        self.tokens.removeAll()
-    //    }
     
-    typealias
-        NodeContextResolution = (
-        _ manager :Manager,
-        _ parent :NodeLocator
-        ) -> Void
+    // MARK: - Child Analyzer
+    
     var
-    deferredNodeContextRequirings :[NodeContextResolution] = []
+    childAnalyzer :[AnyHashable : Analyzer] = [:]
     func
-        resolveContext(
-        then : @escaping NodeContextResolution
-        ) throws {
+        resolvedChildAnalyzer(
+        named name :String,
+        with identifier :AnyHashable
+        ) ->Analyzer
+    {
         let
-        analyzer = self
-        analyzer.deferredNodeContextRequirings.append(then)
-        guard let
-            locator = try? analyzer.resolvedNodeLocatorByAppendingPath(),
-            let
-            manager = try? analyzer.resolvedManager()
-            else
-        {
-            guard analyzer.deferredNodeContextRequirings.count < 7 else {
-                throw ParentError.tooManyDeferredContextRequirings(node: analyzer.name)
-            }
-            return
-        }
-        for resolve in analyzer.deferredNodeContextRequirings {
-            resolve(manager, locator)
-        }
-        analyzer.deferredNodeContextRequirings.removeAll()
+        parent = self;
+        if let
+            child = parent.childAnalyzer[identifier]
+        { return child }
+        let
+        child = Analyzer(
+            with: name,
+            delegate: parent
+        )
+        parent.childAnalyzer[identifier] = child
+        return child
     }
 }
 
 extension
-    BaseAnalyzer : PathConstituting, AnalyzerReadable
+    BaseAnalyzer : FocusPathConstituting, AnalyzerReadable
 {
     public var
     analyzer: Analyzing? { return self }
     public func
-        parentConsititutor(
-        for child :PathConstituting,
-        requiredFrom descendant :PathConstituting
-        ) -> PathConstituting? {
+        parentConstitutor(
+        isOwning: UnsafeMutablePointer<Bool>
+        ) -> FocusPathConstituting? {
         return self
     }
 }
@@ -275,12 +247,20 @@ extension
 }
 
 enum
+    ContextError : Error
+{
+    case unresolvedManager
+    case unsetupAnalysisObject
+}
+
+enum
     ParentError : Error
 {
     case abstractMethod(name :String)
     case noDelegate(name :String)
     case brokenChain(breaking :String)
     case tooManyDeferredContextRequirings(node :String)
+    case unresolvedParenthood
 }
 extension
     ParentError : LocalizedError
@@ -296,6 +276,8 @@ extension
             return "Path chain is broken, because node '\(breaking)' has no parent."
         case .tooManyDeferredContextRequirings(node: let node):
             return "Too many deferred node context requirings on node '\(node)'."
+        case .unresolvedParenthood:
+            return "Unexpected unresolved parenthood."
         }
     }
 }
