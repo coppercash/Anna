@@ -49,7 +49,7 @@ class TableViewTests: XCTestCase {
         );
         """)
         class
-            Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource, AnalyzableGroupedTableViewDelegate
+            Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource, SectionAnalyzableTableViewDelegate
         {
             lazy var
             table :UITableView = {
@@ -126,10 +126,10 @@ class TableViewTests: XCTestCase {
             }
             func
                 tableView(
-                _ tableView: UITableView,
-                analyzableGroupIdentifierForRowAt indexPath: IndexPath
-                ) -> AnyHashable? {
-                return "sc_\(indexPath.section)"
+                _ tableView: UITableView & AnalyzerReadable,
+                analyticNameFor section :Int
+                ) -> String? {
+                return "sc_\(section)"
             }
         }
         test.rootViewController = Controller()
@@ -170,7 +170,7 @@ class TableViewTests: XCTestCase {
         );
         """)
         class
-            Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource, AnalyzableGroupedTableViewDelegate
+            Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource, SectionAnalyzableTableViewDelegate
         {
             lazy var
             table :UITableView = {
@@ -242,11 +242,12 @@ class TableViewTests: XCTestCase {
                 ) -> Int {
                 return 20
             }
-            func tableView(
-                _ tableView: UITableView,
-                analyzableGroupIdentifierForRowAt indexPath: IndexPath
-                ) -> AnyHashable? {
-                return "sc_\(indexPath.row)"
+            func
+                tableView(
+                _ tableView: UITableView & AnalyzerReadable,
+                analyticNameFor section :Int
+                ) -> String? {
+                return "sc_\(section)"
             }
         }
         test.rootViewController = Controller()

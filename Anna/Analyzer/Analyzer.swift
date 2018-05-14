@@ -27,6 +27,23 @@ public class
 
     // MARK: - Focus Path
     
+    class
+    FocusParenthood {
+        let
+        parent :IdentityContextResolving,
+        child :BaseAnalyzer,
+        isOwning :Bool
+        init(
+            parent :IdentityContextResolving,
+            child :BaseAnalyzer,
+            isOwning :Bool
+            ) {
+            self.parent = parent
+            self.child = child
+            self.isOwning = isOwning
+        }
+    }
+
     func
         parenthoodByLookingUp() throws -> (IdentityContextResolving, Bool)? {
         guard let
@@ -140,6 +157,8 @@ public class
                 parenthood.child,
                 parenthood.isOwning
             )
+            let
+            identifier = NodeID(owner: child)
             try parent.resolveContext { [weak analyzer, weak parent] pContext in
                 let
                 (manager, parentID, suffix) = (
@@ -148,11 +167,9 @@ public class
                     pContext.suffix
                 )
                 let
-                identifier = isOwning ?
-                    NodeID(owner: child) + suffix :
-                    NodeID(owner: child)
+                suffixedID = isOwning ? identifier + suffix : identifier
                 manager.registerNode(
-                    by: identifier,
+                    by: suffixedID,
                     named: name,
                     under: parentID
                 )
@@ -165,7 +182,7 @@ public class
                     suffix: (isOwning ? suffix : NodeID.empty())
                 )
                 analyzer?.resolvedContext = context
-                parent?.notifyOnResetingContext { [weak analyzer] in
+                parent?.notifyAfterContextReset { [weak analyzer] in
                     analyzer?.resolvedContext = nil
                 }
                 

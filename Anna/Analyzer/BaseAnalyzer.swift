@@ -42,7 +42,7 @@ protocol
     typealias
         Notify = () -> Void
     func
-        notifyOnResetingContext(
+        notifyAfterContextReset(
         _ notify : @escaping Notify
     )
 }
@@ -59,44 +59,30 @@ public class
     }
     
     deinit {
+        self.notifyContextReset()
         try? self.deregisterIdentityNodes()
     }
     
-    
-    // MARK: - Focus Path
-    
-    class
-    FocusParenthood {
-        let
-        parent :IdentityContextResolving,
-        child :BaseAnalyzer,
-        isOwning :Bool
-        init(
-            parent :IdentityContextResolving,
-            child :BaseAnalyzer,
-            isOwning :Bool
-            ) {
-            self.parent = parent
-            self.child = child
-            self.isOwning = isOwning
-        }
-    }
-
     // MARK: - Identity Context
+    
     var
     resolvedContext :IdentityContext? = nil {
         didSet {
-            for notify in self.contextResetingNotifications {
-                notify()
-            }
-            self.contextResetingNotifications.removeAll()
+            self.notifyContextReset()
         }
     }
     var
     contextResetingNotifications :[IdentityContextResolving.Notify] = []
     func
-        notifyOnResetingContext(_ notify : @escaping IdentityContextResolving.Notify) {
+        notifyAfterContextReset(_ notify : @escaping IdentityContextResolving.Notify) {
         self.contextResetingNotifications.append(notify)
+    }
+    func
+        notifyContextReset() {
+        for notify in self.contextResetingNotifications {
+            notify()
+        }
+        self.contextResetingNotifications.removeAll()
     }
     func
         deregisterIdentityNodes() throws {
@@ -141,7 +127,7 @@ public class
         }
     }
     var
-    tokens = Array<Reporting>()
+    tokens :[Reporting] = []
     public func
         hook(_ hookee :Hookable) {
         let

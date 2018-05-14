@@ -84,6 +84,11 @@ export class Manager
     }
     let
     node = identities.node(nodeID);
+    if (!(
+      node
+    )) {
+      throw new Error(`Cannot record event on unregister node ${ nodeID }.`);
+    }
     node.recordEvent(name, properties);
     let
     tasks = node.tasksMatchingEvent(name);

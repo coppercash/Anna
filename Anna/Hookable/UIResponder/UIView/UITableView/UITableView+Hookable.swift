@@ -175,7 +175,7 @@ class
                 identifier: identifier,
                 suffix: NodeID(owner: cell)
             )
-            row.resolvedParenthood = BaseAnalyzer.FocusParenthood(
+            row.resolvedParenthood = Analyzer.FocusParenthood(
                 parent: parent,
                 child: row,
                 isOwning: true
