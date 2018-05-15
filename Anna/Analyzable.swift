@@ -61,6 +61,9 @@ public protocol
         _ value :Any,
         for keyPath :String
     )
+    @objc(detach)
+    func
+        detach()
 }
 
 @objc(ANAAnalyzerReadable)

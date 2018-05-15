@@ -144,10 +144,9 @@ public class
         by identifier :NodeID,
         named name :String,
         under parentID :NodeID?
-        )
-    {
+        ) throws {
         let
-        manager = try! self.resolvedScriptManager()
+        manager = try self.resolvedScriptManager()
         self.scriptQ.async {
             let
             arguments :[Any]
@@ -176,9 +175,9 @@ public class
     func
         deregisterNodes(
         by identifier :NodeID
-        ) {
+        ) throws {
         let
-        manager = try! self.resolvedScriptManager()
+        manager = try self.resolvedScriptManager()
         self.scriptQ.async {
             manager.invokeMethod(
                 "deregisterNodes",
@@ -188,16 +187,15 @@ public class
     }
     
     typealias
-    Properties = [String : Any]
+        Properties = [String : Any]
     func
         recordEvent(
         named name :String,
         with properties :Propertiez,
         onNodeBy identifier :NodeID
-        )
-    {
+        ) throws {
         let
-        manager = try! self.resolvedScriptManager()
+        manager = try self.resolvedScriptManager()
         self.scriptQ.async {
             manager.invokeMethod(
                 "recordEvent",
@@ -212,10 +210,9 @@ public class
     
     @objc
     public func
-        logSnapshot()
-    {
+        logSnapshot() throws {
         let
-        manager = try! self.resolvedScriptManager()
+        manager = try self.resolvedScriptManager()
         self.scriptQ.async {
             manager.invokeMethod(
                 "logSnapshot",

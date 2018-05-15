@@ -10,7 +10,7 @@ import UIKit
 extension
     UIResponder : FocusPathConstituting, FocusPathConstitutionForwarding
 {
-    public func
+    open func
         parentConstitutor(
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
@@ -19,9 +19,9 @@ extension
             isOwning: isOwning
         )
     }
-    public func
+    open func
         forwardingConstitutor(
-        for anothor: FocusPathConstituting,
+        for another: FocusPathConstituting,
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
         return self
@@ -29,32 +29,91 @@ extension
 }
 
 extension
+    UIViewController
+{
+    open override func
+        parentConstitutor(
+        isOwning: UnsafeMutablePointer<Bool>
+        ) -> FocusPathConstituting? {
+        if let
+            parent = self.presentingViewController ?? self.tabBarController ?? self.navigationController 
+        {
+            return parent.forwardingConstitutor(
+                for: self,
+                isOwning: isOwning
+            )
+        }
+        else {
+            return super.parentConstitutor(
+                isOwning: isOwning
+            )
+        }
+    }
+}
+
+extension
     UINavigationController
 {
-    public override func
+    open override func
         forwardingConstitutor(
-        for anothor: FocusPathConstituting,
+        for another: FocusPathConstituting,
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
         let
-        navigation = self.navigationController,
         siblings = self.viewControllers
         var
         index :Int? = nil
         for i in stride(from: 0, to: siblings.count, by: 1).reversed() {
-            if siblings[i] === anothor {
+            if siblings[i] === another {
                 index = i
                 break
             }
         }
-        if let
-            index = index
+        guard let
+            i = index
+            else
         {
-            return index > 0 ? siblings[index - 1] : navigation
+            guard let
+                last = siblings.last
+                else
+            {
+                return super.forwardingConstitutor(
+                    for: another,
+                    isOwning: isOwning
+                )
+            }
+            return last.forwardingConstitutor(
+                for: another,
+                isOwning: isOwning
+            )
         }
-        else {
-            return siblings.last ?? navigation
+        guard i > 0 else {
+            return super.forwardingConstitutor(
+                for: another,
+                isOwning: isOwning
+            )
         }
+        return siblings[i - 1].forwardingConstitutor(
+            for: another,
+            isOwning: isOwning
+        )
+    }
+}
+
+extension
+    UIView
+{
+    open override func
+        parentConstitutor(
+        isOwning: UnsafeMutablePointer<Bool>
+        ) -> FocusPathConstituting? {
+        isOwning.assign(
+            repeating: true,
+            count: 1
+        )
+        var
+        skipping = false
+        return super.parentConstitutor(isOwning: &skipping)
     }
 }
 

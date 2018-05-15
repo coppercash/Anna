@@ -41,7 +41,7 @@ public class
         { return try callback(context) }
         let
         identifier = NodeID(owner: self)
-        manager.registerNode(
+        try manager.registerNode(
             by: identifier,
             named: name,
             under: nil

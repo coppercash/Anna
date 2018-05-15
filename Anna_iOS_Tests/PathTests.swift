@@ -151,7 +151,8 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                
+                self.becomeAnalysisObject(named: "vc")
+
                 let
                 superview = self.view as! PathTestingView
                 let
@@ -205,7 +206,7 @@ class PathTests: XCTestCase {
                 let
                 superview = self.view!
                 let
-                label = UILabel(frame: superview.bounds)
+                label = PathTestingLabel(frame: superview.bounds)
                 superview.addSubview(label)
                 self.label = label
                 
@@ -215,6 +216,9 @@ class PathTests: XCTestCase {
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 self.label?.text = "42"
+            }
+            deinit {
+                self.analyzer?.detach()
             }
         }
         test.rootViewController = Controller()
@@ -317,5 +321,88 @@ class PathTests: XCTestCase {
         
         XCTAssertEqual(test.results[0] as! Int, 42)
         XCTAssertEqual(test.results[1] as! Int, 43)
+    }
+    
+    func test_customRootTabBarController() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        test.task =
+        """
+        match(
+        '/nv/home/two/detail/ana-appeared',
+        function() { return 42; }
+        );
+        """
+        class
+            Home : PathTestingTabBarController
+        {
+            override func
+                viewDidLoad() {
+                let
+                controllers = ["one", "two"].map { (name :String) -> PathTestingViewController in
+                    let
+                    controller = PathTestingViewController()
+                    controller.becomeAnalysisObject(named: name)
+                    return controller
+                }
+                self.viewControllers = controllers
+                self.becomeAnalysisObject(named: "home")
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                self.selectedIndex = 1
+                let
+                detail = PathTestingViewController()
+                detail.becomeAnalysisObject(named: "detail")
+                self.navigationController?.pushViewController(
+                    detail,
+                    animated: false
+                )
+            }
+            override func
+                forwardingConstitutor(
+                for another: FocusPathConstituting,
+                isOwning: UnsafeMutablePointer<Bool>
+                ) -> FocusPathConstituting? {
+                if let
+                    controller = another as? UIViewController,
+                    let
+                    controllers = self.viewControllers
+                {
+                    if (controllers.contains(controller)) {
+                        return self
+                    }
+                    else {
+                        return self.selectedViewController;
+                    }
+                }
+                else {
+                    return super.forwardingConstitutor(
+                        for: another,
+                        isOwning: isOwning
+                    )
+                }
+            }
+        }
+        class
+            Navigation : PathTestingNavigationController
+        {
+            override func
+                viewDidLoad() {
+                super.viewDidLoad()
+                self.becomeAnalysisObject(named: "nv")
+            }
+        }
+        test.rootViewController = Navigation(rootViewController: Home())
+
+        test.expect()
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 1.0
+        )
+        
+        XCTAssertEqual(test.results[0] as! Int, 42)
     }
 }

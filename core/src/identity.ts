@@ -436,6 +436,14 @@ export class Node implements Markup.Markable
     }
     return undefined;
   }
+  get latestEvent() : Event {
+    let
+    events = this.events;
+    if (!(
+      events.length > 0
+    )) { return null; } 
+    return events[events.length - 1];
+  }
 }
 
 export class Event implements Markup.Markable
@@ -472,8 +480,13 @@ export class Event implements Markup.Markable
     matching :Match.Stage
   ) :Markup.Markable {
     let
-    tasks = new Markup.ArrayMarker('tasks', matching.tasksMatching(this.name));
-    return new Markup.ObjectMarker(this.name, this.properties, [tasks]);
+    children = new Array<Markup.Markable>();
+    let
+    tasks = matching.tasksMatching(this.name);
+    if (tasks.length > 0) {
+      children.push(new Markup.ArrayMarker('tasks', tasks));
+    }
+    return new Markup.ObjectMarker(this.name, this.properties, children);
   }
 }
 export namespace Event

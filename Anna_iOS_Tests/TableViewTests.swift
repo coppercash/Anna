@@ -65,6 +65,7 @@ class TableViewTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
+                self.becomeAnalysisObject(named: "vc")
                 self.view.addSubview(self.table)
                 
             }
@@ -161,12 +162,12 @@ class TableViewTests: XCTestCase {
           function(node) { return 'cell-' + node.parentNode.nodeName; }
         );
         match(
-          ['tb/sc_0/rw/vw/bt/ana-appeared', 'tb/sc_19/rw/vw/bt/ana-appeared'],
+          ['tb/sc_0/rw/vw/bt/ui-control-event', 'tb/sc_19/rw/vw/bt/ui-control-event'],
           function(node) { return 'button-' + node.parentNode.parentNode.parentNode.nodeName; }
         );
         match(
           ['tb/sc_0/rw/vw/bt/ana-value-updated', 'tb/sc_19/rw/vw/bt/ana-value-updated'],
-          function(node) { return node.lastestEvent().attributes['value']; }
+          function(node) { return node.latestEvent.attributes['value']; }
         );
         """)
         class
@@ -186,6 +187,7 @@ class TableViewTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
+                self.becomeAnalysisObject(named: "vc")
                 self.view.addSubview(self.table)
                 
             }
@@ -193,7 +195,7 @@ class TableViewTests: XCTestCase {
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 self.table.scrollToRow(
-                    at: IndexPath(row: 19, section: 0),
+                    at: IndexPath(row: 0, section: 19),
                     at: .bottom,
                     animated: false
                 )
@@ -233,12 +235,19 @@ class TableViewTests: XCTestCase {
                 ) {
                 let
                 button = cell.contentView.subviews[0].subviews[0] as! PathTestingButton
-                button.analyzer?.update("data-\(indexPath.row)", for: "data")
+                button.analyzer?.update("data-\(indexPath.section)", for: "data")
+                button.sendActions(for: .touchUpInside)
             }
             func
                 tableView(
                 _ tableView: UITableView,
                 numberOfRowsInSection section: Int
+                ) -> Int {
+                return 1
+            }
+            func
+                numberOfSections(
+                in tableView: UITableView
                 ) -> Int {
                 return 20
             }
@@ -252,11 +261,11 @@ class TableViewTests: XCTestCase {
         }
         test.rootViewController = Controller()
         
-        test.expect(for: 2)
+        test.expect(for: 6)
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 1.0
+            timeout: 999.0
         )
         
         XCTAssertEqual(test.results[0] as! String, "cell-sc_0")

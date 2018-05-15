@@ -31,14 +31,14 @@ class
 protocol
     IdentityContextResolving : class
 {
+    var
+    resolvedContext :IdentityContext? { get }
     typealias
         Callback = (IdentityContext) throws -> Void
     func
         resolveContext(
         then callback : @escaping Callback
     ) throws
-    var
-    resolvedContext :IdentityContext? { get }
     typealias
         Notify = () -> Void
     func
@@ -57,7 +57,7 @@ public class
         ) {
         self.name = name
     }
-    
+   
     deinit {
         self.notifyContextReset()
         try? self.deregisterIdentityNodes()
@@ -68,6 +68,8 @@ public class
     var
     resolvedContext :IdentityContext? = nil {
         didSet {
+            guard let _ = oldValue, self.resolvedContext == nil
+                else { return }
             self.notifyContextReset()
         }
     }
@@ -93,7 +95,7 @@ public class
             else { throw ContextError.unresolvedManager }
         let
         id = NodeID(owner: self)
-        manager.deregisterNodes(by: id)
+        try manager.deregisterNodes(by: id)
     }
 
     // MARK: - Event Recording
@@ -119,7 +121,7 @@ public class
         try! contextResolver.resolveContext { (context) in
             let
             manager = context.manager
-            manager.recordEvent(
+            try manager.recordEvent(
                 named: name,
                 with: expressable,
                 onNodeBy: context.identifier
@@ -183,16 +185,21 @@ public class
             ]
         )
     }
-    
+    public func
+        detach() {
+        self.tokens.removeAll()
+    }
+
     // MARK: - Child Analyzer
     
     var
-    childAnalyzer :[AnyHashable : Analyzer] = [:]
+    childAnalyzer :[AnyHashable : IdentityContextResolving] = [:]
+    /*
     func
         resolvedChildAnalyzer(
         named name :String,
         with identifier :AnyHashable
-        ) ->Analyzer
+        ) ->IdentityContextResolving
     {
         let
         parent = self;
@@ -207,6 +214,7 @@ public class
         parent.childAnalyzer[identifier] = child
         return child
     }
+ */
 }
 
 extension
@@ -236,7 +244,20 @@ enum
     ContextError : Error
 {
     case unresolvedManager
-    case unsetupAnalysisObject
+    case unsetupAnalysisObject(description :String)
+}
+extension
+    ContextError : LocalizedError
+{
+    public var
+    errorDescription: String? {
+        switch self {
+        case .unresolvedManager:
+            return "Cannot find a resolved manager in context."
+        case .unsetupAnalysisObject(description: let description):
+            return "Unsetup analysis object \(description)."
+        }
+    }
 }
 
 enum

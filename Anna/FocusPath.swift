@@ -25,7 +25,7 @@ public protocol
     @objc(ana_parentConstitutorForChild:owning:)
     func
         forwardingConstitutor(
-        for anothor :FocusPathConstituting,
+        for another :FocusPathConstituting,
         isOwning :UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting?
 }

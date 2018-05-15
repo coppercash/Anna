@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import XCTest
-import Anna
+@testable import Anna
 
 @objc(ANAMockFileManager) class
 MockFileManager : NSObject, CoreJS.FileManaging
@@ -88,6 +88,8 @@ PathTestCaseBuilder : NSObject
         return UIApplication.shared
     }
     var
+    delegate :UIApplicationDelegate? = nil
+    var
     rootViewController :UIViewController? = nil
     func
         launch() {
@@ -99,6 +101,7 @@ PathTestCaseBuilder : NSObject
         manager.tracker = self
         delegate.manager = manager
         self.application.delegate = delegate
+        self.delegate = delegate
         let
         _ = delegate.application(
             self.application,
@@ -243,4 +246,11 @@ PathTestingButton : UIButton, Analyzable
         didMoveToSuperview() {
         super.didMoveToWindow()
     }
+}
+
+@objc(ANAPathTestingLabel) class
+    PathTestingLabel : UILabel, AnalyzerWritable
+{
+    var
+    analyzer :Analyzing?
 }

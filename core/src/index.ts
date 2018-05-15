@@ -87,7 +87,15 @@ export class Manager
     if (!(
       node
     )) {
-      throw new Error(`Cannot record event on unregister node ${ nodeID }.`);
+      let
+      keyPath :string;
+      if (name == 'ana-value-updated') {
+        keyPath = `(${ properties['key-path'] })`;
+      }
+      else {
+        keyPath = '';
+      }
+      throw new Error(`Cannot record event '${ name }${ keyPath }' on unregistered node '${ nodeID }'.`);
     }
     node.recordEvent(name, properties);
     let

@@ -93,8 +93,8 @@ class
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath
         ) {
-        self.target.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
         cell.forwardRecordingEvent(named: "ui-table-will-display-row")
+        self.target.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
 }
 
@@ -128,11 +128,9 @@ class
         owner = tableView as! UITableView & AnalyzerReadable,
         table = owner.analyzer as! Analyzer
         let
-        parent :Analyzer
-        let
-        identifier = indexPath.section
+        parent :BaseAnalyzer & IdentityContextResolving
         if let
-            resolved = table.childAnalyzer[identifier]
+            resolved = table.childAnalyzer[indexPath.section] as? BaseAnalyzer & IdentityContextResolving
         {
             parent = resolved
         }
@@ -145,43 +143,43 @@ class
                     analyticNameFor: indexPath.section
                 )
             {
-                parent = table.resolvedChildAnalyzer(
-                    named: name,
-                    with: identifier
+                let
+                analyzer = Analyzer(
+                    with: name,
+                    delegate: table
                 )
                 delegate.tableView?(
                     owner,
-                    didCreate: parent,
+                    didCreate: analyzer,
                     for: indexPath.section
                 )
+                table.childAnalyzer[indexPath.section] = analyzer
+                parent = analyzer
             }
             else {
                 parent = table
             }
         }
-        try! parent.resolveContext { [weak parent] (context) in
-            guard let
-                parent = parent
-                else { return }
-            let
-            (manager, parentID, identifier) = (
-                context.manager,
-                context.identifier,
-                NodeID(owner: row)
-            )
-            row.resolvedContext = IdentityContext(
-                manager: manager,
-                parentID: parentID,
-                identifier: identifier,
-                suffix: NodeID(owner: cell)
-            )
-            row.resolvedParenthood = Analyzer.FocusParenthood(
-                parent: parent,
-                child: row,
-                isOwning: true
-            )
-            try row.flushDeferredResolutions()
+        let
+        forwarder :SuffixingIdentityContextForwarder
+        if let
+            resolved = parent.childAnalyzer[indexPath] as? SuffixingIdentityContextForwarder
+        {
+            forwarder = resolved
         }
+        else {
+            forwarder = SuffixingIdentityContextForwarder(
+                target: parent
+            )
+            parent.childAnalyzer[indexPath] = forwarder
+        }
+        row.resolvedParenthood = Analyzer.FocusParenthood(
+            parent: forwarder,
+            child: row,
+            isOwning: true
+        )
+        try! row.flushDeferredResolutions()
+
         return cell
     }
 }

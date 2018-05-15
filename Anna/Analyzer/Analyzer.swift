@@ -62,7 +62,7 @@ public class
             {
                 guard let
                     parent = owner.analyzer as? IdentityContextResolving
-                    else { throw ContextError.unsetupAnalysisObject }
+                    else { throw ContextError.unsetupAnalysisObject(description: String(describing: owner)) }
                 return (parent, isParentOwning)
             }
             var
@@ -112,7 +112,9 @@ public class
         
         guard let
             (parent, isParentOwning) = try self.parenthoodByLookingUp()
-            else { return analyzer.deferredParenthoodResolutions.append(callback) }
+            else {
+                return analyzer.deferredParenthoodResolutions.append(callback)
+        }
         let
         parenthood = FocusParenthood(
             parent: parent,
@@ -168,7 +170,7 @@ public class
                 )
                 let
                 suffixedID = isOwning ? identifier + suffix : identifier
-                manager.registerNode(
+                try manager.registerNode(
                     by: suffixedID,
                     named: name,
                     under: parentID
@@ -178,7 +180,7 @@ public class
                 context = IdentityContext(
                     manager: manager,
                     parentID: parentID,
-                    identifier: identifier,
+                    identifier: suffixedID,
                     suffix: (isOwning ? suffix : NodeID.empty())
                 )
                 analyzer?.resolvedContext = context

@@ -10,6 +10,7 @@
 		118327675DD132CD9B88D63F /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
 		3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE5A2086EE4400AE10D3 /* PathTests.swift */; };
 		3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE7C208708F700AE10D3 /* AppDelegate.swift */; };
+		3D8604C120AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */; };
 		3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8701AB20883D1E0014E312 /* CoreJS.swift */; };
 		3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5D9209FEACE005F0572 /* ANAUIView.m */; };
 		3DB2E5E7209FEACE005F0572 /* UITableViewCell+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */; };
@@ -97,6 +98,7 @@
 		3D10FE7C208708F700AE10D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuffixingIdentityContextForwarder.swift; sourceTree = "<group>"; };
 		3D8701AB20883D1E0014E312 /* CoreJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreJS.swift; sourceTree = "<group>"; };
 		3DB2E5D9209FEACE005F0572 /* ANAUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIView.m; sourceTree = "<group>"; };
 		3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Hookable.swift"; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 				3DF1816E20A41479008E6B25 /* Analyzer */,
 				BE195B42209D844F00111F15 /* Analyzable.swift */,
 				BE4010DF20A9909E0056BF29 /* FocusPath.swift */,
+				3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */,
 				BE195B0A209D7D6900111F15 /* Manager.swift */,
 				BE195B24209D7E8A00111F15 /* Tracker.swift */,
 				BE195B0B209D7D6900111F15 /* Hook.swift */,
@@ -569,6 +572,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE195B1A209D7D6A00111F15 /* Manager.swift in Sources */,
+				3D8604C120AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift in Sources */,
 				BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */,
 				3DF1817220A41490008E6B25 /* BaseAnalyzer.swift in Sources */,
 				3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */,
