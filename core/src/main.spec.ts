@@ -201,4 +201,46 @@ describe('Anna', () => {
       anna.recordEvent('appear', {}, 7);
     }
   });
+
+  it('should drop old tasks before reloading' , (done) => {
+    let
+    config = {debug: true};
+    var
+    loaded = 0;
+    let
+    anna = new Anna(new Loader((match) => {
+      switch(loaded) {
+        case 0: 
+        case 1: 
+        case 4: 
+          {
+            match('foo/appear', (node) => { return 42; });
+            match('foo/bar/appear', (node) => { 
+              return node.latestEvent.properties['value'];
+            })
+          } break;
+        default:
+          break;
+      }
+      loaded += 1;
+    }), config);
+    var
+    received = 0;
+    anna.tracker = new Tracker((result) => {
+      received += 1;
+      if (result == 'done') {
+        expect(received).to.equal(3);
+        done();
+      }
+    });
+    anna.registerNode(7, 'root');
+    anna.registerNode(8, 'foo', 7);
+    anna.registerNode(9, 'bar', 8);
+    anna.recordEvent('appear', {value: 0}, 8);
+    anna.recordEvent('appear', {value: 1}, 9);
+    anna.recordEvent('appear', {value: 2}, 8);
+    anna.recordEvent('appear', {value: 3}, 9);
+    anna.recordEvent('appear', {value: 'done'}, 9);
+  });
+
 });

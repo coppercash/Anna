@@ -64,6 +64,7 @@ PathTestCaseBuilder : NSObject
         anna = Bundle(path: bundle.path(forResource: "anna_test", ofType: nil)!)!,
         node_modules = Bundle(path: anna.path(forResource: "node_modules", ofType: nil)!)!
         dep.moduleURL = anna.bundleURL
+        dep.taskModuleURL = anna.bundleURL.appendingPathComponent("task")
         dep.coreModuleURL = node_modules.url(forResource: "core", withExtension: nil)
         dep.logger = Logger()
         return dep;

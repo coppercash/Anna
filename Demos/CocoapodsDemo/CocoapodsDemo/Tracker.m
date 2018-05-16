@@ -22,4 +22,9 @@
     NSLog(@"%@", analyticsResult);
 }
 
+- (void)log:(NSString *)string
+{
+    NSLog(@"%@", string);
+}
+
 @end

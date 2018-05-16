@@ -48,11 +48,15 @@ class Module
     }
 
     let
-    path = native.resolvedPath(
-      id, 
-      (parent ? parent.id : null), 
-      (main ? main.id : null)
-    );
+    resolve = (identifier :Module.ID) => {
+      return native.resolvedPath(
+        identifier, 
+        (parent ? parent.id : null), 
+        (main ? main.id : null)
+      );
+    }
+    let
+    path = resolve(id);
     if (!(path)) {
       throw new Error(`Cannot resolve path for '${ id }' required by '${ parent ? parent.id : 'main' }'.`);
     }
@@ -81,6 +85,8 @@ class Module
           cache
         )
       }
+      (require as any).cache = cache;
+      (require as any).resolve = resolve;
       native.load(path, module.exports, require, module);
       threw = false;
     }

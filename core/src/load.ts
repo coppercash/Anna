@@ -1,10 +1,10 @@
 import * as Match from './match'
 import * as Identity from './identity'
 
-declare let require : (name :string) => any;
 export namespace RequiringLoader 
 {
   export type Inject = (key :string, value :any) => void;
+  export type Require = (name :string) => any;
   export type Match = (
       path :string | string[], 
       map :Match.Task.Map
@@ -14,19 +14,22 @@ export class RequiringLoader implements Identity.Loading
 {
   taskDirectoryPath :string;
   inject :RequiringLoader.Inject;
+  require :RequiringLoader.Require;
   constructor(
     taskDirectoryPath :string,
-    inject :RequiringLoader.Inject
+    inject :RequiringLoader.Inject,
+    require :RequiringLoader.Require
   ) {
     this.taskDirectoryPath = taskDirectoryPath;
     this.inject = inject;
+    this.require = require;
   }
 
   matchTasks(
     namespace :string
   ) :Identity.Loading.Tasks {
     let
-    taskDirectoryPath = this.taskDirectoryPath;
+    taskDirectoryPath = this.taskDirectoryPath, require = this.require;
     let
     path = `${ taskDirectoryPath }/index.js`;
     let

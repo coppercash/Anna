@@ -23,14 +23,25 @@ export class Manager
 
   static
   execute(
-    taskDirectoryPath :string,
+    taskModulePath :string,
     inject :Load.RequiringLoader.Inject,
+    require :Load.RequiringLoader.Require,
     receive :Track.InPlaceTracker.Receive,
     config? :Manager.Config
   ) : Manager {
     let
+    _require = config.debug ? 
+      (identifier :string) => {
+        delete (require as any).cache[(require as any).resolve(identifier)];
+        return require(identifier);
+      } : require;
+    let
     manager = new Manager(
-      new Load.RequiringLoader(taskDirectoryPath, inject),
+      new Load.RequiringLoader(
+        taskModulePath, 
+        inject,
+        _require
+      ),
       config
     );
     manager.tracker = new Track.InPlaceTracker(receive);

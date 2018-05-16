@@ -29,7 +29,9 @@ public class
     Dependency : CoreJS.Dependency
 {
     public var
-    moduleURL :URL? = nil
+    moduleURL :URL? = nil,
+    taskModuleURL :URL? = nil,
+    config :[NSObject : AnyObject]? = nil
 }
 
 @objc(ANAManager) @objcMembers
@@ -109,6 +111,9 @@ public class
             module,
             with: dependency
             )
+        guard let
+            task = self.dependency.taskModuleURL
+            else { throw ScriptError.taskModuleURLNotSpecified }
         let
         receive : @convention(block) (Any) -> Void = {
             [weak self] (result :Any) in
@@ -128,9 +133,10 @@ public class
         }
         guard let
             manager = construct?.call(withArguments: [
-                (module.path as NSString).appendingPathComponent("task"),
+                task.path,
                 unsafeBitCast(inject, to: AnyObject.self),
-                unsafeBitCast(receive, to: AnyObject.self)
+                unsafeBitCast(receive, to: AnyObject.self),
+                (dependency.config ?? [:])
                 ]
             )
             else { throw ScriptError.managerUnconstructable }
@@ -225,6 +231,7 @@ public class
 enum
     ScriptError : Error
 {
+    case taskModuleURLNotSpecified
     case mainModuleURLNotSpecified
     case managerUnconstructable
 }

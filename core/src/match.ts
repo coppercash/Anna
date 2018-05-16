@@ -1,24 +1,21 @@
 import * as Identity from './identity'
 import * as Markup from './markup';
 
-type Matches = Node;
 export class Stage implements Markup.Markable
 {
-  matches :Matches;
-  orphans :Matches;
+  matches :Stage.Matches;
+  orphans :Stage.Matches;
 
   constructor(
-    matches :Matches,
-    orphans :Matches
+    matches :Stage.Matches,
+    orphans :Stage.Matches
   ) {
     this.matches = matches;
     this.orphans = orphans;
   }
 
-  static
-  empty()
-  {
-    return new Stage(Node.emtpy(), Node.emtpy());
+  static empty() {
+    return new Stage(MatchNode.emtpy(), MatchNode.emtpy());
   }
   get isEmpty() :boolean {
     return this.matches.isEmpty && this.orphans.isEmpty;
@@ -47,7 +44,7 @@ export class Stage implements Markup.Markable
     let
     matched = matches.child(name);
     let
-    merged = matched ? matched.copied() : Node.emtpy();
+    merged = matched ? matched.copied() : MatchNode.emtpy();
     let
     adopted = orphans.child(name);
     if (adopted) {
@@ -71,30 +68,146 @@ export class Stage implements Markup.Markable
   }
 
   markup(
-    indent :string = ''
+    indent :string = '',
   ) :string {
-    return this.matches.markup(indent);
+    let
+    children = [
+      new Node.NamedMarker(this.matches, 'matches'),
+      new Node.NamedMarker(this.orphans, 'orphans'),
+    ];
+    return Markup.markup(
+      'stage', 
+      {}, 
+      children, 
+      indent, 
+      true
+    );
+  }
+}
+export namespace Stage {
+  export type Matches = MatchNode;
+  export class DigestMarker implements Markup.Markable {
+    stage :Stage;
+    constructor(
+      stage :Stage
+    ) {
+      this.stage = stage;
+    }
+    markup(
+      indent :string = '',
+    ) :string {
+      return (new Node.DigestMarker(this.stage.matches)).markup(indent);
+    }
   }
 }
 
-type Children = { [name :string] : Node; };
-class Node implements Markup.Markable
+export namespace Node {
+  export type Children = { [name :string] : MatchNode; };
+
+  export class DigestMarker implements Markup.Markable {
+    node :MatchNode;
+    constructor(
+      node :MatchNode
+    ) {
+      this.node = node;
+    }
+    private static
+    nodeName = 'match';
+    markup(
+      indent :string = ''
+    ) :string {
+      let
+      children = this.node.children, tasks = this.node.tasks;
+      let
+      markedChildren = new Array<Markup.Markable>();
+      let
+      branches = new Array<Markup.Markable>();
+      var
+      childrenCount = 0;
+      for (let 
+        key in children
+      ) {
+        branches.push(new Markup.NameMarker(key));
+        childrenCount += 1;
+      }
+      if (childrenCount > 0) {
+        markedChildren.push(new Markup.ArrayMarker(
+          'branches', 
+          branches
+        ));
+      }
+      if (tasks.size > 0) {
+        markedChildren.push(new Markup.ArrayMarker(
+          'tasks',
+          Array.from(tasks)
+        ));
+      }
+
+      if (!(
+        (childrenCount + tasks.size) > 0
+      )) {
+        return '';
+      }
+      return Markup.markup(
+        'match',
+        {}, 
+        markedChildren, 
+        indent, 
+        true
+      );
+    }
+  }
+
+  export class NamedMarker implements Markup.Markable {
+    node :MatchNode;
+    name :string;
+    constructor(
+      node :MatchNode,
+      name :string
+    ) {
+      this.node = node;
+      this.name = name;
+    }
+    markup(
+      indent :string = '',
+    ) :string {
+      let
+      tasks = this.node.tasks;
+      let
+      children :Markup.Markable[] = Object
+        .keys(this.node.children)
+        .map((x) => {
+          return new Node.NamedMarker(this.node.children[x], x);
+        });
+      if (tasks.size > 0) {
+        children.push(new Markup.ArrayMarker('tasks', Array.from(tasks)));
+      }
+      return Markup.markup(
+        this.name,
+        {},
+        children,
+        indent,
+        true
+      )
+    }
+  }
+}
+
+class MatchNode implements Markup.Markable
 {
-  children :Children;
+  children :Node.Children;
   tasks :Set<Task>;
 
   constructor(
-    children :Children,
+    children :Node.Children,
     tasks :Set<Task>
   ) {
     this.children = children;
     this.tasks = tasks;
   }
 
-  static
-  emtpy()
-  {
-    return new Node({}, new Set());
+  static emtpy() {
+    return new MatchNode({}, new Set());
   }
   get isEmpty() :boolean {
     return (Object.keys(this.children).length == 0) && this.tasks.size == 0;
@@ -105,7 +218,7 @@ class Node implements Markup.Markable
     let
     tasks = this.tasks, children = this.children;
     let
-    cCopy :Children = {};
+    cCopy :Node.Children = {};
     for (let 
       name in children
     ) {
@@ -113,11 +226,11 @@ class Node implements Markup.Markable
     }
     let
     tCopy = new Set(tasks);
-    return new Node(cCopy, tCopy);
+    return new MatchNode(cCopy, tCopy);
   }
 
   merge(
-    another :Node
+    another :MatchNode
   ) {
     let
     tasks = this.tasks, children = this.children;
@@ -151,7 +264,7 @@ class Node implements Markup.Markable
   }
 
   drop(
-    another :Node
+    another :MatchNode
   ) {
     let
     tasks = this.tasks, children = this.children;
@@ -159,7 +272,7 @@ class Node implements Markup.Markable
     let
     diff = new Set(tasks);
     let
-    iterableTasks = tasks.values();
+    iterableTasks = another.tasks.values();
     var
     task = iterableTasks.next().value;
     while (task) {
@@ -203,7 +316,7 @@ class Node implements Markup.Markable
     if (!(
       child
     )) {
-      child = Node.emtpy();
+      child = MatchNode.emtpy();
       node.children[name] = child;
     }
     child.insert(path.slice(1));
@@ -211,13 +324,13 @@ class Node implements Markup.Markable
 
   child(
     name :string
-  ) :Node {
+  ) :MatchNode {
     return this.children[name];
   }
 
   descendant(
     path :string[]
-  ) :Node {
+  ) :MatchNode {
     let
     node = this;
     if (!(
@@ -241,44 +354,10 @@ class Node implements Markup.Markable
     this.tasks.add(task);
   }
 
-  private static
-  nodeName = 'match';
   markup(
     indent :string = ''
   ) :string {
-    let
-    children = this.children, tasks = this.tasks;
-    let
-    markedChildren = new Array<Markup.Markable>();
-    let
-    branches = new Array<Markup.NameMarker>();
-    var
-    childrenCount = 0;
-    for (let 
-      key in children
-    ) {
-      branches.push(new Markup.NameMarker(key));
-      childrenCount += 1;
-    }
-    if (childrenCount > 0) {
-      markedChildren.push(new Markup.ArrayMarker(
-        'branches', 
-        branches
-      ));
-    }
-    if (tasks.size > 0) {
-      markedChildren.push(new Markup.ArrayMarker(
-        'tasks',
-        Array.from(tasks)
-      ));
-    }
-
-    if (!(
-      (childrenCount + tasks.size) > 0
-    )) {
-      return '';
-    }
-    return Markup.markup(Node.nodeName, {}, markedChildren, indent, true);
+    return (new Node.NamedMarker(this, 'match')).markup(indent);
   }
 }
 
@@ -293,7 +372,7 @@ export class Builder
     var
     segments = path.split('/');
     let
-    matches :Matches;
+    matches :Stage.Matches;
     if (path.lastIndexOf('/', 0) === 0) {
       matches = result.matches;
       segments = segments.slice(1);
@@ -315,6 +394,11 @@ export class Builder
   }
 }
 
+export namespace Task
+{
+  export type Node = Identity.Node;
+  export type Map = (node :Node) => any;
+}
 export class Task implements Markup.Markable
 {
   map :Task.Map;
@@ -342,11 +426,5 @@ export class Task implements Markup.Markable
     path = this.path;
     return Markup.markup(Task.nodeName, { path: path }, [], indent, true);
   }
-}
-
-export namespace Task
-{
-  export type Node = Identity.Node;
-  export type Map = (node :Node) => any;
 }
 

@@ -10,5 +10,5 @@
 #import <Anna/Anna.h>
 #import <Anna/Anna-Swift.h>
 
-@interface Tracker : NSObject <ANATracking>
+@interface Tracker : NSObject <ANATracking, CJSLogging>
 @end

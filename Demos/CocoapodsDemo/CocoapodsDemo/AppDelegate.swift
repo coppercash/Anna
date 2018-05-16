@@ -16,10 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Analyzable {
     lazy var tracker :Tracker = Tracker()
     lazy var manager :Manager = {
         let dependency = Dependency()
-        dependency.moduleURL = Bundle.main.url(
+        let
+        moduleURL = Bundle.main.url(
             forResource: "analytics",
             withExtension: "bundle"
-        )!
+            )!
+        dependency.moduleURL = moduleURL
+        dependency.taskModuleURL = moduleURL.appendingPathComponent("task")
+        dependency.config = ["debug" as NSString : true as NSNumber]
+        dependency.logger = self.tracker
         let
         manager = Manager(dependency)
         manager.tracker = self.tracker
@@ -32,7 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Analyzable {
         )
     }()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
+        ) -> Bool {
         return true
     }
 }

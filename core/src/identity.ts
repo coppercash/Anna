@@ -378,7 +378,6 @@ export class Node implements Markup.Markable
   ) {
     let
     children = this.children;
-    handle(this, stage);
     let
     iteration = children.values();
     var
@@ -390,6 +389,8 @@ export class Node implements Markup.Markable
 
       current = iteration.next().value;
     }
+
+    handle(this, stage);
   }
 
   markup(
@@ -397,13 +398,16 @@ export class Node implements Markup.Markable
     alone :boolean = false
   ) :string {
     let
-    name = this.name, properties = this.properties, matching = this.matching, subordinates = this.subordinates;
+    name = this.name, 
+      properties = this.properties, 
+      matching = this.matching, 
+      subordinates = this.subordinates;
     if (alone) {
       return Markup.markup(name, properties, [], indent);
     }
     let
     children = new Array<Markup.Markable>();
-    children.push(matching);
+    children.push(new Match.Stage.DigestMarker(matching));
     for (let
       sub of subordinates
     ) {
