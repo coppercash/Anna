@@ -1,5 +1,6 @@
 import * as Match from './match';
 import * as Markup from './markup';
+import * as C from './compatibility';
 
 export class Tree
 {
@@ -354,7 +355,7 @@ export class Node implements Markup.Markable
   {
     let
     tasks = this.matching.tasksMatching(name);
-    return Array.from(tasks);
+    return C.array_from_set(tasks);
   }
 
   stageMatching(
@@ -369,17 +370,11 @@ export class Node implements Markup.Markable
   ) {
     let
     children = this.children;
-    let
-    iteration = children.values();
-    var
-    current = iteration.next().value;
-    while (current) {
+    children.forEach((current) => {
       let
       match = stage.matching(current.name);
       current.traverseWithStage(match, handle);
-
-      current = iteration.next().value;
-    }
+    });
 
     handle(this, stage);
   }
@@ -524,7 +519,7 @@ export class Event implements Markup.Markable
       children.push(
         new Markup.ArrayMarker(
           'tasks', 
-          Array.from(tasks)
+          C.array_from_set(tasks)
         )
       );
     }

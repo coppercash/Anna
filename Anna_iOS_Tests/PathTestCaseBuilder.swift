@@ -1,4 +1,4 @@
-//
+
 //  PathTestCaseBuilder.swift
 //  Anna_iOS_Tests
 //
@@ -20,11 +20,8 @@ MockFileManager : NSObject, CoreJS.FileManaging
     func
         contents(atPath path: String) -> Data?
     {
-        let
-        components = path.components(separatedBy: "/")
         if
-            components.count >= 2,
-            components[components.count - 2] == "task"
+            path.hasSuffix("/anna_test/task/index.js")
         {
             return self.task?.data(using: .utf8)
         }
@@ -150,8 +147,7 @@ PathTestCaseBuilder : Anna.Tracking
         analyticsError :Error,
         dispatchedBy manager :Manager
         ) {
-        print((analyticsError as NSError).localizedFailureReason!)
-        print(analyticsError.localizedDescription)
+        print(analyticsError)
     }
 }
 

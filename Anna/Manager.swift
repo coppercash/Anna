@@ -31,7 +31,8 @@ public class
     public var
     moduleURL :URL? = nil,
     taskModuleURL :URL? = nil,
-    config :[NSObject : AnyObject]? = nil
+    config :[NSObject : AnyObject]? = nil,
+    callbackQueue :DispatchQueue? = nil
 }
 
 @objc(ANAManager) @objcMembers
@@ -40,6 +41,10 @@ public class
 {
     public var
     tracker :Tracking? = nil
+    lazy var
+    callbackQ = {
+        return self.dependency.callbackQueue ?? DispatchQueue.main
+    }()
     public let
     dependency :Dependency
     @objc(initWithDependency:)
@@ -70,19 +75,33 @@ public class
     func
         handle(scriptResult :Any)
     {
-        self.tracker?.receive(
-            analyticsResult: scriptResult,
-            dispatchedBy: self
-        )
+        guard let
+            tracker = self.tracker
+            else { return }
+        let
+        callbackQ = self.callbackQ
+        callbackQ.async {
+            tracker.receive(
+                analyticsResult: scriptResult,
+                dispatchedBy: self
+            )
+        }
     }
     
     func
         handle(scriptError :JSValue)
     {
-        self.tracker?.receive(
-            analyticsError: NSError(with: scriptError),
-            dispatchedBy: self
-        )
+        guard let
+            tracker = self.tracker
+            else { return }
+        let
+        callbackQ = self.callbackQ
+        callbackQ.async {
+           tracker.receive(
+                analyticsError: NSError(with: scriptError),
+                dispatchedBy: self
+            )
+        }
     }
     
     var

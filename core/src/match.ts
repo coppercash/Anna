@@ -1,5 +1,6 @@
 import * as Identity from './identity'
 import * as Markup from './markup';
+import * as C from './compatibility';
 
 export class Stage implements Markup.Markable
 {
@@ -33,6 +34,7 @@ export class Stage implements Markup.Markable
     )) {
       return new Set();
     }
+
     return child.tasks;
   }
 
@@ -139,7 +141,7 @@ export namespace Node {
       if (tasks.size > 0) {
         markedChildren.push(new Markup.ArrayMarker(
           'tasks',
-          Array.from(tasks)
+          C.array_from_set(tasks)
         ));
       }
 
@@ -180,7 +182,12 @@ export namespace Node {
           return new Node.NamedMarker(this.node.children[x], x);
         });
       if (tasks.size > 0) {
-        children.push(new Markup.ArrayMarker('tasks', Array.from(tasks)));
+        children.push(
+          new Markup.ArrayMarker(
+            'tasks', 
+            C.array_from_set(tasks)
+          )
+        );
       }
       return Markup.markup(
         this.name,
@@ -225,7 +232,7 @@ class MatchNode implements Markup.Markable
       cCopy[name] = children[name].copied();
     }
     let
-    tCopy = new Set(tasks);
+    tCopy = C.copy_of_set(tasks);
     return new MatchNode(cCopy, tCopy);
   }
 
@@ -236,15 +243,8 @@ class MatchNode implements Markup.Markable
     tasks = this.tasks, children = this.children;
 
     let
-    union = new Set(tasks);
-    let
-    iterableTasks = another.tasks.values();
-    var
-    task = iterableTasks.next().value;
-    while (task) {
-      union.add(task);
-      task = iterableTasks.next().value;
-    }
+    union = C.copy_of_set(tasks);
+    another.tasks.forEach(e => union.add(e));
     this.tasks = union;
 
     for (let 
@@ -270,15 +270,8 @@ class MatchNode implements Markup.Markable
     tasks = this.tasks, children = this.children;
 
     let
-    diff = new Set(tasks);
-    let
-    iterableTasks = another.tasks.values();
-    var
-    task = iterableTasks.next().value;
-    while (task) {
-      diff.delete(task);
-      task = iterableTasks.next().value;
-    }
+    diff = C.copy_of_set(tasks);
+    another.tasks.forEach(e => diff.delete(e));
     this.tasks = diff;
 
     for (let 
@@ -373,7 +366,7 @@ export class Builder
     segments = path.split('/');
     let
     matches :Stage.Matches;
-    if (path.lastIndexOf('/', 0) === 0) {
+    if (C.string_starts_with(path, '/')) {
       matches = result.matches;
       segments = segments.slice(1);
     }

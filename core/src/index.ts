@@ -2,6 +2,7 @@ import * as Identity from './identity';
 import * as Track from './track';
 import * as Load from './load';
 import * as Task from './task';
+import * as C from './compatibility';
 
 namespace Manager {
   export type Config = { [key :string]: any };
@@ -151,8 +152,8 @@ export class Manager
     namespace :string
   ) : string[] {
     if (
-      namespace.startsWith('.') || 
-      namespace.endsWith('.')
+      C.string_starts_with(namespace, '.') ||
+      C.string_ends_with(namespace, '.')
     ) {
       throw new Error(`Cannot load tasks with invalid namespace '${ namespace }'.`);
     }
