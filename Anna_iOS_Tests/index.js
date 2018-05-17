@@ -1,1 +1,4 @@
-module.exports = require('anna').Manager.execute;
+module.exports = function(dependency) {
+    dependency.require = require;
+    return require('anna').Manager.run(dependency);
+}

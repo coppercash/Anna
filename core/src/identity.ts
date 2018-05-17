@@ -22,7 +22,7 @@ export class Tree
     let
     registered = tree.node(nodeID);
     if (registered) {
-      throw new Error(`${ nodeID } has already been registered.`);
+      throw new Error(`${ nodeID } named '${ name }' has already been registered.`);
     }
 
     var

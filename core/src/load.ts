@@ -52,6 +52,7 @@ export class RequiringLoader implements Task.Loading
       this.preRequire(match);
       require(path);
     }
+    catch {}
     finally {
       this.postRequire();
     }

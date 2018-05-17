@@ -53,6 +53,8 @@ public class
             identifier: identifier,
             suffix: NodeID.empty()
         )
+        
+        analyzer.resolvedContext = context
         return try callback(context)
     }
 }

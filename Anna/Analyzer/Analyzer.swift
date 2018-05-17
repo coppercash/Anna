@@ -23,6 +23,7 @@ public class
         ) {
         self.delegate = delegate
         super.init(name: name)
+        self.resolvedNamespace = String(describing: type(of: delegate))
     }
 
     // MARK: - Focus Path

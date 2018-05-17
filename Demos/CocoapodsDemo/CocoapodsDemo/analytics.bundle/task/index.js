@@ -1,4 +1,4 @@
 match(
-      '/second_view_controller/ana-appeared',
-      () => { return 42; }
+      '/first_view_controller/ana-appeared',
+      function () { return 42; }
 );

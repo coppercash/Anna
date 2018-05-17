@@ -111,9 +111,22 @@ public class
             module,
             with: dependency
             )
+        let
+        managerDependency = try self.resolvedManagerDependency()
+        guard let
+            manager = construct?.call(withArguments: [managerDependency])
+            else { throw ScriptError.managerUnconstructable }
+        
+        self.scriptManager = manager
+        return manager
+    }
+    func
+        resolvedManagerDependency() throws -> [NSString : Any] {
         guard let
             task = self.dependency.taskModuleURL
             else { throw ScriptError.taskModuleURLNotSpecified }
+        let
+        context = self.resolvedScriptContext()
         let
         receive : @convention(block) (Any) -> Void = {
             [weak self] (result :Any) in
@@ -131,18 +144,18 @@ public class
                 global.setValue(value, forProperty: key.toString())
             }
         }
-        guard let
-            manager = construct?.call(withArguments: [
-                task.path,
-                unsafeBitCast(inject, to: AnyObject.self),
-                unsafeBitCast(receive, to: AnyObject.self),
-                (dependency.config ?? [:])
-                ]
-            )
-            else { throw ScriptError.managerUnconstructable }
-        
-        self.scriptManager = manager
-        return manager
+        var
+        dependency :[NSString : Any] = [
+            "taskModulePath": task.path,
+            "inject": unsafeBitCast(inject, to: AnyObject.self),
+            "receive": unsafeBitCast(receive, to: AnyObject.self),
+        ]
+        if let
+            config = self.dependency.config
+        {
+            dependency["config"] = config
+        }
+        return dependency
     }
 
     func
@@ -198,18 +211,26 @@ public class
         recordEvent(
         named name :String,
         with properties :Propertiez,
-        onNodeBy identifier :NodeID
+        onNodeBy identifier :NodeID,
+        namespace :String? = nil
         ) throws {
         let
         manager = try self.resolvedScriptManager()
         self.scriptQ.async {
+            var
+            arguments :[Any] = [
+                name,
+                properties,
+                identifier
+            ]
+            if let
+                namespace = namespace
+            {
+                arguments.append(namespace)
+            }
             manager.invokeMethod(
                 "recordEvent",
-                withArguments: [
-                    name,
-                    properties,
-                    identifier
-                ]
+                withArguments: arguments
             )
         }
     }

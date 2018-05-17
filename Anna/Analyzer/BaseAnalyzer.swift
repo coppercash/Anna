@@ -100,6 +100,8 @@ public class
 
     // MARK: - Event Recording
     
+    var
+    resolvedNamespace :String? = nil
     struct
         Event
     {
@@ -116,15 +118,17 @@ public class
         ) {
         let
         contextResolver = self as! IdentityContextResolving,
-        expressable = properties?.toJSExpressable() ?? [:]
-        
+        expressable = properties?.toJSExpressable() ?? [:],
+        namespace = self.resolvedNamespace
+
         try! contextResolver.resolveContext { (context) in
             let
             manager = context.manager
             try manager.recordEvent(
                 named: name,
                 with: expressable,
-                onNodeBy: context.identifier
+                onNodeBy: context.identifier,
+                namespace: namespace
             )
         }
     }

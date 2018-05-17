@@ -331,10 +331,10 @@ extension
         var
         userInfo = [String : String]()
         if let message = jsValue.forProperty("message").toString() {
-            userInfo[NSLocalizedFailureReasonErrorKey] = message
+            userInfo[NSLocalizedDescriptionKey] = message
         }
         if let stack = jsValue.forProperty("stack").toString() {
-            userInfo[NSLocalizedDescriptionKey] = stack
+            userInfo[NSLocalizedFailureReasonErrorKey] = stack
         }
         self.init(
             domain: jsValue.forProperty("name").toString(),

@@ -9,17 +9,15 @@
 import UIKit
 import Anna
 
-class FirstViewController: UIViewController {
+class FirstViewController: UIViewController, Analyzable {
 
+    var analyzer: Analyzing? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        self.becomeAnalysisObject(named: "first_view_controller")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
-
 }
