@@ -5,6 +5,13 @@ import * as Task from './task';
 
 namespace Manager {
   export type Config = { [key :string]: any };
+  export interface Dependency {
+    taskModulePath :string;
+    inject :Load.RequiringLoader.Inject;
+    require :Load.RequiringLoader.Require;
+    receive :Track.InPlaceTracker.Receive;
+    config? :Manager.Config
+  }
 }
 export class Manager
 {
@@ -12,26 +19,31 @@ export class Manager
   loadedTasks :Task.Tree = new Task.Tree();
   loader :Task.Loading;
   tracker :Track.Tracking = null;
-  config :Manager.Config;
+  config :Manager.Config = {};
 
   constructor(
     loader :Task.Loading, 
     config? :Manager.Config
   ) {
     this.loader = loader;
-    this.config = config || {};
+    if (config) {
+      this.config = config;
+    }
   }
 
   static
-  execute(
-    taskModulePath :string,
-    inject :Load.RequiringLoader.Inject,
-    require :Load.RequiringLoader.Require,
-    receive :Track.InPlaceTracker.Receive,
-    config? :Manager.Config
+  run(
+    dependency :Manager.Dependency
   ) : Manager {
     let
-    _require = config.debug ? 
+    taskModulePath = dependency.taskModulePath,
+      inject = dependency.inject, 
+      require = dependency.require,
+      receive = dependency.receive, 
+      config = dependency.config;
+
+    let
+    _require = (config && config.debug) ? 
       (identifier :string) => {
         delete (require as any).cache[(require as any).resolve(identifier)];
         return require(identifier);
