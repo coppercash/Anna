@@ -1,5 +1,5 @@
 import * as Match from './match'
-import * as Identity from './identity'
+import * as Task from './task'
 
 export namespace RequiringLoader 
 {
@@ -10,28 +10,28 @@ export namespace RequiringLoader
       map :Match.Task.Map
     ) => void 
 }
-export class RequiringLoader implements Identity.Loading
+export class RequiringLoader implements Task.Loading
 {
-  taskDirectoryPath :string;
+  taskModulePath :string;
   inject :RequiringLoader.Inject;
   require :RequiringLoader.Require;
   constructor(
-    taskDirectoryPath :string,
+    taskModulePath :string,
     inject :RequiringLoader.Inject,
     require :RequiringLoader.Require
   ) {
-    this.taskDirectoryPath = taskDirectoryPath;
+    this.taskModulePath = taskModulePath;
     this.inject = inject;
     this.require = require;
   }
 
   matchTasks(
-    namespace :string
-  ) :Identity.Loading.Tasks {
+    namePath :string[]
+  ) :Task.Loading.Tasks {
     let
-    taskDirectoryPath = this.taskDirectoryPath, require = this.require;
+    taskModulePath = this.taskModulePath, require = this.require;
     let
-    path = `${ taskDirectoryPath }/index.js`;
+    path = `${ taskModulePath }/${ namePath.join('/') }.js`;
     let
     builder = new Match.Builder();
     let
@@ -48,9 +48,13 @@ export class RequiringLoader implements Identity.Loading
         builder.addMatchTask(path, map);
       }
     }
-    this.preRequire(match);
-    require(path);
-    this.postRequire();
+    try {
+      this.preRequire(match);
+      require(path);
+    }
+    finally {
+      this.postRequire();
+    }
     return builder.build();
   }
 
@@ -68,9 +72,9 @@ export class RequiringLoader implements Identity.Loading
 namespace InPlaceLoader
 {
   export type Match = (path :string, map :Match.Task.Map) => void;
-  export type Load = (match :Match) => void;
+  export type Load = (match :Match, namePath? :string[]) => void;
 }
-export class InPlaceLoader implements Identity.Loading
+export class InPlaceLoader implements Task.Loading
 {
   load :InPlaceLoader.Load
   constructor(
@@ -79,8 +83,8 @@ export class InPlaceLoader implements Identity.Loading
     this.load = load;
   }
   matchTasks(
-    namespace :string
-  ) :Identity.Loading.Tasks {
+    namePath :string[]
+  ) :Task.Loading.Tasks {
     let
     load = this.load;
     let
@@ -89,7 +93,7 @@ export class InPlaceLoader implements Identity.Loading
     match = (path :string, map :Match.Task.Map) : void => {
       builder.addMatchTask(path, map);
     }
-    load(match);
+    load(match, namePath);
 
     return builder.build();
   }

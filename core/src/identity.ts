@@ -1,15 +1,6 @@
 import * as Match from './match';
 import * as Markup from './markup';
 
-export interface Loading
-{
-  matchTasks(namespace :string) :Loading.Tasks
-}
-export namespace Loading
-{
-  export type Tasks = Match.Stage;
-}
-
 export class Tree
 {
   root :Node = null;

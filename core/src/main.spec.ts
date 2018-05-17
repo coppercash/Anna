@@ -243,4 +243,40 @@ describe('Anna', () => {
     anna.recordEvent('appear', {value: 'done'}, 9);
   });
 
+  it('should load tasks according to namespace' , (done) => {
+    let
+    anna = new Anna(new Loader((match, namePath) => {
+      let
+      namespace = namePath.join('.');
+      switch(namespace) {
+        case 'Lib.Alpha': 
+          {
+            match('foo/appear', (node) => { return namespace; });
+          } break;
+        case 'Lib.Beta': 
+          {
+            match('foo/bar/appear', (node) => { return namespace; });
+          } break;
+        default:
+          break;
+      }
+    }));
+    var
+    received = new Array<any>();
+    anna.tracker = new Tracker((result) => {
+      received.push(result);
+      if (received.length == 2) {
+        expect(received[0]).to.equal('Lib.Alpha');
+        expect(received[1]).to.equal('Lib.Beta');
+        done();
+      }
+    });
+    anna.registerNode(7, 'root');
+    anna.registerNode(8, 'foo', 7);
+    anna.registerNode(9, 'bar', 8);
+    anna.recordEvent('appear', {}, 8, 'nonsence');
+    anna.recordEvent('appear', {}, 8, 'Lib.Alpha');
+    anna.recordEvent('appear', {}, 9, 'nonsence');
+    anna.recordEvent('appear', {}, 9, 'Lib.Beta');
+  });
 });

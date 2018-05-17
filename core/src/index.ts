@@ -1,22 +1,23 @@
 import * as Identity from './identity';
 import * as Track from './track';
 import * as Load from './load';
+import * as Task from './task';
 
 namespace Manager {
   export type Config = { [key :string]: any };
 }
 export class Manager
 {
-  identities :Identity.Tree;
-  loader :Identity.Loading;
+  identities :Identity.Tree = new Identity.Tree();
+  loadedTasks :Task.Tree = new Task.Tree();
+  loader :Task.Loading;
   tracker :Track.Tracking = null;
   config :Manager.Config;
 
   constructor(
-    loader :Identity.Loading, 
+    loader :Task.Loading, 
     config? :Manager.Config
   ) {
-    this.identities = new Identity.Tree();
     this.loader = loader;
     this.config = config || {};
   }
@@ -88,14 +89,16 @@ export class Manager
   recordEvent(
     name :string,
     properties :Identity.Event.Properties,
-    nodeID :Identity.NodeID | number[] | number
+    nodeID :Identity.NodeID | number[] | number,
+    namespace? :string
   )
   {
     let
     identities = this.identities, 
-      tracker = this.tracker, 
-      config = this.config, 
-      loader = this.loader;
+      tracker = this.tracker;
+
+    // Record event
+    //
     nodeID = this.nodeID(nodeID);
     let
     node = identities.node(nodeID);
@@ -108,27 +111,20 @@ export class Manager
     }
     node.recordEvent(name, properties);
 
-    let
-    namespace = null;
-    let
-    every = identities.root.matching;
-    let
-    added = every.isEmpty ? null : every;
-    if (!(added)) {
+    // Load Task
+    //
+    this.loadTasks(['index'], ['.']);
+    if (namespace) {
       let
-      tasks = loader.matchTasks(namespace);
-      identities.addMatchTasks(tasks);
-    }
-    else if (config.debug) {
-      identities.subtractMatchTasks(added);
-      let
-      tasks = loader.matchTasks(namespace);
-      identities.addMatchTasks(tasks);
+      namePath = this.namePath(namespace);
+      this.loadTasks(namePath);
     }
 
+    // Match Task
+    //
     let
     tasks = node.tasksMatchingEvent(name);
-    for ( let 
+    for (let 
       task of tasks
     ) {
       let
@@ -136,6 +132,52 @@ export class Manager
       if (tracker && (result !== undefined)) {
         tracker.receiveResult(result);
       }
+    }
+  }
+
+  namePath(
+    namespace :string
+  ) : string[] {
+    if (
+      namespace.startsWith('.') || 
+      namespace.endsWith('.')
+    ) {
+      throw new Error(`Cannot load tasks with invalid namespace '${ namespace }'.`);
+    }
+
+    let
+    namePath = namespace.split('.');
+    return namePath;
+  }
+
+  loadTasks(
+    namePath :string[],
+    cachePath? :string[]
+  ) {
+    let
+    identities = this.identities, 
+      loadedTasks = this.loadedTasks,
+      config = this.config, 
+      loader = this.loader;
+
+    if (!(cachePath)) {
+      cachePath = namePath;
+    }
+
+    let
+    loaded = loadedTasks.retrieve(cachePath);
+    if (!(loaded)) {
+      let
+      tasks = loader.matchTasks(namePath);
+      identities.addMatchTasks(tasks);
+      loadedTasks.insert(cachePath).value = tasks;
+    }
+    else if (config.debug) {
+      identities.subtractMatchTasks(loaded.value);
+      let
+      tasks = loader.matchTasks(namePath);
+      identities.addMatchTasks(tasks);
+      loaded.value = tasks;
     }
   }
 
