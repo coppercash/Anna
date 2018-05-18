@@ -16,7 +16,7 @@ class PathTests: XCTestCase {
         test.task =
         """
         match(
-        'vc/bt/ui-control-event',
+        'vc/bt/touch-up-inside',
         function() { return 42; }
         );
         """
@@ -63,7 +63,7 @@ class PathTests: XCTestCase {
         test.task =
         """
         match(
-        'vc/delta/gamma/ui-control-event',
+        'vc/delta/gamma/touch-up-inside',
         function() { return 42; }
         );
         """
@@ -135,7 +135,7 @@ class PathTests: XCTestCase {
         """
         const T = require('../tool');
         match(
-        ['vw/ana-value-updated', 'vw/ana-appeared'],
+        ['vw/ana-updated', 'vw/ana-appeared'],
         T.whenDisplays('text', function(node, value) { return value; })
         );
         """
@@ -189,7 +189,7 @@ class PathTests: XCTestCase {
         """
         const T = require('../tool');
         match(
-        ['vc/ana-value-updated', 'vc/ana-appeared'],
+        ['vc/ana-updated', 'vc/ana-appeared'],
         T.whenDisplays('text', function(node, value) { return value; })
         );
         """

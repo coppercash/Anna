@@ -1,5 +1,5 @@
 
 match(
-      'vc/bt/ui-control-event',
+      'vc/bt/touch-up-inside',
       function () { return 42; }
       );

@@ -93,7 +93,7 @@ class
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath
         ) {
-        cell.forwardRecordingEvent(named: "ui-table-will-display-row")
+        cell.forwardRecordingEvent(named: "will-display")
         self.target.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
 }

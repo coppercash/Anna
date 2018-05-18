@@ -16,7 +16,7 @@ class TableViewTests: XCTestCase {
         
         test.task = ("""
         match(
-          'tb/sc_0/rw/ui-table-will-display-row',
+          'tb/sc_0/rw/will-display',
           function(node) {
             const index = node.indexAmongSiblings;
             if (!(index == 0)) { return undefined; }
@@ -24,7 +24,7 @@ class TableViewTests: XCTestCase {
           }
         );
         match(
-          'tb/sc_3/rw/ui-table-will-display-row',
+          'tb/sc_3/rw/will-display',
           function(node) {
             const index = node.indexAmongSiblings;
             if (!(index == 7)) { return undefined; }
@@ -32,7 +32,7 @@ class TableViewTests: XCTestCase {
           }
         );
         match(
-          'tb/sc_0/rw/ana-value-updated',
+          'tb/sc_0/rw/ana-updated',
           function(node) {
             if (!(node.latestValueForKeyPath('identifier') == '0/0')) { return undefined; }
             const last = node.events[node.events.length - 1];
@@ -40,7 +40,7 @@ class TableViewTests: XCTestCase {
           }
         );
         match(
-          'tb/sc_3/rw/ana-value-updated',
+          'tb/sc_3/rw/ana-updated',
           function(node) {
             if (!(node.latestValueForKeyPath('identifier') == '3/7')) { return undefined; }
             const last = node.events[node.events.length - 1];
@@ -158,15 +158,15 @@ class TableViewTests: XCTestCase {
         
         test.task = ("""
         match(
-          ['tb/sc_0/rw/ui-table-will-display-row', 'tb/sc_19/rw/ui-table-will-display-row'],
+          ['tb/sc_0/rw/will-display', 'tb/sc_19/rw/will-display'],
           function(node) { return 'cell-' + node.parentNode.nodeName; }
         );
         match(
-          ['tb/sc_0/rw/vw/bt/ui-control-event', 'tb/sc_19/rw/vw/bt/ui-control-event'],
+          ['tb/sc_0/rw/vw/bt/touch-up-inside', 'tb/sc_19/rw/vw/bt/touch-up-inside'],
           function(node) { return 'button-' + node.parentNode.parentNode.parentNode.nodeName; }
         );
         match(
-          ['tb/sc_0/rw/vw/bt/ana-value-updated', 'tb/sc_19/rw/vw/bt/ana-value-updated'],
+          ['tb/sc_0/rw/vw/bt/ana-updated', 'tb/sc_19/rw/vw/bt/ana-updated'],
           function(node) { return node.latestEvent.attributes['value']; }
         );
         """)

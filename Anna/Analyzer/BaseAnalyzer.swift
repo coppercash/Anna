@@ -182,7 +182,7 @@ public class
         for keyPath :String
         ) {
         self.recordEventOnPath(
-            named: "ana-value-updated",
+            named: "ana-updated",
             with: [
                 "key-path": keyPath,
                 "value": value

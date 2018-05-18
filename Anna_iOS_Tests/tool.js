@@ -12,7 +12,7 @@ exports.whenDisplays = function (keyPath, map) {
                 }
                 isVisible = true;
             }
-            else if ((event_1.name == 'ana-value-updated') &&
+            else if ((event_1.name == 'ana-updated') &&
                 (event_1.properties['key-path'] == keyPath)) {
                 if (!(value == undefined)) {
                     continue;

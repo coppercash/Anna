@@ -124,7 +124,7 @@ class
             after = change[.newKey]
             else { return }
         let
-        name = "ana-value-updated"
+        name = "ana-updated"
         let
         properties = [
             "key-path" : keyPath,

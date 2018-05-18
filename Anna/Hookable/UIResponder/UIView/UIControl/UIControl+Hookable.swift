@@ -47,6 +47,6 @@ class
         on control :UIControl,
         with event :UIEvent
         ) {
-        control.forwardRecordingEvent(named: "ui-control-event")
+        control.forwardRecordingEvent(named: "touch-up-inside")
     }
 }
