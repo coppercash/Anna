@@ -62,15 +62,15 @@ class
 class
     Proxy<Target : NSObjectProtocol> : NSObject
 {
-    let
-    target :Target
+    weak var
+    target :Target?
     init(_ target :Target) {
         self.target = target
     }
     
     override func
         conforms(to aProtocol: Protocol) -> Bool {
-        return self.target.conforms(to: aProtocol)
+        return self.target?.conforms(to: aProtocol) ?? false
     }
     
     override func
@@ -80,7 +80,8 @@ class
     
     override func
         responds(to aSelector: Selector!) -> Bool {
-        return type(of: self).instancesRespond(to: aSelector) || self.target.responds(to: aSelector)
+        return type(of: self).instancesRespond(to: aSelector) ||
+            (self.target?.responds(to: aSelector) ?? false)
     }
 }
 
@@ -94,7 +95,7 @@ class
         forRowAt indexPath: IndexPath
         ) {
         cell.forwardRecordingEvent(named: "will-display")
-        self.target.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
+        self.target?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
 }
 
@@ -107,7 +108,7 @@ class
         UITableView,
         numberOfRowsInSection section: Int
         ) -> Int {
-        return self.target.tableView(tableView, numberOfRowsInSection: section)
+        return self.target?.tableView(tableView, numberOfRowsInSection: section) ?? 0
     }
     
     func
@@ -116,7 +117,7 @@ class
         cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
         let
-        cell = self.target.tableView(tableView, cellForRowAt: indexPath)
+        cell = self.target!.tableView(tableView, cellForRowAt: indexPath)
         guard
             let
             analyzable = cell as? AnalyzerReadable,

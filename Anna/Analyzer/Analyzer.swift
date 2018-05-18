@@ -171,18 +171,22 @@ public class
                 )
                 let
                 suffixedID = isOwning ? identifier + suffix : identifier
-                try manager.registerNode(
-                    by: suffixedID,
-                    named: name,
-                    under: parentID
-                )
-                
                 let
                 context = IdentityContext(
                     manager: manager,
                     parentID: parentID,
                     identifier: suffixedID,
                     suffix: (isOwning ? suffix : NodeID.empty())
+                )
+                
+                guard
+                    context != analyzer?.resolvedContext
+                    else { return try callback(context) }
+                
+                try manager.registerNode(
+                    by: suffixedID,
+                    named: name,
+                    under: parentID
                 )
                 analyzer?.resolvedContext = context
                 parent?.notifyAfterContextReset { [weak analyzer] in

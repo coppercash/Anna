@@ -34,6 +34,7 @@ class TableViewTests: XCTestCase {
         match(
           'tb/sc_0/rw/ana-updated',
           function(node) {
+            console.log(node.latestValueForKeyPath('identifier'));
             if (!(node.latestValueForKeyPath('identifier') == '0/0')) { return undefined; }
             const last = node.events[node.events.length - 1];
             return last.attributes['value'];
@@ -139,7 +140,7 @@ class TableViewTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 1.0
+            timeout: 999.0
         )
         
         XCTAssertEqual(test.results[0] as! String, "0/0")
@@ -265,7 +266,7 @@ class TableViewTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 999.0
+            timeout: 1.0
         )
         
         XCTAssertEqual(test.results[0] as! String, "cell-sc_0")

@@ -93,7 +93,7 @@ class
         owned :Bool
         ) {
         super.init(
-            keyPaths: [keyPath: [.new]],
+            keyPaths: [keyPath: [.initial, .new, .old]],
             observee: observee,
             owned: owned
         )

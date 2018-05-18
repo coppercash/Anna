@@ -182,18 +182,11 @@ export class NodeID
   }
 
   toString = () : string => {
-    let
-    ownerIDs = this.ownerIDs;
-    var
-    buffer = `Node(${ ownerIDs[0] }`;
-    var
-    index = 1;
-    while (index < ownerIDs.length) {
-      buffer += `\\${ ownerIDs[index] }`;
-      index += 1;
-    }
-    buffer += ')';
-    return buffer;
+    return `Node(${ this.briefRepresentation() })`;
+  }
+
+  briefRepresentation() : string {
+    return this.ownerIDs.join('\\');
   }
 }
 
@@ -290,8 +283,6 @@ export class Node implements Markup.Markable
 
   id :NodeID;
   name :string;
-  properties :Markup.Markable.Properties = { class: Node.className };
-  subordinates :Markup.Markable[] = [];
   events :Event[] = [];
   parent :Node;
   children :Set<Node> = new Set<Node>();
@@ -314,12 +305,11 @@ export class Node implements Markup.Markable
     name :string
   ) :Node {
     let
-    node = this, children = this.children, subordinates = this.subordinates;
+    node = this, children = this.children;
     let
     child = new Node(nodeID, name, node);
     child._indexAmongSiblings = children.size;
     children.add(child);
-    subordinates.push(child);
     let 
     matching = node.stageMatching(name);
     child.matching.merge(matching);
@@ -342,11 +332,10 @@ export class Node implements Markup.Markable
     properties :Event.Properties
   ) {
     let
-    events = this.events, subordinates = this.subordinates;
+    events = this.events;
     let
     event = new Event(name, properties);
     events.push(event);
-    subordinates.push(event);
   }
 
   tasksMatchingEvent(
@@ -385,28 +374,19 @@ export class Node implements Markup.Markable
   ) :string {
     let
     name = this.name, 
-      properties = this.properties, 
-      matching = this.matching, 
-      subordinates = this.subordinates;
+      attributes = this.attributes, 
+      matching = this.matching,
+      events = this.events,
+      children = this.children;
     if (alone) {
-      return Markup.markup(name, properties, [], indent);
+      return Markup.markup(name, attributes, [], indent);
     }
     let
-    children = new Array<Markup.Markable>();
-    children.push(new Match.Stage.DigestMarker(matching));
-    for (let
-      sub of subordinates
-    ) {
-      if (sub instanceof Event) {
-        let
-        event = sub as Event;
-        children.push(event.markable(matching));
-      }
-      else {
-        children.push(sub);
-      }
-    }
-    return Markup.markup(name, properties, children, indent);
+    subs = new Array<Markup.Markable>();
+    subs.push(new Match.Stage.DigestMarker(matching));
+    events.forEach(event => subs.push(event.markable(matching)));
+    children.forEach(child => subs.push(child));
+    return Markup.markup(name, attributes, subs, indent);
   }
 
   upMarkedAncestors() :[string, string]
@@ -451,7 +431,12 @@ export class Node implements Markup.Markable
     return this.parent;
   }
   get attributes() : Markup.Markable.Properties {
-    return this.properties;
+    let
+    id = this.id.briefRepresentation();
+    return {
+      id: id,
+      class: Node.className
+    };
   }
 
   latestValueForKeyPath(
@@ -461,7 +446,7 @@ export class Node implements Markup.Markable
       event of this.events
     ) {
       if (!(
-        (event.name == 'ana-value-updated') &&
+        (event.name == 'ana-updated') &&
         (event.properties['key-path'] == keyPath)
       )) { continue; }
       return event.properties['value'];

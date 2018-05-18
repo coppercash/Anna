@@ -25,7 +25,11 @@ public extension
         named name :String
         ) {
         let
-        writable = self as! AnalyzerWritable,
+        writable = self as! AnalyzerWritable
+        guard
+            writable.analyzer == nil
+            else { return }
+        let
         delegate = (self as! Analyzer.Delegate & Hookable),
         analyzer = Analyzer(
             with: name,
@@ -58,7 +62,7 @@ public protocol
     @objc(updateValue:forKeyPath:)
     func
         update(
-        _ value :Any,
+        _ value :Any?,
         for keyPath :String
     )
     @objc(detach)

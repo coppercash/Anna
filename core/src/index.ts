@@ -208,7 +208,7 @@ class RecordingError {
   ) : Error {
     let
     keyValue :string;
-    if (name == 'ana-value-updated') {
+    if (name == 'ana-updated') {
       keyValue = `(${ properties['key-path'] }: ${ properties['value'] })`;
     }
     else {

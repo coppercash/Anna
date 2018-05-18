@@ -8,7 +8,7 @@
 import Foundation
 
 class
-    IdentityContext
+    IdentityContext : Equatable
 {
     let
     manager :Manager,
@@ -25,6 +25,16 @@ class
         self.parentID = parentID
         self.identifier = identifier
         self.suffix = suffix
+    }
+    static func
+        == (
+        lhs: IdentityContext,
+        rhs: IdentityContext
+        ) -> Bool {
+        return lhs.manager === rhs.manager &&
+            lhs.parentID == rhs.parentID &&
+            lhs.identifier == rhs.identifier &&
+            lhs.suffix == rhs.suffix
     }
 }
 
@@ -178,15 +188,20 @@ public class
     }
     public func
         update(
-        _ value :Any,
+        _ value :Any?,
         for keyPath :String
         ) {
+        var
+        properties = [
+            "key-path": keyPath as Any
+        ]
+        if let
+            value = value {
+            properties["value"] = value
+        }
         self.recordEventOnPath(
             named: "ana-updated",
-            with: [
-                "key-path": keyPath,
-                "value": value
-            ]
+            with: properties
         )
     }
     public func
