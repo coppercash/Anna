@@ -74,8 +74,8 @@ class
         ]) { (key, _) in return key }
     }
     class override var
-    decorator :AnyClass? {
-        return ANAUIView.self
+    decorators :[AnyClass] {
+        return super.decorators + [ANAUIView.self]
     }
 }
 

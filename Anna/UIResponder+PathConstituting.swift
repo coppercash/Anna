@@ -8,22 +8,35 @@
 import UIKit
 
 extension
-    UIResponder : FocusPathConstituting, FocusPathConstitutionForwarding
+    UIResponder : FocusPathConstituting, FocusPathConstitutionRedirecting
 {
     open func
         parentConstitutor(
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
-        return self.next?.forwardingConstitutor(
+        return self.next?.redirectedConstitutor(
             for: self,
             isOwning: isOwning
         )
     }
     open func
-        forwardingConstitutor(
+        redirectedConstitutor(
         for another: FocusPathConstituting,
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
+        if
+            (another as? UIResponder)?.next !== self,
+            let
+            analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer,
+            let
+            focused = analyzer.latestFocusedObject,
+            focused !== self
+        {
+            return focused.redirectedConstitutor(
+                for: another,
+                isOwning: isOwning
+            )
+        }
         return self
     }
 }
@@ -38,7 +51,7 @@ extension
         if let
             parent = self.presentingViewController ?? self.tabBarController ?? self.navigationController 
         {
-            return parent.forwardingConstitutor(
+            return parent.redirectedConstitutor(
                 for: self,
                 isOwning: isOwning
             )
@@ -55,7 +68,7 @@ extension
     UINavigationController
 {
     open override func
-        forwardingConstitutor(
+        redirectedConstitutor(
         for another: FocusPathConstituting,
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
@@ -77,23 +90,23 @@ extension
                 last = siblings.last
                 else
             {
-                return super.forwardingConstitutor(
+                return super.redirectedConstitutor(
                     for: another,
                     isOwning: isOwning
                 )
             }
-            return last.forwardingConstitutor(
+            return last.redirectedConstitutor(
                 for: another,
                 isOwning: isOwning
             )
         }
         guard i > 0 else {
-            return super.forwardingConstitutor(
+            return super.redirectedConstitutor(
                 for: another,
                 isOwning: isOwning
             )
         }
-        return siblings[i - 1].forwardingConstitutor(
+        return siblings[i - 1].redirectedConstitutor(
             for: another,
             isOwning: isOwning
         )

@@ -35,12 +35,12 @@ extension
 }
 
 class
-    UITableViewCellObserver<Observee> : UIViewObserver<Observee>
+    UITableViewCellObserver<Observee> : UIResponderObserver<Observee>
     where Observee : UITableViewCell
 {
     class override var
-    decorator :AnyClass? {
-        return ANAUITableViewCell.self
+    decorators :[AnyClass] {
+        return super.decorators + [ANAUITableViewCell.self]
     }
 }
 

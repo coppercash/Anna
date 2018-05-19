@@ -162,14 +162,14 @@ class
     where Observee : NSObject
 {
     let
-    decorator :AnyClass?
+    decorators :[AnyClass]
     init(
-        decorator :AnyClass?,
+        decorators :[AnyClass],
         keyPaths :[String: NSKeyValueObservingOptions],
         observee :Observee,
         owned :Bool = false
         ) {
-        self.decorator = decorator
+        self.decorators = decorators
         super.init(
             keyPaths: keyPaths,
             observee: observee,
@@ -179,7 +179,9 @@ class
     override func
         observe(_ observee: Observee) {
         super.observe(observee)
-        self.decorator?.decorate(object: observee)
+        for decorator in self.decorators {
+            decorator.decorate(object: observee)
+        }
     }
     override func
         observeValue(
@@ -215,7 +217,7 @@ class
         let
         clazz = type(of: self)
         super.init(
-            decorator: clazz.decorator,
+            decorators: clazz.decorators,
             keyPaths: clazz.keyPaths,
             observee: observee,
             owned: owned
@@ -228,7 +230,7 @@ class
         ]
     }
     class var
-    decorator :AnyClass? { return nil }
+    decorators :[AnyClass] { return [] }
 }
 
 extension Dictionary

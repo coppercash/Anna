@@ -1,5 +1,5 @@
 //
-//  SuffixingIdentityContextForwarder.swift
+//  PrefixingIdentityContextForwarder.swift
 //  Anna_iOS
 //
 //  Created by William on 2018/5/15.
@@ -8,18 +8,20 @@
 import Foundation
 
 class
-    SuffixingIdentityContextForwarder : IdentityContextResolving
+    PrefixingIdentityContextForwarder : IdentityContextResolving, FocusHandling
 {
+    typealias
+    Target = IdentityContextResolving & FocusHandling
     weak var
-    target :IdentityContextResolving?
-    lazy var
-    suffix :NodeID = {
-        return NodeID(owner: self)
-    }()
+    target :Target?
+    let
+    prefix :NodeID
     init(
-        target :IdentityContextResolving
+        target :Target,
+        prefix :NodeID
         ) {
         self.target = target
+        self.prefix = prefix
     }
     var
     resolvedContext: IdentityContext? {
@@ -30,13 +32,13 @@ class
         then callback: @escaping IdentityContextResolving.Callback
         ) throws {
         let
-        suffix = self.suffix
+        prefix = self.prefix
         try self.target?.resolveContext { pContext in
             try callback(IdentityContext(
                 manager: pContext.manager,
                 parentID: pContext.parentID,
                 identifier: pContext.identifier,
-                suffix: suffix
+                prefix: prefix
             ))
         }
     }
@@ -45,5 +47,9 @@ class
         _ notify: @escaping IdentityContextResolving.Notify
         ) {
         self.target?.notifyAfterContextReset(notify)
+    }
+    func
+        handleFocused(_ object: FocusHandling.Object) {
+        self.target?.handleFocused(object)
     }
 }

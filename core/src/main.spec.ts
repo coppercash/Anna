@@ -216,7 +216,7 @@ describe('Anna', () => {
           {
             match('foo/appear', (node) => { return 42; });
             match('foo/bar/appear', (node) => { 
-              return node.latestEvent.properties['value'];
+              return node.events[node.events.length - 1].properties['value'];
             })
           } break;
         default:

@@ -43,7 +43,7 @@ export class Tree
     let
     node = parent ? 
       parent.fork(nodeID, name) : 
-      new Node(nodeID, name, null);
+      new Node(nodeID, name);
 
     tree.setNode(node, nodeID);
     if (!(parent)) {
@@ -186,7 +186,7 @@ export class NodeID
   }
 
   briefRepresentation() : string {
-    return this.ownerIDs.join('\\');
+    return this.ownerIDs.join('/');
   }
 }
 
@@ -283,8 +283,9 @@ export class Node implements Markup.Markable
 
   id :NodeID;
   name :string;
+  _path :string;
   events :Event[] = [];
-  parent :Node;
+  _parent :Node;
   children :Set<Node> = new Set<Node>();
   matching :Match.Stage = Match.Stage.empty();
   
@@ -293,11 +294,12 @@ export class Node implements Markup.Markable
   constructor(
     id :NodeID,
     name :string,
-    parent :Node,
+    parent? :Node
   ) {
     this.id = id;
     this.name = name;
-    this.parent = parent;
+    this._parent = parent;
+    this._path = parent ? `${ parent.path }/${ name }` : '';
   }
 
   fork(
@@ -320,7 +322,7 @@ export class Node implements Markup.Markable
   delete()
   {
     let
-    parent = this.parent, deleting = this;
+    parent = this._parent, deleting = this;
     if (!(
       parent
     )) { return; }
@@ -392,7 +394,7 @@ export class Node implements Markup.Markable
   upMarkedAncestors() :[string, string]
   {
     let
-    node = this, parent = this.parent;
+    node = this, parent = this._parent;
     if (!(
       parent
     )) {
@@ -410,7 +412,7 @@ export class Node implements Markup.Markable
   snapshot() :string
   {
     let
-    parent = this.parent;
+    parent = this._parent;
     if (!(
       parent
     )) {
@@ -428,7 +430,7 @@ export class Node implements Markup.Markable
     return this.name;
   }
   get parentNode() : Node {
-    return this.parent;
+    return this._parent;
   }
   get attributes() : Markup.Markable.Properties {
     let
@@ -438,7 +440,11 @@ export class Node implements Markup.Markable
       class: Node.className
     };
   }
+  get path() : string {
+    return this._path;
+  }
 
+  /*
   latestValueForKeyPath(
     keyPath :string
   ) : any {
@@ -461,6 +467,7 @@ export class Node implements Markup.Markable
     )) { return null; } 
     return events[events.length - 1];
   }
+  */
 }
 
 export class Event implements Markup.Markable

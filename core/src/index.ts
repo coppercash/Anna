@@ -104,8 +104,7 @@ export class Manager
     properties :Identity.Event.Properties,
     nodeID :Identity.NodeID | number[] | number,
     namespace? :string
-  )
-  {
+  ) {
     let
     identities = this.identities, 
       tracker = this.tracker;
@@ -135,16 +134,27 @@ export class Manager
 
     // Match Task
     //
+    if (!(tracker)) { return; }
     let
     tasks = node.tasksMatchingEvent(name);
+    var 
+    exception :Error = undefined;
     for (let 
       task of tasks
     ) {
-      let
-      result = task.resultByMapping(node);
-      if (tracker && (result !== undefined)) {
-        tracker.receiveResult(result);
+      try {
+        let
+        result = task.resultByMapping(node);
+        if (result !== undefined) {
+          tracker.receiveResult(result);
+        }
       }
+      catch (e) {
+        exception = e;
+      }
+    }
+    if (exception) {
+      throw exception;
     }
   }
 
@@ -186,9 +196,9 @@ export class Manager
       loadedTasks.insert(cachePath).value = tasks;
     }
     else if (config.debug) {
-      identities.subtractMatchTasks(loaded.value);
       let
       tasks = loader.matchTasks(namePath);
+      identities.subtractMatchTasks(loaded.value);
       identities.addMatchTasks(tasks);
       loaded.value = tasks;
     }

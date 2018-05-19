@@ -51,7 +51,7 @@ public class
             manager: manager,
             parentID: nil,
             identifier: identifier,
-            suffix: NodeID.empty()
+            prefix: NodeID.empty()
         )
         
         analyzer.resolvedContext = context

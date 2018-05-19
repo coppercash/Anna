@@ -10,6 +10,9 @@
 		118327675DD132CD9B88D63F /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
 		3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE5A2086EE4400AE10D3 /* PathTests.swift */; };
 		3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE7C208708F700AE10D3 /* AppDelegate.swift */; };
+		3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFCD20AFBC9200294037 /* FocusTests.swift */; };
+		3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */; };
+		3D2CDFD320AFC35C00294037 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD220AFC35C00294037 /* Focus.swift */; };
 		3D8604C120AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */; };
 		3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8701AB20883D1E0014E312 /* CoreJS.swift */; };
 		3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5D9209FEACE005F0572 /* ANAUIView.m */; };
@@ -97,6 +100,9 @@
 		2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D10FE5A2086EE4400AE10D3 /* PathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTests.swift; sourceTree = "<group>"; };
 		3D10FE7C208708F700AE10D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3D2CDFCD20AFBC9200294037 /* FocusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTests.swift; sourceTree = "<group>"; };
+		3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Hookable.swift"; sourceTree = "<group>"; };
+		3D2CDFD220AFC35C00294037 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
 		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuffixingIdentityContextForwarder.swift; sourceTree = "<group>"; };
@@ -173,6 +179,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D2CDFCF20AFC0D200294037 /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */,
+			);
+			path = UIButton;
+			sourceTree = "<group>";
+		};
 		3D52623F208583D200D287BA /* Anna_iOS_Testee */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				3DB2E5DF209FEACE005F0572 /* UIControl+Hookable.swift */,
+				3D2CDFCF20AFC0D200294037 /* UIButton */,
 			);
 			path = UIControl;
 			sourceTree = "<group>";
@@ -335,6 +350,7 @@
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 				3D10FE5A2086EE4400AE10D3 /* PathTests.swift */,
 				3DB2E79C20A26734005F0572 /* TableViewTests.swift */,
+				3D2CDFCD20AFBC9200294037 /* FocusTests.swift */,
 				BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */,
 			);
 			path = Anna_iOS_Tests;
@@ -351,6 +367,7 @@
 				BE195B0A209D7D6900111F15 /* Manager.swift */,
 				BE195B24209D7E8A00111F15 /* Tracker.swift */,
 				BE195B0B209D7D6900111F15 /* Hook.swift */,
+				3D2CDFD220AFC35C00294037 /* Focus.swift */,
 				BE195B04209D7D6900111F15 /* KVObserver.swift */,
 				BE195B05209D7D6900111F15 /* UIResponder+PathConstituting.swift */,
 			);
@@ -577,6 +594,7 @@
 				3D8604C120AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift in Sources */,
 				BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */,
 				3DF1817220A41490008E6B25 /* BaseAnalyzer.swift in Sources */,
+				3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */,
 				3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */,
 				3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */,
 				3DB2E5EB209FEACE005F0572 /* UIView+Hookable.swift in Sources */,
@@ -591,6 +609,7 @@
 				3DF1817420A41499008E6B25 /* RootAnalyzer.swift in Sources */,
 				3DB2E5E8209FEACE005F0572 /* UITableView+Hookable.swift in Sources */,
 				BE195B43209D844F00111F15 /* Analyzable.swift in Sources */,
+				3D2CDFD320AFC35C00294037 /* Focus.swift in Sources */,
 				3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */,
 				BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */,
 				BE4010E020A9909E0056BF29 /* FocusPath.swift in Sources */,
@@ -603,6 +622,7 @@
 			files = (
 				3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */,
 				BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */,
+				3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */,
 				3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

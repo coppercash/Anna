@@ -361,7 +361,7 @@ class PathTests: XCTestCase {
                 )
             }
             override func
-                forwardingConstitutor(
+                redirectedConstitutor(
                 for another: FocusPathConstituting,
                 isOwning: UnsafeMutablePointer<Bool>
                 ) -> FocusPathConstituting? {
@@ -378,7 +378,7 @@ class PathTests: XCTestCase {
                     }
                 }
                 else {
-                    return super.forwardingConstitutor(
+                    return super.redirectedConstitutor(
                         for: another,
                         isOwning: isOwning
                     )

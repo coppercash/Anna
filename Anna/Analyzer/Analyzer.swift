@@ -9,7 +9,7 @@ import Foundation
 
 @objc(ANAAnalyzer)
 public class
-    Analyzer : BaseAnalyzer, IdentityContextResolving
+    Analyzer : BaseAnalyzer, IdentityContextResolving, FocusHandling
 {
     public typealias
         Delegate = FocusPathConstituting
@@ -138,6 +138,23 @@ public class
         self.deferredParenthoodResolutions.removeAll()
     }
     
+    weak var
+    latestFocusedObject :FocusHandling.Object? = nil
+    func
+        handleFocused(_ object :FocusHandling.Object) {
+        self.latestFocusedObject = object
+        try! self.resolveParenthood {
+            let
+            (parent, isOwning) = ($0.parent, $0.isOwning)
+            guard
+                isOwning,
+                let
+                analyzer = parent as? FocusHandling
+                else { return }
+            analyzer.handleFocused(object)
+        }
+    }
+    
     // MARK: - Identity Context
     
     typealias
@@ -164,19 +181,19 @@ public class
             identifier = NodeID(owner: child)
             try parent.resolveContext { [weak analyzer, weak parent] pContext in
                 let
-                (manager, parentID, suffix) = (
+                (manager, parentID, prefix) = (
                     pContext.manager,
                     pContext.identifier,
-                    pContext.suffix
+                    pContext.prefix
                 )
                 let
-                suffixedID = isOwning ? identifier + suffix : identifier
+                prefixedID = isOwning ? prefix + identifier : identifier
                 let
                 context = IdentityContext(
                     manager: manager,
                     parentID: parentID,
-                    identifier: suffixedID,
-                    suffix: (isOwning ? suffix : NodeID.empty())
+                    identifier: prefixedID,
+                    prefix: (isOwning ? prefix : NodeID.empty())
                 )
                 
                 guard
@@ -184,7 +201,7 @@ public class
                     else { return try callback(context) }
                 
                 try manager.registerNode(
-                    by: suffixedID,
+                    by: prefixedID,
                     named: name,
                     under: parentID
                 )

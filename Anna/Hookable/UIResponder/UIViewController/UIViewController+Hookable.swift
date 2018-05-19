@@ -48,7 +48,7 @@ class
         }
     }
     class override var
-    decorator :AnyClass? {
-        return ANAUIViewController.self
+    decorators :[AnyClass] {
+        return super.decorators + [ANAUIViewController.self]
     }
 }

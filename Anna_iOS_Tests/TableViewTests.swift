@@ -140,7 +140,7 @@ class TableViewTests: XCTestCase {
         test.launch()
         self.wait(
             for: test.expectations,
-            timeout: 999.0
+            timeout: 1.0
         )
         
         XCTAssertEqual(test.results[0] as! String, "0/0")
@@ -177,7 +177,7 @@ class TableViewTests: XCTestCase {
             lazy var
             table :UITableView = {
                 let
-                superview = self.view!;
+                superview = self.view!
                 let
                 table = PathTestingTableView(frame: superview.bounds)
                 table.delegate = self

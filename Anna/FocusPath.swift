@@ -18,13 +18,13 @@ public protocol
         ) -> FocusPathConstituting?
 }
 
-@objc(ANAFocusPathConstitutionForwarding)
+@objc(ANAFocusPathConstitutionRedirecting)
 public protocol
-    FocusPathConstitutionForwarding
+    FocusPathConstitutionRedirecting
 {
-    @objc(ana_parentConstitutorForChild:owning:)
+    @objc(ana_redirectedConstitutorForAnother:owning:)
     func
-        forwardingConstitutor(
+        redirectedConstitutor(
         for another :FocusPathConstituting,
         isOwning :UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting?

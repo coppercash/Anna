@@ -95,7 +95,68 @@ class
         forRowAt indexPath: IndexPath
         ) {
         cell.forwardRecordingEvent(named: "will-display")
-        self.target?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
+        self.target?.tableView?(
+            tableView,
+            willDisplay: cell,
+            forRowAt: indexPath
+        )
+    }
+    func
+        tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+        ) {
+        if let
+            cell = tableView.cellForRow(at: indexPath),
+            let
+            analyzer = (cell as? AnalyzerReadable)?.analyzer as? FocusHandling
+        {
+            analyzer.handleFocused(cell)
+        }
+        self.target?.tableView?(
+            tableView,
+            didSelectRowAt: indexPath
+        )
+    }
+}
+
+extension
+UITableView
+{
+    typealias
+    SectionAnalyzer = Analyzer & IdentityContextResolving
+    func
+        resolvedSubAnalyzer(
+        for section :Int
+        ) -> SectionAnalyzer? {
+        guard let
+            owner = self as? UITableView & AnalyzerReadable,
+            let
+            table = owner.analyzer as? Analyzer
+            else { return nil }
+        if let
+            resolved = table.childAnalyzer[section] as? SectionAnalyzer
+        { return resolved }
+        guard let
+            delegate = self.delegate as? SectionAnalyzableTableViewDelegate,
+            let
+            name = delegate.tableView(
+                owner,
+                analyticNameFor: section
+            )
+            else { return nil }
+        let
+        analyzer = Analyzer(
+            with: name,
+            delegate: table
+        )
+        delegate.tableView?(
+            owner,
+            didCreate: analyzer,
+            for: section
+        )
+        table.childAnalyzer[section] = analyzer
+        return analyzer
     }
 }
 
@@ -124,53 +185,27 @@ class
             let
             row = analyzable.analyzer as? Analyzer
         else { return cell }
+        
+        let
+        section = tableView.resolvedSubAnalyzer(for: indexPath.section),
+        parent = section ?? ((tableView as! AnalyzerReadable).analyzer as! Analyzer),
+        prefix = NodeID(owner: parent) + (
+            section == nil ?
+                [UInt(indexPath.section), UInt(indexPath.row)] :
+                [UInt(indexPath.row)]
+        )
 
         let
-        owner = tableView as! UITableView & AnalyzerReadable,
-        table = owner.analyzer as! Analyzer
-        let
-        parent :BaseAnalyzer & IdentityContextResolving
+        forwarder :PrefixingIdentityContextForwarder
         if let
-            resolved = table.childAnalyzer[indexPath.section] as? BaseAnalyzer & IdentityContextResolving
-        {
-            parent = resolved
-        }
-        else {
-            if let
-                delegate = tableView.delegate as? SectionAnalyzableTableViewDelegate,
-                let
-                name = delegate.tableView(
-                    owner,
-                    analyticNameFor: indexPath.section
-                )
-            {
-                let
-                analyzer = Analyzer(
-                    with: name,
-                    delegate: table
-                )
-                delegate.tableView?(
-                    owner,
-                    didCreate: analyzer,
-                    for: indexPath.section
-                )
-                table.childAnalyzer[indexPath.section] = analyzer
-                parent = analyzer
-            }
-            else {
-                parent = table
-            }
-        }
-        let
-        forwarder :SuffixingIdentityContextForwarder
-        if let
-            resolved = parent.childAnalyzer[indexPath] as? SuffixingIdentityContextForwarder
+            resolved = parent.childAnalyzer[indexPath] as? PrefixingIdentityContextForwarder
         {
             forwarder = resolved
         }
         else {
-            forwarder = SuffixingIdentityContextForwarder(
-                target: parent
+            forwarder = PrefixingIdentityContextForwarder(
+                target: parent,
+                prefix: prefix
             )
             parent.childAnalyzer[indexPath] = forwarder
         }
@@ -189,19 +224,6 @@ class
 public protocol
     SectionAnalyzableTableViewDelegate
 {
-    // TODO: Remove
-//    @objc(tableView:analyzerNameForRowAtIndexPath:)
-//    func
-//        tableView(
-//        _ tableView: UITableView,
-//        analyzerNameForRowAt indexPath: IndexPath
-//        ) -> String?
-//    @objc(tableView:analyzerNameForSection:)
-//    optional func
-//        tableView(
-//        _ tableView: UITableView,
-//        analyzerNameFor section: Int
-//        ) -> String?
     @objc(tableView:didCreateAnalyzer:forSection:)
     optional func
         tableView(

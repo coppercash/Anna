@@ -14,17 +14,17 @@ class
     manager :Manager,
     parentID :NodeID?,
     identifier :NodeID,
-    suffix :NodeID
+    prefix :NodeID
     init(
         manager :Manager,
         parentID :NodeID?,
         identifier :NodeID,
-        suffix :NodeID
+        prefix :NodeID
         ) {
         self.manager = manager
         self.parentID = parentID
         self.identifier = identifier
-        self.suffix = suffix
+        self.prefix = prefix
     }
     static func
         == (
@@ -34,7 +34,7 @@ class
         return lhs.manager === rhs.manager &&
             lhs.parentID == rhs.parentID &&
             lhs.identifier == rhs.identifier &&
-            lhs.suffix == rhs.suffix
+            lhs.prefix == rhs.prefix
     }
 }
 
@@ -245,6 +245,10 @@ extension
         parentConstitutor(
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
+        isOwning.assign(
+            repeating: true,
+            count: 1
+        )
         return self
     }
 }
