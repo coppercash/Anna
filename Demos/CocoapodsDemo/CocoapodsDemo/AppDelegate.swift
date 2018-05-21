@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Analyzable {
         dependency.taskModuleURL = moduleURL.appendingPathComponent("task")
         dependency.config = ["debug" as NSString : true as NSNumber]
         dependency.logger = self.tracker
+        dependency.nodePathURLs = [moduleURL]
         let
         manager = Manager(dependency)
         manager.tracker = self.tracker

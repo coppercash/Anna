@@ -32,7 +32,7 @@ public struct
         fileManager :FileManaging? = nil,
         logger :Logging? = nil,
         handleException : ((JSContext?, JSValue?) -> Void)? = nil,
-        nodePaths :[String]? = nil
+        nodePathURLs :[URL]? = nil
         
         func
             resolvedCoreModuleURL() throws -> URL {
@@ -310,7 +310,7 @@ extension
         native = Native(
             context: context,
             fileManager: fileManager,
-            paths: dependency.nodePaths ?? []
+            paths: dependency.nodePathURLs?.map { $0.path } ?? []
         )
         native.logger = dependency.logger
         let

@@ -3,3 +3,4 @@ match(
       function () { return 43; }
       );
 
+console.log(require('bar').foo);
