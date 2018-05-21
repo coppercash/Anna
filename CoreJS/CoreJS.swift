@@ -31,7 +31,8 @@ public struct
         coreModuleURL :URL? = nil,
         fileManager :FileManaging? = nil,
         logger :Logging? = nil,
-        handleException : ((JSContext?, JSValue?) -> Void)? = nil
+        handleException : ((JSContext?, JSValue?) -> Void)? = nil,
+        nodePaths :[String]? = nil
         
         func
             resolvedCoreModuleURL() throws -> URL {
@@ -84,15 +85,18 @@ class
     weak var
     context :JSContext?
     let
-    fileManager :FileManaging
+    fileManager :FileManaging,
+    paths :[String]
     var
     logger :Logging? = nil
     init(
         context :JSContext,
-        fileManager :FileManaging
+        fileManager :FileManaging,
+        paths :[String]
         ) {
         self.context = context
         self.fileManager = fileManager
+        self.paths = paths
     }
     func
         contains(
@@ -121,45 +125,43 @@ class
             (js_parent.isString || js_parent.isNull),
             (js_main.isString || js_main.isNull)
             else { return nil }
-        let
-        parent = js_parent.isString ? js_parent.toString() : nil
-
+        
         if id.hasPrefix("/") {
             return id
         }
         
+        guard let
+            parent = js_parent.isString ? js_parent.toString() : nil
+            else { return nil }
         let
-        cd :String
-        if let
-            parent = parent {
-            cd = (parent as NSString).deletingLastPathComponent
-        }
-        else {
-            return nil
-        }
+        cd = (parent as NSString).deletingLastPathComponent
         //
         // cd is a folder
-        // id is either './name', '../name.js' or '.././../'
+        // id is kind of './name', '../name.js' or 'name'
         
         if
-            id.hasSuffix(".js") {
-            return (cd as NSString).appendingPathComponent(id)
+            id.hasPrefix("../") ||
+                id.hasPrefix("./")
+        {
+            let
+            absolute = (cd as NSString).appendingPathComponent(id)
+            if (id as NSString).pathExtension != "" {
+                return absolute
+            }
+            return (absolute as NSString).appendingPathExtension("js")
         }
-        let
-        name = (id as NSString).deletingPathExtension
+        
+        guard
+            (id as NSString).pathExtension == ""
+            else { return nil }
         //
-        // id is a folder or a file without extension
+        // id is a folder
 
         let
-        lookup = [
-            ((cd as NSString)
-                .appendingPathComponent(name) as NSString)
-                .appendingPathExtension("js")!,
-            (((cd as NSString)
-                .appendingPathComponent("node_modules") as NSString)
-                .appendingPathComponent(name) as NSString)
-                .appendingPathComponent("index.js")
-        ]
+        lookup = self.__lookupPaths(
+            for: id,
+            under: cd
+        )
         for path in lookup {
             if fileManager.fileExists(atPath: path) {
                 return path
@@ -233,6 +235,26 @@ class
         ) {
         self.logger?.log(string)
     }
+    
+    func
+        __lookupPaths(
+        for identifier :String,
+        under directory :String
+        ) -> [String] {
+        var
+        result = [] as [String]
+        let
+        paths = self.paths + [directory]
+        for path in paths {
+            result.append(
+                (((path as NSString)
+                    .appendingPathComponent("node_modules") as NSString)
+                    .appendingPathComponent(identifier) as NSString)
+                    .appendingPathComponent("index.js")
+            )
+        }
+        return result;
+    }
 }
 @objc protocol
     NativeJSExport : JSExport
@@ -287,7 +309,8 @@ extension
         let
         native = Native(
             context: context,
-            fileManager: fileManager
+            fileManager: fileManager,
+            paths: dependency.nodePaths ?? []
         )
         native.logger = dependency.logger
         let

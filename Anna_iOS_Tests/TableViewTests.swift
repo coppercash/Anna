@@ -18,34 +18,30 @@ class TableViewTests: XCTestCase {
         match(
           'tb/sc_0/rw/will-display',
           function(node) {
-            const index = node.indexAmongSiblings;
-            if (!(index == 0)) { return undefined; }
-            return node.parentNode.nodeName + '_' + index;
+            if (!(node.index() == 0)) { return undefined; }
+            return node.parentNode.nodeName + '_' + node.index();
           }
         );
         match(
           'tb/sc_3/rw/will-display',
           function(node) {
-            const index = node.indexAmongSiblings;
-            if (!(index == 7)) { return undefined; }
-            return node.parentNode.nodeName + '_' + index;
+            if (!(node.index() == 7)) { return undefined; }
+            return node.parentNode.nodeName + '_' + node.index();
           }
         );
         match(
           'tb/sc_0/rw/ana-updated',
           function(node) {
-            console.log(node.latestValueForKeyPath('identifier'));
-            if (!(node.latestValueForKeyPath('identifier') == '0/0')) { return undefined; }
-            const last = node.events[node.events.length - 1];
-            return last.attributes['value'];
+            console.log(node.latestValue('identifier'));
+            if (!(node.latestValue('identifier') == '0/0')) { return undefined; }
+            return node.latestEvent().attributes['value'];
           }
         );
         match(
           'tb/sc_3/rw/ana-updated',
           function(node) {
-            if (!(node.latestValueForKeyPath('identifier') == '3/7')) { return undefined; }
-            const last = node.events[node.events.length - 1];
-            return last.attributes['value'];
+            if (!(node.latestValue('identifier') == '3/7')) { return undefined; }
+            return node.latestEvent().attributes['value'];
           }
         );
         """)
@@ -168,7 +164,7 @@ class TableViewTests: XCTestCase {
         );
         match(
           ['tb/sc_0/rw/vw/bt/ana-updated', 'tb/sc_19/rw/vw/bt/ana-updated'],
-          function(node) { return node.latestEvent.attributes['value']; }
+          function(node) { return node.latestEvent().attributes['value']; }
         );
         """)
         class

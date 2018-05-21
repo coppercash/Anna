@@ -423,9 +423,6 @@ export class Node implements Markup.Markable
     return ancestors[0] + '\n' + this.markup(`${ ancestors[1]}  `);
   }
 
-  get indexAmongSiblings() : number {
-    return this._indexAmongSiblings;
-  }
   get nodeName() : string {
     return this.name;
   }
@@ -444,13 +441,19 @@ export class Node implements Markup.Markable
     return this._path;
   }
 
-  /*
-  latestValueForKeyPath(
+  
+  latestValue(
     keyPath :string
   ) : any {
-    for (let
-      event of this.events
+    let
+    events = this.events;
+    for (
+      var index = events.length - 1;
+      index >= 0;
+      index -= 1
     ) {
+      let
+      event = events[index];
       if (!(
         (event.name == 'ana-updated') &&
         (event.properties['key-path'] == keyPath)
@@ -459,7 +462,7 @@ export class Node implements Markup.Markable
     }
     return undefined;
   }
-  get latestEvent() : Event {
+  latestEvent() : Event {
     let
     events = this.events;
     if (!(
@@ -467,7 +470,23 @@ export class Node implements Markup.Markable
     )) { return null; } 
     return events[events.length - 1];
   }
-  */
+  index() : number {
+    return this._indexAmongSiblings;
+  }
+  ancestor(
+    length :number = 0
+  ) : Node {
+    var 
+    current = this as Node;
+    for (
+      var left = length;
+      current && left > 0;
+      left -= 1
+    ) {
+      current = current.parentNode;
+    }
+    return current;
+  }
 }
 
 export class Event implements Markup.Markable

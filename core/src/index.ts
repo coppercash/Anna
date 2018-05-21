@@ -84,11 +84,23 @@ export class Manager
     name :string,
     parentID? :Identity.NodeID | number[] | number
   ) {
-    this.identities.registerNode(
-      this.nodeID(id), 
-      name, 
-      this.nodeID(parentID)
-    );
+    let
+    nodeID = this.nodeID(id);
+    // Suppress error for node id has more than one components
+    // This is a temp solution, not ideal
+    //
+    try {
+      this.identities.registerNode(
+        nodeID, 
+        name, 
+        this.nodeID(parentID)
+      );
+    }
+    catch (e) {
+      if (!(nodeID.ownerIDs.length > 1)) {
+        throw e;
+      }
+    }
   }
 
   deregisterNodes(
