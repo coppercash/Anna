@@ -10,53 +10,6 @@ import Anna
 
 class PathTests: XCTestCase {
    
-    func test_button() {
-        let
-        test = PathTestCaseBuilder(with: self)
-        test.task =
-        """
-        match(
-        'vc/bt/touch-up-inside',
-        function() { return 42; }
-        );
-        """
-        class
-        Controller : PathTestingViewController
-        {
-            var
-            button :UIButton? = nil
-            override func
-                viewDidLoad() {
-                super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
-                
-                self.button = {
-                    let
-                    button = PathTestingButton()
-                    button.becomeAnalysisObject(named: "bt")
-                    return button
-                }()
-                self.view.addSubview(self.button!)
-            }
-            override func
-                viewDidAppear(_ animated: Bool) {
-                super.viewDidAppear(animated)
-                self.button?.sendActions(for: .touchUpInside)
-            }
-        }
-        test.rootViewController = Controller()
-
-        test.expect()
-        test.launch()
-        self.wait(
-            for: test.expectations,
-            timeout: 1.0
-        )
-        
-        XCTAssertEqual(test.results[0] as! Int, 42)
-    }
-
-
     func test_deregister() {
         let
         test = PathTestCaseBuilder(with: self)
@@ -125,7 +78,7 @@ class PathTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test[0] as? Int, 42)
     }
     
     func test_dataDisplaysOnView() {
@@ -179,7 +132,7 @@ class PathTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! String, "42")
+        XCTAssertEqual(test[0] as? String, "42")
     }
     
     func test_dataDisplaysOnViewController() {
@@ -230,7 +183,7 @@ class PathTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! String, "42")
+        XCTAssertEqual(test[0] as? String, "42")
     }
     
     func test_navigatedControllers() {
@@ -272,7 +225,7 @@ class PathTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test[0] as? Int, 42)
     }
     
     func test_tabController() {
@@ -319,8 +272,8 @@ class PathTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! Int, 42)
-        XCTAssertEqual(test.results[1] as! Int, 43)
+        XCTAssertEqual(test[0] as? Int, 42)
+        XCTAssertEqual(test[1] as? Int, 43)
     }
     
     func test_customRootTabBarController() {
@@ -403,6 +356,6 @@ class PathTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test[0] as? Int, 42)
     }
 }

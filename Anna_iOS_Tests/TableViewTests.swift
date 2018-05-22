@@ -32,7 +32,6 @@ class TableViewTests: XCTestCase {
         match(
           'tb/sc_0/rw/ana-updated',
           function(node) {
-            console.log(node.latestValue('identifier'));
             if (!(node.latestValue('identifier') == '0/0')) { return undefined; }
             return node.latestEvent().attributes['value'];
           }
@@ -139,14 +138,14 @@ class TableViewTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! String, "0/0")
-        XCTAssertEqual(test.results[1] as! String, "sc_0_0")
-        XCTAssertEqual(test.results[2] as! String, "0-0")
-        XCTAssertEqual(test.results[3] as! String, "00")
-        XCTAssertEqual(test.results[4] as! String, "3/7")
-        XCTAssertEqual(test.results[5] as! String, "sc_3_7")
-        XCTAssertEqual(test.results[6] as! String, "3-7")
-        XCTAssertEqual(test.results[7] as! String, "37")
+        XCTAssertEqual(test[0] as? String, "0/0")
+        XCTAssertEqual(test[1] as? String, "sc_0_0")
+        XCTAssertEqual(test[2] as? String, "0-0")
+        XCTAssertEqual(test[3] as? String, "00")
+        XCTAssertEqual(test[4] as? String, "3/7")
+        XCTAssertEqual(test[5] as? String, "sc_3_7")
+        XCTAssertEqual(test[6] as? String, "3-7")
+        XCTAssertEqual(test[7] as? String, "37")
     }
     
     func test_tableViewCellSubviews() {
@@ -265,11 +264,103 @@ class TableViewTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! String, "cell-sc_0")
-        XCTAssertEqual(test.results[1] as! String, "data-0")
-        XCTAssertEqual(test.results[2] as! String, "button-sc_0")
-        XCTAssertEqual(test.results[3] as! String, "cell-sc_19")
-        XCTAssertEqual(test.results[4] as! String, "data-19")
-        XCTAssertEqual(test.results[5] as! String, "button-sc_19")
+        XCTAssertEqual(test[0] as? String, "cell-sc_0")
+        XCTAssertEqual(test[1] as? String, "data-0")
+        XCTAssertEqual(test[2] as? String, "button-sc_0")
+        XCTAssertEqual(test[3] as? String, "cell-sc_19")
+        XCTAssertEqual(test[4] as? String, "data-19")
+        XCTAssertEqual(test[5] as? String, "button-sc_19")
+    }
+    
+    func test_tableViewSectionShouldReportAppeared() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        
+        test.task = ("""
+        match(
+          'tb/sc_0/ana-appeared',
+          function(node) { return 42; }
+        );
+        match(
+          'tb/sc_19/ana-appeared',
+          function(node) { return 43; }
+        );
+        """)
+        class
+            Controller : UIViewController, UITableViewDelegate, UITableViewDataSource, SectionAnalyzableTableViewDelegate
+        {
+            lazy var
+            table :UITableView = {
+                let
+                superview = self.view!;
+                let
+                table = PathTestingTableView(frame: superview.bounds)
+                table.delegate = self
+                table.dataSource = self
+                table.register(
+                    UITableViewCell.self,
+                    forCellReuseIdentifier: "r"
+                )
+                table.becomeAnalysisObject(named: "tb")
+                return table
+            }()
+            override func
+                viewDidLoad() {
+                super.viewDidLoad()
+                self.view.addSubview(self.table)
+                
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                self.table.scrollToRow(
+                    at: IndexPath(row: 0, section: 19),
+                    at: .bottom,
+                    animated: false
+                )
+            }
+            func
+                tableView(
+                _ tableView: UITableView,
+                cellForRowAt indexPath: IndexPath
+                ) -> UITableViewCell {
+                return table.dequeueReusableCell(
+                    withIdentifier: "r",
+                    for: indexPath
+                )
+            }
+            func
+                tableView(
+                _ tableView: UITableView,
+                numberOfRowsInSection section: Int
+                ) -> Int {
+                return 1
+            }
+            func
+                numberOfSections(
+                in tableView: UITableView
+                ) -> Int {
+                return 20
+            }
+            func
+                tableView(
+                _ tableView: UITableView & AnalyzerReadable,
+                analyticNameFor section :Int
+                ) -> String? {
+                return "sc_\(section)"
+            }
+        }
+        test.rootViewController = Controller()
+        
+        test.expect(for: 2)
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 1.0
+        )
+        
+        XCTAssertEqual(test.resultCount, 2)
+        XCTAssertEqual(test[0] as? Int, 42)
+        XCTAssertEqual(test[1] as? Int, 43)
     }
 }

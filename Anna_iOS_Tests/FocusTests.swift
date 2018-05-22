@@ -71,7 +71,7 @@ class FocusTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test[0] as? Int, 42)
     }
     
     func test_table() {
@@ -188,6 +188,6 @@ class FocusTests: XCTestCase {
             timeout: 1.0
         )
         
-        XCTAssertEqual(test.results[0] as! Int, 42)
+        XCTAssertEqual(test[0] as? Int, 42)
     }
 }

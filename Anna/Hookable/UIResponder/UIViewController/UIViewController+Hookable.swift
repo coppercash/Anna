@@ -21,9 +21,30 @@ extension
 }
 
 class
-    UIViewControllerObserver<ViewController> : HookingObserver<ViewController>
-    where ViewController : UIViewController
+    UIViewControllerObserver<Observee> : UIResponderObserver<Observee>
+    where Observee : UIViewController
 {
+    let
+    visibilityRecorder :VisibilityRecorder
+    override var
+    recorder: Reporting.Recorder? {
+        didSet {
+            self.visibilityRecorder.recorder = self.recorder
+        }
+    }
+    required
+    init(
+        observee: Observee,
+        owned: Bool
+        ) {
+        self.visibilityRecorder = VisibilityRecorder(
+            activeEvents: [.appeared]
+        )
+        super.init(
+            observee: observee,
+            owned: owned
+        )
+    }
     override func
         observeValue(
         forKeyPath keyPath: String?,
@@ -34,17 +55,16 @@ class
         guard let event = change?.toEvent() else { return }
         switch event.name {
         case String(describing: #selector(UIViewController.viewDidAppear(_:))):
-            self.recorder?.recordEventOnPath(
-                named: "ana-appeared",
-                with: nil
-            )
+            self.visibilityRecorder.record(true)
         case String(describing: #selector(UIViewController.viewDidDisappear(_:))):
-            self.recorder?.recordEventOnPath(
-                named: "ana-disappeared",
-                with: nil
-            )
+            self.visibilityRecorder.record(false)
         default:
-            return super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return super.observeValue(
+                forKeyPath: keyPath,
+                of: object,
+                change: change,
+                context: context
+            )
         }
     }
     class override var

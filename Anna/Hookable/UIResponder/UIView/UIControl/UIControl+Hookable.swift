@@ -24,6 +24,21 @@ class
     UIControlObserver<Observee> : UIViewObserver<Observee>
     where Observee : UIControl
 {
+    required
+    init(
+        observee: Observee,
+        owned: Bool
+        ) {
+        super.init(
+            observee: observee,
+            owned: owned
+        )
+        if owned == false {
+            self.visibilityRecorder = VisibilityRecorder(
+                activeEvents: []
+            )
+        }
+    }
     override func
         observe(_ observee: Observee) {
         super.observe(observee)

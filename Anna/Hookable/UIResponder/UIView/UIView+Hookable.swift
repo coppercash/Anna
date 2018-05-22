@@ -24,6 +24,27 @@ class
     UIViewObserver<Observee> : UIResponderObserver<Observee>
     where Observee : UIView
 {
+    var
+    visibilityRecorder :VisibilityRecorder
+    override var
+    recorder: Reporting.Recorder? {
+        didSet {
+            self.visibilityRecorder.recorder = self.recorder
+        }
+    }
+    required
+    init(
+        observee: Observee,
+        owned: Bool
+        ) {
+        self.visibilityRecorder = VisibilityRecorder(
+            activeEvents: [.appeared]
+        )
+        super.init(
+            observee: observee,
+            owned: owned
+        )
+    }
     override func
         observeValue(
         forKeyPath keyPath: String?,
@@ -34,14 +55,14 @@ class
         switch keyPath {
         case #keyPath(UIView.isVisible):
             guard let isVisible = change?[.newKey] as? Bool else { return }
-            self.recordVisibility(isVisible)
+            self.visibilityRecorder.record(isVisible)
         default:
             guard let event = change?.toEvent() else { return }
             switch event.name {
             case String(describing: #selector(UIView.didMoveToWindow)): fallthrough
             case String(describing: #selector(UIView.didMoveToSuperview)):
                 guard let view = object as? UIView else { return }
-                self.recordVisibility(view.isVisible)
+                self.visibilityRecorder.record(view.isVisible)
             default:
                 return super.observeValue(
                     forKeyPath: keyPath,
@@ -51,21 +72,6 @@ class
                 )
             }
         }
-    }
-    var
-    isViewVisible :Bool = false
-    func
-        recordVisibility(
-        _ isVisible :Bool
-        ) {
-        guard isVisible != self.isViewVisible else { return }
-        self.isViewVisible = isVisible
-        let
-        event = isVisible ? "ana-appeared" : "ana-disappeared"
-        self.recorder?.recordEventOnPath(
-            named: event,
-            with: nil
-        )
     }
     class override var
     keyPaths :[String: NSKeyValueObservingOptions] {

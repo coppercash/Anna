@@ -94,7 +94,9 @@ class
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath
         ) {
-        cell.forwardRecordingEvent(named: "will-display")
+        cell.forwardRecordingEvent(
+            named: String(describing: #selector(tableView(_:willDisplay:forRowAt:)))
+        )
         self.target?.tableView?(
             tableView,
             willDisplay: cell,
@@ -104,14 +106,30 @@ class
     func
         tableView(
         _ tableView: UITableView,
+        didEndDisplaying cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+        ) {
+        cell.forwardRecordingEvent(
+            named: String(describing: #selector(tableView(_:didEndDisplaying:forRowAt:)))
+        )
+        self.target?.tableView?(
+            tableView,
+            didEndDisplaying: cell,
+            forRowAt: indexPath
+        )
+    }
+    func
+        tableView(
+        _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
         ) {
-        if let
-            cell = tableView.cellForRow(at: indexPath),
-            let
-            analyzer = (cell as? AnalyzerReadable)?.analyzer as? FocusHandling
-        {
-            analyzer.handleFocused(cell)
+        if let cell = tableView.cellForRow(at: indexPath) {
+            cell.forwardRecordingEvent(
+                named: String(describing: #selector(tableView(_:didSelectRowAt:)))
+            )
+            if let analyzer = (cell as? AnalyzerReadable)?.analyzer as? FocusHandling {
+                analyzer.handleFocused(cell)
+            }
         }
         self.target?.tableView?(
             tableView,
@@ -156,6 +174,15 @@ UITableView
             for: section
         )
         table.childAnalyzer[section] = analyzer
+        
+        let
+        vr = VisibilityRecorder(
+            activeEvents: [.appeared]
+        )
+        vr.recorder = analyzer
+        analyzer.tokens.append(vr)
+        vr.record(true)
+        
         return analyzer
     }
 }
@@ -179,15 +206,15 @@ class
         ) -> UITableViewCell {
         let
         cell = self.target!.tableView(tableView, cellForRowAt: indexPath)
+        let
+        section = tableView.resolvedSubAnalyzer(for: indexPath.section)
         guard
             let
             analyzable = cell as? AnalyzerReadable,
             let
             row = analyzable.analyzer as? Analyzer
         else { return cell }
-        
         let
-        section = tableView.resolvedSubAnalyzer(for: indexPath.section),
         parent = section ?? ((tableView as! AnalyzerReadable).analyzer as! Analyzer),
         prefix = NodeID(owner: parent) + (
             section == nil ?

@@ -205,6 +205,15 @@ public class
         )
     }
     public func
+        record(
+        _ event: String
+        ) {
+        self.recordEventOnPath(
+            named: event,
+            with: nil
+        )
+    }
+    public func
         detach() {
         self.tokens.removeAll()
     }
@@ -234,6 +243,12 @@ public class
         return child
     }
  */
+    
+    // MARK: - Focus
+    
+    public func
+        markFocused() {
+    }
 }
 
 extension

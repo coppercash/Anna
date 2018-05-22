@@ -59,15 +59,23 @@ public protocol
         owner :NSObject,
         for keyPath :String
     )
+    @objc(detach)
+    func
+        detach()
+    @objc(markFocused)
+    func
+        markFocused()
     @objc(updateValue:forKeyPath:)
     func
         update(
         _ value :Any?,
         for keyPath :String
     )
-    @objc(detach)
+    @objc(recordEvent:)
     func
-        detach()
+        record(
+        _ event :String
+    )
 }
 
 @objc(ANAAnalyzerReadable)

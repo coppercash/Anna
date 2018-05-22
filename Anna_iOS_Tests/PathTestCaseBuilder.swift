@@ -124,7 +124,11 @@ PathTestCaseBuilder : NSObject
     results = [Any]()
     var
     currentResultIndex = 0
-    
+    var
+    resultCount :Int { return self.results.count }
+    subscript(index :Int) -> Any? {
+        return index < self.results.count ? self.results[index] : nil;
+    }
 }
     
 extension
@@ -138,6 +142,8 @@ PathTestCaseBuilder : Anna.Tracking
         DispatchQueue.main.async {
             self.results.insert(analyticsResult, at: self.currentResultIndex)
             self.currentResultIndex += 1
+            guard self.currentExpectationIndex < self.expectations.count
+                else { return }
             self.expectations[self.currentExpectationIndex].fulfill()
             self.currentExpectationIndex += 1
         }

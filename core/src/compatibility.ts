@@ -28,6 +28,6 @@ export function string_ends_with(
   haystack :string,
   needle :string
 ) : boolean {
-  return haystack.indexOf(haystack, haystack.length - needle.length) !== -1;
+  return haystack.indexOf(needle, haystack.length - needle.length) !== -1;
 }
 

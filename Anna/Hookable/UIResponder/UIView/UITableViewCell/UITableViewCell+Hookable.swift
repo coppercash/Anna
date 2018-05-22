@@ -35,12 +35,57 @@ extension
 }
 
 class
-    UITableViewCellObserver<Observee> : UIResponderObserver<Observee>
+    UITableViewCellObserver<Observee> : UIViewObserver<Observee>
     where Observee : UITableViewCell
 {
+    required
+    init(
+        observee: Observee,
+        owned: Bool
+        ) {
+        super.init(
+            observee: observee,
+            owned: owned
+        )
+        self.visibilityRecorder = VisibilityRecorder(
+            activeEvents: []
+        )
+    }
     class override var
     decorators :[AnyClass] {
         return super.decorators + [ANAUITableViewCell.self]
+    }
+    override func
+        observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey : Any]?,
+        context: UnsafeMutableRawPointer?
+        ) {
+        switch change?.toEvent()?.name {
+        case String(describing: #selector(UITableViewDelegate.tableView(_:willDisplay:forRowAt:))):
+            self.recorder?.recordEventOnPath(
+                named: "will-display",
+                with: nil
+            )
+        case String(describing: #selector(UITableViewDelegate.tableView(_:didEndDisplaying:forRowAt:))):
+            self.recorder?.recordEventOnPath(
+                named: "end-displaying",
+                with: nil
+            )
+        case String(describing: #selector(UITableViewDelegate.tableView(_:didSelectRowAt:))):
+            self.recorder?.recordEventOnPath(
+                named: "did-select",
+                with: nil
+            )
+        default:
+            return super.observeValue(
+                forKeyPath: keyPath,
+                of: object,
+                change: change,
+                context: context
+            )
+        }
     }
 }
 

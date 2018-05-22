@@ -154,7 +154,14 @@ public class
             analyzer.handleFocused(object)
         }
     }
-    
+
+    public override func
+        markFocused() {
+        guard let object = self.delegate as? FocusHandling.Object
+            else { return }
+        self.handleFocused(object)
+    }
+
     // MARK: - Identity Context
     
     typealias
