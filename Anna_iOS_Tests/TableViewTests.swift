@@ -16,14 +16,14 @@ class TableViewTests: XCTestCase {
         
         test.task = ("""
         match(
-          'tb/sc_0/rw/will-display',
+          'tb/sc_0/rw/ana-appeared',
           function(node) {
             if (!(node.index() == 0)) { return undefined; }
             return node.parentNode.nodeName + '_' + node.index();
           }
         );
         match(
-          'tb/sc_3/rw/will-display',
+          'tb/sc_3/rw/ana-appeared',
           function(node) {
             if (!(node.index() == 7)) { return undefined; }
             return node.parentNode.nodeName + '_' + node.index();
@@ -154,7 +154,7 @@ class TableViewTests: XCTestCase {
         
         test.task = ("""
         match(
-          ['tb/sc_0/rw/will-display', 'tb/sc_19/rw/will-display'],
+          ['tb/sc_0/rw/ana-appeared', 'tb/sc_19/rw/ana-appeared'],
           function(node) { return 'cell-' + node.parentNode.nodeName; }
         );
         match(

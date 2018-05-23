@@ -143,12 +143,12 @@ class
             id.hasPrefix("../") ||
                 id.hasPrefix("./")
         {
-            let
+            var
             absolute = (cd as NSString).appendingPathComponent(id)
-            if (id as NSString).pathExtension != "" {
-                return absolute
+            if (id as NSString).pathExtension == "" {
+                absolute = (absolute as NSString).appendingPathExtension("js")!
             }
-            return (absolute as NSString).appendingPathExtension("js")
+            return (absolute as NSString).standardizingPath
         }
         
         guard
@@ -164,7 +164,7 @@ class
         )
         for path in lookup {
             if fileManager.fileExists(atPath: path) {
-                return path
+                return (path as NSString).standardizingPath
             }
         }
         

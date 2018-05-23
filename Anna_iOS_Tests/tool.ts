@@ -5,8 +5,42 @@ interface Event {
 }
 interface Node {
   events :Event[];
+  parentNode :Node;
 }
 type Map = (node :Node) => any
+
+
+let node_parent(
+)
+
+type Digger = (node :Node) => any
+export let first_displayed = (
+  node :Node,
+  keyPath :string,
+  ancestor :number = 0
+) : any => {
+  let
+  ancestor = node_parent(node, ancestor);
+  if (!(ancestor)) { return undefined; }
+  let
+  last = node_last_value_update(ancestor, keyPath, ancestor.events.length);
+  if (!(last)) { return undefined };
+  let
+  lAppearance = node_last_event_after(node, last[0].attributes.time, node.events.length);
+  if (!(lAppearance)) { return undefined };
+  let
+  lValue = last[0].attributes.value;
+  let
+  second = node_last_value_update(ancestor, keyPath, last[1]);
+  if (!(second)) { return lValue; }
+  let
+  sAppearance = node_last_event_after(node, second[0].attributes.time, lAppearance[1])
+  if (!(sAppearance)) { return lValue; }
+  let
+  sValue = second[0].attributes.value;
+
+  return lValue == sValue ? undefined : lValue;
+}
 
 export let whenDisplays = (
   keyPath :string, 

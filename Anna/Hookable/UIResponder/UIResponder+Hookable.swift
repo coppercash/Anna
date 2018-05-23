@@ -27,14 +27,11 @@ class
 struct VisibilityEvent : OptionSet {
     let rawValue: Int
     static let appeared = VisibilityEvent(rawValue: 1)
-    static let reappeared = VisibilityEvent(rawValue: 2)
-    static let disappeared = VisibilityEvent(rawValue: 4)
+    static let disappeared = VisibilityEvent(rawValue: 2)
     var name :String {
         switch self {
         case .appeared:
             return "ana-appeared"
-        case .reappeared:
-            return "ana-reappeared"
         case .disappeared:
             return "ana-disappeared"
         default:
@@ -56,25 +53,14 @@ class
         self.activeEvents = activeEvents
     }
     var
-    isVisible :Bool = false,
-    times :Int = 0
+    isVisible :Bool = false
     func
         visibilityEvent(
         with isVisible :Bool
         ) -> VisibilityEvent? {
         guard isVisible != self.isVisible
             else { return nil }
-        if isVisible {
-            if self.times > 0 {
-                return .reappeared
-            }
-            else {
-                return .appeared
-            }
-        }
-        else {
-            return .disappeared
-        }
+        return isVisible ? .appeared : .disappeared
     }
     func
         record(
@@ -83,9 +69,6 @@ class
         let
         e = self.visibilityEvent(with: isVisible)
         self.isVisible = isVisible
-        if isVisible {
-            self.times += 1
-        }
         guard let
             event = e,
             self.activeEvents.contains(event)

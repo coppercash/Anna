@@ -123,6 +123,7 @@ public class
             isOwning: isParentOwning
         )
         analyzer.resolvedParenthood = parenthood
+        try self.flushDeferredResolutions()
         try callback(parenthood)
     }
     func

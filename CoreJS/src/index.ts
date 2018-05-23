@@ -62,7 +62,7 @@ class Module
     }
 
     let
-    cached = cache[id];
+    cached = cache[path];
     if (cached) {
       return cached.exports;
     }

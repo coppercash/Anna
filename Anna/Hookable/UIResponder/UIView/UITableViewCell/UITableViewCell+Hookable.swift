@@ -38,19 +38,6 @@ class
     UITableViewCellObserver<Observee> : UIViewObserver<Observee>
     where Observee : UITableViewCell
 {
-    required
-    init(
-        observee: Observee,
-        owned: Bool
-        ) {
-        super.init(
-            observee: observee,
-            owned: owned
-        )
-        self.visibilityRecorder = VisibilityRecorder(
-            activeEvents: []
-        )
-    }
     class override var
     decorators :[AnyClass] {
         return super.decorators + [ANAUITableViewCell.self]
@@ -64,15 +51,9 @@ class
         ) {
         switch change?.toEvent()?.name {
         case String(describing: #selector(UITableViewDelegate.tableView(_:willDisplay:forRowAt:))):
-            self.recorder?.recordEventOnPath(
-                named: "will-display",
-                with: nil
-            )
+            self.visibilityRecorder.record(true)
         case String(describing: #selector(UITableViewDelegate.tableView(_:didEndDisplaying:forRowAt:))):
-            self.recorder?.recordEventOnPath(
-                named: "end-displaying",
-                with: nil
-            )
+            self.visibilityRecorder.record(false)
         case String(describing: #selector(UITableViewDelegate.tableView(_:didSelectRowAt:))):
             self.recorder?.recordEventOnPath(
                 named: "did-select",

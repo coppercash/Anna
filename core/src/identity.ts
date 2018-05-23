@@ -440,7 +440,6 @@ export class Node implements Markup.Markable
   get path() : string {
     return this._path;
   }
-
   
   latestValue(
     keyPath :string
@@ -461,6 +460,9 @@ export class Node implements Markup.Markable
       return event.properties['value'];
     }
     return undefined;
+  }
+  earliestEvent() : Event {
+    return this.events[0];
   }
   latestEvent() : Event {
     let
@@ -504,6 +506,7 @@ export class Event implements Markup.Markable
     var
     buffer = { ...properties };
     buffer.class = Event.className;
+    buffer.time = Date.now();
     this.properties = buffer;
   }
   get nodeName() : string {
@@ -522,6 +525,7 @@ export class Event implements Markup.Markable
   markable(
     matching :Match.Stage
   ) :Markup.Markable {
+    /*
     let
     children = new Array<Markup.Markable>();
     let
@@ -534,7 +538,8 @@ export class Event implements Markup.Markable
         )
       );
     }
-    return new Markup.ObjectMarker(this.name, this.properties, children);
+    */
+    return new Markup.ObjectMarker(this.name, this.properties, []);
   }
 }
 export namespace Event
