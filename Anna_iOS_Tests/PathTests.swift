@@ -30,16 +30,23 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
+                self.analyzer = Analyzer.analyzer(with: self)
 
                 var
                 superview = self.view!
+                var
+                superAnalyzer = self.analyzer!
                 for name in ["alpha", "beta", "delta"] {
                     let
                     view = PathTestingView(frame: superview.bounds)
-                    view.becomeAnalysisObject(named: name)
+                    view.analyzer = Analyzer.analyzer(with: view)
                     superview.addSubview(view)
+                    superAnalyzer.addSubAnalyzer(
+                        view.analyzer!,
+                        named: name
+                    )
                     superview = view
+                    superAnalyzer = view.analyzer!
                     switch name {
                     case "beta":
                         self.beta = view
@@ -51,9 +58,15 @@ class PathTests: XCTestCase {
                 }
                 let
                 button = PathTestingButton(frame: superview.bounds)
-                button.becomeAnalysisObject(named: "gamma")
+                button.analyzer = Analyzer.analyzer(with: button)
+                superAnalyzer.addSubAnalyzer(
+                    button.analyzer!,
+                    named: "gamma"
+                )
                 self.gamma = button
                 superview.addSubview(button)
+                
+                self.analyzer?.enable(with: "vc")
             }
             override func
                 viewDidAppear(_ animated: Bool) {

@@ -298,7 +298,7 @@ class TableViewTests: XCTestCase {
                 table.delegate = self
                 table.dataSource = self
                 table.register(
-                    UITableViewCell.self,
+                    PathTestingTableViewCell.self,
                     forCellReuseIdentifier: "r"
                 )
                 table.becomeAnalysisObject(named: "tb")

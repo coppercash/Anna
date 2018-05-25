@@ -60,19 +60,29 @@ protocol
 public class
     BaseAnalyzer : NSObject, Recording, Analyzing
 {
-    let
-    name :String
-    init(
-        name :String
-        ) {
-        self.name = name
-    }
+//    let
+//    name :String?
+//    init(
+//        name :String
+//        ) {
+//        self.name = name
+//    }
    
     deinit {
         self.notifyContextReset()
         try? self.deregisterIdentityNodes()
     }
     
+    public func
+        enable(with name :String) {
+    }
+    public func
+        addSubAnalyzer(
+        _ sub :Analyzing,
+        named name:String
+        ) {
+    }
+
     // MARK: - Identity Context
     
     var
@@ -283,6 +293,7 @@ enum
 {
     case unresolvedManager
     case unsetupAnalysisObject(description :String)
+    case unresolvedName
 }
 extension
     ContextError : LocalizedError
@@ -292,6 +303,8 @@ extension
         switch self {
         case .unresolvedManager:
             return "Cannot find a resolved manager in context."
+        case .unresolvedName:
+            return "Enable analyzer before analyzing."
         case .unsetupAnalysisObject(description: let description):
             return "Unsetup analysis object \(description)."
         }

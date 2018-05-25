@@ -139,16 +139,115 @@ class
 }
 
 extension
-UITableView
+    UITableView : AnalyzableCellConfiguring
 {
     typealias
-    SectionAnalyzer = Analyzer & IdentityContextResolving
+        Cell = UITableViewCell & AnalyzerReadable
+    func
+        analyticName(
+        for section: Int
+        ) -> String? {
+        guard let
+            delegate = self.delegate as? SectionAnalyzableTableViewDelegate,
+            let
+            name = delegate.tableView(
+                self as! UITableView & AnalyzerReadable,
+                analyticNameFor: section
+            )
+            else { return nil }
+        return name
+    }
+    func
+        didCreate(
+        _ analyzer :Analyzing,
+        for section: Int
+        ) {
+        guard let
+            delegate = self.delegate as? SectionAnalyzableTableViewDelegate
+            else { return }
+        delegate.tableView?(
+            self as! UITableView & AnalyzerReadable,
+            didCreate: analyzer,
+            for: section
+        )
+    }
+}
+
+protocol
+    AnalyzableCellConfiguring
+{
+    associatedtype
+    Cell : AnalyzerReadable
+    func
+        configure(
+        cell :Cell,
+        at indexPath :IndexPath
+    )
+    func
+        analyticName(
+        for section :Int
+    ) -> String?
+    func
+        didCreate(
+        _ analyzer :Analyzing,
+        for section :Int
+    )
+}
+
+extension
+    AnalyzableCellConfiguring
+{
+    func
+        configure(
+        cell :Cell,
+        at indexPath :IndexPath
+        ) {
+        let
+        section = self.resolvedSubAnalyzer(for: indexPath.section)
+        guard
+            let
+            table = (self as? AnalyzerReadable)?.analyzer as? Analyzer,
+            let
+            row = cell.analyzer as? Analyzer
+            else { return }
+        let
+        parent = section ?? table,
+        prefix = NodeID(owner: parent) + (
+            section == nil ?
+                [UInt(indexPath.section), UInt(indexPath.row)] :
+                [UInt(indexPath.row)]
+        )
+        
+        let
+        forwarder :PrefixingIdentityContextForwarder
+        if let
+            resolved = parent.childAnalyzer[indexPath] as? PrefixingIdentityContextForwarder
+        {
+            forwarder = resolved
+        }
+        else {
+            forwarder = PrefixingIdentityContextForwarder(
+                target: parent,
+                prefix: prefix
+            )
+            parent.childAnalyzer[indexPath] = forwarder
+        }
+        row.resolvedParenthood = Analyzer.FocusParenthood(
+            parent: forwarder,
+            child: row,
+            isOwning: true
+        )
+        try! row.flushDeferredResolutions()
+    }
+    
+    typealias
+        SectionAnalyzer = Analyzer & IdentityContextResolving
     func
         resolvedSubAnalyzer(
         for section :Int
         ) -> SectionAnalyzer? {
         guard let
-            owner = self as? UITableView & AnalyzerReadable,
+            owner = self as? AnalyzerReadable,
             let
             table = owner.analyzer as? Analyzer
             else { return nil }
@@ -156,25 +255,16 @@ UITableView
             resolved = table.childAnalyzer[section] as? SectionAnalyzer
         { return resolved }
         guard let
-            delegate = self.delegate as? SectionAnalyzableTableViewDelegate,
-            let
-            name = delegate.tableView(
-                owner,
-                analyticNameFor: section
-            )
+            name = self.analyticName(for: section)
             else { return nil }
         let
         analyzer = Analyzer(
-            with: name,
             delegate: table
         )
-        delegate.tableView?(
-            owner,
-            didCreate: analyzer,
-            for: section
-        )
+        analyzer.enable(with: name)
         table.childAnalyzer[section] = analyzer
-        
+        self.didCreate(analyzer, for: section)
+
         let
         vr = VisibilityRecorder(
             activeEvents: [.appeared]
@@ -205,44 +295,16 @@ class
         cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
         let
-        cell = self.target!.tableView(tableView, cellForRowAt: indexPath)
-        let
-        section = tableView.resolvedSubAnalyzer(for: indexPath.section)
-        guard
-            let
-            analyzable = cell as? AnalyzerReadable,
-            let
-            row = analyzable.analyzer as? Analyzer
-        else { return cell }
-        let
-        parent = section ?? ((tableView as! AnalyzerReadable).analyzer as! Analyzer),
-        prefix = NodeID(owner: parent) + (
-            section == nil ?
-                [UInt(indexPath.section), UInt(indexPath.row)] :
-                [UInt(indexPath.row)]
+        cell = self.target!.tableView(
+            tableView,
+            cellForRowAt: indexPath
         )
-
-        let
-        forwarder :PrefixingIdentityContextForwarder
-        if let
-            resolved = parent.childAnalyzer[indexPath] as? PrefixingIdentityContextForwarder
-        {
-            forwarder = resolved
-        }
-        else {
-            forwarder = PrefixingIdentityContextForwarder(
-                target: parent,
-                prefix: prefix
+        if let analyzable = cell as? (UITableViewCell & AnalyzerReadable) {
+            tableView.configure(
+                cell: analyzable,
+                at: indexPath
             )
-            parent.childAnalyzer[indexPath] = forwarder
         }
-        row.resolvedParenthood = Analyzer.FocusParenthood(
-            parent: forwarder,
-            child: row,
-            isOwning: true
-        )
-        try! row.flushDeferredResolutions()
-
         return cell
     }
 }

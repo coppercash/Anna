@@ -7,6 +7,21 @@
 
 import Foundation
 
+class
+SubAnalyzerWrapper {
+    let
+    name :String
+    weak var
+    analyzer :Analyzer?
+    init(
+        analyzer :Analyzer,
+        name :String
+        ) {
+        self.name = name
+        self.analyzer = analyzer
+    }
+}
+
 @objc(ANAAnalyzer)
 public class
     Analyzer : BaseAnalyzer, IdentityContextResolving, FocusHandling
@@ -15,6 +30,8 @@ public class
         Delegate = FocusPathConstituting
     weak var
     delegate :Delegate?
+
+    /*
     @objc(initWithName:delegate:)
     public init
         (
@@ -24,6 +41,98 @@ public class
         self.delegate = delegate
         super.init(name: name)
         self.resolvedNamespace = String(describing: type(of: delegate))
+    }
+     */
+    
+    init(
+        delegate :Delegate
+        ) {
+        super.init()
+        self.delegate = delegate
+        self.resolvedNamespace = String(describing: type(of: delegate))
+    }
+    @objc(analyzerWithDelegate:)
+    public class func
+        analyzer(
+        with delegate :Delegate
+        ) -> Self {
+        return self.init(delegate: delegate)
+    }
+    
+    var
+    resolvedName :String? = nil
+    var
+    deferredNameResolutions :[NameCallback] = []
+    typealias
+        NameCallback = (String) throws -> Void
+    func
+        resolvedName(
+        then callback : @escaping NameCallback
+        ) throws {
+        let
+        analyzer = self
+        guard let
+            name = analyzer.resolvedName
+        else { return analyzer.deferredNameResolutions.append(callback); }
+        try callback(name)
+    }
+    func
+        flushDeferredNameResolutions() throws {
+        guard let
+            name = self.resolvedName
+            else { throw ContextError.unresolvedName }
+        let
+        resolutions = self.deferredNameResolutions
+        for resolve in resolutions {
+            try resolve(name)
+        }
+        self.deferredNameResolutions.removeAll()
+    }
+
+    var
+    isEnabled = false
+    public override func
+        enable(with name :String) {
+        guard self.isEnabled == false
+            else { return }
+        self.resolvedName = name;
+        if let delegate = self.delegate as? Hookable {
+            self.hook(owner: delegate)
+        }
+        self.isEnabled = true
+        try! self.flushDeferredNameResolutions()
+        self.flushSubAnalyzerBuffer()
+    }
+    public override func
+        addSubAnalyzer(
+        _ sub :Analyzing,
+        named name:String
+        ) {
+        guard let sub = sub as? Analyzer
+            else { return }
+        self.subAnalyzerBuffer.append(
+            SubAnalyzerWrapper(
+                analyzer: sub,
+                name: name
+            )
+        )
+        if self.isEnabled {
+            self.flushSubAnalyzerBuffer()
+        }
+    }
+    var
+    subAnalyzerBuffer :[SubAnalyzerWrapper] = []
+    func
+        flushSubAnalyzerBuffer() {
+        for wrapper in self.subAnalyzerBuffer {
+            guard let
+                sub = wrapper.analyzer
+                else { continue }
+            sub.resolvedParentAnalyzer = self
+            sub.resolvedParentship = true
+            sub.enable(with: wrapper.name)
+        }
+        self.subAnalyzerBuffer.removeAll()
     }
 
     // MARK: - Focus Path
@@ -172,53 +281,54 @@ public class
         then callback : @escaping ContextCallback
         ) throws {
         let
-        analyzer = self,
-        name = self.name
+        analyzer = self
         if let
             context = analyzer.resolvedContext
         { return try callback(context) }
         
-        try analyzer.resolveParenthood { [weak analyzer] parenthood in
-            let
-            (parent, child, isOwning) = (
-                parenthood.parent,
-                parenthood.child,
-                parenthood.isOwning
-            )
-            let
-            identifier = NodeID(owner: child)
-            try parent.resolveContext { [weak analyzer, weak parent] pContext in
+        try analyzer.resolvedName { [weak analyzer] name in
+            try analyzer?.resolveParenthood { [weak analyzer] parenthood in
                 let
-                (manager, parentID, prefix) = (
-                    pContext.manager,
-                    pContext.identifier,
-                    pContext.prefix
+                (parent, child, isOwning) = (
+                    parenthood.parent,
+                    parenthood.child,
+                    parenthood.isOwning
                 )
                 let
-                prefixedID = isOwning ? prefix + identifier : identifier
-                let
-                context = IdentityContext(
-                    manager: manager,
-                    parentID: parentID,
-                    identifier: prefixedID,
-                    prefix: (isOwning ? prefix : NodeID.empty())
-                )
-                
-                guard
-                    context != analyzer?.resolvedContext
-                    else { return try callback(context) }
-                
-                try manager.registerNode(
-                    by: prefixedID,
-                    named: name,
-                    under: parentID
-                )
-                analyzer?.resolvedContext = context
-                parent?.notifyAfterContextReset { [weak analyzer] in
-                    analyzer?.resolvedContext = nil
+                identifier = NodeID(owner: child)
+                try parent.resolveContext { [weak analyzer, weak parent] pContext in
+                    let
+                    (manager, parentID, prefix) = (
+                        pContext.manager,
+                        pContext.identifier,
+                        pContext.prefix
+                    )
+                    let
+                    prefixedID = isOwning ? prefix + identifier : identifier
+                    let
+                    context = IdentityContext(
+                        manager: manager,
+                        parentID: parentID,
+                        identifier: prefixedID,
+                        prefix: (isOwning ? prefix : NodeID.empty())
+                    )
+                    
+                    guard
+                        context != analyzer?.resolvedContext
+                        else { return try callback(context) }
+                    
+                    try manager.registerNode(
+                        by: prefixedID,
+                        named: name,
+                        under: parentID
+                    )
+                    analyzer?.resolvedContext = context
+                    parent?.notifyAfterContextReset { [weak analyzer] in
+                        analyzer?.resolvedContext = nil
+                    }
+                    
+                    try callback(context)
                 }
-                
-                try callback(context)
             }
         }
     }

@@ -19,3 +19,4 @@ FOUNDATION_EXPORT const unsigned char AnnaVersionString[];
 #import <Anna/ANAUIView.h>
 #import <Anna/ANAUIViewController.h>
 #import <Anna/ANAUITableViewCell.h>
+#import <Anna/ANAUICollectionViewCell.h>

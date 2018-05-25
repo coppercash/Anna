@@ -12,7 +12,8 @@ public class
     RootAnalyzer : BaseAnalyzer, IdentityContextResolving
 {
     public let
-    manager :Manager
+    manager :Manager,
+    name :String
     @objc(initWithManager:name:)
     public
     init(
@@ -21,7 +22,8 @@ public class
         )
     {
         self.manager = manager
-        super.init(name: name)
+        self.name = name
+        super.init()
     }
     
     // MARK: - Context

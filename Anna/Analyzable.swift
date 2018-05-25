@@ -32,11 +32,10 @@ public extension
         let
         delegate = (self as! Analyzer.Delegate & Hookable),
         analyzer = Analyzer(
-            with: name,
             delegate: delegate
         )
-        analyzer.hook(owner: delegate)
         writable.analyzer = analyzer
+        analyzer.enable(with: name)
     }
 }
 
@@ -75,6 +74,15 @@ public protocol
     func
         record(
         _ event :String
+    )
+    @objc(enableWithName:)
+    func
+        enable(with name :String)
+    @objc(addSubAnalyzer:named:)
+    func
+        addSubAnalyzer(
+        _ sub :Analyzing,
+        named name:String
     )
 }
 

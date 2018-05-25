@@ -228,6 +228,20 @@ PathTestingButton : UIButton, Analyzable
     analyzer :Analyzing?
 }
 
+@objc(ANAPathTestingCollectionView) class
+    PathTestingCollectionView : UICollectionView, Analyzable
+{
+    var
+    analyzer :Analyzing?
+}
+
+@objc(ANAPathTestingCollectionViewCell) class
+    PathTestingCollectionViewCell : UICollectionViewCell, Analyzable
+{
+    var
+    analyzer :Analyzing?
+}
+
 @objc(ANAPathTestingView) class
     PathTestingView : UIView, Analyzable
 {
