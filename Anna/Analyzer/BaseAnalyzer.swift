@@ -58,7 +58,7 @@ protocol
 }
 
 public class
-    BaseAnalyzer : NSObject, Recording, Analyzing
+    BaseAnalyzer : NSObject, Recording
 {
 //    let
 //    name :String?
@@ -73,15 +73,60 @@ public class
         try? self.deregisterIdentityNodes()
     }
     
-    public func
-        enable(with name :String) {
+    func
+        resolvedAttributes() throws -> Properties {
+        return [:]
+    }
+    
+    /*
+    var
+    subAnalyzerBuffer :[SubAnalyzerWrapper] = []
+    func
+        flushSubAnalyzerBuffer() {
+        for wrapper in self.subAnalyzerBuffer {
+            guard let
+                sub = wrapper.analyzer
+                else { continue }
+            sub.resolvedParentAnalyzer = self
+            sub.resolvedParentship = true
+            sub.enable()
+        }
+        self.subAnalyzerBuffer.removeAll()
     }
     public func
-        addSubAnalyzer(
+        enable(with key :String) {
+    }
+    public func
+        setSubAnalyzer(
         _ sub :Analyzing,
-        named name:String
+        for key:String
         ) {
+        guard let sub = sub as? Analyzer
+            else { return }
+        sub.key = key
+        self.subAnalyzerBuffer.append(
+            SubAnalyzerWrapper(sub)
+        )
+        if self.isEnabled {
+            self.flushSubAnalyzerBuffer()
+        }
     }
+    public func
+        setSubAnalyzers(_ subs: [Analyzing], for key: String) {
+        for (i, sub) in subs.enumerated() {
+            guard let sub = sub as? Analyzer
+                else { continue }
+            sub.key = key
+            sub.index = i
+            self.subAnalyzerBuffer.append(
+                SubAnalyzerWrapper(sub)
+            )
+        }
+        if self.isEnabled {
+            self.flushSubAnalyzerBuffer()
+        }
+    }
+ */
 
     // MARK: - Identity Context
     
@@ -152,81 +197,6 @@ public class
             )
         }
     }
-    var
-    tokens :[Reporting] = []
-    public func
-        hook(_ hookee :Hookable) {
-        let
-        token = hookee.tokenByAddingObserver()
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    func
-        hook(owner :Hookable) {
-        let
-        token = owner.tokenByAddingOwnedObserver()
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    public func
-        observe(
-        _ observee :NSObject,
-        for keyPath :String
-        ) {
-        let
-        token = KVObserver(
-            keyPath: keyPath,
-            observee: observee,
-            owned: false
-        )
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    public func
-        observe(
-        owner :NSObject,
-        for keyPath :String
-        ) {
-        let
-        token = KVObserver(
-            keyPath: keyPath,
-            observee: owner,
-            owned: true
-        )
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    public func
-        update(
-        _ value :Any?,
-        for keyPath :String
-        ) {
-        var
-        properties = [
-            "key-path": keyPath as Any
-        ]
-        if let
-            value = value {
-            properties["value"] = value
-        }
-        self.recordEventOnPath(
-            named: "ana-updated",
-            with: properties
-        )
-    }
-    public func
-        record(
-        _ event: String
-        ) {
-        self.recordEventOnPath(
-            named: event,
-            with: nil
-        )
-    }
-    public func
-        detach() {
-        self.tokens.removeAll()
-    }
 
     // MARK: - Child Analyzer
     
@@ -258,23 +228,6 @@ public class
     
     public func
         markFocused() {
-    }
-}
-
-extension
-    BaseAnalyzer : FocusPathConstituting, AnalyzerReadable
-{
-    public var
-    analyzer: Analyzing? { return self }
-    public func
-        parentConstitutor(
-        isOwning: UnsafeMutablePointer<Bool>
-        ) -> FocusPathConstituting? {
-        isOwning.assign(
-            repeating: true,
-            count: 1
-        )
-        return self
     }
 }
 

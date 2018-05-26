@@ -11,35 +11,35 @@ describe('Anna', () => {
   it('should record event on root' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('/appear', (n) => { return n.events[0].properties.answer; })
+      match('/appear', (n) => { return n.earliestEvent().attributes.answer; })
     }));
     anna.tracker = new Tracker((result) => {
       expect(result).to.equal(42);
       done();
     });
-    anna.registerNode(7, 'root');
+    anna.registerNode(7, null, 'root');
     anna.recordEvent('appear', {answer: 42}, 7);
   });
 
   it('should record event on sub node' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('/foo/bar/tap', (n) => { return n.events[0].properties.answer; })
+      match('/foo/bar/tap', (n) => { return n.earliestEvent().attributes.answer; })
     }));
     anna.tracker = new Tracker((result) => {
       expect(result).to.equal(43);
       done();
     });
-    anna.registerNode(7, 'root');
-    anna.registerNode(77, 'foo', 7);
-    anna.registerNode(777, 'bar', 77);
+    anna.registerNode(7, null, 'root');
+    anna.registerNode(77, 7, 'foo');
+    anna.registerNode(777, 77, 'bar');
     anna.recordEvent('tap', {answer: 43}, 777);
   });
 
   it('should record event on non-absolute path' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('foo/bar/tap', (n) => { return n.events[0].properties.answer; })
+      match('foo/bar/tap', (n) => { return n.earliestEvent().attributes.answer; })
     }));
     var
     results = new Array<number>();
@@ -56,7 +56,7 @@ describe('Anna', () => {
     names = '/foo/bar/pass/foo/bar'
       .split('/')
       .slice(1);
-    anna.registerNode(7, 'root');
+    anna.registerNode(7, null, 'root');
     var
     parent = 7;
     var
@@ -64,7 +64,7 @@ describe('Anna', () => {
     for (let 
       name of names
     ) {
-      anna.registerNode(index, name, parent);
+      anna.registerNode(index, parent, name);
       parent = index;
       index += 1;
     }
@@ -79,7 +79,7 @@ describe('Anna', () => {
     names = '/alpha/beta/delta/gamma'
       .split('/')
       .slice(1);
-    anna.registerNode(7, 'root');
+    anna.registerNode(7, null, 'root');
     var
     parent = 7;
     var
@@ -87,20 +87,20 @@ describe('Anna', () => {
     for (let 
       name of names
     ) {
-      anna.registerNode(index, name, parent);
+      anna.registerNode(index, parent, name);
       parent = index;
       index += 1;
     }
 
     anna.deregisterNodes(71);
-    anna.registerNode(73, 'gamma', 70);
+    anna.registerNode(73, 70, 'gamma');
   });
 
   it('should record event on reusable node' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('foo/tap', (n) => { return n.events[0].properties.answer; })
-      match('foo/bar/tap', (n) => { return n.events[0].properties.answer; })
+      match('foo/tap', (n) => { return n.earliestEvent().attributes.answer; })
+      match('foo/bar/tap', (n) => { return n.earliestEvent().attributes.answer; })
     }));
     var
     count = 0;
@@ -120,9 +120,9 @@ describe('Anna', () => {
         done();
       }
     });
-    anna.registerNode(7, 'root');
-    anna.registerNode([70, 700], 'foo', 7);
-    anna.registerNode([80, 800, 8000], 'bar', [70, 700]);
+    anna.registerNode(7, null, 'root');
+    anna.registerNode([70, 700], 7, 'foo');
+    anna.registerNode([80, 800, 8000], [70, 700], 'bar');
     anna.recordEvent('tap', {answer: 42}, [70, 700]);
     anna.recordEvent('tap', {answer: 43}, [80, 800, 8000]);
   });
@@ -130,11 +130,11 @@ describe('Anna', () => {
   it('should deregister reusable node' , () => {
     let
     anna = new Anna(new Loader(() => {}));
-    anna.registerNode(7, 'root');
-    anna.registerNode([70, 700], 'foo', 7)
-    anna.registerNode([80, 800, 8000], 'bar', [70, 700]);
+    anna.registerNode(7, null, 'root');
+    anna.registerNode([70, 700], 7, 'foo')
+    anna.registerNode([80, 800, 8000], [70, 700], 'bar');
     anna.deregisterNodes(70);
-    anna.registerNode([80, 800, 8000], 'bar', 7);
+    anna.registerNode([80, 800, 8000], 7, 'bar');
   });
 
   it('should reload tasks if configured' , (done) => {
@@ -167,7 +167,7 @@ describe('Anna', () => {
         done();
       }
     });
-    anna.registerNode(7, 'root');
+    anna.registerNode(7, null, 'root');
     for (var i = 0; i < 3; i += 1) {
       anna.recordEvent('appear', {}, 7);
     }
@@ -196,7 +196,7 @@ describe('Anna', () => {
         done();
       }
     });
-    anna.registerNode(7, 'root');
+    anna.registerNode(7, null, 'root');
     for (var i = 0; i < 3; i += 1) {
       anna.recordEvent('appear', {}, 7);
     }
@@ -216,7 +216,7 @@ describe('Anna', () => {
           {
             match('foo/appear', (node) => { return 42; });
             match('foo/bar/appear', (node) => { 
-              return node.events[node.events.length - 1].properties['value'];
+              return node.latestEvent().attributes.value;
             })
           } break;
         default:
@@ -233,9 +233,9 @@ describe('Anna', () => {
         done();
       }
     });
-    anna.registerNode(7, 'root');
-    anna.registerNode(8, 'foo', 7);
-    anna.registerNode(9, 'bar', 8);
+    anna.registerNode(7, null, 'root');
+    anna.registerNode(8, 7, 'foo');
+    anna.registerNode(9, 8, 'bar');
     anna.recordEvent('appear', {value: 0}, 8);
     anna.recordEvent('appear', {value: 1}, 9);
     anna.recordEvent('appear', {value: 2}, 8);
@@ -271,9 +271,9 @@ describe('Anna', () => {
         done();
       }
     });
-    anna.registerNode(7, 'root');
-    anna.registerNode(8, 'foo', 7);
-    anna.registerNode(9, 'bar', 8);
+    anna.registerNode(7, null, 'root');
+    anna.registerNode(8, 7, 'foo');
+    anna.registerNode(9, 8, 'bar');
     anna.recordEvent('appear', {}, 8, 'nonsence');
     anna.recordEvent('appear', {}, 8, 'Lib.Alpha');
     anna.recordEvent('appear', {}, 9, 'nonsence');

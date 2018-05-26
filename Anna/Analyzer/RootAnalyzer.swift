@@ -25,6 +25,12 @@ public class
         self.name = name
         super.init()
     }
+    override func
+        resolvedAttributes() throws -> Recording.Properties {
+        return [
+            "__name__": self.name,
+        ]
+    }
     
     // MARK: - Context
     
@@ -36,7 +42,6 @@ public class
         ) throws {
         let
         analyzer = self,
-        name = self.name,
         manager = self.manager
         if let
             context = analyzer.resolvedContext
@@ -45,8 +50,8 @@ public class
         identifier = NodeID(owner: self)
         try manager.registerNode(
             by: identifier,
-            named: name,
-            under: nil
+            under: nil,
+            name: analyzer.name
         )
         let
         context = IdentityContext(
@@ -60,3 +65,29 @@ public class
         return try callback(context)
     }
 }
+
+extension
+    RootAnalyzer : Analyzing
+{
+    public func
+        observe(
+        owner :NSObject,
+        for keyPath :String
+        ) { }
+    public func observe(_ observee: NSObject, for keyPath: String) { }
+    
+    public func hook(_ hookee: Hookable) { }
+    
+    public func detach() { }
+    
+    public func update(_ value: Any?, for keyPath: String) { }
+    
+    public func record(_ event: String) { }
+    
+    public func enable(with key: String) { }
+    
+    public func setSubAnalyzer(_ sub: Analyzing, for key: String) { }
+    
+    public func setSubAnalyzers(_ subs: [Analyzing], for key: String) { }
+}
+

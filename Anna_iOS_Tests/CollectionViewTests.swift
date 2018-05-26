@@ -28,7 +28,7 @@ class CollectionViewTests: XCTestCase {
             Controller : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, SectionAnalyzableCollectionViewDelegate
         {
             lazy var
-            collection :UICollectionView = {
+            collection :PathTestingCollectionView = {
                 let
                 superview = self.view!;
                 let
@@ -42,14 +42,13 @@ class CollectionViewTests: XCTestCase {
                     PathTestingCollectionViewCell.self,
                     forCellWithReuseIdentifier: "r"
                 )
-                collection.becomeAnalysisObject(named: "tb")
                 return collection
             }()
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
                 self.view.addSubview(self.collection)
-                
+                self.collection.analyzer.enable(with: "tb")
             }
             override func
                 viewDidAppear(_ animated: Bool) {

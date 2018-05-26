@@ -18,15 +18,15 @@ class TableViewTests: XCTestCase {
         match(
           'tb/sc_0/rw/ana-appeared',
           function(node) {
-            if (!(node.index() == 0)) { return undefined; }
-            return node.parentNode.nodeName + '_' + node.index();
+            if (!(node.index == 0)) { return undefined; }
+            return node.parentNode.nodeName + '_' + node.index;
           }
         );
         match(
           'tb/sc_3/rw/ana-appeared',
           function(node) {
-            if (!(node.index() == 7)) { return undefined; }
-            return node.parentNode.nodeName + '_' + node.index();
+            if (!(node.index == 7)) { return undefined; }
+            return node.parentNode.nodeName + '_' + node.index;
           }
         );
         match(
@@ -48,22 +48,24 @@ class TableViewTests: XCTestCase {
             Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource, SectionAnalyzableTableViewDelegate
         {
             lazy var
-            table :UITableView = {
+            table :PathTestingTableView = {
                 let
                 superview = self.view!;
                 let
                 table = PathTestingTableView(frame: superview.bounds)
                 table.delegate = self
                 table.dataSource = self
-                table.becomeAnalysisObject(named: "tb")
                 return table
             }()
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
+                self.analyzer.enable(with: "vc")
                 self.view.addSubview(self.table)
-                
+                self.analyzer.setSubAnalyzer(
+                    self.table.analyzer,
+                    for: "tb"
+                )
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -87,14 +89,14 @@ class TableViewTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.becomeAnalysisObject(named: "rw")
-                        cell.analyzer?.observe(
+                        cell.analyzer.enable(with: "rw")
+                        cell.analyzer.observe(
                             owner: cell,
                             for: #keyPath(UITableViewCell.textLabel.text)
                         )
                         return cell
                     }()
-                cell.analyzer?.update("\(indexPath.section)/\(indexPath.row)", for: "identifier")
+                cell.analyzer.update("\(indexPath.section)/\(indexPath.row)", for: "identifier")
                 return cell
             }
             func
@@ -106,7 +108,10 @@ class TableViewTests: XCTestCase {
                 let
                 cell = cell as! PathTestingTableViewCell
                 cell.textLabel?.text = "\(indexPath.section)-\(indexPath.row)"
-                cell.analyzer?.update("\(indexPath.section)\(indexPath.row)", for: "data")
+                cell.analyzer.update(
+                    "\(indexPath.section)\(indexPath.row)",
+                    for: "data"
+                )
             }
             func
                 tableView(
@@ -170,22 +175,24 @@ class TableViewTests: XCTestCase {
             Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource, SectionAnalyzableTableViewDelegate
         {
             lazy var
-            table :UITableView = {
+            table :PathTestingTableView = {
                 let
                 superview = self.view!
                 let
                 table = PathTestingTableView(frame: superview.bounds)
                 table.delegate = self
                 table.dataSource = self
-                table.becomeAnalysisObject(named: "tb")
                 return table
             }()
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
+                self.analyzer.enable(with: "vc")
                 self.view.addSubview(self.table)
-                
+                self.analyzer.setSubAnalyzer(
+                    self.table.analyzer,
+                    for: "tb"
+                )
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -209,15 +216,21 @@ class TableViewTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.becomeAnalysisObject(named: "rw")
+                        cell.analyzer.enable(with: "rw")
                         let
                         view = PathTestingView(frame: cell.contentView.bounds)
-                        view.becomeAnalysisObject(named: "vw")
+                        cell.analyzer.setSubAnalyzer(
+                            view.analyzer,
+                            for: "vw"
+                        )
                         cell.contentView.addSubview(view)
                         let
                         button = PathTestingButton(type: .custom)
                         button.frame = view.bounds
-                        button.becomeAnalysisObject(named: "bt")
+                        view.analyzer.setSubAnalyzer(
+                            button.analyzer,
+                            for: "bt"
+                        )
                         view.addSubview(button)
                         return cell
                     }()
@@ -231,7 +244,10 @@ class TableViewTests: XCTestCase {
                 ) {
                 let
                 button = cell.contentView.subviews[0].subviews[0] as! PathTestingButton
-                button.analyzer?.update("data-\(indexPath.section)", for: "data")
+                button.analyzer.update(
+                    "data-\(indexPath.section)",
+                    for: "data"
+                )
                 button.sendActions(for: .touchUpInside)
             }
             func
@@ -290,7 +306,7 @@ class TableViewTests: XCTestCase {
             Controller : UIViewController, UITableViewDelegate, UITableViewDataSource, SectionAnalyzableTableViewDelegate
         {
             lazy var
-            table :UITableView = {
+            table :PathTestingTableView = {
                 let
                 superview = self.view!;
                 let
@@ -301,14 +317,13 @@ class TableViewTests: XCTestCase {
                     PathTestingTableViewCell.self,
                     forCellReuseIdentifier: "r"
                 )
-                table.becomeAnalysisObject(named: "tb")
                 return table
             }()
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
                 self.view.addSubview(self.table)
-                
+                self.table.analyzer.enable(with: "tb")
             }
             override func
                 viewDidAppear(_ animated: Bool) {

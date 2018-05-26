@@ -11,11 +11,13 @@ import Foundation
 public protocol
     Analyzable : AnalyzerWritable & Hookable
 {
+    /*
     @objc(ana_becomeAnalysisObjectNamed:)
     func
         becomeAnalysisObject(named name :String)
+ */
 }
-
+/*
 public extension
     NSObject
 {
@@ -38,6 +40,7 @@ public extension
         analyzer.enable(with: name)
     }
 }
+*/
 
 @objc(ANAAnalyzing)
 public protocol
@@ -75,14 +78,21 @@ public protocol
         record(
         _ event :String
     )
-    @objc(enableWithName:)
+    
+    @objc(enableWithKey:)
     func
-        enable(with name :String)
-    @objc(addSubAnalyzer:named:)
+        enable(with key :String)
+    @objc(setSubAnalyzer:forKey:)
     func
-        addSubAnalyzer(
+        setSubAnalyzer(
         _ sub :Analyzing,
-        named name:String
+        for key:String
+    )
+    @objc(setSubAnalyzers:forKey:)
+    func
+        setSubAnalyzers(
+        _ subs :[Analyzing],
+        for key:String
     )
 }
 
@@ -92,7 +102,7 @@ public protocol
 {
     @objc(ana_analyzer)
     var
-    analyzer :Analyzing? { get }
+    analyzer :Analyzing { get }
 }
 
 @objc(ANAAnalyzerWritable)
@@ -101,5 +111,5 @@ public protocol
 {
     @objc(ana_analyzer)
     var
-    analyzer :Analyzing? { get set }
+    analyzer :Analyzing { get set }
 }

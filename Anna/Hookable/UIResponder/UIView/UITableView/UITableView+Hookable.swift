@@ -232,6 +232,7 @@ extension
             )
             parent.childAnalyzer[indexPath] = forwarder
         }
+        row.index = indexPath.row
         row.resolvedParenthood = Analyzer.FocusParenthood(
             parent: forwarder,
             child: row,
@@ -261,8 +262,9 @@ extension
         analyzer = Analyzer(
             delegate: table
         )
-        analyzer.enable(with: name)
+        analyzer.index = section
         table.childAnalyzer[section] = analyzer
+        analyzer.enable(with: name)
         self.didCreate(analyzer, for: section)
 
         let

@@ -15,8 +15,10 @@ export class Tree
 
   registerNode(
     nodeID :NodeID, 
+    parentID :NodeID | null,
     name :string,
-    parentID? :NodeID
+    index? :number,
+    attributes? :Node.Attributes
   ) {
     let
     tree = this;
@@ -42,8 +44,8 @@ export class Tree
 
     let
     node = parent ? 
-      parent.fork(nodeID, name) : 
-      new Node(nodeID, name);
+      parent.fork(nodeID, name, index, attributes) : 
+      new Node(nodeID, null, name, index, attributes);
 
     tree.setNode(node, nodeID);
     if (!(parent)) {
@@ -68,7 +70,7 @@ export class Tree
     for (let
       node of nodes
     ) {
-      node.children.forEach(x => this.deregisterNodes(x.id));
+      node._children.forEach(x => this.deregisterNodes(x._id));
 
       node.delete();
       tree.removeNode(nodeID);
@@ -145,7 +147,7 @@ export class Tree
     root.traverseWithStage(
       tasks, 
       (node, stage) => { 
-        node.matching.merge(stage); 
+        node._matching.merge(stage); 
       }
     );
   }
@@ -161,7 +163,7 @@ export class Tree
     root.traverseWithStage(
       tasks, 
       (node, stage) => { 
-        node.matching.drop(stage); 
+        node._matching.drop(stage); 
       }
     );
   }
@@ -264,7 +266,7 @@ class Identity implements Markup.Markable {
     let
     node = this.node;
     let
-    name = node ? node.name : '_';
+    name = node ? node._name : '_';
     var
     children = new Array<Markup.Markable>();
     for (let
@@ -276,45 +278,64 @@ class Identity implements Markup.Markable {
   }
 }
 
+export namespace Node {
+  export type Attributes = { [name: string]: any; };
+}
 export class Node implements Markup.Markable
 {
   private static
   className = 'ana-node';
 
-  id :NodeID;
-  name :string;
-  _path :string;
-  events :Event[] = [];
+  _id :NodeID;
   _parent :Node;
-  children :Set<Node> = new Set<Node>();
-  matching :Match.Stage = Match.Stage.empty();
+  _children :Set<Node> = new Set<Node>();
+  _name :string;
+  _index :number;
+  _path :string;
+  _attributes :Node.Attributes;
+  _events :Event[] = [];
+  _matching :Match.Stage = Match.Stage.empty();
   
-  _indexAmongSiblings :number = Number.MAX_SAFE_INTEGER;
-
   constructor(
     id :NodeID,
+    parent :Node | null,
     name :string,
-    parent? :Node
+    index? :number,
+    attributes? :Node.Attributes
   ) {
-    this.id = id;
-    this.name = name;
+    this._id = id;
     this._parent = parent;
     this._path = parent ? `${ parent.path }/${ name }` : '';
+    this._name = name;
+    this._index = index;
+    let
+    attrs = {
+      id: id.briefRepresentation(),
+      class: Node.className,
+    } as Node.Attributes;
+    if (attributes) {
+      C.object_assign(attrs, attributes);
+    }
+    if (index !== undefined) {
+      attrs.index = index;
+    }
+    this._attributes = attrs;
   }
 
   fork(
     nodeID :NodeID,
-    name :string
+    name :string,
+    index? :number,
+    attributes? :Node.Attributes
   ) :Node {
     let
-    node = this, children = this.children;
+    node = this, children = this._children;
     let
-    child = new Node(nodeID, name, node);
-    child._indexAmongSiblings = children.size;
+    child = new Node(nodeID, node, name, index, attributes);
     children.add(child);
     let 
     matching = node.stageMatching(name);
-    child.matching.merge(matching);
+    child._matching.merge(matching);
     
     return child;
   }
@@ -326,7 +347,7 @@ export class Node implements Markup.Markable
     if (!(
       parent
     )) { return; }
-    parent.children.delete(this);
+    parent._children.delete(this);
   }
 
   recordEvent(
@@ -334,7 +355,7 @@ export class Node implements Markup.Markable
     properties :Event.Properties
   ) {
     let
-    events = this.events;
+    events = this._events;
     let
     event = new Event(name, properties);
     events.push(event);
@@ -345,14 +366,14 @@ export class Node implements Markup.Markable
   ) :Match.Task[]
   {
     let
-    tasks = this.matching.tasksMatching(name);
+    tasks = this._matching.tasksMatching(name);
     return C.array_from_set(tasks);
   }
 
   stageMatching(
     name :string
   ) :Match.Stage {
-    return this.matching.matching(name);
+    return this._matching.matching(name);
   }
 
   traverseWithStage(
@@ -360,10 +381,10 @@ export class Node implements Markup.Markable
     handle :(node :Node, stage :Match.Stage) => void
   ) {
     let
-    children = this.children;
+    children = this._children;
     children.forEach((current) => {
       let
-      match = stage.matching(current.name);
+      match = stage.matching(current._name);
       current.traverseWithStage(match, handle);
     });
 
@@ -375,11 +396,11 @@ export class Node implements Markup.Markable
     alone :boolean = false
   ) :string {
     let
-    name = this.name, 
+    name = this._name, 
       attributes = this.attributes, 
-      matching = this.matching,
-      events = this.events,
-      children = this.children;
+      matching = this._matching,
+      events = this._events,
+      children = this._children;
     if (alone) {
       return Markup.markup(name, attributes, [], indent);
     }
@@ -424,18 +445,16 @@ export class Node implements Markup.Markable
   }
 
   get nodeName() : string {
-    return this.name;
+    return this._name;
+  }
+  get index() : number {
+    return this._index;
   }
   get parentNode() : Node {
     return this._parent;
   }
   get attributes() : Markup.Markable.Properties {
-    let
-    id = this.id.briefRepresentation();
-    return {
-      id: id,
-      class: Node.className
-    };
+    return this._attributes;
   }
   get path() : string {
     return this._path;
@@ -445,7 +464,7 @@ export class Node implements Markup.Markable
     keyPath :string
   ) : any {
     let
-    events = this.events;
+    events = this._events;
     for (
       var index = events.length - 1;
       index >= 0;
@@ -461,19 +480,19 @@ export class Node implements Markup.Markable
     }
     return undefined;
   }
+  get events() : Event[] {
+    return this._events;
+  }
   earliestEvent() : Event {
-    return this.events[0];
+    return this._events[0];
   }
   latestEvent() : Event {
     let
-    events = this.events;
+    events = this._events;
     if (!(
       events.length > 0
     )) { return null; } 
     return events[events.length - 1];
-  }
-  index() : number {
-    return this._indexAmongSiblings;
   }
   ancestor(
     length :number = 0

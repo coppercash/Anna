@@ -9,15 +9,11 @@ import Foundation
 
 class
 SubAnalyzerWrapper {
-    let
-    name :String
     weak var
     analyzer :Analyzer?
     init(
-        analyzer :Analyzer,
-        name :String
+        _ analyzer :Analyzer
         ) {
-        self.name = name
         self.analyzer = analyzer
     }
 }
@@ -58,7 +54,8 @@ public class
         ) -> Self {
         return self.init(delegate: delegate)
     }
-    
+   
+    /*
     var
     resolvedName :String? = nil
     var
@@ -88,37 +85,39 @@ public class
         }
         self.deferredNameResolutions.removeAll()
     }
+ */
+
+    var
+    key :String? = nil,
+    index :Int? = nil
+    override func
+        resolvedAttributes() throws -> Recording.Properties {
+        guard let key = self.key else { throw ContextError.unresolvedName  }
+        var
+        attributes :Properties = [
+            "__name__": key
+        ]
+        if let index = self.index {
+            attributes["__index__"] = index
+        }
+        return attributes
+    }
+    
+    var
+    tokens :[Reporting] = []
 
     var
     isEnabled = false
-    public override func
-        enable(with name :String) {
+    func
+        enable() {
         guard self.isEnabled == false
             else { return }
-        self.resolvedName = name;
+        self.isEnabled = true
         if let delegate = self.delegate as? Hookable {
             self.hook(owner: delegate)
         }
-        self.isEnabled = true
-        try! self.flushDeferredNameResolutions()
+        try! self.resolveParenthood { (_) in }
         self.flushSubAnalyzerBuffer()
-    }
-    public override func
-        addSubAnalyzer(
-        _ sub :Analyzing,
-        named name:String
-        ) {
-        guard let sub = sub as? Analyzer
-            else { return }
-        self.subAnalyzerBuffer.append(
-            SubAnalyzerWrapper(
-                analyzer: sub,
-                name: name
-            )
-        )
-        if self.isEnabled {
-            self.flushSubAnalyzerBuffer()
-        }
     }
     var
     subAnalyzerBuffer :[SubAnalyzerWrapper] = []
@@ -130,9 +129,45 @@ public class
                 else { continue }
             sub.resolvedParentAnalyzer = self
             sub.resolvedParentship = true
-            sub.enable(with: wrapper.name)
+            sub.enable()
         }
         self.subAnalyzerBuffer.removeAll()
+    }
+    
+    public func
+        enable(with key :String) {
+        self.key = key;
+        self.enable()
+    }
+    public func
+        setSubAnalyzer(
+        _ sub :Analyzing,
+        for key:String
+        ) {
+        guard let sub = sub as? Analyzer
+            else { return }
+        sub.key = key
+        self.subAnalyzerBuffer.append(
+            SubAnalyzerWrapper(sub)
+        )
+        if self.isEnabled {
+            self.flushSubAnalyzerBuffer()
+        }
+    }
+    public func
+        setSubAnalyzers(_ subs: [Analyzing], for key: String) {
+        for (i, sub) in subs.enumerated() {
+            guard let sub = sub as? Analyzer
+                else { continue }
+            sub.key = key
+            sub.index = i
+            self.subAnalyzerBuffer.append(
+                SubAnalyzerWrapper(sub)
+            )
+        }
+        if self.isEnabled {
+            self.flushSubAnalyzerBuffer()
+        }
     }
 
     // MARK: - Focus Path
@@ -167,12 +202,15 @@ public class
         while let
             current = next
         {
-            if let
-                owner = current as? AnalyzerReadable
-            {
+            if let owner = current as? AnalyzerReadable {
                 guard let
                     parent = owner.analyzer as? IdentityContextResolving
-                    else { throw ContextError.unsetupAnalysisObject(description: String(describing: owner)) }
+                    else
+                {
+                    throw ContextError.unsetupAnalysisObject(
+                        description: String(describing: owner)
+                    )
+                }
                 return (parent, isParentOwning)
             }
             var
@@ -216,6 +254,10 @@ public class
         resolveParenthood(then callback : @escaping ParenthoodCallback) throws {
         let
         analyzer = self
+        guard analyzer.isEnabled else {
+            return analyzer.deferredParenthoodResolutions.append(callback)
+        }
+        
         if let
             parenthood = analyzer.resolvedParenthood
         { return try callback(parenthood) }
@@ -232,7 +274,7 @@ public class
             isOwning: isParentOwning
         )
         analyzer.resolvedParenthood = parenthood
-        try self.flushDeferredResolutions()
+        try analyzer.flushDeferredResolutions()
         try callback(parenthood)
     }
     func
@@ -286,50 +328,144 @@ public class
             context = analyzer.resolvedContext
         { return try callback(context) }
         
-        try analyzer.resolvedName { [weak analyzer] name in
-            try analyzer?.resolveParenthood { [weak analyzer] parenthood in
+        try analyzer.resolveParenthood { [weak analyzer] parenthood in
+            let
+            (parent, child, isOwning) = (
+                parenthood.parent,
+                parenthood.child,
+                parenthood.isOwning
+            )
+            let
+            identifier = NodeID(owner: child)
+            try parent.resolveContext { [weak analyzer, weak parent] pContext in
                 let
-                (parent, child, isOwning) = (
-                    parenthood.parent,
-                    parenthood.child,
-                    parenthood.isOwning
+                (manager, parentID, prefix) = (
+                    pContext.manager,
+                    pContext.identifier,
+                    pContext.prefix
                 )
                 let
-                identifier = NodeID(owner: child)
-                try parent.resolveContext { [weak analyzer, weak parent] pContext in
-                    let
-                    (manager, parentID, prefix) = (
-                        pContext.manager,
-                        pContext.identifier,
-                        pContext.prefix
-                    )
-                    let
-                    prefixedID = isOwning ? prefix + identifier : identifier
-                    let
-                    context = IdentityContext(
-                        manager: manager,
-                        parentID: parentID,
-                        identifier: prefixedID,
-                        prefix: (isOwning ? prefix : NodeID.empty())
-                    )
-                    
-                    guard
-                        context != analyzer?.resolvedContext
-                        else { return try callback(context) }
-                    
-                    try manager.registerNode(
-                        by: prefixedID,
-                        named: name,
-                        under: parentID
-                    )
-                    analyzer?.resolvedContext = context
-                    parent?.notifyAfterContextReset { [weak analyzer] in
-                        analyzer?.resolvedContext = nil
-                    }
-                    
-                    try callback(context)
+                prefixedID = isOwning ? prefix + identifier : identifier
+                let
+                context = IdentityContext(
+                    manager: manager,
+                    parentID: parentID,
+                    identifier: prefixedID,
+                    prefix: (isOwning ? prefix : NodeID.empty())
+                )
+                guard
+                    context != analyzer?.resolvedContext
+                    else { return try callback(context) }
+                
+                try manager.registerNode(
+                    by: prefixedID,
+                    under: parentID,
+                    name: analyzer?.key ?? "anonymous",
+                    index: analyzer?.index
+                )
+                analyzer?.resolvedContext = context
+                parent?.notifyAfterContextReset { [weak analyzer] in
+                    analyzer?.resolvedContext = nil
                 }
+                
+                try callback(context)
             }
         }
     }
 }
+
+extension
+    Analyzer : Analyzing
+{
+    public func
+        hook(_ hookee :Hookable) {
+        let
+        token = hookee.tokenByAddingObserver()
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    func
+        hook(owner :Hookable) {
+        let
+        token = owner.tokenByAddingOwnedObserver()
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    public func
+        observe(
+        _ observee :NSObject,
+        for keyPath :String
+        ) {
+        let
+        token = KVObserver(
+            keyPath: keyPath,
+            observee: observee,
+            owned: false
+        )
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    public func
+        observe(
+        owner :NSObject,
+        for keyPath :String
+        ) {
+        let
+        token = KVObserver(
+            keyPath: keyPath,
+            observee: owner,
+            owned: true
+        )
+        token.recorder = self
+        self.tokens.append(token)
+    }
+    public func
+        update(
+        _ value :Any?,
+        for keyPath :String
+        ) {
+        var
+        properties = [
+            "key-path": keyPath as Any
+        ]
+        if let
+            value = value {
+            properties["value"] = value
+        }
+        self.recordEventOnPath(
+            named: "ana-updated",
+            with: properties
+        )
+    }
+    public func
+        record(
+        _ event: String
+        ) {
+        self.recordEventOnPath(
+            named: event,
+            with: nil
+        )
+    }
+    public func
+        detach() {
+        self.tokens.removeAll()
+    }
+}
+
+extension
+    Analyzer : FocusPathConstituting, AnalyzerReadable
+{
+    public var
+    analyzer: Analyzing { return self }
+    public func
+        parentConstitutor(
+        isOwning: UnsafeMutablePointer<Bool>
+        ) -> FocusPathConstituting? {
+        isOwning.assign(
+            repeating: true,
+            count: 1
+        )
+        return self
+    }
+}
+

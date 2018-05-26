@@ -9,11 +9,8 @@ interface Node {
 }
 type Map = (node :Node) => any
 
-
-let node_parent(
-)
-
 type Digger = (node :Node) => any
+/*
 export let first_displayed = (
   node :Node,
   keyPath :string,
@@ -41,6 +38,7 @@ export let first_displayed = (
 
   return lValue == sValue ? undefined : lValue;
 }
+*/
 
 export let whenDisplays = (
   keyPath :string, 

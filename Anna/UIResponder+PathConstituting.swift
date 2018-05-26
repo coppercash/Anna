@@ -129,14 +129,3 @@ extension
         return super.parentConstitutor(isOwning: &skipping)
     }
 }
-
-extension
-UITableViewCell
-{
-    open override func
-        parentConstitutor(
-        isOwning: UnsafeMutablePointer<Bool>
-        ) -> FocusPathConstituting? {
-        return nil
-    }
-}

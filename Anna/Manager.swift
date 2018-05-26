@@ -180,28 +180,25 @@ public class
     func
         registerNode(
         by identifier :NodeID,
-        named name :String,
-        under parentID :NodeID?
+        under parentID :NodeID?,
+        name :String,
+        index :Int? = nil,
+        attributes :Properties? = nil
         ) throws {
         let
         manager = try self.resolvedScriptManager()
         self.scriptQ.async {
-            let
-            arguments :[Any]
-            if let
-                parentID = parentID
-            {
-                arguments = [
-                    identifier,
-                    name,
-                    parentID
-                ]
+            var
+            arguments :[Any] = [
+                identifier,
+                parentID ?? NSNull(),
+                name
+            ]
+            if let index = index {
+                arguments.append(index)
             }
-            else {
-                arguments = [
-                    identifier,
-                    name
-                ]
+            if let attrs = attributes {
+                arguments.append(attrs)
             }
             manager.invokeMethod(
                 "registerNode",

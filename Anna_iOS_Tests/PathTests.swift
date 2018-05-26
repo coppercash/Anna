@@ -35,18 +35,18 @@ class PathTests: XCTestCase {
                 var
                 superview = self.view!
                 var
-                superAnalyzer = self.analyzer!
+                superAnalyzer = self.analyzer
                 for name in ["alpha", "beta", "delta"] {
                     let
                     view = PathTestingView(frame: superview.bounds)
                     view.analyzer = Analyzer.analyzer(with: view)
                     superview.addSubview(view)
-                    superAnalyzer.addSubAnalyzer(
-                        view.analyzer!,
-                        named: name
+                    superAnalyzer.setSubAnalyzer(
+                        view.analyzer,
+                        for: name
                     )
                     superview = view
-                    superAnalyzer = view.analyzer!
+                    superAnalyzer = view.analyzer
                     switch name {
                     case "beta":
                         self.beta = view
@@ -59,14 +59,14 @@ class PathTests: XCTestCase {
                 let
                 button = PathTestingButton(frame: superview.bounds)
                 button.analyzer = Analyzer.analyzer(with: button)
-                superAnalyzer.addSubAnalyzer(
-                    button.analyzer!,
-                    named: "gamma"
+                superAnalyzer.setSubAnalyzer(
+                    button.analyzer,
+                    for: "gamma"
                 )
                 self.gamma = button
                 superview.addSubview(button)
                 
-                self.analyzer?.enable(with: "vc")
+                self.analyzer.enable(with: "vc")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -117,7 +117,7 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
+                self.analyzer.enable(with: "vc")
 
                 let
                 superview = self.view as! PathTestingView
@@ -125,8 +125,11 @@ class PathTests: XCTestCase {
                 label = UILabel(frame: superview.bounds)
                 superview.addSubview(label)
                 
-                superview.becomeAnalysisObject(named: "vw")
-                superview.analyzer?.observe(label, for: "text")
+                self.analyzer.setSubAnalyzer(
+                    superview.analyzer,
+                    for: "vw"
+                )
+                superview.analyzer.observe(label, for: "text")
 
                 self.label = label
             }
@@ -167,7 +170,7 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
+                self.analyzer.enable(with: "vc")
 
                 let
                 superview = self.view!
@@ -176,7 +179,7 @@ class PathTests: XCTestCase {
                 superview.addSubview(label)
                 self.label = label
                 
-                self.analyzer?.observe(label, for: "text")
+                self.analyzer.observe(label, for: "text")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -184,7 +187,7 @@ class PathTests: XCTestCase {
                 self.label?.text = "42"
             }
             deinit {
-                self.analyzer?.detach()
+                self.analyzer.detach()
             }
         }
         test.rootViewController = Controller()
@@ -214,18 +217,18 @@ class PathTests: XCTestCase {
         {
             override func
                 viewDidLoad() {
-                self.becomeAnalysisObject(named: "nv")
+                self.analyzer.enable(with: "nv")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 let
                 master = PathTestingViewController()
-                master.becomeAnalysisObject(named: "ms")
+                master.analyzer.enable(with: "ms")
                 self.pushViewController(master, animated: false)
                 let
                 detail = PathTestingViewController()
-                detail.becomeAnalysisObject(named: "dt")
+                detail.analyzer.enable(with: "dt")
                 self.pushViewController(detail, animated: false)
             }
         }
@@ -264,11 +267,11 @@ class PathTests: XCTestCase {
                 controllers = ["one", "two"].map { (name :String) -> PathTestingViewController in
                     let
                     controller = PathTestingViewController()
-                    controller.becomeAnalysisObject(named: name)
+                    self.analyzer.setSubAnalyzer(controller.analyzer, for: name)
                     return controller
                 }
                 self.viewControllers = controllers
-                self.becomeAnalysisObject(named: "tb")
+                self.analyzer.enable(with: "tb")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -308,11 +311,14 @@ class PathTests: XCTestCase {
                 controllers = ["one", "two"].map { (name :String) -> PathTestingViewController in
                     let
                     controller = PathTestingViewController()
-                    controller.becomeAnalysisObject(named: name)
+                    self.analyzer.setSubAnalyzer(
+                        controller.analyzer,
+                        for: name
+                    )
                     return controller
                 }
                 self.viewControllers = controllers
-                self.becomeAnalysisObject(named: "home")
+                self.analyzer.enable(with: "home")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -320,7 +326,7 @@ class PathTests: XCTestCase {
                 self.selectedIndex = 1
                 let
                 detail = PathTestingViewController()
-                detail.becomeAnalysisObject(named: "detail")
+                detail.analyzer.enable(with: "detail")
                 self.navigationController?.pushViewController(
                     detail,
                     animated: false
@@ -357,7 +363,7 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "nv")
+                self.analyzer.enable(with: "nv")
             }
         }
         test.rootViewController = Navigation(rootViewController: Home())

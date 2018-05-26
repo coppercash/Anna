@@ -63,7 +63,7 @@ export class Manager
   }
 
   nodeID(
-    id :Identity.NodeID | number[] | number, 
+    id :Identity.NodeID | number[] | number | null, 
   ) : Identity.NodeID {
     if (id instanceof Identity.NodeID) {
       return id;
@@ -81,23 +81,28 @@ export class Manager
 
   registerNode(
     id :Identity.NodeID | number[] | number, 
+    parentID :Identity.NodeID | number[] | number | null,
     name :string,
-    parentID? :Identity.NodeID | number[] | number
+    index? :number,
+    attributes? :Identity.Node.Attributes
   ) {
     let
-    nodeID = this.nodeID(id);
+    nID = this.nodeID(id),
+      pID = this.nodeID(parentID);
     // Suppress error for node id has more than one components
     // This is a temp solution, not ideal
     //
     try {
       this.identities.registerNode(
-        nodeID, 
-        name, 
-        this.nodeID(parentID)
+        nID, 
+        pID,
+        name,
+        index,
+        attributes
       );
     }
     catch (e) {
-      if (!(nodeID.ownerIDs.length > 1)) {
+      if (!(nID.ownerIDs.length > 1)) {
         throw e;
       }
     }

@@ -167,7 +167,7 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
     var
     manager :Manager?
     lazy var
-    analyzer :Analyzing? = {
+    analyzer :Analyzing = {
         RootAnalyzer(manager: self.manager!, name: "root")
     }()
     func
@@ -189,64 +189,64 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
 @objc(ANAPathTestingNavigationController) class
     PathTestingNavigationController : UINavigationController, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingTabBarController) class
     PathTestingTabBarController : UITabBarController, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingViewController) class
 PathTestingViewController : UIViewController, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingButton) class
 PathTestingButton : UIButton, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingTableView) class
     PathTestingTableView : UITableView, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingTableViewCell) class
     PathTestingTableViewCell : UITableViewCell, AnalyzerWritable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingCollectionView) class
     PathTestingCollectionView : UICollectionView, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingCollectionViewCell) class
     PathTestingCollectionViewCell : UICollectionViewCell, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }
 
 @objc(ANAPathTestingView) class
     PathTestingView : UIView, Analyzable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
     override func
         setNeedsDisplay() {
         super.setNeedsDisplay()
@@ -268,6 +268,6 @@ PathTestingButton : UIButton, Analyzable
 @objc(ANAPathTestingLabel) class
     PathTestingLabel : UILabel, AnalyzerWritable
 {
-    var
-    analyzer :Analyzing?
+    lazy var
+    analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
 }

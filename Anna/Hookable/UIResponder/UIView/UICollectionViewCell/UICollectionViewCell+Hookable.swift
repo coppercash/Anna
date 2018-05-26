@@ -71,4 +71,10 @@ extension
         analyzer.resolvedContext = nil
         analyzer.resolvedParentship = nil
     }
+    open override func
+        parentConstitutor(
+        isOwning: UnsafeMutablePointer<Bool>
+        ) -> FocusPathConstituting? {
+        return nil
+    }
 }

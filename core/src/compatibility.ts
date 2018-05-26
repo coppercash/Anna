@@ -31,3 +31,24 @@ export function string_ends_with(
   return haystack.indexOf(needle, haystack.length - needle.length) !== -1;
 }
 
+export function object_assign(
+  target :{ [key :string] : any },
+  source :{ [key :string] : any }
+) : object {
+  for (let 
+    key of Object.keys(source)
+  ) {
+    target[key] = source[key];
+  }
+  return target;
+}
+export function object_remove_all(
+  target :{ [key :string] : any }
+) : void {
+  for (let 
+    key of Object.keys(target)
+  ) {
+    delete target[key];
+  }
+}
+

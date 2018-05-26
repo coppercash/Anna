@@ -28,12 +28,15 @@ class ControlTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
+                self.analyzer.enable(with: "vc")
                 
                 self.button = {
                     let
                     button = PathTestingButton()
-                    button.becomeAnalysisObject(named: "bt")
+                    self.analyzer.setSubAnalyzer(
+                        button.analyzer,
+                        for: "bt"
+                    )
                     return button
                 }()
                 self.view.addSubview(self.button!)
@@ -78,9 +81,9 @@ class ControlTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "vc")
+                self.analyzer.enable(with: "vc")
                 self.view.addSubview(self.button)
-                self.analyzer?.hook(self.button)
+                self.analyzer.hook(self.button)
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -88,7 +91,7 @@ class ControlTests: XCTestCase {
                 self.button.sendActions(for: .touchUpInside)
             }
             deinit {
-                self.analyzer?.detach()
+                self.analyzer.detach()
             }
         }
         test.rootViewController = Controller()

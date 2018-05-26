@@ -28,12 +28,15 @@ class FocusTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "master")
-                
+                self.analyzer.enable(with: "master")
+
                 self.button = {
                     let
                     button = PathTestingButton()
-                    button.becomeAnalysisObject(named: "bt")
+                    self.analyzer.setSubAnalyzer(
+                        button.analyzer,
+                        for: "bt"
+                    )
                     button.addTarget(
                         self,
                         action: #selector(handleControlEvent),
@@ -52,7 +55,7 @@ class FocusTests: XCTestCase {
                 handleControlEvent() {
                 let
                 detail = PathTestingViewController()
-                detail.becomeAnalysisObject(named: "detail")
+                detail.analyzer.enable(with: "detail")
                 self.navigationController?.pushViewController(
                     detail,
                     animated: false
@@ -61,7 +64,7 @@ class FocusTests: XCTestCase {
         }
         let
         navigation = PathTestingNavigationController(rootViewController: Controller())
-        navigation.becomeAnalysisObject(named: "nv")
+        navigation.analyzer.enable(with: "nv")
         test.rootViewController = navigation
         
         test.expect()
@@ -88,21 +91,24 @@ class FocusTests: XCTestCase {
             Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource, SectionAnalyzableTableViewDelegate
         {
             lazy var
-            table :UITableView = {
+            table :PathTestingTableView = {
                 let
                 superview = self.view!
                 let
                 table = PathTestingTableView(frame: superview.bounds)
                 table.delegate = self
                 table.dataSource = self
-                table.becomeAnalysisObject(named: "table")
                 return table
             }()
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.becomeAnalysisObject(named: "master")
+                self.analyzer.enable(with: "master")
                 self.view.addSubview(self.table)
+                self.analyzer.setSubAnalyzer(
+                    self.table.analyzer,
+                    for: "table"
+                )
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -137,7 +143,7 @@ class FocusTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.becomeAnalysisObject(named: "row")
+                        cell.analyzer.enable(with: "row")
                         return cell
                     }()
                 return cell
@@ -162,7 +168,7 @@ class FocusTests: XCTestCase {
                 ) {
                 let
                 detail = PathTestingViewController()
-                detail.becomeAnalysisObject(named: "detail")
+                detail.analyzer.enable(with: "detail")
                 self.navigationController?.pushViewController(
                     detail,
                     animated: false
@@ -178,7 +184,7 @@ class FocusTests: XCTestCase {
         }
         let
         navigation = PathTestingNavigationController(rootViewController: Controller())
-        navigation.becomeAnalysisObject(named: "nv")
+        navigation.analyzer.enable(with: "nv")
         test.rootViewController = navigation
         
         test.expect()
