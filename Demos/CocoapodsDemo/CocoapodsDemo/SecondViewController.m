@@ -13,12 +13,18 @@
 @end
 
 @implementation SecondViewController
-@synthesize ana_analyzer;
+@synthesize ana_analyzer = _ana_analyzer;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (!(self = [super initWithCoder:aDecoder])) { return nil; }
+    _ana_analyzer = [ANAAnalyzer analyzerWithDelegate:self];
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self ana_becomeAnalysisObjectNamed:@"second_view_controller"];
+    [self.ana_analyzer enableWithKey:@"second_view_controller"];
 }
 
 - (void)didReceiveMemoryWarning {

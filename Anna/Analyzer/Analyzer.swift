@@ -307,7 +307,7 @@ public class
         }
     }
 
-    public override func
+    public func
         markFocused() {
         guard let object = self.delegate as? FocusHandling.Object
             else { return }

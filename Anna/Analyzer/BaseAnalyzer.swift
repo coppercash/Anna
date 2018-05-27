@@ -223,12 +223,6 @@ public class
         return child
     }
  */
-    
-    // MARK: - Focus
-    
-    public func
-        markFocused() {
-    }
 }
 
 extension

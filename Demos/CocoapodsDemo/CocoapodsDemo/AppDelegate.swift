@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Analyzable {
         manager.tracker = self.tracker
         return manager
     }()
-    lazy var analyzer :Analyzing? = {
+    lazy var analyzer :Analyzing = {
         return RootAnalyzer(
             manager: self.manager,
             name: "root"

@@ -9,7 +9,7 @@ import Foundation
 
 @objc(ANAAnalyzable)
 public protocol
-    Analyzable : AnalyzerWritable & Hookable
+    Analyzable : AnalyzerReadable & Hookable
 {
     /*
     @objc(ana_becomeAnalysisObjectNamed:)

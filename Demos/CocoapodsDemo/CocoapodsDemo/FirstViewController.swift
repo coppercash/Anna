@@ -11,10 +11,10 @@ import Anna
 
 class FirstViewController: UIViewController, Analyzable {
 
-    var analyzer: Analyzing? = nil
+    lazy var analyzer: Analyzing = { Analyzer.analyzer(with: self) }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.becomeAnalysisObject(named: "first_view_controller")
+        self.analyzer.enable(with: "first_view_controller")
     }
 
     override func didReceiveMemoryWarning() {
