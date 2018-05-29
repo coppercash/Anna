@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.ana_analyzer enableWithKey:@"second_view_controller"];
+    [self.ana_analyzer enableWithName:@"second_view_controller"];
 }
 
 - (void)didReceiveMemoryWarning {

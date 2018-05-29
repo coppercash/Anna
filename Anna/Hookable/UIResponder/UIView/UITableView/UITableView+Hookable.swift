@@ -206,9 +206,10 @@ extension
         section = self.resolvedSubAnalyzer(for: indexPath.section)
         guard
             let
-            table = (self as? AnalyzerReadable)?.analyzer as? Analyzer,
+            row = cell.analyzer as? Analyzer,
+            row.isEnabled,
             let
-            row = cell.analyzer as? Analyzer
+            table = (self as? AnalyzerReadable)?.analyzer as? Analyzer
             else { return }
         let
         parent = section ?? table,

@@ -79,9 +79,9 @@ public protocol
         _ event :String
     )
     
-    @objc(enableWithKey:)
+    @objc(enableWithName:)
     func
-        enable(with key :String)
+        enable(with name :String)
     @objc(setSubAnalyzer:forKey:)
     func
         setSubAnalyzer(

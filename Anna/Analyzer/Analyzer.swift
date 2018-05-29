@@ -116,7 +116,6 @@ public class
         if let delegate = self.delegate as? Hookable {
             self.hook(owner: delegate)
         }
-        try! self.resolveParenthood { (_) in }
         self.flushSubAnalyzerBuffer()
     }
     var
@@ -130,6 +129,7 @@ public class
             sub.resolvedParentAnalyzer = self
             sub.resolvedParentship = true
             sub.enable()
+            try! sub.flushDeferredResolutions()
         }
         self.subAnalyzerBuffer.removeAll()
     }
@@ -360,7 +360,7 @@ public class
                 try manager.registerNode(
                     by: prefixedID,
                     under: parentID,
-                    name: analyzer?.key ?? "anonymous",
+                    name: (analyzer?.key)!,
                     index: analyzer?.index
                 )
                 analyzer?.resolvedContext = context

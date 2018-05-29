@@ -28,8 +28,8 @@ class
     visibilityRecorder :VisibilityRecorder
     override var
     recorder: Reporting.Recorder? {
-        didSet {
-            self.visibilityRecorder.recorder = self.recorder
+        willSet {
+            self.visibilityRecorder.recorder = newValue
         }
     }
     required
@@ -92,9 +92,9 @@ extension
     var isVisible :Bool {
         let
         view = self
-        return (view.window != nil) &&
+        return (view.isHidden == false) &&
             (view.superview != nil) &&
-            (view.isHidden == false)
+            (view.window != nil)
     }
     @objc(keyPathsForValuesAffectingAna_isVisible)
     class var

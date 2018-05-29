@@ -312,6 +312,7 @@ export class Node implements Markup.Markable
     attrs = {
       id: id.briefRepresentation(),
       class: Node.className,
+      createdAt: Date.now(),
     } as Node.Attributes;
     if (attributes) {
       C.object_assign(attrs, attributes);
