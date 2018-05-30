@@ -84,6 +84,7 @@ export class Manager
     parentID :Identity.NodeID | number[] | number | null,
     name :string,
     index? :number,
+    namespace? :string,
     attributes? :Identity.Node.Attributes
   ) {
     let
@@ -106,6 +107,15 @@ export class Manager
         throw e;
       }
     }
+    
+    // Load Task
+    //
+    this.loadTasks(['index'], ['.']);
+    if (namespace) {
+      let
+      namePath = this.namePath(namespace);
+      this.loadTasks(namePath);
+    }
   }
 
   deregisterNodes(
@@ -119,8 +129,7 @@ export class Manager
   recordEvent(
     name :string,
     properties :Identity.Event.Properties,
-    nodeID :Identity.NodeID | number[] | number,
-    namespace? :string
+    nodeID :Identity.NodeID | number[] | number
   ) {
     let
     identities = this.identities, 
@@ -139,15 +148,6 @@ export class Manager
       )
     }
     node.recordEvent(name, properties);
-
-    // Load Task
-    //
-    this.loadTasks(['index'], ['.']);
-    if (namespace) {
-      let
-      namePath = this.namePath(namespace);
-      this.loadTasks(namePath);
-    }
 
     // Match Task
     //

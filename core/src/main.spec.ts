@@ -167,9 +167,10 @@ describe('Anna', () => {
         done();
       }
     });
-    anna.registerNode(7, null, 'root');
     for (var i = 0; i < 3; i += 1) {
+      anna.registerNode(7, null, 'root');
       anna.recordEvent('appear', {}, 7);
+      anna.deregisterNodes(7);
     }
   });
 
@@ -182,7 +183,7 @@ describe('Anna', () => {
     anna = new Anna(new Loader((match) => {
       let
       delta = time;
-      match('/appear', () => { return 42 + delta; })
+      match('/foo/appear', () => { return 42 + delta; })
     }), config);
     anna.tracker = new Tracker((result) => {
       switch (time) {
@@ -198,7 +199,9 @@ describe('Anna', () => {
     });
     anna.registerNode(7, null, 'root');
     for (var i = 0; i < 3; i += 1) {
-      anna.recordEvent('appear', {}, 7);
+      anna.registerNode(8, 7, 'foo');
+      anna.recordEvent('appear', {}, 8);
+      anna.deregisterNodes(8);
     }
   });
 
@@ -210,9 +213,9 @@ describe('Anna', () => {
     let
     anna = new Anna(new Loader((match) => {
       switch(loaded) {
-        case 0: 
         case 1: 
-        case 4: 
+        case 2: 
+        case 5: 
           {
             match('foo/appear', (node) => { return 42; });
             match('foo/bar/appear', (node) => { 
@@ -234,12 +237,22 @@ describe('Anna', () => {
       }
     });
     anna.registerNode(7, null, 'root');
+
     anna.registerNode(8, 7, 'foo');
-    anna.registerNode(9, 8, 'bar');
     anna.recordEvent('appear', {value: 0}, 8);
+
+    anna.registerNode(9, 8, 'bar');
     anna.recordEvent('appear', {value: 1}, 9);
+
+    anna.deregisterNodes(8);
+    anna.registerNode(8, 7, 'foo');
     anna.recordEvent('appear', {value: 2}, 8);
+
+    anna.registerNode(9, 8, 'bar');
     anna.recordEvent('appear', {value: 3}, 9);
+
+    anna.deregisterNodes(9);
+    anna.registerNode(9, 8, 'bar');
     anna.recordEvent('appear', {value: 'done'}, 9);
   });
 
@@ -272,11 +285,14 @@ describe('Anna', () => {
       }
     });
     anna.registerNode(7, null, 'root');
-    anna.registerNode(8, 7, 'foo');
-    anna.registerNode(9, 8, 'bar');
-    anna.recordEvent('appear', {}, 8, 'nonsence');
-    anna.recordEvent('appear', {}, 8, 'Lib.Alpha');
-    anna.recordEvent('appear', {}, 9, 'nonsence');
-    anna.recordEvent('appear', {}, 9, 'Lib.Beta');
+    anna.registerNode(8, 7, 'foo', undefined, 'nonsence');
+    anna.registerNode(9, 8, 'bar', undefined, 'nonsence');
+    anna.recordEvent('appear', {}, 8);
+    anna.recordEvent('appear', {}, 9);
+    anna.deregisterNodes(8);
+    anna.registerNode(8, 7, 'foo', undefined, 'Lib.Alpha');
+    anna.registerNode(9, 8, 'bar', undefined, 'Lib.Beta');
+    anna.recordEvent('appear', {}, 8);
+    anna.recordEvent('appear', {}, 9);
   });
 });

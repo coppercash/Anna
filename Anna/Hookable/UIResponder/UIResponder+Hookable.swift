@@ -56,18 +56,22 @@ class
     isVisible :Bool = false
     func
         visibilityEvent(
-        with isVisible :Bool
+        with newValue :Bool,
+        oldValue :Bool
         ) -> VisibilityEvent? {
-        guard isVisible != self.isVisible
+        guard newValue != oldValue
             else { return nil }
-        return isVisible ? .appeared : .disappeared
+        return newValue ? .appeared : .disappeared
     }
     func
         record(
         _ isVisible :Bool
         ) {
         let
-        e = self.visibilityEvent(with: isVisible)
+        e = self.visibilityEvent(
+            with: isVisible,
+            oldValue: self.isVisible
+        )
         self.isVisible = isVisible
         guard let
             event = e,

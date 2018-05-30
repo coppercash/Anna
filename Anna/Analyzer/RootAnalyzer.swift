@@ -42,6 +42,7 @@ public class
         ) throws {
         let
         analyzer = self,
+        namespace = self.resolvedNamespace,
         manager = self.manager
         if let
             context = analyzer.resolvedContext
@@ -51,7 +52,9 @@ public class
         try manager.registerNode(
             by: identifier,
             under: nil,
-            name: analyzer.name
+            name: analyzer.name,
+            index: nil,
+            namespace: namespace
         )
         let
         context = IdentityContext(

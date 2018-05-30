@@ -182,24 +182,23 @@ public class
         by identifier :NodeID,
         under parentID :NodeID?,
         name :String,
-        index :Int? = nil,
+        index :Int?,
+        namespace :String? = nil,
         attributes :Properties? = nil
         ) throws {
         let
         manager = try self.resolvedScriptManager()
         self.scriptQ.async {
-            var
+            let
+            null = NSNull(),
             arguments :[Any] = [
                 identifier,
-                parentID ?? NSNull(),
-                name
+                parentID ?? null,
+                name,
+                index ?? null,
+                namespace ?? null,
+                attributes ?? null
             ]
-            if let index = index {
-                arguments.append(index)
-            }
-            if let attrs = attributes {
-                arguments.append(attrs)
-            }
             manager.invokeMethod(
                 "registerNode",
                 withArguments: arguments
@@ -227,23 +226,17 @@ public class
         recordEvent(
         named name :String,
         with properties :Propertiez,
-        onNodeBy identifier :NodeID,
-        namespace :String? = nil
+        onNodeBy identifier :NodeID
         ) throws {
         let
         manager = try self.resolvedScriptManager()
         self.scriptQ.async {
-            var
+            let
             arguments :[Any] = [
                 name,
                 properties,
                 identifier
             ]
-            if let
-                namespace = namespace
-            {
-                arguments.append(namespace)
-            }
             manager.invokeMethod(
                 "recordEvent",
                 withArguments: arguments

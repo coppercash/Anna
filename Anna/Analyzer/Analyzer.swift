@@ -323,7 +323,8 @@ public class
         then callback : @escaping ContextCallback
         ) throws {
         let
-        analyzer = self
+        analyzer = self,
+        namespace = self.resolvedNamespace
         if let
             context = analyzer.resolvedContext
         { return try callback(context) }
@@ -354,20 +355,29 @@ public class
                     prefix: (isOwning ? prefix : NodeID.empty())
                 )
                 guard
-                    context != analyzer?.resolvedContext
+                    let
+                    analyzer = analyzer,
+                    context != analyzer.resolvedContext
                     else { return try callback(context) }
                 
                 try manager.registerNode(
                     by: prefixedID,
                     under: parentID,
-                    name: (analyzer?.key)!,
-                    index: analyzer?.index
+                    name: analyzer.key!,
+                    index: analyzer.index,
+                    namespace: namespace
                 )
-                analyzer?.resolvedContext = context
-                parent?.notifyAfterContextReset { [weak analyzer] in
-                    analyzer?.resolvedContext = nil
+                analyzer.resolvedContext = context
+                if
+                    isOwning,
+                    let
+                    parent = parent
+                {
+                    parent.notifyAfterContextReset { [weak analyzer] in
+                        analyzer?.resolvedContext = nil
+                    }
                 }
-                
+
                 try callback(context)
             }
         }

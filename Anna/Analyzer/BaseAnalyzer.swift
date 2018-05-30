@@ -183,8 +183,7 @@ public class
         ) {
         let
         contextResolver = self as! IdentityContextResolving,
-        expressable = properties?.toJSExpressable() ?? [:],
-        namespace = self.resolvedNamespace
+        expressable = properties?.toJSExpressable() ?? [:]
 
         try! contextResolver.resolveContext { (context) in
             let
@@ -192,8 +191,7 @@ public class
             try manager.recordEvent(
                 named: name,
                 with: expressable,
-                onNodeBy: context.identifier,
-                namespace: namespace
+                onNodeBy: context.identifier
             )
         }
     }
