@@ -1,45 +1,47 @@
 
+namespace Event {
+  export enum Name {
+    Appeared = "ana-appeared",
+      Updated = "ana-updated",
+  }
+  export class Update {
+    static 
+    KeyPath :string = 'key-path';
+    static 
+    Value :string = 'value';
+  }
+}
 interface Event {
   name :string;
-  properties :{ [key :string] : any };
+  attributes :{ [key :string] : any };
 }
 interface Node {
-  events :Event[];
+  path :string;
   parentNode :Node;
+  ancestor(distance :number) : Node;
+  latestEvent() : Event;
+  firstDisplayedTime() : number
+  valueFirstDisplayedTime(keyPath :string) : number
+  latestValue(keyPath :string) : any;
+  isVisible() : boolean;
 }
-type Map = (node :Node) => any
 
-type Digger = (node :Node) => any
-/*
 export let first_displayed = (
   node :Node,
-  keyPath :string,
+  keyPath? :string,
   ancestor :number = 0
 ) : any => {
   let
-  ancestor = node_parent(node, ancestor);
-  if (!(ancestor)) { return undefined; }
+  event = node.latestEvent();
   let
-  last = node_last_value_update(ancestor, keyPath, ancestor.events.length);
-  if (!(last)) { return undefined };
-  let
-  lAppearance = node_last_event_after(node, last[0].attributes.time, node.events.length);
-  if (!(lAppearance)) { return undefined };
-  let
-  lValue = last[0].attributes.value;
-  let
-  second = node_last_value_update(ancestor, keyPath, last[1]);
-  if (!(second)) { return lValue; }
-  let
-  sAppearance = node_last_event_after(node, second[0].attributes.time, lAppearance[1])
-  if (!(sAppearance)) { return lValue; }
-  let
-  sValue = second[0].attributes.value;
-
-  return lValue == sValue ? undefined : lValue;
+  displayedAt = keyPath ? 
+    node.valueFirstDisplayedTime(keyPath) : 
+    node.firstDisplayedTime();
+  if (!(displayedAt === event.attributes.time)) { return undefined; }
+  return node.latestValue(keyPath);
 }
-*/
-
+/*
+type Map = (node :Node) => any
 export let whenDisplays = (
   keyPath :string, 
   map :(node :Node, value :any) => any
@@ -79,4 +81,4 @@ export let whenDisplays = (
     }
   }
 }
-
+*/

@@ -38,7 +38,7 @@ class
         owned: Bool
         ) {
         self.visibilityRecorder = VisibilityRecorder(
-            activeEvents: [.appeared]
+            activeEvents: [.appeared, .disappeared]
         )
         super.init(
             observee: observee,

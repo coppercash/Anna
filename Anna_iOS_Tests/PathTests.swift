@@ -102,7 +102,10 @@ class PathTests: XCTestCase {
         const T = require('../tool');
         match(
         ['vw/ana-updated', 'vw/ana-appeared'],
-        T.whenDisplays('text', function(node, value) { return value; })
+        function(n) {
+        const text = T.first_displayed(n, 'text');
+        return text;
+        }
         );
         """
         class
@@ -137,18 +140,21 @@ class PathTests: XCTestCase {
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 self.label?.text = "42"
+                self.label?.text = "43"
             }
         }
         test.rootViewController = Controller()
         
-        test.expect()
+        test.expect(for: 2)
         test.launch()
         self.wait(
             for: test.expectations,
             timeout: 1.0
         )
         
+        XCTAssertEqual(test.resultCount, 2)
         XCTAssertEqual(test[0] as? String, "42")
+        XCTAssertEqual(test[1] as? String, "43")
     }
     
     func test_dataDisplaysOnViewController() {
@@ -159,7 +165,7 @@ class PathTests: XCTestCase {
         const T = require('../tool');
         match(
         ['vc/ana-updated', 'vc/ana-appeared'],
-        T.whenDisplays('text', function(node, value) { return value; })
+        function(n) { return T.first_displayed(n, 'text'); }
         );
         """
         class

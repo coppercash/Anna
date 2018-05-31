@@ -11,7 +11,7 @@ describe('Anna', () => {
   it('should record event on root' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('/appear', (n) => { return n.earliestEvent().attributes.answer; })
+      match('/appear', (n) => { return n.latestEvent().attributes.answer; })
     }));
     anna.tracker = new Tracker((result) => {
       expect(result).to.equal(42);
@@ -24,7 +24,7 @@ describe('Anna', () => {
   it('should record event on sub node' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('/foo/bar/tap', (n) => { return n.earliestEvent().attributes.answer; })
+      match('/foo/bar/tap', (n) => { return n.latestEvent().attributes.answer; })
     }));
     anna.tracker = new Tracker((result) => {
       expect(result).to.equal(43);
@@ -39,7 +39,7 @@ describe('Anna', () => {
   it('should record event on non-absolute path' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('foo/bar/tap', (n) => { return n.earliestEvent().attributes.answer; })
+      match('foo/bar/tap', (n) => { return n.latestEvent().attributes.answer; })
     }));
     var
     results = new Array<number>();
@@ -99,8 +99,8 @@ describe('Anna', () => {
   it('should record event on reusable node' , (done) => {
     let
     anna = new Anna(new Loader((match) => {
-      match('foo/tap', (n) => { return n.earliestEvent().attributes.answer; })
-      match('foo/bar/tap', (n) => { return n.earliestEvent().attributes.answer; })
+      match('foo/tap', (n) => { return n.latestEvent().attributes.answer; })
+      match('foo/bar/tap', (n) => { return n.latestEvent().attributes.answer; })
     }));
     var
     count = 0;

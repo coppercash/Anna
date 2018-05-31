@@ -235,8 +235,8 @@ class RecordingError {
   ) : Error {
     let
     keyValue :string;
-    if (name == 'ana-updated') {
-      keyValue = `(${ properties['key-path'] }: ${ properties['value'] })`;
+    if (name == Identity.Event.Name.Updated) {
+      keyValue = `(${ properties[Identity.Event.Update.KeyPath] }: ${ properties[Identity.Event.Update.Value] })`;
     }
     else {
       keyValue = '';

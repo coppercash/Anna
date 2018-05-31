@@ -293,9 +293,15 @@ export class Node implements Markup.Markable
   _index :number;
   _path :string;
   _attributes :Node.Attributes;
-  _events :Event[] = [];
+
   _matching :Match.Stage = Match.Stage.empty();
   
+  _lastetEvent :Event = null;
+  _latestValues :{ [keyPath :string] : any } = {};
+  _isVisible :boolean = false;
+  _firstDisplayedAt :number;
+  _events :Event[] = [];
+
   constructor(
     id :NodeID,
     parent :Node | null,
@@ -356,10 +362,95 @@ export class Node implements Markup.Markable
     properties :Event.Properties
   ) {
     let
-    events = this._events;
+    event = new Event(name, properties), time = event.attributes.time;
+    this._appendEvent(event);
+    this._lastetEvent = event;
+    switch (name) {
+      case Event.Name.Updated:
+        this._updateValue(
+          properties[Event.Update.Value],
+          properties[Event.Update.KeyPath],
+          time
+        );
+        break;
+      case Event.Name.Appeared:
+        this._recordAppearance(
+          true,
+          time
+        );
+        break;
+      case Event.Name.Disappeared:
+        this._recordAppearance(
+          false,
+          time
+        );
+        break;
+      default:
+        break;
+    }
+  }
+  _appendEvent(
+    event :Event
+  ) {
     let
-    event = new Event(name, properties);
+    events = this._events;
     events.push(event);
+    if (events.length > 10) {
+      events.shift();
+    }
+  }
+  _updateValue(
+    value :any,
+    keyPath :string,
+    time :number
+  ) {
+    let
+    latestValues = this._latestValues;
+    var
+    container = latestValues[keyPath];
+    if (!(container)) {
+      container = new Value();
+      latestValues[keyPath] = container;
+    }
+    let
+    old = container.value;
+    let
+    equals = (value == old) || (
+      (value != undefined) && 
+      (old != undefined) &&
+      (value.toString() === old.toString())
+    ); // TODO: Have a better equality checking method
+    if (!(equals === false)) { return; }
+
+    container.value = value;
+    if (this._isVisible) {
+      container.firstDisplayedAt = time;
+    }
+    else {
+      delete container.firstDisplayedAt;
+    }
+  }
+  _recordAppearance(
+    isVisible :boolean,
+    time :number
+  ) {
+    let
+    wasVisible = this._isVisible;
+    if (!(isVisible !== wasVisible)) { return; }
+
+    this._isVisible = isVisible;
+
+    if (!(
+      isVisible
+    )) { return; }
+    if (!(this._firstDisplayedAt)) {
+      this._firstDisplayedAt = time;
+    }
+    for (let
+      key of Object.keys(this._latestValues)
+    ) {
+      this._latestValues[key].firstDisplayedAt = time;
+    }
   }
 
   tasksMatchingEvent(
@@ -461,39 +552,24 @@ export class Node implements Markup.Markable
     return this._path;
   }
   
+  latestEvent() : Event {
+    return this._lastetEvent;
+  }
   latestValue(
     keyPath :string
   ) : any {
-    let
-    events = this._events;
-    for (
-      var index = events.length - 1;
-      index >= 0;
-      index -= 1
-    ) {
-      let
-      event = events[index];
-      if (!(
-        (event.name == 'ana-updated') &&
-        (event.properties['key-path'] == keyPath)
-      )) { continue; }
-      return event.properties['value'];
-    }
-    return undefined;
+    return this._latestValues[keyPath].value;
   }
-  get events() : Event[] {
-    return this._events;
+  firstDisplayedTime() : number {
+    return this._firstDisplayedAt;
   }
-  earliestEvent() : Event {
-    return this._events[0];
+  valueFirstDisplayedTime(
+    keyPath :string
+  ) : number {
+    return this._latestValues[keyPath].firstDisplayedAt;
   }
-  latestEvent() : Event {
-    let
-    events = this._events;
-    if (!(
-      events.length > 0
-    )) { return null; } 
-    return events[events.length - 1];
+  isVisible() : boolean {
+    return this._isVisible;
   }
   ancestor(
     length :number = 0
@@ -565,5 +641,21 @@ export class Event implements Markup.Markable
 export namespace Event
 {
   export type Properties = Markup.Markable.Properties;
+  export enum Name {
+    Updated = "ana-updated",
+      Appeared = "ana-appeared",
+      Disappeared = "ana-disappeared",
+  }
+  export class Update {
+    static 
+    KeyPath :string = 'key-path';
+    static 
+    Value :string = 'value';
+  }
+}
+
+class Value {
+  value :any;
+  firstDisplayedAt :number;
 }
 

@@ -270,7 +270,7 @@ extension
 
         let
         vr = VisibilityRecorder(
-            activeEvents: [.appeared]
+            activeEvents: [.appeared, .disappeared]
         )
         vr.recorder = analyzer
         analyzer.tokens.append(vr)
