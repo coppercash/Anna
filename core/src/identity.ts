@@ -317,7 +317,7 @@ export class Node implements Markup.Markable
     if (attributes) {
       C.object_assign(attrs, attributes);
     }
-    if (index !== undefined) {
+    if (index !== undefined && index !== null) {
       attrs.index = index;
     }
     this._attributes = attrs;
