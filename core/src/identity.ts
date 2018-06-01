@@ -297,9 +297,9 @@ export class Node implements Markup.Markable
   _matching :Match.Stage = Match.Stage.empty();
   
   _lastetEvent :Event = null;
-  _latestValues :{ [keyPath :string] : any } = {};
+  _latestValues :{ [keyPath :string] : Value } = {};
   _isVisible :boolean = false;
-  _firstDisplayedAt :number;
+  _firstDisplayedEvent :Event;
   _events :Event[] = [];
 
   constructor(
@@ -362,7 +362,7 @@ export class Node implements Markup.Markable
     properties :Event.Properties
   ) {
     let
-    event = new Event(name, properties), time = event.attributes.time;
+    event = new Event(name, properties);
     this._appendEvent(event);
     this._lastetEvent = event;
     switch (name) {
@@ -370,19 +370,19 @@ export class Node implements Markup.Markable
         this._updateValue(
           properties[Event.Update.Value],
           properties[Event.Update.KeyPath],
-          time
+          event
         );
         break;
       case Event.Name.Appeared:
         this._recordAppearance(
           true,
-          time
+          event
         );
         break;
       case Event.Name.Disappeared:
         this._recordAppearance(
           false,
-          time
+          event
         );
         break;
       default:
@@ -402,7 +402,7 @@ export class Node implements Markup.Markable
   _updateValue(
     value :any,
     keyPath :string,
-    time :number
+    event :Event
   ) {
     let
     latestValues = this._latestValues;
@@ -424,15 +424,15 @@ export class Node implements Markup.Markable
 
     container.value = value;
     if (this._isVisible) {
-      container.firstDisplayedAt = time;
+      container.firstDisplayedEvent = event;
     }
     else {
-      delete container.firstDisplayedAt;
+      delete container.firstDisplayedEvent;
     }
   }
   _recordAppearance(
     isVisible :boolean,
-    time :number
+    event :Event
   ) {
     let
     wasVisible = this._isVisible;
@@ -443,13 +443,18 @@ export class Node implements Markup.Markable
     if (!(
       isVisible
     )) { return; }
-    if (!(this._firstDisplayedAt)) {
-      this._firstDisplayedAt = time;
+    if (!(this._firstDisplayedEvent)) {
+      this._firstDisplayedEvent = event;
     }
+    let
+    latestValues = this._latestValues;
     for (let
-      key of Object.keys(this._latestValues)
+      key of Object.keys(latestValues)
     ) {
-      this._latestValues[key].firstDisplayedAt = time;
+      let
+      container = latestValues[key];
+      if (!(container.firstDisplayedEvent == undefined)) { continue; }
+      container.firstDisplayedEvent = event;
     }
   }
 
@@ -558,15 +563,19 @@ export class Node implements Markup.Markable
   latestValue(
     keyPath :string
   ) : any {
-    return this._latestValues[keyPath].value;
+    let
+    container = this._latestValues[keyPath];
+    return container ? container.value : undefined;
   }
-  firstDisplayedTime() : number {
-    return this._firstDisplayedAt;
+  firstDisplayedEvent() : Event {
+    return this._firstDisplayedEvent;
   }
-  valueFirstDisplayedTime(
+  valueFirstDisplayedEvent(
     keyPath :string
-  ) : number {
-    return this._latestValues[keyPath].firstDisplayedAt;
+  ) : Event {
+    let
+    container = this._latestValues[keyPath];
+    return container ? container.firstDisplayedEvent : undefined;
   }
   isVisible() : boolean {
     return this._isVisible;
@@ -656,6 +665,6 @@ export namespace Event
 
 class Value {
   value :any;
-  firstDisplayedAt :number;
+  firstDisplayedEvent :Event;
 }
 

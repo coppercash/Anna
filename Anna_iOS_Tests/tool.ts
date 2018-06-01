@@ -20,65 +20,22 @@ interface Node {
   parentNode :Node;
   ancestor(distance :number) : Node;
   latestEvent() : Event;
-  firstDisplayedTime() : number
-  valueFirstDisplayedTime(keyPath :string) : number
+  firstDisplayedEvent() : Event;
+  valueFirstDisplayedEvent(keyPath :string) : Event
   latestValue(keyPath :string) : any;
   isVisible() : boolean;
 }
 
 export let first_displayed = (
   node :Node,
-  keyPath? :string,
-  ancestor :number = 0
+  keyPath? :string
 ) : any => {
   let
   event = node.latestEvent();
   let
-  displayedAt = keyPath ? 
-    node.valueFirstDisplayedTime(keyPath) : 
-    node.firstDisplayedTime();
-  if (!(displayedAt === event.attributes.time)) { return undefined; }
-  return node.latestValue(keyPath);
+  display = keyPath ? 
+    node.valueFirstDisplayedEvent(keyPath) : 
+    node.firstDisplayedEvent();
+  if (!(display === event)) { return undefined; }
+  return keyPath ? node.latestValue(keyPath) : node;
 }
-/*
-type Map = (node :Node) => any
-export let whenDisplays = (
-  keyPath :string, 
-  map :(node :Node, value :any) => any
-) : Map => {
-  return (node) => {
-    var
-    isVisible :boolean = undefined;
-    var
-    value :any = undefined;
-    for (
-      let event of node.events
-    ) {
-      if (event.name == 'ana-appeared') {
-        if (!(isVisible === undefined)) { continue; }
-        isVisible = true;
-      }
-      else if (
-        (event.name == 'ana-value-updated') &&
-        (event.properties['key-path'] == keyPath) 
-      ) {
-        if (!(value == undefined)) { continue; }
-        value = event.properties['value'];
-      }
-      if (
-        (isVisible !== undefined) &&
-        (value != undefined)
-      ) { break; }
-    }
-    if (!(
-      (isVisible === true) &&
-      (value != undefined)
-    )) {
-      return undefined;
-    } 
-    else {
-      return map(node, value);
-    }
-  }
-}
-*/
