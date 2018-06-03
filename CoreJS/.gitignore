@@ -69,3 +69,8 @@ tests/cases/user/*/**/*.d.ts
 !tests/cases/user/bignumber.js/
 !tests/cases/user/discord.js/
 tests/baselines/reference/dt
+
+# Project
+!/built/core/
+/built/core/*
+!/built/core/index.js
