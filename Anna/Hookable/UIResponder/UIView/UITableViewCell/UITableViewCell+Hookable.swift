@@ -76,14 +76,10 @@ extension
     @objc(ana_prepareAnalyzerForReuse)
     public func
         prepareAnalyzerForReuse() {
-        guard
-            let
-            analyzable = self as? AnalyzerReadable,
-            let
-            analyzer = analyzable.analyzer as? Analyzer
+        guard let
+            analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
             else { return }
-        analyzer.resolvedContext = nil
-        analyzer.resolvedParentship = nil
+        try! analyzer.deactivate()
     }
     open override func
         parentConstitutor(

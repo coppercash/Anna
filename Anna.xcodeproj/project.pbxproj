@@ -42,6 +42,7 @@
 		BE195B43209D844F00111F15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B42209D844F00111F15 /* Analyzable.swift */; };
 		BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */; };
 		BE4010E020A9909E0056BF29 /* FocusPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4010DF20A9909E0056BF29 /* FocusPath.swift */; };
+		BE4F088520C27A970034F578 /* ReuseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4F088420C27A970034F578 /* ReuseTests.swift */; };
 		BE520DAA20ADD2D900A5625D /* ramda.js in Copy Files */ = {isa = PBXBuildFile; fileRef = BE520DA820ADD1DD00A5625D /* ramda.js */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE87DA801EAB608700DA81EB /* Anna.framework */; };
@@ -144,6 +145,7 @@
 		BE3D83BE2081E33C00A1D17D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTestCaseBuilder.swift; sourceTree = "<group>"; };
 		BE4010DF20A9909E0056BF29 /* FocusPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusPath.swift; sourceTree = "<group>"; };
+		BE4F088420C27A970034F578 /* ReuseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseTests.swift; sourceTree = "<group>"; };
 		BE520DA820ADD1DD00A5625D /* ramda.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ramda.js; sourceTree = "<group>"; };
 		BE87DA801EAB608700DA81EB /* Anna.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Anna.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE87DA831EAB608700DA81EB /* Anna.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Anna.h; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				3DB2E79C20A26734005F0572 /* TableViewTests.swift */,
 				BE89419B20B9505A005D7EC9 /* CollectionViewTests.swift */,
 				3D2CDFCD20AFBC9200294037 /* FocusTests.swift */,
+				BE4F088420C27A970034F578 /* ReuseTests.swift */,
 				BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */,
 			);
 			path = Anna_iOS_Tests;
@@ -660,6 +663,7 @@
 			files = (
 				3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */,
 				BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */,
+				BE4F088520C27A970034F578 /* ReuseTests.swift in Sources */,
 				3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */,
 				3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */,
 				BE89419C20B9505A005D7EC9 /* CollectionViewTests.swift in Sources */,

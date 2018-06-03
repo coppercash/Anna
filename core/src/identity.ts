@@ -1,17 +1,12 @@
 import * as Match from './match';
 import * as Markup from './markup';
+import * as Trie from './trie';
 import * as C from './compatibility';
 
 export class Tree
 {
   root :Node = null;
   identities :Identity = new Identity();
-
-  nodeID(
-    ownerIDs :number[]
-  ) : NodeID {
-    return new NodeID(ownerIDs)
-  }
 
   registerNode(
     nodeID :NodeID, 
@@ -61,7 +56,7 @@ export class Tree
     let
     identities = this.identities;
     let
-    nodes = identities.nodes(nodeID.ownerIDs);
+    nodes = identities.retrieveAllValues(nodeID.toPath());
     if (!(
       nodes.length > 0
     )) {
@@ -84,8 +79,8 @@ export class Tree
     nodeID :NodeID
   ) : Node {
     let 
-    identity = this.identities.descendant(nodeID.ownerIDs);
-    return identity ? identity.node : null;
+    identity = this.identities.retrieve(nodeID.toPath());
+    return identity ? identity.value : null;
   }
 
   setNode(
@@ -93,47 +88,16 @@ export class Tree
     nodeID :NodeID
   ) {
     let
-    ownerIDs = nodeID.ownerIDs;
-    var
-    index = 0;
-    var
-    identity :Identity = this.identities;
-    while (index < ownerIDs.length) {
-      let
-      ownerID = ownerIDs[index];
-      var
-      child = identity.child(ownerID);
-      if (!(
-        child
-      )) { 
-        child = new Identity();
-        identity.setChild(child, ownerID);
-      }
-      identity = child;
-      index += 1;
-    }
-    identity.node = node;
+    identities = this.identities;
+    let
+    identity = identities.insert(nodeID.toPath());
+    identity.value = node;
   }
 
   removeNode(
     nodeID :NodeID
   ) {
-    let
-    ownerIDs = nodeID.ownerIDs;
-    var
-    index = 1;
-    var
-    parent :Identity = this.identities;
-    var
-    identity :Identity = parent.child(nodeID.ownerIDs[0]);
-    while (index < ownerIDs.length) {
-      let
-      ownerID = ownerIDs[index];
-      parent = identity;
-      identity = identity.child(ownerID);
-      index += 1;
-    }
-    parent.removeChild(ownerIDs[ownerIDs.length - 1]);
+    this.identities.delete(nodeID.toPath());
   }
 
   addMatchTasks(
@@ -175,12 +139,15 @@ export class Tree
 
 export class NodeID
 {
-  ownerIDs :number[];
+  ownerID :number;
+  keyPath :string[];
 
   constructor(
-    ownerIDs :number[]
+    ownerID :number,
+    keyPath :string[] = []
   ) {
-    this.ownerIDs = ownerIDs;
+    this.ownerID = ownerID;
+    this.keyPath = keyPath;
   }
 
   toString = () : string => {
@@ -188,92 +155,29 @@ export class NodeID
   }
 
   briefRepresentation() : string {
-    return this.ownerIDs.join('/');
+    return this.toPath().join('/');
+  }
+
+  toPath() : string[] {
+    let
+    path = [this.ownerID.toString()];
+    this.keyPath.forEach(e => path.push(e));
+    return path;
   }
 }
 
-class Identity implements Markup.Markable {
-  node :Node = null;
-  children :{ [ownerID :number] : Identity } = {};
-
-  child(
-    ownerID :number
-  ) : Identity {
-    return this.children[ownerID];
-  }
-
-  setChild(
-    child :Identity,
-    ownerID :number
-  ) {
-    this.children[ownerID] = child;
-  }
-
-  removeChild(
-    ownerID :number
-  ) {
-    delete this.children[ownerID];
-  }
-
-  descendant(
-    ownerIDs :number[]
-  ) : Identity {
-    var
-    index = 0;
-    var
-    identity :Identity = this;
-    while (index < ownerIDs.length) {
-      let
-      ownerID = ownerIDs[index];
-      identity = identity.child(ownerID);
-      if (!(
-        identity
-      )) { break; }
-      index += 1;
-    }
-    return identity;
-  }
-
-  nodes(
-    ownerIDs :number[]
-  ) : Node[] {
-    var
-    buffer = new Array<Node>();
-    this.descendant(ownerIDs).collectNodes(buffer);
-    return buffer;
-  }
-
-  collectNodes(
-    buffer :Node[]
-  ) {
-    let
-    node = this.node, children = this.children;
-    if (node) {
-      buffer.push(node);
-    }
-    for (let 
-      key in children
-    ) {
-      let
-      child = children[key];
-      child.collectNodes(buffer);
-    }
-  }
+class Identity extends Trie.Node<string, Node> implements Markup.Markable {
 
   markup(
     indent :string = '',
   ) :string {
     let
-    node = this.node;
+    node = this.value;
     let
     name = node ? node._name : '_';
     var
     children = new Array<Markup.Markable>();
-    for (let
-      key in this.children
-    ) {
-      children.push(this.children[key]);
-    }
+    this.children.forEach(v => children.push(v as Identity));
     return Markup.markup(name, {}, children, indent, true);
   }
 }

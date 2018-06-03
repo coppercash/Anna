@@ -34,12 +34,14 @@ class
         let
         prefix = self.prefix
         try self.target?.resolveContext { pContext in
+            /*
             try callback(IdentityContext(
                 manager: pContext.manager,
                 parentID: pContext.parentID,
                 identifier: pContext.identifier,
                 prefix: prefix
             ))
+ */
         }
     }
     func

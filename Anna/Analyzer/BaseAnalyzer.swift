@@ -7,25 +7,15 @@
 
 import Foundation
 
-class
+struct
     IdentityContext : Equatable
 {
     let
     manager :Manager,
     parentID :NodeID?,
     identifier :NodeID,
-    prefix :NodeID
-    init(
-        manager :Manager,
-        parentID :NodeID?,
-        identifier :NodeID,
-        prefix :NodeID
-        ) {
-        self.manager = manager
-        self.parentID = parentID
-        self.identifier = identifier
-        self.prefix = prefix
-    }
+    name :String,
+    index :Int?
     static func
         == (
         lhs: IdentityContext,
@@ -34,7 +24,8 @@ class
         return lhs.manager === rhs.manager &&
             lhs.parentID == rhs.parentID &&
             lhs.identifier == rhs.identifier &&
-            lhs.prefix == rhs.prefix
+            lhs.name == rhs.name &&
+            lhs.index == rhs.index
     }
 }
 
@@ -57,8 +48,22 @@ protocol
     )
 }
 
+protocol
+    IdentityResolving : class
+{
+    typealias
+        Callback = (Manager, NodeID) throws -> Void
+    func
+        resolveIdentity(
+        then callback : @escaping Callback
+    ) throws -> Void
+}
+
 public class
-    BaseAnalyzer : NSObject, Recording
+    BaseAnalyzer :
+    NSObject,
+    Recording,
+    IdentityResolving
 {
 //    let
 //    name :String?
@@ -69,13 +74,7 @@ public class
 //    }
    
     deinit {
-        self.notifyContextReset()
-        try? self.deregisterIdentityNodes()
-    }
-    
-    func
-        resolvedAttributes() throws -> Properties {
-        return [:]
+        try? self.unbindNode()
     }
     
     /*
@@ -127,7 +126,7 @@ public class
         }
     }
  */
-
+/*
     // MARK: - Identity Context
     
     var
@@ -162,6 +161,75 @@ public class
         id = NodeID(owner: self)
         try manager.deregisterNodes(by: id)
     }
+ */
+    
+    // MARK: - Node Identity
+    
+    func
+        resolveIdentity(
+        then callback: @escaping IdentityResolving.Callback
+        ) throws {
+        fatalError("Overidding needed.")
+    }
+    func
+        bindNode(
+        with context :IdentityContext
+        ) throws {
+        fatalError("Overidding needed.")
+    }
+    func
+        unbindNode() throws {
+        fatalError("Overidding needed.")
+    }
+    var
+    nodeID :NodeID? = nil {
+        didSet {
+            for
+                key in self.nodeIDObservations.keyEnumerator()
+            {
+                guard
+                    let
+                    observer = key as? BaseAnalyzer,
+                    let
+                    observation = self.nodeIDObservations.object(forKey: observer)
+                    else { continue }
+                observation.callback(self, observer)
+            }
+        }
+    }
+    class
+    NodeIDObservation<Observee : BaseAnalyzer> {
+        typealias
+            Callback = (BaseAnalyzer, Observee) -> Void
+        let
+        callback :Callback
+        init(_ callback : @escaping Callback) {
+            self.callback = callback
+        }
+    }
+    var
+    nodeIDObservations :NSMapTable<
+        BaseAnalyzer,
+        NodeIDObservation<BaseAnalyzer>
+        > = NSMapTable.weakToStrongObjects()
+    func
+        addNodeIDObserver(
+        _ observer: BaseAnalyzer,
+        callback : @escaping (BaseAnalyzer, BaseAnalyzer) -> Void
+        ) {
+        self.nodeIDObservations.setObject(
+            NodeIDObservation(callback),
+            forKey: observer
+        )
+    }
+    func
+        removeNodeIDObserver(
+        _ observer :BaseAnalyzer
+        ) {
+        self.nodeIDObservations.removeObject(
+            forKey: observer
+        )
+    }
 
     // MARK: - Event Recording
     
@@ -182,16 +250,13 @@ public class
         with properties :Properties? = nil
         ) {
         let
-        contextResolver = self as! IdentityContextResolving,
-        expressable = properties?.toJSExpressable() ?? [:]
-
-        try! contextResolver.resolveContext { (context) in
-            let
-            manager = context.manager
+        identityResolver = self
+        try! identityResolver.resolveIdentity {
+            (manager, nodeID) in
             try manager.recordEvent(
                 named: name,
-                with: expressable,
-                onNodeBy: context.identifier
+                with: properties,
+                onNodeBy: nodeID
             )
         }
     }
@@ -199,7 +264,7 @@ public class
     // MARK: - Child Analyzer
     
     var
-    childAnalyzer :[AnyHashable : IdentityContextResolving] = [:]
+    childAnalyzer :[AnyHashable : BaseAnalyzer] = [:]
     /*
     func
         resolvedChildAnalyzer(
@@ -222,7 +287,7 @@ public class
     }
  */
 }
-
+/*
 extension
     Dictionary
     where Key == String, Value : Any
@@ -232,6 +297,7 @@ extension
         return self
     }
 }
+ */
 
 enum
     ContextError : Error

@@ -9,18 +9,62 @@
 import Foundation
 import JavaScriptCore
 
-typealias
-    NodeID = Array<UInt>
-extension
-    Array
-    where Element == UInt
+struct NodeID : Equatable
 {
-    init(owner: AnyObject) {
-        self.init(arrayLiteral: UInt(bitPattern: ObjectIdentifier(owner)))
-    }
+    let
+    ownerID :UInt,
+    keyPath :[String]?
     static func
-        empty() -> [Element] {
-        return []
+    owned(
+        by owner: AnyObject
+        ) -> NodeID {
+        return self.init(
+            ownerID: UInt(bitPattern: ObjectIdentifier(owner)),
+            keyPath: nil
+        )
+    }
+    func
+        isOwned(by object :AnyObject) -> Bool {
+        return UInt(bitPattern: ObjectIdentifier(object)) == self.ownerID
+    }
+    var
+    containsKeyPath :Bool {
+        return self.keyPath != nil && self.keyPath!.count > 0
+    }
+    func
+        appended(
+        _ keyPath :[String]
+        ) -> NodeID {
+        var
+        copied = self.keyPath ?? []
+        copied.append(contentsOf: keyPath)
+        return NodeID(
+            ownerID: self.ownerID,
+            keyPath: copied
+        )
+    }
+    func
+        appended(
+        key :String,
+        index :Int?
+        ) -> NodeID {
+        var
+        keyPath = [key]
+        if let
+            index = index {
+            keyPath.append("\(index)")
+        }
+        return self.appended(keyPath)
+    }
+    func
+        toJSRepresentation() -> [Any] {
+        var
+        repr :[Any] = self.keyPath ?? []
+        repr.insert(
+            self.ownerID,
+            at: 0
+        )
+        return repr
     }
 }
 
@@ -176,7 +220,6 @@ public class
         }
         return dependency
     }
-
     func
         registerNode(
         by identifier :NodeID,
@@ -192,8 +235,8 @@ public class
             let
             null = NSNull(),
             arguments :[Any] = [
-                identifier,
-                parentID ?? null,
+                identifier.toJSRepresentation(),
+                parentID?.toJSRepresentation() ?? null,
                 name,
                 index ?? null,
                 namespace ?? null,
@@ -205,7 +248,6 @@ public class
             )
         }
     }
-    
     func
         deregisterNodes(
         by identifier :NodeID
@@ -215,27 +257,29 @@ public class
         self.scriptQ.async {
             manager.invokeMethod(
                 "deregisterNodes",
-                withArguments: [identifier]
+                withArguments: [
+                    identifier.toJSRepresentation()
+                ]
             )
         }
     }
-    
     typealias
         Properties = [String : Any]
     func
         recordEvent(
         named name :String,
-        with properties :Propertiez,
+        with properties :Propertiez?,
         onNodeBy identifier :NodeID
         ) throws {
         let
         manager = try self.resolvedScriptManager()
         self.scriptQ.async {
             let
+            null = NSNull(),
             arguments :[Any] = [
                 name,
-                properties,
-                identifier
+                properties ?? null,
+                identifier.toJSRepresentation()
             ]
             manager.invokeMethod(
                 "recordEvent",
@@ -243,7 +287,6 @@ public class
             )
         }
     }
-    
     @objc
     public func
         logSnapshot() throws {

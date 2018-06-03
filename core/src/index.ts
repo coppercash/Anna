@@ -63,16 +63,20 @@ export class Manager
   }
 
   nodeID(
-    id :Identity.NodeID | number[] | number | null, 
+    id :Identity.NodeID | (number | string)[] | number | null, 
   ) : Identity.NodeID {
     if (id instanceof Identity.NodeID) {
       return id;
     }
     else if (id instanceof Array) {
-      return this.identities.nodeID(id);
+      return id.length > 0 ?
+        new Identity.NodeID(
+          id[0] as number,
+          id.slice(1) as string[]
+        ) : null;
     }
     else if (typeof id == 'number') {
-      return this.identities.nodeID([id]);
+      return new Identity.NodeID(id);
     }
     else {
       return null;
@@ -103,7 +107,7 @@ export class Manager
       );
     }
     catch (e) {
-      if (!(nID.ownerIDs.length > 1)) {
+      if (!(nID.keyPath.length > 0)) {
         throw e;
       }
     }

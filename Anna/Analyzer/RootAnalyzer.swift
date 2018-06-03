@@ -9,11 +9,11 @@ import Foundation
 
 @objc(ANARootAnalyzer) @objcMembers
 public class
-    RootAnalyzer : BaseAnalyzer, IdentityContextResolving
+    RootAnalyzer : BaseAnalyzer
 {
     public let
-    manager :Manager,
-    name :String
+    name :String,
+    manager :Manager
     @objc(initWithManager:name:)
     public
     init(
@@ -25,13 +25,14 @@ public class
         self.name = name
         super.init()
     }
+    /*
     override func
         resolvedAttributes() throws -> Recording.Properties {
         return [
             "__name__": self.name,
         ]
     }
-    
+   
     // MARK: - Context
     
     typealias
@@ -66,6 +67,59 @@ public class
         
         analyzer.resolvedContext = context
         return try callback(context)
+    }
+ */
+    
+    // MARK: - Node Identity
+    
+    override func
+        resolveIdentity(
+        then callback: @escaping IdentityResolving.Callback
+        ) throws {
+        let
+        manager = self.manager
+        if let
+            nodeID = self.nodeID
+        { return try callback(manager, nodeID) }
+        let
+        nodeID = NodeID.owned(by: self),
+        context = IdentityContext(
+            manager: manager,
+            parentID: nil,
+            identifier: nodeID,
+            name: self.name,
+            index: nil
+        )
+        try self.bindNode(with: context)
+        return try callback(manager, nodeID)
+    }
+    override func
+        bindNode(
+        with context: IdentityContext
+        ) throws {
+        guard self.nodeID == nil
+            else { return }
+        let
+        manager = context.manager,
+        nodeID = context.identifier
+        self.nodeID = nodeID
+        try manager.registerNode(
+            by: nodeID,
+            under: context.parentID,
+            name: context.name,
+            index: context.index,
+            namespace: nil
+        )
+    }
+    override func
+        unbindNode() throws {
+        let
+        manager = self.manager
+        guard let
+            nodeID = self.nodeID
+            else { return }
+        try manager.deregisterNodes(by: nodeID)
+        self.nodeID = nil
     }
 }
 

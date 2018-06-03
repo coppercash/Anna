@@ -2,6 +2,13 @@
 export class Node<Key, Value> {
   value? :Value = null;
   children :Map<Key, Node<Key, Value>> = new Map();
+
+  get(
+    key :Key
+  ) {
+    return this.children.get(key);
+  }
+
   retrieve(
     path :Array<Key>
   ) : Node<Key, Value> {
@@ -62,6 +69,49 @@ export class Node<Key, Value> {
     target = new construct() as Node<Key, Value>;
     node.children.set(component, target);
     return target;
+  }
+
+  delete(
+    path :Array<Key>
+  ) {
+    if (!(path.length > 0)) { return }
+    var
+    index = 1,
+      parent :Node<Key, Value> = this,
+      current = parent.get(path[0]);
+    while (index < path.length) {
+      let
+      key = path[index];
+      parent = current;
+      current = current.get(key);
+      index += 1;
+    }
+    let
+    lastKey = path[path.length - 1];
+    parent.children.delete(lastKey);
+  }
+
+  retrieveAllValues(
+    path :Array<Key>
+  ) : Value[] {
+    var
+    buffer = new Array<Value>();
+    let
+    node = this.retrieve(path);
+    this._collect_values(node, buffer);
+    return buffer;
+  }
+
+  _collect_values(
+    node :Node<Key, Value>,
+    buffer :Value[]
+  ) : void {
+    let
+    children = node.children;
+    if (node.value) {
+      buffer.push(node.value);
+    }
+    children.forEach(v => this._collect_values(v, buffer));
   }
 }
 

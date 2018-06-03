@@ -1,0 +1,125 @@
+//
+//  ReuseTests.swift
+//  Anna_iOS_Tests
+//
+//  Created by William on 2018/6/2.
+//
+
+import XCTest
+
+class ReuseTests: XCTestCase {
+    
+    func test_subAnalyzerOfAReusedAnalyzerShouldInheritTheEventsHappendOnAnalyzerWithSameKeyPath() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        test.task = ("""
+        match(
+          'tb/rw/vw/ana-updated',
+          function(node) {
+            if (!(node.ancestor(1).index == 0)) { return undefined; }
+            var
+            first = node.latestValue('count_10'),
+            second = node.latestValue('count_11');
+            return first + (second ? second : 0);
+          }
+        );
+        """)
+        class
+            Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource
+        {
+            var
+            counter = 10
+            lazy var
+            table :PathTestingTableView = {
+                let
+                superview = self.view!;
+                let
+                table = PathTestingTableView(frame: superview.bounds)
+                table.delegate = self
+                table.dataSource = self
+                table.register(
+                    PathTestingTableViewCell.self,
+                    forCellReuseIdentifier: "r"
+                )
+                return table
+            }()
+            override func
+                viewDidLoad() {
+                super.viewDidLoad()
+                self.analyzer.enable(with: "vc")
+                self.view.addSubview(self.table)
+                self.analyzer.setSubAnalyzer(
+                    self.table.analyzer,
+                    for: "tb"
+                )
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                DispatchQueue.main.async {
+                    self.table.scrollToRow(
+                        at: IndexPath(row: 9, section: 1),
+                        at: .middle, animated: false
+                    )
+                    DispatchQueue.main.async {
+                        self.table.scrollToRow(
+                            at: IndexPath(row: 0, section: 0),
+                            at: .middle, animated: false
+                        )
+                    }
+                }
+            }
+            func
+                tableView(
+                _ tableView: UITableView,
+                cellForRowAt indexPath: IndexPath
+                ) -> UITableViewCell {
+                let
+                cell = tableView.dequeueReusableCell(
+                    withIdentifier: "r",
+                    for: indexPath
+                ) as! PathTestingTableViewCell
+                cell.analyzer.enable(with: "rw")
+                let
+                subview = PathTestingView(frame: cell.contentView.bounds)
+                cell.contentView.addSubview(subview)
+                cell.analyzer.setSubAnalyzer(
+                    subview.analyzer,
+                    for: "vw"
+                )
+                if indexPath.section == 0 && indexPath.row == 0 {
+                    subview.analyzer.update(
+                        self.counter,
+                        for: "count_\(self.counter)"
+                    )
+                    self.counter += 1
+                }
+                return cell
+            }
+            func
+                tableView(
+                _ tableView: UITableView,
+                numberOfRowsInSection section: Int
+                ) -> Int {
+                return 10
+            }
+            func
+                numberOfSections(
+                in tableView: UITableView
+                ) -> Int {
+                return 2
+            }
+        }
+        test.rootViewController = Controller()
+        
+        test.expect(for: 2)
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 1.0
+        )
+        
+        XCTAssertEqual(test[0] as? Int, 10)
+        XCTAssertEqual(test[1] as? Int, 21)
+    }
+}

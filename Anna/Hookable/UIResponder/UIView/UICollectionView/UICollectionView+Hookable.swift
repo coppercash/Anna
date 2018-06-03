@@ -125,7 +125,7 @@ extension
     UICollectionView : AnalyzableCellConfiguring
 {
     typealias
-        Cell = UICollectionViewCell & AnalyzerReadable
+        Cell = UICollectionViewCell
     func
         analyticName(
         for section: Int
@@ -179,12 +179,10 @@ class
             collectionView,
             cellForItemAt: indexPath
         )
-        if let analyzable = cell as? (UICollectionViewCell & AnalyzerReadable) {
-            collectionView.configure(
-                cell: analyzable,
-                at: indexPath
-            )
-        }
+        collectionView.configure(
+            cell: cell,
+            at: indexPath
+        )
         return cell
     }
 }
