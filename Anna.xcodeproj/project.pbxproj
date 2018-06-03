@@ -13,7 +13,6 @@
 		3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFCD20AFBC9200294037 /* FocusTests.swift */; };
 		3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */; };
 		3D2CDFD320AFC35C00294037 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD220AFC35C00294037 /* Focus.swift */; };
-		3D8604C120AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */; };
 		3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8701AB20883D1E0014E312 /* CoreJS.swift */; };
 		3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D95C33320B39FD600781DB6 /* ControlTests.swift */; };
 		3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5D9209FEACE005F0572 /* ANAUIView.m */; };
@@ -112,7 +111,6 @@
 		3D2CDFD220AFC35C00294037 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
 		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuffixingIdentityContextForwarder.swift; sourceTree = "<group>"; };
 		3D8701AB20883D1E0014E312 /* CoreJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreJS.swift; sourceTree = "<group>"; };
 		3D95C33320B39FD600781DB6 /* ControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlTests.swift; sourceTree = "<group>"; };
 		3DB2E5D9209FEACE005F0572 /* ANAUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIView.m; sourceTree = "<group>"; };
@@ -382,7 +380,6 @@
 				3DF1816E20A41479008E6B25 /* Analyzer */,
 				BE195B42209D844F00111F15 /* Analyzable.swift */,
 				BE4010DF20A9909E0056BF29 /* FocusPath.swift */,
-				3D8604C020AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift */,
 				BE195B0A209D7D6900111F15 /* Manager.swift */,
 				BE195B24209D7E8A00111F15 /* Tracker.swift */,
 				BE195B0B209D7D6900111F15 /* Hook.swift */,
@@ -629,7 +626,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE195B1A209D7D6A00111F15 /* Manager.swift in Sources */,
-				3D8604C120AA8C10001D1942 /* SuffixingIdentityContextForwarder.swift in Sources */,
 				BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */,
 				3DF1817220A41490008E6B25 /* BaseAnalyzer.swift in Sources */,
 				3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */,

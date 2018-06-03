@@ -30,25 +30,6 @@ struct
 }
 
 protocol
-    IdentityContextResolving : class
-{
-    var
-    resolvedContext :IdentityContext? { get }
-    typealias
-        Callback = (IdentityContext) throws -> Void
-    func
-        resolveContext(
-        then callback : @escaping Callback
-    ) throws
-    typealias
-        Notify = () -> Void
-    func
-        notifyAfterContextReset(
-        _ notify : @escaping Notify
-    )
-}
-
-protocol
     IdentityResolving : class
 {
     typealias
@@ -65,104 +46,10 @@ public class
     Recording,
     IdentityResolving
 {
-//    let
-//    name :String?
-//    init(
-//        name :String
-//        ) {
-//        self.name = name
-//    }
-   
     deinit {
         try? self.unbindNode()
     }
-    
-    /*
-    var
-    subAnalyzerBuffer :[SubAnalyzerWrapper] = []
-    func
-        flushSubAnalyzerBuffer() {
-        for wrapper in self.subAnalyzerBuffer {
-            guard let
-                sub = wrapper.analyzer
-                else { continue }
-            sub.resolvedParentAnalyzer = self
-            sub.resolvedParentship = true
-            sub.enable()
-        }
-        self.subAnalyzerBuffer.removeAll()
-    }
-    public func
-        enable(with key :String) {
-    }
-    public func
-        setSubAnalyzer(
-        _ sub :Analyzing,
-        for key:String
-        ) {
-        guard let sub = sub as? Analyzer
-            else { return }
-        sub.key = key
-        self.subAnalyzerBuffer.append(
-            SubAnalyzerWrapper(sub)
-        )
-        if self.isEnabled {
-            self.flushSubAnalyzerBuffer()
-        }
-    }
-    public func
-        setSubAnalyzers(_ subs: [Analyzing], for key: String) {
-        for (i, sub) in subs.enumerated() {
-            guard let sub = sub as? Analyzer
-                else { continue }
-            sub.key = key
-            sub.index = i
-            self.subAnalyzerBuffer.append(
-                SubAnalyzerWrapper(sub)
-            )
-        }
-        if self.isEnabled {
-            self.flushSubAnalyzerBuffer()
-        }
-    }
- */
-/*
-    // MARK: - Identity Context
-    
-    var
-    resolvedContext :IdentityContext? = nil {
-        didSet {
-            guard let _ = oldValue, self.resolvedContext == nil
-                else { return }
-            self.notifyContextReset()
-        }
-    }
-    var
-    contextResetingNotifications :[IdentityContextResolving.Notify] = []
-    func
-        notifyAfterContextReset(_ notify : @escaping IdentityContextResolving.Notify) {
-        self.contextResetingNotifications.append(notify)
-    }
-    func
-        notifyContextReset() {
-        for notify in self.contextResetingNotifications {
-            notify()
-        }
-        self.contextResetingNotifications.removeAll()
-    }
-    func
-        deregisterIdentityNodes() throws {
-        guard let
-            contextResolver = self as? IdentityContextResolving,
-            let
-            manager = contextResolver.resolvedContext?.manager
-            else { throw ContextError.unresolvedManager }
-        let
-        id = NodeID(owner: self)
-        try manager.deregisterNodes(by: id)
-    }
- */
-    
+
     // MARK: - Node Identity
     
     func
@@ -234,7 +121,7 @@ public class
     // MARK: - Event Recording
     
     var
-    resolvedNamespace :String? = nil
+    namespace :String? = nil
     struct
         Event
     {
@@ -265,39 +152,7 @@ public class
     
     var
     childAnalyzer :[AnyHashable : BaseAnalyzer] = [:]
-    /*
-    func
-        resolvedChildAnalyzer(
-        named name :String,
-        with identifier :AnyHashable
-        ) ->IdentityContextResolving
-    {
-        let
-        parent = self;
-        if let
-            child = parent.childAnalyzer[identifier]
-        { return child }
-        let
-        child = Analyzer(
-            with: name,
-            delegate: parent
-        )
-        parent.childAnalyzer[identifier] = child
-        return child
-    }
- */
 }
-/*
-extension
-    Dictionary
-    where Key == String, Value : Any
-{
-    func
-        toJSExpressable() -> Manager.Properties {
-        return self
-    }
-}
- */
 
 enum
     ContextError : Error

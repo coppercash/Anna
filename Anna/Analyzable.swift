@@ -11,36 +11,7 @@ import Foundation
 public protocol
     Analyzable : AnalyzerReadable & Hookable
 {
-    /*
-    @objc(ana_becomeAnalysisObjectNamed:)
-    func
-        becomeAnalysisObject(named name :String)
- */
 }
-/*
-public extension
-    NSObject
-{
-    @objc(ana_becomeAnalysisObjectNamed:)
-    public func
-        becomeAnalysisObject(
-        named name :String
-        ) {
-        let
-        writable = self as! AnalyzerWritable
-        guard
-            writable.analyzer == nil
-            else { return }
-        let
-        delegate = (self as! Analyzer.Delegate & Hookable),
-        analyzer = Analyzer(
-            delegate: delegate
-        )
-        writable.analyzer = analyzer
-        analyzer.enable(with: name)
-    }
-}
-*/
 
 @objc(ANAAnalyzing)
 public protocol

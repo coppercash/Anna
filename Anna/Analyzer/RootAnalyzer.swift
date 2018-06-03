@@ -25,51 +25,7 @@ public class
         self.name = name
         super.init()
     }
-    /*
-    override func
-        resolvedAttributes() throws -> Recording.Properties {
-        return [
-            "__name__": self.name,
-        ]
-    }
-   
-    // MARK: - Context
-    
-    typealias
-        ContextCallback = IdentityContextResolving.Callback
-    func
-        resolveContext(
-        then callback : @escaping ContextCallback
-        ) throws {
-        let
-        analyzer = self,
-        namespace = self.resolvedNamespace,
-        manager = self.manager
-        if let
-            context = analyzer.resolvedContext
-        { return try callback(context) }
-        let
-        identifier = NodeID(owner: self)
-        try manager.registerNode(
-            by: identifier,
-            under: nil,
-            name: analyzer.name,
-            index: nil,
-            namespace: namespace
-        )
-        let
-        context = IdentityContext(
-            manager: manager,
-            parentID: nil,
-            identifier: identifier,
-            prefix: NodeID.empty()
-        )
-        
-        analyzer.resolvedContext = context
-        return try callback(context)
-    }
- */
-    
+
     // MARK: - Node Identity
     
     override func
@@ -146,4 +102,3 @@ extension
     
     public func setSubAnalyzers(_ subs: [Analyzing], for key: String) { }
 }
-
