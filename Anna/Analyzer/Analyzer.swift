@@ -7,17 +7,6 @@
 
 import Foundation
 
-class
-SubAnalyzerWrapper {
-    weak var
-    analyzer :Analyzer?
-    init(
-        _ analyzer :Analyzer
-        ) {
-        self.analyzer = analyzer
-    }
-}
-
 @objc(ANAAnalyzer)
 public class
     Analyzer : BaseAnalyzer, FocusHandling
@@ -40,11 +29,16 @@ public class
         ) -> Self {
         return self.init(delegate: delegate)
     }
+    deinit {
+        try? self.deactivate()
+        //
+        // The observation to parent.nodeID is removed.
+    }
     
     // MARK: - Node Identity
     
-    var
-    manager :Manager? = nil
+//    var
+//    manager :Manager? = nil
     override func
         resolveIdentity(
         then callback: @escaping IdentityResolving.Callback
@@ -54,16 +48,8 @@ public class
         //
         self.deferResolution(callback)
         if let
-            manager = self.manager,
-            let
-            nodeID = self.nodeID
-        {
-            try self.flushResolutions(
-                with: manager,
-                nodeID
-            )
-            return
-        }
+            identity = self.identity
+        { return try self.flushResolutions(with: identity) }
         
         guard
             let
@@ -72,55 +58,18 @@ public class
             parent = self.parent ?? self.parentByLookingUp()
             else { return }
         try parent.resolveIdentity {
-            [weak self] (manager, parentID) in
+            [weak self] (identity) in
             guard let
                 analyzer = self
                 else { return }
             let
-            context = makeContext(manager, parentID)
+            context = makeContext(identity)
             try analyzer.bindNode(
                 with: context
             )
-            try analyzer.flushResolutions(
-                with: context.manager,
-                context.identifier
-            )
+            try analyzer.flushResolutions(with: analyzer.identity!)
         }
     }
-    override func
-        bindNode(
-        with context :IdentityContext
-        ) throws {
-        let
-        manager = context.manager,
-        nodeID = context.identifier
-        if self.manager == nil {
-            self.manager = manager
-        }
-        if self.nodeID == nil {
-            self.nodeID = nodeID
-            try manager.registerNode(
-                by: nodeID,
-                under: context.parentID,
-                name: context.name,
-                index: context.index
-            )
-        }
-    }
-    override func
-        unbindNode() throws {
-        guard let
-            nodeID = self.nodeID
-            else { return }
-        if let
-            manager = self.manager,
-            nodeID.isOwned(by: self)
-        {
-            try manager.deregisterNodes(by: nodeID)
-        }
-        self.nodeID = nil
-    }
-    
     var
     deferred :[IdentityResolving.Callback] = []
     func
@@ -131,13 +80,12 @@ public class
     }
     func
         flushResolutions(
-        with manager :Manager,
-        _ nodeID :NodeID
+        with identity :Identity
         ) throws {
         for
             callback in self.deferred
         {
-            try callback(manager, nodeID)
+            try callback(identity)
         }
         self.deferred.removeAll()
     }
@@ -152,17 +100,6 @@ public class
     var
     isEnabled = false,
     parentlessName :String? = nil
-    public func
-        enable(
-        with name :String
-        ) {
-        self.parentlessName = name
-        try! self.enable(
-            under: nil,
-            key: name,
-            index: nil
-        )
-    }
     func
         enable(
         under parent :BaseAnalyzer?,
@@ -172,12 +109,26 @@ public class
         guard self.isEnabled == false
             else { return }
         self.isEnabled = true
-        try self.activate(
-            under: parent,
-            key: key,
-            index: index,
-            nodeIDKeyPath: nil
-        )
+        
+        if parent == nil {
+            self.parentlessName = key
+        }
+        
+        if let
+            parent = parent
+        {
+            try self.activate(
+                under: parent,
+                key: key,
+                index: index
+            )
+        }
+        else {
+            try self.activate(
+                with: key
+            )
+        }
+
         if let
             delegate = self.delegate as? Hookable
         {
@@ -226,7 +177,7 @@ public class
             return
         }
         try self.resolveIdentity {
-            [weak self, weak sub] (manager, nodeID) in
+            [weak self, weak sub] (_) in
             guard let
                 analyzer = self,
                 let
@@ -242,66 +193,77 @@ public class
 
     // MARK: - Activate
     
+    typealias
+    Parent = IdentityResolving
     weak var
-    parent :BaseAnalyzer? = nil {
+    parent :Parent? = nil {
         willSet {
-            self.parent?.removeNodeIDObserver(self)
+            self.parent?.removeIdentityObserver(self)
         }
         didSet {
-            self.parent?.addNodeIDObserver(self) {
+            self.parent?.addIdentityObserver(self) {
                 (parent, analyzer) in
-                analyzer.nodeID = nil
+                if parent.identity == nil {
+                    analyzer.identity = nil
+                }
             }
         }
     }
     typealias
-    ContextMaker = (Manager, NodeID) -> IdentityContext
+    ContextMaker = (Identity) -> IdentityContext
     var
     makeContext :ContextMaker? = nil
     func
         activate(
-        under parent :BaseAnalyzer?,
-        key :String,
-        index :Int?,
-        nodeIDKeyPath :[String]?
+        under parent :Parent?,
+        contextMaker : @escaping ContextMaker
         ) throws {
         self.parent = parent
+        self.makeContext = contextMaker
+        try self.resolveIdentity { (_) in }
+    }
+    func
+        activate(
+        with name :String
+        ) throws {
         let
-        isParentless = parent == nil,
-        parentlessID = NodeID.owned(by: self)
-        self.makeContext = {
-            (manager, parentID) in
+        nodeID = NodeID.owned(by: self)
+        try self.activate(under: nil) {
             let
-            nodeID :NodeID
-            if
-                isParentless
-            {
-                nodeID = parentlessID
-            }
-            else {
-                if let
-                    keyPath = nodeIDKeyPath
-                {
-                    nodeID = parentID.appended(keyPath)
-                }
-                else if
-                    parentID.containsKeyPath
-                {
-                    nodeID = parentID.appended(key: key, index: index)
-                }
-                else {
-                    nodeID = parentlessID
-                }
-            }
+            manager = $0.manager,
+            parentID = $0.nodeID
             return IdentityContext(
                 manager: manager,
+                nodeID: nodeID,
                 parentID: parentID,
-                identifier: nodeID,
+                name: name,
+                index: nil
+            )
+        }
+    }
+    func
+        activate(
+        under parent :Parent,
+        key :String,
+        index :Int?
+        ) throws {
+        let
+        atonomicID = NodeID.owned(by: self)
+        try self.activate(under: parent) {
+            let
+            manager = $0.manager,
+            parentID = $0.nodeID,
+            nodeID = parentID.containsKeyPath ?
+                parentID.appended(key: key, index: index) :
+            atonomicID
+            return IdentityContext(
+                manager: manager,
+                nodeID: nodeID,
+                parentID: parentID,
                 name: key,
                 index: index
             )
         }
-        try self.resolveIdentity { (_, _) in }
     }
     func
         deactivate() throws {
@@ -360,11 +322,50 @@ public class
             else { return }
         handler.handleFocused(object)
     }
+
+    // MARK: - Subordinary
+    
+    typealias
+        SubKey = AnyHashable
+    typealias
+        SubObject = AnyObject
+    var
+    subordinaires :[SubKey : SubObject] = [:]
+    func
+        removeSubordinary(
+        for key :SubKey
+        ) {
+        self.subordinaires[key] = nil
+    }
+    func
+        setSubordinary(
+        _ sub :SubObject,
+        for key :SubKey
+        ) {
+        self.subordinaires[key] = sub
+    }
+    func
+        subordinary(
+        for key :SubKey
+        ) ->SubObject? {
+        return self.subordinaires[key]
+    }
 }
 
 extension
     Analyzer : Analyzing
 {
+    public func
+        enable(
+        with name :String
+        ) {
+        self.parentlessName = name
+        try! self.enable(
+            under: nil,
+            key: name,
+            index: nil
+        )
+    }
     public func
         hook(_ hookee :Hookable) {
         let

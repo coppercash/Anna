@@ -20,6 +20,37 @@ extension
     }
 }
 
+extension
+    UICollectionView
+{
+    @objc(ana_reloadData)
+    public func
+        ana_reloadData() {
+        guard let
+            analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
+            else { return }
+        for
+            i in 0..<(self.dataSource?.numberOfSections?(in: self) ?? 0)
+        {
+            analyzer.removeSubordinary(for: i)
+        }
+    }
+    @objc(ana_reloadSections:)
+    public func
+        ana_reloadSections(
+        _ sections: IndexSet
+        ) {
+        guard let
+            analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
+            else { return }
+        for
+            i in sections
+        {
+            analyzer.removeSubordinary(for: i)
+        }
+    }
+}
+
 class
     UICollectionViewObserver<Observee> : UIViewObserver<Observee>
     where Observee : UICollectionView
@@ -53,6 +84,10 @@ class
             //
             observee.dataSource = dataSource
         }
+    }
+    class override var
+    decorators :[AnyClass] {
+        return super.decorators + [ANAUICollectionView.self]
     }
 }
 
@@ -122,10 +157,8 @@ class
 }
 
 extension
-    UICollectionView : AnalyzableCellConfiguring
+    UICollectionView : SectionAnalyzable
 {
-    typealias
-        Cell = UICollectionViewCell
     func
         analyticName(
         for section: Int
@@ -179,10 +212,18 @@ class
             collectionView,
             cellForItemAt: indexPath
         )
-        collectionView.configure(
-            cell: cell,
-            at: indexPath
-        )
+        if
+            let
+            row = cell as? AnalyzerReadable,
+            let
+            table = collectionView as? AnalyzerReadable & SectionAnalyzable
+        {
+            try! _configure(
+                cell: row,
+                in: table,
+                at: indexPath
+            )
+        }
         return cell
     }
 }

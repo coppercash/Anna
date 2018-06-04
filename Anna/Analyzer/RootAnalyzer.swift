@@ -35,47 +35,19 @@ public class
         let
         manager = self.manager
         if let
-            nodeID = self.nodeID
-        { return try callback(manager, nodeID) }
+            identity = self.identity
+        { return try callback(identity) }
         let
         nodeID = NodeID.owned(by: self),
         context = IdentityContext(
             manager: manager,
+            nodeID: nodeID,
             parentID: nil,
-            identifier: nodeID,
             name: self.name,
             index: nil
         )
         try self.bindNode(with: context)
-        return try callback(manager, nodeID)
-    }
-    override func
-        bindNode(
-        with context: IdentityContext
-        ) throws {
-        guard self.nodeID == nil
-            else { return }
-        let
-        manager = context.manager,
-        nodeID = context.identifier
-        self.nodeID = nodeID
-        try manager.registerNode(
-            by: nodeID,
-            under: context.parentID,
-            name: context.name,
-            index: context.index,
-            namespace: nil
-        )
-    }
-    override func
-        unbindNode() throws {
-        let
-        manager = self.manager
-        guard let
-            nodeID = self.nodeID
-            else { return }
-        try manager.deregisterNodes(by: nodeID)
-        self.nodeID = nil
+        return try callback(self.identity!)
     }
 }
 

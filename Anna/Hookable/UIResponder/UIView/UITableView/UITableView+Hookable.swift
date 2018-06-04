@@ -20,6 +20,38 @@ extension
     }
 }
 
+extension
+    UITableView
+{
+    @objc(ana_reloadData)
+    public func
+        ana_reloadData() {
+        guard let
+            analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
+            else { return }
+        for
+            i in 0..<(self.dataSource?.numberOfSections?(in: self) ?? 1)
+        {
+            analyzer.removeSubordinary(for: i)
+        }
+    }
+    @objc(ana_reloadSections:withRowAnimation:)
+    public func
+        ana_reloadSections(
+        _ sections: IndexSet,
+        with animation: UITableViewRowAnimation
+        ) {
+        guard let
+            analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
+            else { return }
+        for
+            i in sections
+        {
+            analyzer.removeSubordinary(for: i)
+        }
+    }
+}
+
 // Why reseting flags
 // https://github.com/BigZaphod/Chameleon/blob/master/UIKit/Classes/UITableView.m
 //
@@ -56,6 +88,10 @@ class
             //
             observee.dataSource = dataSource
         }
+    }
+    class override var
+    decorators :[AnyClass] {
+        return super.decorators + [ANAUITableView.self]
     }
 }
 
@@ -139,7 +175,7 @@ class
 }
 
 extension
-    UITableView : AnalyzableCellConfiguring
+    UITableView : SectionAnalyzable
 {
     typealias
         Cell = UITableViewCell
@@ -173,102 +209,6 @@ extension
     }
 }
 
-protocol
-    AnalyzableCellConfiguring
-{
-    associatedtype
-    Cell
-    func
-        configure(
-        cell :Cell,
-        at indexPath :IndexPath
-    )
-    func
-        analyticName(
-        for section :Int
-    ) -> String?
-    func
-        didCreate(
-        _ analyzer :Analyzing,
-        for section :Int
-    )
-}
-
-extension
-    AnalyzableCellConfiguring
-{
-    func
-        configure(
-        cell :Cell,
-        at indexPath :IndexPath
-        ) {
-        let
-        section = self.resolvedSubAnalyzer(for: indexPath.section)
-        guard
-            let
-            table = (self as? AnalyzerReadable)?.analyzer as? Analyzer,
-            let
-            row = (cell as? AnalyzerReadable)?.analyzer as? Analyzer,
-            let
-            key = row.parentlessName
-            else { return }
-        let
-        parent = section ?? table,
-        keyPath = section != nil ? ["\(indexPath.row)"] :
-            [
-                "\(indexPath.section)",
-                "\(indexPath.row)",
-        ]
-        try! row.activate(
-            under: parent,
-            key: key,
-            index: indexPath.row,
-            nodeIDKeyPath: keyPath
-        )
-    }
-    
-    typealias
-        SectionAnalyzer = Analyzer
-    func
-        resolvedSubAnalyzer(
-        for section :Int
-        ) -> SectionAnalyzer? {
-        guard let
-            owner = self as? AnalyzerReadable,
-            let
-            table = owner.analyzer as? Analyzer
-            else { return nil }
-        if let
-            resolved = table.childAnalyzer[section] as? SectionAnalyzer
-        { return resolved }
-        guard let
-            name = self.analyticName(for: section)
-            else { return nil }
-        let
-        analyzer = Analyzer(
-            delegate: table
-        )
-        table.childAnalyzer[section] = analyzer
-        try! analyzer.activate(
-            under: table,
-            key: name,
-            index: section,
-            nodeIDKeyPath: nil
-        )
-        self.didCreate(analyzer, for: section)
-
-        let
-        vr = VisibilityRecorder(
-            activeEvents: [.appeared, .disappeared]
-        )
-        vr.recorder = analyzer
-        analyzer.tokens.append(vr)
-        vr.record(true)
-        
-        return analyzer
-    }
-}
-
 class
     UITableViewDataSourceProxy : Proxy<UITableViewDataSource>, UITableViewDataSource
 {
@@ -291,10 +231,18 @@ class
             tableView,
             cellForRowAt: indexPath
         )
-        tableView.configure(
-            cell: cell,
-            at: indexPath
-        )
+        if
+            let
+            row = cell as? AnalyzerReadable,
+            let
+            table = tableView as? AnalyzerReadable & SectionAnalyzable
+        {
+            try! _configure(
+                cell: row,
+                in: table,
+                at: indexPath
+            )
+        }
         return cell
     }
 }

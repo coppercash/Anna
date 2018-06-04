@@ -8,22 +8,38 @@
 import Foundation
 
 struct
+    Identity : Equatable
+{
+    let
+    manager :Manager,
+    nodeID :NodeID
+    static func
+        == (
+        lhs :Identity,
+        rhs :Identity
+        ) -> Bool {
+        return lhs.manager === rhs.manager &&
+            lhs.nodeID == rhs.nodeID
+    }
+}
+
+struct
     IdentityContext : Equatable
 {
     let
     manager :Manager,
+    nodeID :NodeID,
     parentID :NodeID?,
-    identifier :NodeID,
     name :String,
     index :Int?
     static func
         == (
-        lhs: IdentityContext,
-        rhs: IdentityContext
+        lhs :IdentityContext,
+        rhs :IdentityContext
         ) -> Bool {
         return lhs.manager === rhs.manager &&
+            lhs.nodeID == rhs.nodeID &&
             lhs.parentID == rhs.parentID &&
-            lhs.identifier == rhs.identifier &&
             lhs.name == rhs.name &&
             lhs.index == rhs.index
     }
@@ -33,11 +49,22 @@ protocol
     IdentityResolving : class
 {
     typealias
-        Callback = (Manager, NodeID) throws -> Void
+        Callback = (Identity) throws -> Void
     func
         resolveIdentity(
         then callback : @escaping Callback
     ) throws -> Void
+    var
+    identity :Identity? { get }
+    func
+        addIdentityObserver(
+        _ observer: BaseAnalyzer,
+        callback : @escaping (BaseAnalyzer, BaseAnalyzer) -> Void
+    )
+    func
+        removeIdentityObserver(
+        _ observer :BaseAnalyzer
+    )
 }
 
 public class
@@ -62,30 +89,50 @@ public class
         bindNode(
         with context :IdentityContext
         ) throws {
-        fatalError("Overidding needed.")
+        guard self.identity == nil
+            else { return }
+        self.identity = Identity(
+            manager: context.manager,
+            nodeID: context.nodeID
+        )
+        try context.manager.registerNode(
+            by: context.nodeID,
+            under: context.parentID,
+            name: context.name,
+            index: context.index
+        )
     }
     func
         unbindNode() throws {
-        fatalError("Overidding needed.")
+        guard let
+            identity = self.identity
+            else { return }
+        let
+        manager = identity.manager,
+        nodeID = identity.nodeID
+        if nodeID.isOwned(by: self) {
+            try manager.deregisterNodes(by: nodeID)
+        }
+        self.identity = nil
     }
     var
-    nodeID :NodeID? = nil {
+    identity :Identity? = nil {
         didSet {
             for
-                key in self.nodeIDObservations.keyEnumerator()
+                key in self.identityObservations.keyEnumerator()
             {
                 guard
                     let
                     observer = key as? BaseAnalyzer,
                     let
-                    observation = self.nodeIDObservations.object(forKey: observer)
+                    observation = self.identityObservations.object(forKey: observer)
                     else { continue }
                 observation.callback(self, observer)
             }
         }
     }
     class
-    NodeIDObservation<Observee : BaseAnalyzer> {
+    IdentityObservation<Observee : BaseAnalyzer> {
         typealias
             Callback = (BaseAnalyzer, Observee) -> Void
         let
@@ -95,25 +142,25 @@ public class
         }
     }
     var
-    nodeIDObservations :NSMapTable<
+    identityObservations :NSMapTable<
         BaseAnalyzer,
-        NodeIDObservation<BaseAnalyzer>
+        IdentityObservation<BaseAnalyzer>
         > = NSMapTable.weakToStrongObjects()
     func
-        addNodeIDObserver(
+        addIdentityObserver(
         _ observer: BaseAnalyzer,
         callback : @escaping (BaseAnalyzer, BaseAnalyzer) -> Void
         ) {
-        self.nodeIDObservations.setObject(
-            NodeIDObservation(callback),
+        self.identityObservations.setObject(
+            IdentityObservation(callback),
             forKey: observer
         )
     }
     func
-        removeNodeIDObserver(
+        removeIdentityObserver(
         _ observer :BaseAnalyzer
         ) {
-        self.nodeIDObservations.removeObject(
+        self.identityObservations.removeObject(
             forKey: observer
         )
     }
@@ -139,7 +186,9 @@ public class
         let
         identityResolver = self
         try! identityResolver.resolveIdentity {
-            (manager, nodeID) in
+            let
+            manager = $0.manager,
+            nodeID = $0.nodeID
             try manager.recordEvent(
                 named: name,
                 with: properties,
@@ -147,11 +196,6 @@ public class
             )
         }
     }
-
-    // MARK: - Child Analyzer
-    
-    var
-    childAnalyzer :[AnyHashable : BaseAnalyzer] = [:]
 }
 
 enum

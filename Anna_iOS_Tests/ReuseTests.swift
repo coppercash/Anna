@@ -9,7 +9,7 @@ import XCTest
 
 class ReuseTests: XCTestCase {
     
-    func test_subAnalyzerOfAReusedAnalyzerShouldInheritTheEventsHappendOnAnalyzerWithSameKeyPath() {
+    func test_sub_analyzer_of_a_reused_analyzer_should_inherit_the_events_happend_on_analyzer_with_same_key_path() {
         let
         test = PathTestCaseBuilder(with: self)
         test.task = ("""
@@ -224,6 +224,96 @@ class ReuseTests: XCTestCase {
             rootViewController: Controller()
         )
 
+        test.expect()
+        test.launch()
+        self.wait(
+            for: test.expectations,
+            timeout: 1.0
+        )
+        
+        XCTAssertEqual(test[0] as? Int, 42)
+    }
+    
+    func
+        test_reload_data() {
+        let
+        test = PathTestCaseBuilder(with: self)
+        test.task = ("""
+        match(
+          'tb/rw/ana-updated',
+          function(node) {
+            if (!(node.latestValue('trigger') == 7)) { return undefined; }
+            return node.latestValue('answer') === undefined ? 42 : undefined;
+          }
+        );
+        """)
+        class
+            Controller : PathTestingViewController, UITableViewDelegate, UITableViewDataSource
+        {
+            var
+            counter = 10
+            lazy var
+            table :PathTestingTableView = {
+                let
+                superview = self.view!;
+                let
+                table = PathTestingTableView(frame: superview.bounds)
+                table.delegate = self
+                table.dataSource = self
+                table.register(
+                    PathTestingTableViewCell.self,
+                    forCellReuseIdentifier: "r"
+                )
+                return table
+            }()
+            override func
+                viewDidLoad() {
+                super.viewDidLoad()
+                self.analyzer.enable(with: "vc")
+                self.view.addSubview(self.table)
+                self.analyzer.setSubAnalyzer(
+                    self.table.analyzer,
+                    for: "tb"
+                )
+            }
+            override func
+                viewDidAppear(_ animated: Bool) {
+                super.viewDidAppear(animated)
+                let
+                cell = self.table.cellForRow(at: IndexPath(row: 0, section: 0)) as! PathTestingTableViewCell
+                cell.analyzer.update(7, for: "answer")
+                DispatchQueue.main.async {
+                    self.table.reloadData()
+                    DispatchQueue.main.async {
+                        let
+                        cell = self.table.cellForRow(at: IndexPath(row: 0, section: 0)) as! PathTestingTableViewCell
+                        cell.analyzer.update(7, for: "trigger")
+                    }
+                }
+            }
+            func
+                tableView(
+                _ tableView: UITableView,
+                cellForRowAt indexPath: IndexPath
+                ) -> UITableViewCell {
+                let
+                cell = tableView.dequeueReusableCell(
+                    withIdentifier: "r",
+                    for: indexPath
+                    ) as! PathTestingTableViewCell
+                cell.analyzer.enable(with: "rw")
+                return cell
+            }
+            func
+                tableView(
+                _ tableView: UITableView,
+                numberOfRowsInSection section: Int
+                ) -> Int {
+                return 20
+            }
+        }
+        test.rootViewController = Controller()
+        
         test.expect()
         test.launch()
         self.wait(
