@@ -106,12 +106,16 @@ export class Node<Key, Value> {
     node :Node<Key, Value>,
     buffer :Value[]
   ) : void {
+    if (!(node)) { return; }
     let
-    children = node.children;
-    if (node.value) {
-      buffer.push(node.value);
+    children = node.children,
+    value = node.value;
+    if (value) {
+      buffer.push(value);
     }
-    children.forEach(v => this._collect_values(v, buffer));
+    if (children) {
+      children.forEach(v => this._collect_values(v, buffer));
+    }
   }
 }
 

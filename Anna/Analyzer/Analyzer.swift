@@ -37,8 +37,6 @@ public class
     
     // MARK: - Node Identity
     
-//    var
-//    manager :Manager? = nil
     override func
         resolveIdentity(
         then callback: @escaping IdentityResolving.Callback
@@ -169,16 +167,27 @@ public class
 
     // MARK: - Activate
     
+    var
+    identityObservationToken :IdentityResolving.ObservationToken? = nil
     typealias
     Parent = IdentityResolving
     weak var
     parent :Parent? = nil {
         willSet {
-            self.parent?.removeIdentityObserver(self)
+            if let
+                token = self.identityObservationToken
+            {
+                self.parent?.removeIdentityObserver(by: token)
+            }
+            self.identityObservationToken = nil
         }
         didSet {
-            self.parent?.addIdentityObserver(self) {
-                (parent, analyzer) in
+            self.identityObservationToken =
+            self.parent?.addIdentityObserver {
+                [weak self] (parent) in
+                guard let
+                    analyzer = self
+                    else { return }
                 if parent.identity == nil {
                     analyzer.identity = nil
                 }

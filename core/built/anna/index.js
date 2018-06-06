@@ -1116,11 +1116,16 @@ var Node = (function () {
     };
     Node.prototype._collect_values = function (node, buffer) {
         var _this = this;
-        var children = node.children;
-        if (node.value) {
-            buffer.push(node.value);
+        if (!(node)) {
+            return;
         }
-        children.forEach(function (v) { return _this._collect_values(v, buffer); });
+        var children = node.children, value = node.value;
+        if (value) {
+            buffer.push(value);
+        }
+        if (children) {
+            children.forEach(function (v) { return _this._collect_values(v, buffer); });
+        }
     };
     return Node;
 }());

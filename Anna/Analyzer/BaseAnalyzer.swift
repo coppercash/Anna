@@ -56,14 +56,17 @@ protocol
     ) throws -> Void
     var
     identity :Identity? { get }
+    typealias
+        ObservationToken = Int
+    typealias
+        ObservationCallback = (BaseAnalyzer) -> Void
     func
         addIdentityObserver(
-        _ observer: BaseAnalyzer,
-        callback : @escaping (BaseAnalyzer, BaseAnalyzer) -> Void
-    )
+        callback : @escaping ObservationCallback
+        ) -> ObservationToken
     func
         removeIdentityObserver(
-        _ observer :BaseAnalyzer
+        by token :ObservationToken
     )
 }
 
@@ -72,6 +75,8 @@ public class
     NSObject,
     IdentityResolving
 {
+    var
+    namespace :String? = nil
     deinit {
         try? self.unbindNode()
     }
@@ -94,11 +99,15 @@ public class
             manager: context.manager,
             nodeID: context.nodeID
         )
+        let
+        namespace = self.namespace
         try context.manager.registerNode(
             by: context.nodeID,
             under: context.parentID,
             name: context.name,
-            index: context.index
+            index: context.index,
+            namespace: namespace,
+            attributes: nil
         )
     }
     func
@@ -118,56 +127,39 @@ public class
     identity :Identity? = nil {
         didSet {
             for
-                key in self.identityObservations.keyEnumerator()
+                callback in self.identityObservationByToken.values
             {
-                guard
-                    let
-                    observer = key as? BaseAnalyzer,
-                    let
-                    observation = self.identityObservations.object(forKey: observer)
-                    else { continue }
-                observation.callback(self, observer)
+                callback(self)
             }
         }
     }
-    class
-    IdentityObservation<Observee : BaseAnalyzer> {
-        typealias
-            Callback = (BaseAnalyzer, Observee) -> Void
-        let
-        callback :Callback
-        init(_ callback : @escaping Callback) {
-            self.callback = callback
-        }
-    }
+    typealias
+        ObservationToken = Int
+    typealias
+        ObservationCallback = (BaseAnalyzer) -> Void
     var
-    identityObservations :NSMapTable<
-        BaseAnalyzer,
-        IdentityObservation<BaseAnalyzer>
-        > = NSMapTable.weakToStrongObjects()
+    nextIdentityObservationToken :ObservationToken = 0,
+    identityObservationByToken :[ObservationToken : ObservationCallback] = [:]
     func
         addIdentityObserver(
-        _ observer: BaseAnalyzer,
-        callback : @escaping (BaseAnalyzer, BaseAnalyzer) -> Void
-        ) {
-        self.identityObservations.setObject(
-            IdentityObservation(callback),
-            forKey: observer
-        )
+        callback : @escaping ObservationCallback
+        ) -> ObservationToken {
+        let
+        token = self.nextIdentityObservationToken
+        self.identityObservationByToken[token] = callback
+        self.nextIdentityObservationToken += 1
+        return token
     }
     func
         removeIdentityObserver(
-        _ observer :BaseAnalyzer
+        by token :ObservationToken
         ) {
-        self.identityObservations.removeObject(
-            forKey: observer
-        )
+        self.identityObservationByToken[token] = nil
     }
+
 
     // MARK: - Event Recording
     
-    var
-    namespace :String? = nil
     struct
         Event
     {
