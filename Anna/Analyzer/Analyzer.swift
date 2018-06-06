@@ -135,30 +135,6 @@ public class
             self.hook(owner: delegate)
         }
     }
-    public func
-        setSubAnalyzer(
-        _ sub :Analyzing,
-        for key:String
-        ) {
-        try! self.setSubAnalyzer(
-            sub,
-            for: key,
-            index: nil
-        )
-    }
-    public func
-        setSubAnalyzers(
-        _ subs: [Analyzing],
-        for key: String
-        ) {
-        for (i, sub) in subs.enumerated() {
-            try! self.setSubAnalyzer(
-                sub,
-                for: key,
-                index: i
-            )
-        }
-    }
     func
         setSubAnalyzer(
         _ sub :Analyzing,
@@ -360,11 +336,47 @@ extension
         with name :String
         ) {
         self.parentlessName = name
-        try! self.enable(
-            under: nil,
-            key: name,
-            index: nil
-        )
+        do {
+            try self.enable(
+                under: nil,
+                key: name,
+                index: nil
+            )
+        } catch let error {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+    public func
+        setSubAnalyzer(
+        _ sub :Analyzing,
+        for key:String
+        ) {
+        do {
+            try self.setSubAnalyzer(
+                sub,
+                for: key,
+                index: nil
+            )
+        } catch let error {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+    public func
+        setSubAnalyzers(
+        _ subs: [Analyzing],
+        for key: String
+        ) {
+        do {
+            for (i, sub) in subs.enumerated() {
+                try self.setSubAnalyzer(
+                    sub,
+                    for: key,
+                    index: i
+                )
+            }
+        } catch let error {
+            assertionFailure(error.localizedDescription)
+        }
     }
     public func
         hook(_ hookee :Hookable) {
@@ -421,7 +433,7 @@ extension
             value = value {
             properties["value"] = value
         }
-        self.recordEventOnPath(
+        self.recordEvent(
             named: "ana-updated",
             with: properties
         )
@@ -430,7 +442,7 @@ extension
         record(
         _ event: String
         ) {
-        self.recordEventOnPath(
+        self.recordEvent(
             named: event,
             with: nil
         )

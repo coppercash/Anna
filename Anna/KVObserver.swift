@@ -131,7 +131,7 @@ class
             "value" : after
         ]
         guard let before = change[.oldKey] else {
-            self.recorder?.recordEventOnPath(
+            self.recorder?.recordEvent(
                 named: name,
                 with: properties
             )
@@ -142,7 +142,7 @@ class
             let after = after as? NSObject,
             before == after
         { return }
-        self.recorder?.recordEventOnPath(
+        self.recorder?.recordEvent(
             named: name,
             with: properties
         )

@@ -13,20 +13,22 @@ public protocol
 {
     typealias
         Recorder = Recording
-    weak var
+    @objc(ana_recorder)
+    var
     recorder :Recorder? { get set }
 }
 
 @objc(ANARecording)
 public protocol
-    Recording
+    Recording : class
 {
     typealias
-        Properties = NSObject.Propertiez
+        Attributes = NSObject.Propertiez
+    @objc(ana_recordEventNamed:withAttributes:)
     func
-        recordEventOnPath(
+    recordEvent(
         named name :String,
-        with properties :Properties?
+        with attributes :Attributes?
     )
 }
 
@@ -198,7 +200,7 @@ class
                 context: context
             )
         }
-        self.recorder?.recordEventOnPath(
+        self.recorder?.recordEvent(
             named: event.name,
             with: event.properties
         )

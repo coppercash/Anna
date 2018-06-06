@@ -77,7 +77,7 @@ class
             event = e,
             self.activeEvents.contains(event)
             else { return }
-        self.recorder?.recordEventOnPath(
+        self.recorder?.recordEvent(
             named: event.name,
             with: nil
         )

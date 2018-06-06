@@ -227,7 +227,7 @@ public class
         name :String,
         index :Int?,
         namespace :String? = nil,
-        attributes :Properties? = nil
+        attributes :Attributes? = nil
         ) throws {
         let
         manager = try self.resolvedScriptManager()
@@ -264,11 +264,11 @@ public class
         }
     }
     typealias
-        Properties = [String : Any]
+        Attributes = [String : Any]
     func
         recordEvent(
         named name :String,
-        with properties :Propertiez?,
+        with properties :Attributes?,
         onNodeBy identifier :NodeID
         ) throws {
         let

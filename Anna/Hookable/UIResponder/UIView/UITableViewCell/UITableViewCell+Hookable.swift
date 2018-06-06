@@ -55,7 +55,7 @@ class
         case String(describing: #selector(UITableViewDelegate.tableView(_:didEndDisplaying:forRowAt:))):
             self.visibilityRecorder.record(false)
         case String(describing: #selector(UITableViewDelegate.tableView(_:didSelectRowAt:))):
-            self.recorder?.recordEventOnPath(
+            self.recorder?.recordEvent(
                 named: "did-select",
                 with: nil
             )
@@ -79,7 +79,11 @@ extension
         guard let
             analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
             else { return }
-        try! analyzer.deactivate()
+        do {
+            try analyzer.deactivate()
+        } catch let error {
+            assertionFailure(error.localizedDescription)
+        }
     }
     open override func
         parentConstitutor(

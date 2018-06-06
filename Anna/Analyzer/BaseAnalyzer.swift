@@ -70,7 +70,6 @@ protocol
 public class
     BaseAnalyzer :
     NSObject,
-    Recording,
     IdentityResolving
 {
     deinit {
@@ -178,22 +177,41 @@ public class
         name :String,
         properties :Properties?
     }
-    public func
+    func
         recordEventOnPath(
         named name :String,
-        with properties :Properties? = nil
-        ) {
+        with attributes :Manager.Attributes? = nil
+        ) throws {
         let
         identityResolver = self
-        try! identityResolver.resolveIdentity {
+        try identityResolver.resolveIdentity {
             let
             manager = $0.manager,
             nodeID = $0.nodeID
             try manager.recordEvent(
                 named: name,
-                with: properties,
+                with: attributes,
                 onNodeBy: nodeID
             )
+        }
+    }
+}
+
+extension
+    BaseAnalyzer : Recording
+{
+    public func
+        recordEvent(
+        named name: String,
+        with attributes: Recording.Attributes?
+        ) {
+        do {
+            try self.recordEventOnPath(
+                named: name,
+                with: attributes
+            )
+        } catch let error {
+            assertionFailure(error.localizedDescription)
         }
     }
 }
