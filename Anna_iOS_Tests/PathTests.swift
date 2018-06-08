@@ -13,13 +13,12 @@ class PathTests: XCTestCase {
     func test_deregister() {
         let
         test = PathTestCaseBuilder(with: self)
-        test.task =
-        """
+        test.task = ("""
         match(
-        'vc/delta/gamma/touch-up-inside',
-        function() { return 42; }
+          'vc/delta/gamma/touch-up-inside',
+          function() { return 42; }
         );
-        """
+        """)
         class
             Controller : PathTestingViewController
         {

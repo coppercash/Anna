@@ -120,10 +120,19 @@ extension
         parentConstitutor(
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
-        isOwning.assign(
+        #if swift(>=4.1)
+            isOwning.assign(
             repeating: true,
             count: 1
-        )
+            )
+        #else
+            var
+            value = true
+            isOwning.assign(
+                from: &value,
+                count: 1
+            )
+        #endif
         var
         skipping = false
         return super.parentConstitutor(isOwning: &skipping)

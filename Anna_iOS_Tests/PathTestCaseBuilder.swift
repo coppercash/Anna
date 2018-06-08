@@ -157,6 +157,15 @@ PathTestCaseBuilder : Anna.Tracking
     }
 }
 
+extension
+    ProcessInfo
+{
+    class var
+    needDetachAnalyzer :Bool {
+        return true
+    }
+}
+
 @objc(ANAPathTestingAppDelegate) class
 PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
 {
@@ -191,6 +200,11 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingTabBarController) class
@@ -198,6 +212,11 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingViewController) class
@@ -205,6 +224,11 @@ PathTestingViewController : UIViewController, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingButton) class
@@ -212,6 +236,11 @@ PathTestingButton : UIButton, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingTableView) class
@@ -219,6 +248,11 @@ PathTestingButton : UIButton, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingTableViewCell) class
@@ -226,6 +260,11 @@ PathTestingButton : UIButton, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingCollectionView) class
@@ -233,6 +272,11 @@ PathTestingButton : UIButton, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingCollectionViewCell) class
@@ -240,6 +284,11 @@ PathTestingButton : UIButton, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }
 
 @objc(ANAPathTestingView) class
@@ -247,6 +296,11 @@ PathTestingButton : UIButton, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
     override func
         setNeedsDisplay() {
         super.setNeedsDisplay()
@@ -270,4 +324,9 @@ PathTestingButton : UIButton, Analyzable
 {
     lazy var
     analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit {
+        if ProcessInfo.needDetachAnalyzer {
+            self.analyzer.detach()
+        }
+    }
 }

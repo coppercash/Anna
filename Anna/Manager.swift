@@ -66,6 +66,19 @@ struct NodeID : Equatable
         )
         return repr
     }
+    
+    #if !swift(>=4.1)
+    static func
+        ==(
+        lhs: NodeID,
+        rhs: NodeID
+        ) -> Bool {
+        return lhs.ownerID == rhs.ownerID
+        && ((lhs.keyPath == nil && rhs.keyPath == nil)
+            || (lhs.keyPath != nil && rhs.keyPath != nil && lhs.keyPath! == rhs.keyPath!)
+        )
+    }
+    #endif
 }
 
 @objc(ANADependency) @objcMembers

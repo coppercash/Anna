@@ -16,6 +16,8 @@ public protocol
     @objc(ana_recorder)
     var
     recorder :Recorder? { get set }
+    func
+        detach()
 }
 
 @objc(ANARecording)

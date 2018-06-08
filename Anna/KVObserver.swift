@@ -12,7 +12,8 @@ class
     where Observee : NSObject
 {
     let
-    keyPaths :[String: NSKeyValueObservingOptions],
+    keyPaths :[String: NSKeyValueObservingOptions]
+    var
     owner :NSValue?
     weak var
     observee :Observee?
@@ -23,7 +24,11 @@ class
         ) {
         self.keyPaths = keyPaths
         self.observee = observee
-        self.owner = owned ? NSValue.init(nonretainedObject: observee) : nil
+//        self.owner = owned ? NSValue.init(nonretainedObject: observee) : nil
+        self.owner = NSValue.init(nonretainedObject: observee)
+    }
+    deinit {
+        self.detach()
     }
     func
         observe(_ observee :Observee) {
@@ -45,12 +50,22 @@ class
             )
         }
     }
-    deinit {
-        guard let
-            observee = self.observee ??
-                (self.owner?.nonretainedObjectValue as? Observee)
-            else { return }
-        self.deobserve(observee)
+    func
+        detach() {
+        if let observee = self.observeeBeingDeobserved() {
+            self.deobserve(observee)
+            self.observee = nil
+            self.owner = nil
+        }
+    }
+    func
+        observeeBeingDeobserved() -> Observee? {
+        if let owner = self.owner {
+            return owner.nonretainedObjectValue as? Observee
+        }
+        else {
+            return self.observee
+        }
     }
     
     override func
@@ -80,6 +95,11 @@ class
                 self.observe(observee)
             }
         }
+    }
+    override func
+        detach() {
+        super.detach()
+        self.recorder = nil
     }
 }
 

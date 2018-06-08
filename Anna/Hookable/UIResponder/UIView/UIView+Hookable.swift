@@ -52,7 +52,7 @@ class
         change: [NSKeyValueChangeKey : Any]?,
         context: UnsafeMutableRawPointer?
         ) {
-        switch keyPath {
+        switch keyPath! {
         case #keyPath(UIView.isVisible):
             guard let isVisible = change?[.newKey] as? Bool else { return }
             self.visibilityRecorder.record(isVisible)

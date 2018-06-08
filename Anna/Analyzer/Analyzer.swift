@@ -15,6 +15,7 @@ public class
         Delegate = FocusPathConstituting
     weak var
     delegate :Delegate?
+    public required
     init(
         delegate :Delegate
         ) {
@@ -30,6 +31,7 @@ public class
         return self.init(delegate: delegate)
     }
     deinit {
+        self.detach()
         try? self.deactivate()
         //
         // The observation to parent.nodeID is removed.
@@ -97,7 +99,8 @@ public class
 
     var
     isEnabled = false,
-    parentlessName :String? = nil
+    parentlessName :String? = nil,
+    subsObserver : SubAnalyzableObserver? = nil
     func
         enable(
         under parent :BaseAnalyzer?,
@@ -107,11 +110,14 @@ public class
         guard self.isEnabled == false
             else { return }
         self.isEnabled = true
-        
-        if parent == nil {
-            self.parentlessName = key
+       
+        if let
+            describer = self.delegate as? SubAnalyzableObserver.Object {
+            self.subsObserver = SubAnalyzableObserver(
+                object: describer
+            )
         }
-        
+
         if let
             parent = parent
         {
@@ -122,6 +128,7 @@ public class
             )
         }
         else {
+            self.parentlessName = key
             try self.activate(
                 with: key
             )
@@ -458,7 +465,11 @@ extension
     }
     public func
         detach() {
+        for token in self.tokens {
+            token.detach()
+        }
         self.tokens.removeAll()
+        self.subsObserver = nil
     }
     public func
         markFocused() {
@@ -466,7 +477,6 @@ extension
             else { return }
         self.handleFocused(object)
     }
-
 }
 
 extension
@@ -478,10 +488,19 @@ extension
         parentConstitutor(
         isOwning: UnsafeMutablePointer<Bool>
         ) -> FocusPathConstituting? {
-        isOwning.assign(
+        #if swift(>=4.1)
+            isOwning.assign(
             repeating: true,
             count: 1
-        )
+            )
+        #else
+            var
+            value = true
+            isOwning.assign(
+                from: &value,
+                count: 1
+            )
+        #endif
         return self
     }
 }

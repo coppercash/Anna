@@ -82,4 +82,8 @@ class
             with: nil
         )
     }
+    func
+        detach() {
+        self.recorder = nil
+    }
 }

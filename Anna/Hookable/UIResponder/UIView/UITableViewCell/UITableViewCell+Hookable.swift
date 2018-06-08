@@ -49,7 +49,23 @@ class
         change: [NSKeyValueChangeKey : Any]?,
         context: UnsafeMutableRawPointer?
         ) {
-        switch change?.toEvent()?.name {
+        #if swift(>=4.1)
+            let
+            eventName = change?.toEvent()?.name
+        #else
+            guard let
+                eventName = change?.toEvent()?.name
+                else
+            {
+                return super.observeValue(
+                    forKeyPath: keyPath,
+                    of: object,
+                    change: change,
+                    context: context
+                )
+            }
+        #endif
+        switch eventName {
         case String(describing: #selector(UITableViewDelegate.tableView(_:willDisplay:forRowAt:))):
             self.visibilityRecorder.record(true)
         case String(describing: #selector(UITableViewDelegate.tableView(_:didEndDisplaying:forRowAt:))):

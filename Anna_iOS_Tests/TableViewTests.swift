@@ -15,32 +15,26 @@ class TableViewTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         
         test.task = ("""
+        var T = require('../tool');
         match(
-          'tb/sc_0/rw/ana-appeared',
-          function(node) {
-            if (!(node.index == 0)) { return undefined; }
-            return node.parentNode.nodeName + '_' + node.index;
+          ['tb/sc_0/rw/ana-appeared', 'tb/sc_3/rw/ana-appeared'],
+          function(n) {
+            var id = n.latestValue('identifier');
+            if (!((id === '0/0') || (id === '3/7'))) { return undefined; }
+            if (!(
+                T.first_displayed(n, 'identifier')
+            )) { return undefined; }
+            return id + '_appeared';
           }
         );
         match(
-          'tb/sc_3/rw/ana-appeared',
-          function(node) {
-            if (!(node.index == 7)) { return undefined; }
-            return node.parentNode.nodeName + '_' + node.index;
-          }
-        );
-        match(
-          'tb/sc_0/rw/ana-updated',
-          function(node) {
-            if (!(node.latestValue('identifier') == '0/0')) { return undefined; }
-            return node.latestEvent().attributes['value'];
-          }
-        );
-        match(
-          'tb/sc_3/rw/ana-updated',
-          function(node) {
-            if (!(node.latestValue('identifier') == '3/7')) { return undefined; }
-            return node.latestEvent().attributes['value'];
+          ['tb/sc_0/rw/ana-updated', 'tb/sc_3/rw/ana-updated'],
+          function(n) {
+            var id = n.latestValue('identifier');
+            if (!((id === '0/0') || (id === '3/7'))) { return undefined; }
+            var e = n.latestEvent(), keyPath = e.attributes['key-path'];
+            if (!(keyPath != 'identifier')) { return; }
+            return keyPath + '_' + e.attributes.value;
           }
         );
         """)
@@ -96,7 +90,10 @@ class TableViewTests: XCTestCase {
                         )
                         return cell
                     }()
-                cell.analyzer.update("\(indexPath.section)/\(indexPath.row)", for: "identifier")
+                cell.analyzer.update(
+                    "\(indexPath.section)/\(indexPath.row)",
+                    for: "identifier"
+                )
                 return cell
             }
             func
@@ -136,21 +133,19 @@ class TableViewTests: XCTestCase {
         }
         test.rootViewController = Controller()
         
-        test.expect(for: 8)
+        test.expect(for: 6)
         test.launch()
         self.wait(
             for: test.expectations,
             timeout: 1.0
         )
         
-        XCTAssertEqual(test[0] as? String, "0/0")
-        XCTAssertEqual(test[1] as? String, "sc_0_0")
-        XCTAssertEqual(test[2] as? String, "0-0")
-        XCTAssertEqual(test[3] as? String, "00")
-        XCTAssertEqual(test[4] as? String, "3/7")
-        XCTAssertEqual(test[5] as? String, "sc_3_7")
-        XCTAssertEqual(test[6] as? String, "3-7")
-        XCTAssertEqual(test[7] as? String, "37")
+        XCTAssertEqual(test[0] as? String, "0/0_appeared")
+        XCTAssertEqual(test[1] as? String, "textLabel.text_0-0")
+        XCTAssertEqual(test[2] as? String, "data_00")
+        XCTAssertEqual(test[3] as? String, "3/7_appeared")
+        XCTAssertEqual(test[4] as? String, "textLabel.text_3-7")
+        XCTAssertEqual(test[5] as? String, "data_37")
     }
     
     func test_tableViewCellSubviews() {
@@ -158,9 +153,13 @@ class TableViewTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         
         test.task = ("""
+        var T = require('../tool');
         match(
           ['tb/sc_0/rw/ana-appeared', 'tb/sc_19/rw/ana-appeared'],
-          function(node) { return 'cell-' + node.parentNode.nodeName; }
+          function(node) {
+            if (!(T.first_displayed(node))) { return undefined; }
+            return 'cell-' + node.parentNode.nodeName;
+          }
         );
         match(
           ['tb/sc_0/rw/vw/bt/touch-up-inside', 'tb/sc_19/rw/vw/bt/touch-up-inside'],
