@@ -1,214 +1,323 @@
-//
+
 //  Manager.swift
 //  Anna
 //
-//  Created by William on 22/04/2017.
+//  Created by William on 01/07/2017.
 //
 //
 
 import Foundation
+import JavaScriptCore
 
-public protocol
-EasyManaging {
-    typealias
-        Event = EasyEventBeing
-    typealias
-        Trackers = EasyTrackerConfiguring & EasyTrackerCollecting
-    var
-    trackers :Trackers { get }
-}
-
-public class
-EasyManager : EasyManaging
+struct NodeID : Equatable
 {
     let
-    configQueue :DispatchQueue,
-    queue :DispatchQueue
-    
-    public init
-        () {
-        self.configQueue = DispatchQueue(
-            label: "Anna.config",
-            attributes: .concurrent
-        )
-        self.queue = DispatchQueue (
-            label: "Anna.main",
-            target: configQueue
+    ownerID :UInt,
+    keyPath :[String]?
+    static func
+    owned(
+        by owner: AnyObject
+        ) -> NodeID {
+        return self.init(
+            ownerID: UInt(bitPattern: ObjectIdentifier(owner)),
+            keyPath: nil
         )
     }
-    
-    // MARK:- Point
-    
-    typealias
-        Root = EasyRootPoint
-    let
-    root :Root = Root()
-    
-    // MARK:- Tracker
-    
-    lazy internal(set) public var
-    trackers :EasyManaging.Trackers = {
-        return EasyTrackerConfigurator(host: self)
-    }()
-}
-
-// MARK: - Singleton
-
-extension
-EasyManager {
-    public static let
-    shared = EasyManager()
-}
-
-// MARK: - Load Points
-
-extension
-EasyClassPointBuilder : EasyRegistrationRecording {}
-extension
-EasyManager {
-    typealias
-        Registrant = EasyRegistering.Type
-    typealias
-        ClassPointBuilder = EasyClassPointBuilder
-    func loadPoints(for cls :Registrant) throws {
-        guard root.classPoint(for: cls) == nil else { return }
-        let
-        builder = ClassPointBuilder(trackers: trackers)
-        builder.classBuffer = cls
-        let
-        point = try builder.point()
-        
-        // Register the newly loaded point and all its super points
-        //
+    func
+        isOwned(by object :AnyObject) -> Bool {
+        return UInt(bitPattern: ObjectIdentifier(object)) == self.ownerID
+    }
+    var
+    containsKeyPath :Bool {
+        return self.keyPath != nil && self.keyPath!.count > 0
+    }
+    func
+        appended(
+        _ keyPath :[String]
+        ) -> NodeID {
         var
-        current :EasyClassPoint? = point,
-        currentBuilder :ClassPointBuilder? = builder
-        while
-            let point = current,
-            let cls = currentBuilder?.classBuffer
-        {
-            point.parent = root
-            root.setClassPoint(point, for: cls)
-            current = point.superClassPoint
-            currentBuilder = currentBuilder?.superClassPointBuilder
-        }
+        copied = self.keyPath ?? []
+        copied.append(contentsOf: keyPath)
+        return NodeID(
+            ownerID: self.ownerID,
+            keyPath: copied
+        )
     }
-}
-
-// MARK: - Receive & Dispatch
-
-public enum
-MatchingError : Error {
-    case noMatchingPoint(class :String, method :String)
-    case tooManyMatchingPoints(count :Int)
-}
-
-extension
-MatchingError : LocalizedError {
-    public var
-    errorDescription: String? {
-        switch self {
-        case .noMatchingPoint(class: let cls, method: let method):
-            return "No matching point found on class \(cls) for method \(method)."
-        case .tooManyMatchingPoints(count: let count):
-            return "Too many matching points found. Expected one but found \(count)."
-        }
-    }
-}
-
-extension
-MatchingError : Equatable {
-    public static func
-        == (lhs: MatchingError, rhs: MatchingError) ->Bool {
-        switch (lhs, rhs) {
-        case (.noMatchingPoint, .noMatchingPoint):
-            return true
-        case (.tooManyMatchingPoints, .tooManyMatchingPoints):
-            return true
-        default:
-            return false;
-        }
-    }
-}
-
-public enum
-ConfigurationError : Error {
-   case noAvailableTrackers
-}
-
-extension
-ConfigurationError : LocalizedError {
-    public var
-    errorDescription: String? {
-        switch self {
-        case .noAvailableTrackers:
-            return "Please, at least, set a default tracker by calling `EasyManager.shared.trackers.defaults = [YOUR_TRACKER]`."
-        }
-    }
-}
-
-extension
-EasyManager : EasyEventDispatching {
     func
-        dispatchEvent(with seed: Seed) {
-        queue.async {
-            do {
-                // Try to load points if they have not been loaded
-                //
-                try self.loadPoints(for: seed.registrant)
-                try self.dispatch(seed)
-            }
-            catch {
-                try! self.sendDefaultTrackers(error)
-            }
+        appended(
+        key :String,
+        index :Int?
+        ) -> NodeID {
+        var
+        keyPath = [key]
+        if let
+            index = index {
+            keyPath.append("\(index)")
         }
+        return self.appended(keyPath)
+    }
+    func
+        toJSRepresentation() -> [Any] {
+        var
+        repr :[Any] = self.keyPath ?? []
+        repr.insert(
+            self.ownerID,
+            at: 0
+        )
+        return repr
     }
     
-    typealias
-        Point = EasyPoint
+    #if !swift(>=4.1)
+    static func
+        ==(
+        lhs: NodeID,
+        rhs: NodeID
+        ) -> Bool {
+        return lhs.ownerID == rhs.ownerID
+        && ((lhs.keyPath == nil && rhs.keyPath == nil)
+            || (lhs.keyPath != nil && rhs.keyPath != nil && lhs.keyPath! == rhs.keyPath!)
+        )
+    }
+    #endif
+}
+
+@objc(ANADependency) @objcMembers
+public class
+    Dependency : CoreJS.Dependency
+{
+    public var
+    moduleURL :URL? = nil,
+    taskModuleURL :URL? = nil,
+    config :[NSObject : AnyObject]? = nil,
+    callbackQueue :DispatchQueue? = nil
+}
+
+@objc(ANAManager) @objcMembers
+public class
+    Manager : NSObject
+{
+    public var
+    tracker :Tracking? = nil
+    lazy var
+    callbackQ = {
+        return self.dependency.callbackQueue ?? DispatchQueue.main
+    }()
+    public let
+    dependency :Dependency
+    @objc(initWithDependency:)
+    public init
+        (
+        _ dependency :Dependency
+        ) {
+        self.dependency = dependency
+    }
+    
+    let
+    scriptQ = DispatchQueue(label: "anna.script")
+    var
+    scriptContext :JSContext? = nil
     func
-        dispatch(_ seed :EasyPointMatchable & EasyPayloadCarrier) throws {
-        
-        // Find point
-        //
-        let
-        points :[EasyPayloadNode]! = root.points(match: seed)
-        guard points.count > 0 else {
-            throw MatchingError.noMatchingPoint(
-                class: String(describing: seed.cls),
-                method: seed.method
-            )
+        resolvedScriptContext()
+        -> JSContext
+    {
+        if let context = self.scriptContext {
+            return context
         }
-        guard points.count <= 1 else {
-            throw MatchingError.tooManyMatchingPoints(count: points.count)
-        }
-        guard let point = points?.first else { return }
-        
-        // Dispatch the event with point to every tracker tracks the point
-        //
-        let merged = try point.mergedFromRoot()
-        guard
-            let trackers = merged.trackers,
-            trackers.count > 0
-            else { throw ConfigurationError.noAvailableTrackers }
         let
-        event = try EasyEvent(seed: seed, point: merged)
-        for tracker in trackers {
+        context = JSContext()!
+        self.scriptContext = context
+        return context
+    }
+    
+    func
+        handle(scriptResult :Any)
+    {
+        guard let
+            tracker = self.tracker
+            else { return }
+        let
+        callbackQ = self.callbackQ
+        callbackQ.async {
             tracker.receive(
-                analyticsEvent: event,
+                analyticsResult: scriptResult,
                 dispatchedBy: self
             )
         }
     }
     
     func
-        sendDefaultTrackers(_ error :Error) throws {
-        guard
-            let trackers = root.trackers
-            else { throw ConfigurationError.noAvailableTrackers }
-        for tracker in trackers {
-            tracker.receive(analyticsError: error, dispatchedBy: self)
+        handle(scriptError :JSValue)
+    {
+        guard let
+            tracker = self.tracker
+            else { return }
+        let
+        callbackQ = self.callbackQ
+        callbackQ.async {
+           tracker.receive(
+                analyticsError: NSError(with: scriptError),
+                dispatchedBy: self
+            )
+        }
+    }
+    
+    var
+    scriptManager :JSValue? = nil
+    func
+        resolvedScriptManager()
+        throws -> JSValue
+    {
+        if let manager = self.scriptManager {
+            return manager
+        }
+        let
+        context = self.resolvedScriptContext();
+        guard let
+            module = self.dependency.moduleURL
+            else { throw ScriptError.mainModuleURLNotSpecified }
+        let
+        dependency = self.dependency
+        dependency.handleException =
+            { [weak self] (context, error) in
+                guard let error = error else { return }
+                self?.handle(scriptError: error)
+        }
+        let
+        construct = try context.run(
+            module,
+            with: dependency
+            )
+        let
+        managerDependency = try self.resolvedManagerDependency()
+        guard let
+            manager = construct?.call(withArguments: [managerDependency])
+            else { throw ScriptError.managerUnconstructable }
+        
+        self.scriptManager = manager
+        return manager
+    }
+    func
+        resolvedManagerDependency() throws -> [NSString : Any] {
+        guard let
+            task = self.dependency.taskModuleURL
+            else { throw ScriptError.taskModuleURLNotSpecified }
+        let
+        context = self.resolvedScriptContext()
+        let
+        receive : @convention(block) (Any) -> Void = {
+            [weak self] (result :Any) in
+            self?.handle(scriptResult: result)
+        },
+        inject : @convention(block) (JSValue, JSValue) -> Void = {
+            [weak context] (key :JSValue, value :JSValue) in
+            guard let
+                global = context?.globalObject
+                else { return }
+            if (value.isUndefined) {
+                global.deleteProperty(key.toString())
+            }
+            else {
+                global.setValue(value, forProperty: key.toString())
+            }
+        }
+        var
+        dependency :[NSString : Any] = [
+            "taskModulePath": task.path,
+            "inject": unsafeBitCast(inject, to: AnyObject.self),
+            "receive": unsafeBitCast(receive, to: AnyObject.self),
+        ]
+        if let
+            config = self.dependency.config
+        {
+            dependency["config"] = config
+        }
+        return dependency
+    }
+    func
+        registerNode(
+        by identifier :NodeID,
+        under parentID :NodeID?,
+        name :String,
+        index :Int?,
+        namespace :String? = nil,
+        attributes :Attributes? = nil
+        ) throws {
+        let
+        manager = try self.resolvedScriptManager()
+        self.scriptQ.async {
+            let
+            null = NSNull(),
+            arguments :[Any] = [
+                identifier.toJSRepresentation(),
+                parentID?.toJSRepresentation() ?? null,
+                name,
+                index ?? null,
+                namespace ?? null,
+                attributes ?? null
+            ]
+            manager.invokeMethod(
+                "registerNode",
+                withArguments: arguments
+            )
+        }
+    }
+    func
+        deregisterNodes(
+        by identifier :NodeID
+        ) throws {
+        let
+        manager = try self.resolvedScriptManager()
+        self.scriptQ.async {
+            manager.invokeMethod(
+                "deregisterNodes",
+                withArguments: [
+                    identifier.toJSRepresentation()
+                ]
+            )
+        }
+    }
+    typealias
+        Attributes = [String : Any]
+    func
+        recordEvent(
+        named name :String,
+        with properties :Attributes?,
+        onNodeBy identifier :NodeID
+        ) throws {
+        let
+        manager = try self.resolvedScriptManager()
+        self.scriptQ.async {
+            let
+            null = NSNull(),
+            arguments :[Any] = [
+                name,
+                properties ?? null,
+                identifier.toJSRepresentation()
+            ]
+            manager.invokeMethod(
+                "recordEvent",
+                withArguments: arguments
+            )
+        }
+    }
+    @objc
+    public func
+        logSnapshot() throws {
+        let
+        manager = try self.resolvedScriptManager()
+        self.scriptQ.async {
+            manager.invokeMethod(
+                "logSnapshot",
+                withArguments: []
+            )
         }
     }
 }
-    
+
+enum
+    ScriptError : Error
+{
+    case taskModuleURLNotSpecified
+    case mainModuleURLNotSpecified
+    case managerUnconstructable
+}

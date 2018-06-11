@@ -7,64 +7,71 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D646DE21EF0BDCE00D39AF7 /* Base.swift */; };
-		3D646E071EF20A3B00D39AF7 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34A1EEBF486000B0E15 /* Manager.swift */; };
+		118327675DD132CD9B88D63F /* Pods_Anna_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */; };
+		3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE5A2086EE4400AE10D3 /* PathTests.swift */; };
+		3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D10FE7C208708F700AE10D3 /* AppDelegate.swift */; };
+		3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFCD20AFBC9200294037 /* FocusTests.swift */; };
+		3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */; };
+		3D2CDFD320AFC35C00294037 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD220AFC35C00294037 /* Focus.swift */; };
+		3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8701AB20883D1E0014E312 /* CoreJS.swift */; };
+		3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D95C33320B39FD600781DB6 /* ControlTests.swift */; };
+		3D9B18B820C4C5E00094D835 /* SectionAnalyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9B18B720C4C5E00094D835 /* SectionAnalyzable.swift */; };
+		3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5D9209FEACE005F0572 /* ANAUIView.m */; };
+		3DB2E5E7209FEACE005F0572 /* UITableViewCell+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */; };
+		3DB2E5E8209FEACE005F0572 /* UITableView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */; };
+		3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DF209FEACE005F0572 /* UIControl+Hookable.swift */; };
+		3DB2E5EA209FEACE005F0572 /* ANAUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB2E5E0209FEACE005F0572 /* ANAUIView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DB2E5EB209FEACE005F0572 /* UIView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5E1209FEACE005F0572 /* UIView+Hookable.swift */; };
+		3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5E3209FEACE005F0572 /* ANAUIViewController.m */; };
+		3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */; };
+		3DB2E5EE209FEACE005F0572 /* ANAUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DB2E5F0209FEAF6005F0572 /* UIResponder+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */; };
+		3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E79C20A26734005F0572 /* TableViewTests.swift */; };
+		3DB8B860209C3548003B671B /* tool.js in Copy Files */ = {isa = PBXBuildFile; fileRef = 3DB8B85E209C3517003B671B /* tool.js */; };
+		3DCF87FF20C6595200F1DAAE /* ForwardingAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCF87FE20C6595200F1DAAE /* ForwardingAnalyzer.swift */; };
+		3DCF880220C68E1900F1DAAE /* ANAUITableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DCF880020C68E1900F1DAAE /* ANAUITableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DCF880320C68E1900F1DAAE /* ANAUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCF880120C68E1900F1DAAE /* ANAUITableView.m */; };
+		3DCF880620C68FFC00F1DAAE /* ANAUICollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DCF880420C68FFC00F1DAAE /* ANAUICollectionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DCF880720C68FFC00F1DAAE /* ANAUICollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCF880520C68FFC00F1DAAE /* ANAUICollectionView.m */; };
+		3DF1813320A28BAD008E6B25 /* ANAUITableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DF1813420A28BAD008E6B25 /* ANAUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */; };
+		3DF1817020A41479008E6B25 /* Analyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1816F20A41479008E6B25 /* Analyzer.swift */; };
+		3DF1817220A41490008E6B25 /* BaseAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1817120A41490008E6B25 /* BaseAnalyzer.swift */; };
+		3DF1817420A41499008E6B25 /* RootAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1817320A41499008E6B25 /* RootAnalyzer.swift */; };
 		B00156AB31877DDCB371F3C9 /* Pods_Anna_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */; };
-		BE042E611F0EEA0E00E0B44A /* ANARegister.h in Headers */ = {isa = PBXBuildFile; fileRef = BE042E601F0EEA0E00E0B44A /* ANARegister.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE042E631F0EEB8E00E0B44A /* ANARegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE042E621F0EEB8E00E0B44A /* ANARegister.swift */; };
-		BE042E671F0EF78600E0B44A /* ANAClass.h in Headers */ = {isa = PBXBuildFile; fileRef = BE042E661F0EF78600E0B44A /* ANAClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE042E691F0EF7DE00E0B44A /* ANAMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = BE042E681F0EF7DE00E0B44A /* ANAMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE042E6D1F0EF9C900E0B44A /* ANAClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE042E6C1F0EF9C900E0B44A /* ANAClass.swift */; };
-		BE22D35C1F076263007AEE40 /* ANATPointMatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE22D35B1F076263007AEE40 /* ANATPointMatchingTests.m */; };
-		BE22D35F1F0766F2007AEE40 /* ANATAnnaTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = BE22D35E1F0766F2007AEE40 /* ANATAnnaTestCase.m */; };
-		BE22D3611F076B1E007AEE40 /* ANAAnalyzable.h in Headers */ = {isa = PBXBuildFile; fileRef = BE22D3601F076ADB007AEE40 /* ANAAnalyzable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE22D3651F076B4D007AEE40 /* ANAEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = BE22D3621F076B40007AEE40 /* ANAEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE22D36C1F0776F3007AEE40 /* ANATracker.h in Headers */ = {isa = PBXBuildFile; fileRef = BE22D3681F077589007AEE40 /* ANATracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE22D37C1F078692007AEE40 /* ANAManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D3741F07845C007AEE40 /* ANAManager.swift */; };
-		BE22D37E1F0789EE007AEE40 /* ANATracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37D1F0789EE007AEE40 /* ANATracker.swift */; };
-		BE22D3801F0794AA007AEE40 /* ANAEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */; };
-		BE22D3811F079821007AEE40 /* ANAEventSeed.h in Headers */ = {isa = PBXBuildFile; fileRef = BE22D3701F077EF8007AEE40 /* ANAEventSeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE237AFB1F19D907002EB52B /* ANATInheritanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE237AFA1F19D907002EB52B /* ANATInheritanceTests.m */; };
-		BE237AFD1F19DFE9002EB52B /* ANATTrackerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE237AFC1F19DFE9002EB52B /* ANATTrackerTests.m */; };
-		BE237B001F19E2B4002EB52B /* ANATBlockTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = BE237AFF1F19E2B4002EB52B /* ANATBlockTracker.m */; };
-		BE2B8DC11F19C1BD0071DDC4 /* ANAManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */; };
-		BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */; };
-		BE3127D11EF5657100DA452A /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3127D01EF5657100DA452A /* Selector.swift */; };
-		BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FC1EFE32650006665A /* TrackerTests.swift */; };
-		BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */; };
-		BE55D5031EFE66060006665A /* ConvenienceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE55D5021EFE66060006665A /* ConvenienceTests.swift */; };
-		BE67454E1F2C11A400751E3E /* ANAAnalyzable.m in Sources */ = {isa = PBXBuildFile; fileRef = BE67454D1F2C11A400751E3E /* ANAAnalyzable.m */; };
-		BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */; };
-		BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3471EEBF486000B0E15 /* Builder.swift */; };
-		BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3481EEBF486000B0E15 /* Buildup.swift */; };
-		BE80F3591EEBF486000B0E15 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3491EEBF486000B0E15 /* Event.swift */; };
-		BE80F35B1EEBF486000B0E15 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34C1EEBF486000B0E15 /* Class.swift */; };
-		BE80F35C1EEBF486000B0E15 /* Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34D1EEBF486000B0E15 /* Method.swift */; };
-		BE80F35D1EEBF486000B0E15 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34E1EEBF486000B0E15 /* Point.swift */; };
-		BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F34F1EEBF486000B0E15 /* Root.swift */; };
-		BE80F35F1EEBF486000B0E15 /* Predicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3511EEBF486000B0E15 /* Predicate.swift */; };
-		BE80F3601EEBF486000B0E15 /* Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3521EEBF486000B0E15 /* Prefix.swift */; };
-		BE80F3611EEBF486000B0E15 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3531EEBF486000B0E15 /* Register.swift */; };
-		BE80F3621EEBF486000B0E15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3541EEBF486000B0E15 /* Analyzable.swift */; };
-		BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3551EEBF486000B0E15 /* Tracker.swift */; };
-		BE80F3641EEBF486000B0E15 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80F3561EEBF486000B0E15 /* Type.swift */; };
+		BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B04209D7D6900111F15 /* KVObserver.swift */; };
+		BE195B15209D7D6A00111F15 /* UIResponder+PathConstituting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B05209D7D6900111F15 /* UIResponder+PathConstituting.swift */; };
+		BE195B1A209D7D6A00111F15 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0A209D7D6900111F15 /* Manager.swift */; };
+		BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0B209D7D6900111F15 /* Hook.swift */; };
+		BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B24209D7E8A00111F15 /* Tracker.swift */; };
+		BE195B43209D844F00111F15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B42209D844F00111F15 /* Analyzable.swift */; };
+		BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */; };
+		BE4010E020A9909E0056BF29 /* FocusPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4010DF20A9909E0056BF29 /* FocusPath.swift */; };
+		BE4F088520C27A970034F578 /* ReuseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4F088420C27A970034F578 /* ReuseTests.swift */; };
+		BE520DAA20ADD2D900A5625D /* ramda.js in Copy Files */ = {isa = PBXBuildFile; fileRef = BE520DA820ADD1DD00A5625D /* ramda.js */; };
+		BE7ED60720CD2814001E6E6E /* AnalyzableComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7ED60620CD2814001E6E6E /* AnalyzableComponentTests.swift */; };
+		BE7ED60920CD4236001E6E6E /* SubAnalyzableObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7ED60820CD4236001E6E6E /* SubAnalyzableObserver.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE87DA921EAB615D00DA81EB /* Anna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE87DA801EAB608700DA81EB /* Anna.framework */; };
-		BE97E6BA1F18322C00BF1EF8 /* ANAPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE97E6B91F18322C00BF1EF8 /* ANAPoint.swift */; };
-		BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE98B1421EC274A000978728 /* PointMatchingTests.swift */; };
-		BEAAB59C1EC135FC00C0EBF9 /* ANAPrefix.h in Headers */ = {isa = PBXBuildFile; fileRef = BEAAB59A1EC135FC00C0EBF9 /* ANAPrefix.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BEC00D981F07B0A40060DCDF /* ANAPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC00D971F07B0A40060DCDF /* ANAPrefix.swift */; };
-		BEC00D9A1F07B3BA0060DCDF /* ANAEventSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC00D991F07B3BA0060DCDF /* ANAEventSeed.swift */; };
-		BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BEDB99EA1EBE8DBA006637DC /* ANAManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BEEB15B81F10BF4200871F74 /* ANAPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEB15B71F10BF4200871F74 /* ANAPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB15B91F10CC1700871F74 /* ANAMethod.swift */; };
-		BEF71B1C1F23454E00B20F4A /* SampleCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF71B1B1F23454E00B20F4A /* SampleCodeTests.swift */; };
-		BEF71B1E1F2345C700B20F4A /* ANATSampleCodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF71B1D1F2345C700B20F4A /* ANATSampleCodeTests.m */; };
-		BEF96EF41EFE23FD004C2967 /* NameCollisionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */; };
-		BEF96EF61EFE25BA004C2967 /* InheritanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */; };
+		BE89419320B93DFA005D7EC9 /* UICollectionView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE89419220B93DFA005D7EC9 /* UICollectionView+Hookable.swift */; };
+		BE89419620B945B2005D7EC9 /* UICollectionViewCell+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE89419520B945B2005D7EC9 /* UICollectionViewCell+Hookable.swift */; };
+		BE89419920B94654005D7EC9 /* ANAUICollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BE89419720B94654005D7EC9 /* ANAUICollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE89419A20B94654005D7EC9 /* ANAUICollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE89419820B94654005D7EC9 /* ANAUICollectionViewCell.m */; };
+		BE89419C20B9505A005D7EC9 /* CollectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE89419B20B9505A005D7EC9 /* CollectionViewTests.swift */; };
+		BEC320402096F4EA00206AD1 /* anna in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC3203F2096F4E900206AD1 /* anna */; };
+		BEC320422096F51100206AD1 /* core in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC320412096F51100206AD1 /* core */; };
+		BEC320442096F66300206AD1 /* index.js in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320342096C72400206AD1 /* index.js */; };
+		BEC320472096F6A800206AD1 /* task in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320462096F6A700206AD1 /* task */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3D10FE5C2086F96E00AE10D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE87DA751EAB606A00DA81EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D52623D208583D100D287BA;
+			remoteInfo = Anna_iOS_Testee;
+		};
 		BE87DA931EAB615D00DA81EB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BE87DA751EAB606A00DA81EB /* Project object */;
@@ -74,78 +81,117 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		BEC3203E2096F47900206AD1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = anna_test/node_modules;
+			dstSubfolderSpec = 7;
+			files = (
+				BEC320422096F51100206AD1 /* core in CopyFiles */,
+				BEC320402096F4EA00206AD1 /* anna in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BEC320432096F65100206AD1 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = anna_test;
+			dstSubfolderSpec = 7;
+			files = (
+				BE520DAA20ADD2D900A5625D /* ramda.js in Copy Files */,
+				3DB8B860209C3548003B671B /* tool.js in Copy Files */,
+				BEC320472096F6A800206AD1 /* task in Copy Files */,
+				BEC320442096F66300206AD1 /* index.js in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1EB556A53781E87D9189AEB8 /* Pods-Anna_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D646DE21EF0BDCE00D39AF7 /* Base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
+		3D10FE5A2086EE4400AE10D3 /* PathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTests.swift; sourceTree = "<group>"; };
+		3D10FE7C208708F700AE10D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3D2CDFCD20AFBC9200294037 /* FocusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTests.swift; sourceTree = "<group>"; };
+		3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Hookable.swift"; sourceTree = "<group>"; };
+		3D2CDFD220AFC35C00294037 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
+		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D8701AB20883D1E0014E312 /* CoreJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreJS.swift; sourceTree = "<group>"; };
+		3D95C33320B39FD600781DB6 /* ControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlTests.swift; sourceTree = "<group>"; };
+		3D9B18B720C4C5E00094D835 /* SectionAnalyzable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionAnalyzable.swift; sourceTree = "<group>"; };
+		3DB2E5D9209FEACE005F0572 /* ANAUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIView.m; sourceTree = "<group>"; };
+		3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5DF209FEACE005F0572 /* UIControl+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5E0209FEACE005F0572 /* ANAUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIView.h; sourceTree = "<group>"; };
+		3DB2E5E1209FEACE005F0572 /* UIView+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5E3209FEACE005F0572 /* ANAUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIViewController.m; sourceTree = "<group>"; };
+		3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIViewController.h; sourceTree = "<group>"; };
+		3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Hookable.swift"; sourceTree = "<group>"; };
+		3DB2E79C20A26734005F0572 /* TableViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTests.swift; sourceTree = "<group>"; };
+		3DB8B85E209C3517003B671B /* tool.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tool.js; sourceTree = "<group>"; };
+		3DCF87FE20C6595200F1DAAE /* ForwardingAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardingAnalyzer.swift; sourceTree = "<group>"; };
+		3DCF880020C68E1900F1DAAE /* ANAUITableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUITableView.h; sourceTree = "<group>"; };
+		3DCF880120C68E1900F1DAAE /* ANAUITableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUITableView.m; sourceTree = "<group>"; };
+		3DCF880420C68FFC00F1DAAE /* ANAUICollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUICollectionView.h; sourceTree = "<group>"; };
+		3DCF880520C68FFC00F1DAAE /* ANAUICollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUICollectionView.m; sourceTree = "<group>"; };
+		3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUITableViewCell.h; sourceTree = "<group>"; };
+		3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUITableViewCell.m; sourceTree = "<group>"; };
+		3DF1816F20A41479008E6B25 /* Analyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analyzer.swift; sourceTree = "<group>"; };
+		3DF1817120A41490008E6B25 /* BaseAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAnalyzer.swift; sourceTree = "<group>"; };
+		3DF1817320A41499008E6B25 /* RootAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAnalyzer.swift; sourceTree = "<group>"; };
 		3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anna_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		BE042E601F0EEA0E00E0B44A /* ANARegister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANARegister.h; sourceTree = "<group>"; };
-		BE042E621F0EEB8E00E0B44A /* ANARegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANARegister.swift; sourceTree = "<group>"; };
-		BE042E661F0EF78600E0B44A /* ANAClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAClass.h; sourceTree = "<group>"; };
-		BE042E681F0EF7DE00E0B44A /* ANAMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAMethod.h; sourceTree = "<group>"; };
-		BE042E6C1F0EF9C900E0B44A /* ANAClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAClass.swift; sourceTree = "<group>"; };
-		BE22D35B1F076263007AEE40 /* ANATPointMatchingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATPointMatchingTests.m; sourceTree = "<group>"; };
-		BE22D35D1F0766F2007AEE40 /* ANATAnnaTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANATAnnaTestCase.h; sourceTree = "<group>"; };
-		BE22D35E1F0766F2007AEE40 /* ANATAnnaTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATAnnaTestCase.m; sourceTree = "<group>"; };
-		BE22D3601F076ADB007AEE40 /* ANAAnalyzable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAAnalyzable.h; sourceTree = "<group>"; };
-		BE22D3621F076B40007AEE40 /* ANAEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAEvent.h; sourceTree = "<group>"; };
-		BE22D3681F077589007AEE40 /* ANATracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANATracker.h; sourceTree = "<group>"; };
-		BE22D3701F077EF8007AEE40 /* ANAEventSeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAEventSeed.h; sourceTree = "<group>"; };
-		BE22D3741F07845C007AEE40 /* ANAManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAManager.swift; sourceTree = "<group>"; };
-		BE22D37D1F0789EE007AEE40 /* ANATracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANATracker.swift; sourceTree = "<group>"; };
-		BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAEvent.swift; sourceTree = "<group>"; };
-		BE237AFA1F19D907002EB52B /* ANATInheritanceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATInheritanceTests.m; sourceTree = "<group>"; };
-		BE237AFC1F19DFE9002EB52B /* ANATTrackerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATTrackerTests.m; sourceTree = "<group>"; };
-		BE237AFE1F19E2B4002EB52B /* ANATBlockTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANATBlockTracker.h; sourceTree = "<group>"; };
-		BE237AFF1F19E2B4002EB52B /* ANATBlockTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATBlockTracker.m; sourceTree = "<group>"; };
-		BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAManager.m; sourceTree = "<group>"; };
-		BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorMatchingTests.swift; sourceTree = "<group>"; };
-		BE3127D01EF5657100DA452A /* Selector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
-		BE55D4FC1EFE32650006665A /* TrackerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
-		BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureTracker.swift; sourceTree = "<group>"; };
-		BE55D5021EFE66060006665A /* ConvenienceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvenienceTests.swift; sourceTree = "<group>"; };
-		BE67454D1F2C11A400751E3E /* ANAAnalyzable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAAnalyzable.m; sourceTree = "<group>"; };
-		BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnaTestCase.swift; sourceTree = "<group>"; };
-		BE80F3471EEBF486000B0E15 /* Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
-		BE80F3481EEBF486000B0E15 /* Buildup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buildup.swift; sourceTree = "<group>"; };
-		BE80F3491EEBF486000B0E15 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		BE80F34A1EEBF486000B0E15 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
-		BE80F34C1EEBF486000B0E15 /* Class.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
-		BE80F34D1EEBF486000B0E15 /* Method.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Method.swift; sourceTree = "<group>"; };
-		BE80F34E1EEBF486000B0E15 /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
-		BE80F34F1EEBF486000B0E15 /* Root.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
-		BE80F3511EEBF486000B0E15 /* Predicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Predicate.swift; sourceTree = "<group>"; };
-		BE80F3521EEBF486000B0E15 /* Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefix.swift; sourceTree = "<group>"; };
-		BE80F3531EEBF486000B0E15 /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
-		BE80F3541EEBF486000B0E15 /* Analyzable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analyzable.swift; sourceTree = "<group>"; };
-		BE80F3551EEBF486000B0E15 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
-		BE80F3561EEBF486000B0E15 /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
+		BE195B04209D7D6900111F15 /* KVObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KVObserver.swift; sourceTree = "<group>"; };
+		BE195B05209D7D6900111F15 /* UIResponder+PathConstituting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIResponder+PathConstituting.swift"; sourceTree = "<group>"; };
+		BE195B0A209D7D6900111F15 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		BE195B0B209D7D6900111F15 /* Hook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hook.swift; sourceTree = "<group>"; };
+		BE195B24209D7E8A00111F15 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		BE195B42209D844F00111F15 /* Analyzable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analyzable.swift; sourceTree = "<group>"; };
+		BE3D83BC2081E33200A1D17D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		BE3D83BE2081E33C00A1D17D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTestCaseBuilder.swift; sourceTree = "<group>"; };
+		BE4010DF20A9909E0056BF29 /* FocusPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusPath.swift; sourceTree = "<group>"; };
+		BE4F088420C27A970034F578 /* ReuseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseTests.swift; sourceTree = "<group>"; };
+		BE520DA820ADD1DD00A5625D /* ramda.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ramda.js; sourceTree = "<group>"; };
+		BE7ED60620CD2814001E6E6E /* AnalyzableComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzableComponentTests.swift; sourceTree = "<group>"; };
+		BE7ED60820CD4236001E6E6E /* SubAnalyzableObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubAnalyzableObserver.swift; sourceTree = "<group>"; };
 		BE87DA801EAB608700DA81EB /* Anna.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Anna.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE87DA831EAB608700DA81EB /* Anna.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Anna.h; sourceTree = "<group>"; };
 		BE87DA841EAB608700DA81EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE87DA8D1EAB615C00DA81EB /* Anna_iOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Anna_iOS_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE87DA911EAB615D00DA81EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Anna_iOS_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
-		BE97E6B91F18322C00BF1EF8 /* ANAPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAPoint.swift; sourceTree = "<group>"; };
-		BE98B1421EC274A000978728 /* PointMatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointMatchingTests.swift; sourceTree = "<group>"; };
-		BEAAB59A1EC135FC00C0EBF9 /* ANAPrefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAPrefix.h; sourceTree = "<group>"; };
-		BEC00D971F07B0A40060DCDF /* ANAPrefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAPrefix.swift; sourceTree = "<group>"; };
-		BEC00D991F07B3BA0060DCDF /* ANAEventSeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAEventSeed.swift; sourceTree = "<group>"; };
-		BEDB99EA1EBE8DBA006637DC /* ANAManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAManager.h; sourceTree = "<group>"; };
-		BEEB15B71F10BF4200871F74 /* ANAPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAPoint.h; sourceTree = "<group>"; };
-		BEEB15B91F10CC1700871F74 /* ANAMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANAMethod.swift; sourceTree = "<group>"; };
-		BEF71B1B1F23454E00B20F4A /* SampleCodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleCodeTests.swift; sourceTree = "<group>"; };
-		BEF71B1D1F2345C700B20F4A /* ANATSampleCodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANATSampleCodeTests.m; sourceTree = "<group>"; };
-		BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCollisionTests.swift; sourceTree = "<group>"; };
-		BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InheritanceTests.swift; sourceTree = "<group>"; };
+		BE89419220B93DFA005D7EC9 /* UICollectionView+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Hookable.swift"; sourceTree = "<group>"; };
+		BE89419520B945B2005D7EC9 /* UICollectionViewCell+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Hookable.swift"; sourceTree = "<group>"; };
+		BE89419720B94654005D7EC9 /* ANAUICollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUICollectionViewCell.h; sourceTree = "<group>"; };
+		BE89419820B94654005D7EC9 /* ANAUICollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUICollectionViewCell.m; sourceTree = "<group>"; };
+		BE89419B20B9505A005D7EC9 /* CollectionViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewTests.swift; sourceTree = "<group>"; };
+		BEC320342096C72400206AD1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		BEC3203F2096F4E900206AD1 /* anna */ = {isa = PBXFileReference; lastKnownFileType = folder; name = anna; path = ../core/built/anna; sourceTree = "<group>"; };
+		BEC320412096F51100206AD1 /* core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = core; path = ../CoreJS/built/core; sourceTree = "<group>"; };
+		BEC320462096F6A700206AD1 /* task */ = {isa = PBXFileReference; lastKnownFileType = folder; path = task; sourceTree = "<group>"; };
+		CAFE46CD992D8A38286245EA /* Pods-Anna_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3D52623B208583D100D287BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BE87DA7C1EAB608700DA81EB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				118327675DD132CD9B88D63F /* Pods_Anna_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,9 +207,111 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D2CDFCF20AFC0D200294037 /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */,
+			);
+			path = UIButton;
+			sourceTree = "<group>";
+		};
+		3D52623F208583D200D287BA /* Anna_iOS_Testee */ = {
+			isa = PBXGroup;
+			children = (
+				3D10FE7C208708F700AE10D3 /* AppDelegate.swift */,
+				3D52624C208583D300D287BA /* Info.plist */,
+			);
+			path = Anna_iOS_Testee;
+			sourceTree = "<group>";
+		};
+		3D8701AA20883CA10014E312 /* CoreJS */ = {
+			isa = PBXGroup;
+			children = (
+				3D8701AB20883D1E0014E312 /* CoreJS.swift */,
+			);
+			path = CoreJS;
+			sourceTree = "<group>";
+		};
+		3DB2E5D7209FEACE005F0572 /* UIResponder */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5D8209FEACE005F0572 /* UIView */,
+				3DB2E5E2209FEACE005F0572 /* UIViewController */,
+				3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */,
+			);
+			path = UIResponder;
+			sourceTree = "<group>";
+		};
+		3DB2E5D8209FEACE005F0572 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				BE89419420B94596005D7EC9 /* UICollectionViewCell */,
+				BE89419120B93DD5005D7EC9 /* UICollectionView */,
+				3DB2E5DA209FEACE005F0572 /* UITableViewCell */,
+				3DB2E5DC209FEACE005F0572 /* UITableView */,
+				3DB2E5DE209FEACE005F0572 /* UIControl */,
+				3DB2E5E1209FEACE005F0572 /* UIView+Hookable.swift */,
+				3DB2E5E0209FEACE005F0572 /* ANAUIView.h */,
+				3DB2E5D9209FEACE005F0572 /* ANAUIView.m */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
+		3DB2E5DA209FEACE005F0572 /* UITableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */,
+				3DF1813120A28BAD008E6B25 /* ANAUITableViewCell.h */,
+				3DF1813220A28BAD008E6B25 /* ANAUITableViewCell.m */,
+			);
+			path = UITableViewCell;
+			sourceTree = "<group>";
+		};
+		3DB2E5DC209FEACE005F0572 /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */,
+				3DCF880020C68E1900F1DAAE /* ANAUITableView.h */,
+				3DCF880120C68E1900F1DAAE /* ANAUITableView.m */,
+			);
+			path = UITableView;
+			sourceTree = "<group>";
+		};
+		3DB2E5DE209FEACE005F0572 /* UIControl */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5DF209FEACE005F0572 /* UIControl+Hookable.swift */,
+				3D2CDFCF20AFC0D200294037 /* UIButton */,
+			);
+			path = UIControl;
+			sourceTree = "<group>";
+		};
+		3DB2E5E2209FEACE005F0572 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				3DB2E5E4209FEACE005F0572 /* UIViewController+Hookable.swift */,
+				3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */,
+				3DB2E5E3209FEACE005F0572 /* ANAUIViewController.m */,
+			);
+			path = UIViewController;
+			sourceTree = "<group>";
+		};
+		3DF1816E20A41479008E6B25 /* Analyzer */ = {
+			isa = PBXGroup;
+			children = (
+				3DF1817120A41490008E6B25 /* BaseAnalyzer.swift */,
+				3DF1816F20A41479008E6B25 /* Analyzer.swift */,
+				3DF1817320A41499008E6B25 /* RootAnalyzer.swift */,
+				3DCF87FE20C6595200F1DAAE /* ForwardingAnalyzer.swift */,
+			);
+			path = Analyzer;
+			sourceTree = "<group>";
+		};
 		4531771AA090ADCF6D936D6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE3D83BE2081E33C00A1D17D /* UIKit.framework */,
+				BE3D83BC2081E33200A1D17D /* Foundation.framework */,
 				3E523148CB49BDF7B29E0003 /* Pods_Anna_iOS.framework */,
 				2DB22BF96258F78367DEBF50 /* Pods_Anna_iOS_Tests.framework */,
 			);
@@ -175,64 +323,28 @@
 			children = (
 				592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */,
 				780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */,
+				1EB556A53781E87D9189AEB8 /* Pods-Anna_iOS.debug.xcconfig */,
+				CAFE46CD992D8A38286245EA /* Pods-Anna_iOS.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		BE042E641F0EF73E00E0B44A /* Point */ = {
+		BE195B2A209D7F6800111F15 /* Hookable */ = {
 			isa = PBXGroup;
 			children = (
-				BE042E661F0EF78600E0B44A /* ANAClass.h */,
-				BE042E6C1F0EF9C900E0B44A /* ANAClass.swift */,
-				BE042E681F0EF7DE00E0B44A /* ANAMethod.h */,
-				BEEB15B91F10CC1700871F74 /* ANAMethod.swift */,
-				BEEB15B71F10BF4200871F74 /* ANAPoint.h */,
-				BE97E6B91F18322C00BF1EF8 /* ANAPoint.swift */,
+				3DB2E5D7209FEACE005F0572 /* UIResponder */,
 			);
-			path = Point;
-			sourceTree = "<group>";
-		};
-		BE22D35A1F076263007AEE40 /* ObjC */ = {
-			isa = PBXGroup;
-			children = (
-				BE22D35B1F076263007AEE40 /* ANATPointMatchingTests.m */,
-				BE237AFA1F19D907002EB52B /* ANATInheritanceTests.m */,
-				BE237AFC1F19DFE9002EB52B /* ANATTrackerTests.m */,
-				BEF71B1D1F2345C700B20F4A /* ANATSampleCodeTests.m */,
-				BE22D35D1F0766F2007AEE40 /* ANATAnnaTestCase.h */,
-				BE22D35E1F0766F2007AEE40 /* ANATAnnaTestCase.m */,
-				BE237AFE1F19E2B4002EB52B /* ANATBlockTracker.h */,
-				BE237AFF1F19E2B4002EB52B /* ANATBlockTracker.m */,
-			);
-			path = ObjC;
-			sourceTree = "<group>";
-		};
-		BE80F34B1EEBF486000B0E15 /* Point */ = {
-			isa = PBXGroup;
-			children = (
-				BE80F34E1EEBF486000B0E15 /* Point.swift */,
-				BE80F34D1EEBF486000B0E15 /* Method.swift */,
-				BE80F34C1EEBF486000B0E15 /* Class.swift */,
-				BE80F34F1EEBF486000B0E15 /* Root.swift */,
-				3D646DE21EF0BDCE00D39AF7 /* Base.swift */,
-			);
-			path = Point;
-			sourceTree = "<group>";
-		};
-		BE80F3501EEBF486000B0E15 /* Predicate */ = {
-			isa = PBXGroup;
-			children = (
-				BE80F3511EEBF486000B0E15 /* Predicate.swift */,
-			);
-			path = Predicate;
+			path = Hookable;
 			sourceTree = "<group>";
 		};
 		BE87DA741EAB606A00DA81EB = {
 			isa = PBXGroup;
 			children = (
+				3D8701AA20883CA10014E312 /* CoreJS */,
 				BE87DA981EAB62A100DA81EB /* Anna */,
 				BE87DA821EAB608700DA81EB /* Anna_iOS */,
 				BE87DA8E1EAB615D00DA81EB /* Anna_iOS_Tests */,
+				3D52623F208583D200D287BA /* Anna_iOS_Testee */,
 				BE87DA811EAB608700DA81EB /* Products */,
 				99ACB2654502D3AB72EE245D /* Pods */,
 				4531771AA090ADCF6D936D6D /* Frameworks */,
@@ -244,6 +356,7 @@
 			children = (
 				BE87DA801EAB608700DA81EB /* Anna.framework */,
 				BE87DA8D1EAB615C00DA81EB /* Anna_iOS_Tests.xctest */,
+				3D52623E208583D100D287BA /* Anna_iOS_Testee.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -260,18 +373,22 @@
 		BE87DA8E1EAB615D00DA81EB /* Anna_iOS_Tests */ = {
 			isa = PBXGroup;
 			children = (
-				BE22D35A1F076263007AEE40 /* ObjC */,
+				BEC320412096F51100206AD1 /* core */,
+				BEC3203F2096F4E900206AD1 /* anna */,
+				BEC320462096F6A700206AD1 /* task */,
+				BEC320342096C72400206AD1 /* index.js */,
+				3DB8B85E209C3517003B671B /* tool.js */,
+				BE520DA820ADD1DD00A5625D /* ramda.js */,
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
-				BE98B1421EC274A000978728 /* PointMatchingTests.swift */,
-				BEF96EF51EFE25BA004C2967 /* InheritanceTests.swift */,
-				BE3127CE1EF55D0A00DA452A /* SelectorMatchingTests.swift */,
-				BEF96EF31EFE23FD004C2967 /* NameCollisionTests.swift */,
-				BE55D4FC1EFE32650006665A /* TrackerTests.swift */,
-				BE55D5021EFE66060006665A /* ConvenienceTests.swift */,
-				BEF71B1B1F23454E00B20F4A /* SampleCodeTests.swift */,
-				BE80F3291EEBBF86000B0E15 /* AnnaTestCase.swift */,
-				BE55D4FE1EFE354A0006665A /* ClosureTracker.swift */,
+				3D10FE5A2086EE4400AE10D3 /* PathTests.swift */,
+				3D95C33320B39FD600781DB6 /* ControlTests.swift */,
+				3DB2E79C20A26734005F0572 /* TableViewTests.swift */,
+				BE89419B20B9505A005D7EC9 /* CollectionViewTests.swift */,
+				3D2CDFCD20AFBC9200294037 /* FocusTests.swift */,
+				BE4F088420C27A970034F578 /* ReuseTests.swift */,
+				BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */,
+				BE7ED60620CD2814001E6E6E /* AnalyzableComponentTests.swift */,
 			);
 			path = Anna_iOS_Tests;
 			sourceTree = "<group>";
@@ -279,44 +396,40 @@
 		BE87DA981EAB62A100DA81EB /* Anna */ = {
 			isa = PBXGroup;
 			children = (
-				BE80F3471EEBF486000B0E15 /* Builder.swift */,
-				BE80F3481EEBF486000B0E15 /* Buildup.swift */,
-				BE80F3491EEBF486000B0E15 /* Event.swift */,
-				BE80F34A1EEBF486000B0E15 /* Manager.swift */,
-				BE80F3521EEBF486000B0E15 /* Prefix.swift */,
-				BE80F3531EEBF486000B0E15 /* Register.swift */,
-				BE80F3541EEBF486000B0E15 /* Analyzable.swift */,
-				BE80F3551EEBF486000B0E15 /* Tracker.swift */,
-				BE80F3561EEBF486000B0E15 /* Type.swift */,
-				BE3127D01EF5657100DA452A /* Selector.swift */,
-				BE80F34B1EEBF486000B0E15 /* Point */,
-				BE80F3501EEBF486000B0E15 /* Predicate */,
-				BEDB99E91EBE8DA1006637DC /* ObjC */,
+				BE195B2A209D7F6800111F15 /* Hookable */,
+				3DF1816E20A41479008E6B25 /* Analyzer */,
+				BE195B42209D844F00111F15 /* Analyzable.swift */,
+				BE4010DF20A9909E0056BF29 /* FocusPath.swift */,
+				BE195B0A209D7D6900111F15 /* Manager.swift */,
+				BE195B24209D7E8A00111F15 /* Tracker.swift */,
+				BE195B0B209D7D6900111F15 /* Hook.swift */,
+				3D2CDFD220AFC35C00294037 /* Focus.swift */,
+				BE195B04209D7D6900111F15 /* KVObserver.swift */,
+				BE7ED60820CD4236001E6E6E /* SubAnalyzableObserver.swift */,
+				BE195B05209D7D6900111F15 /* UIResponder+PathConstituting.swift */,
+				3D9B18B720C4C5E00094D835 /* SectionAnalyzable.swift */,
 			);
 			path = Anna;
 			sourceTree = "<group>";
 		};
-		BEDB99E91EBE8DA1006637DC /* ObjC */ = {
+		BE89419120B93DD5005D7EC9 /* UICollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				BE042E641F0EF73E00E0B44A /* Point */,
-				BE22D3601F076ADB007AEE40 /* ANAAnalyzable.h */,
-				BE67454D1F2C11A400751E3E /* ANAAnalyzable.m */,
-				BEDB99EA1EBE8DBA006637DC /* ANAManager.h */,
-				BE22D3741F07845C007AEE40 /* ANAManager.swift */,
-				BE2B8DC01F19C1BD0071DDC4 /* ANAManager.m */,
-				BE22D3681F077589007AEE40 /* ANATracker.h */,
-				BE22D37D1F0789EE007AEE40 /* ANATracker.swift */,
-				BEAAB59A1EC135FC00C0EBF9 /* ANAPrefix.h */,
-				BEC00D971F07B0A40060DCDF /* ANAPrefix.swift */,
-				BE22D3621F076B40007AEE40 /* ANAEvent.h */,
-				BE22D37F1F0794AA007AEE40 /* ANAEvent.swift */,
-				BE22D3701F077EF8007AEE40 /* ANAEventSeed.h */,
-				BEC00D991F07B3BA0060DCDF /* ANAEventSeed.swift */,
-				BE042E601F0EEA0E00E0B44A /* ANARegister.h */,
-				BE042E621F0EEB8E00E0B44A /* ANARegister.swift */,
+				BE89419220B93DFA005D7EC9 /* UICollectionView+Hookable.swift */,
+				3DCF880420C68FFC00F1DAAE /* ANAUICollectionView.h */,
+				3DCF880520C68FFC00F1DAAE /* ANAUICollectionView.m */,
 			);
-			path = ObjC;
+			path = UICollectionView;
+			sourceTree = "<group>";
+		};
+		BE89419420B94596005D7EC9 /* UICollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				BE89419520B945B2005D7EC9 /* UICollectionViewCell+Hookable.swift */,
+				BE89419720B94654005D7EC9 /* ANAUICollectionViewCell.h */,
+				BE89419820B94654005D7EC9 /* ANAUICollectionViewCell.m */,
+			);
+			path = UICollectionViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -327,26 +440,40 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE87DA851EAB608700DA81EB /* Anna.h in Headers */,
-				BEAAB59C1EC135FC00C0EBF9 /* ANAPrefix.h in Headers */,
-				BE22D3611F076B1E007AEE40 /* ANAAnalyzable.h in Headers */,
-				BE22D3651F076B4D007AEE40 /* ANAEvent.h in Headers */,
-				BE22D36C1F0776F3007AEE40 /* ANATracker.h in Headers */,
-				BE042E691F0EF7DE00E0B44A /* ANAMethod.h in Headers */,
-				BE042E671F0EF78600E0B44A /* ANAClass.h in Headers */,
-				BE22D3811F079821007AEE40 /* ANAEventSeed.h in Headers */,
-				BE042E611F0EEA0E00E0B44A /* ANARegister.h in Headers */,
-				BEEB15B81F10BF4200871F74 /* ANAPoint.h in Headers */,
-				BEDB99EC1EBE8DBA006637DC /* ANAManager.h in Headers */,
+				3DB2E5EA209FEACE005F0572 /* ANAUIView.h in Headers */,
+				3DB2E5EE209FEACE005F0572 /* ANAUIViewController.h in Headers */,
+				BE89419920B94654005D7EC9 /* ANAUICollectionViewCell.h in Headers */,
+				3DF1813320A28BAD008E6B25 /* ANAUITableViewCell.h in Headers */,
+				3DCF880620C68FFC00F1DAAE /* ANAUICollectionView.h in Headers */,
+				3DCF880220C68E1900F1DAAE /* ANAUITableView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		3D52623D208583D100D287BA /* Anna_iOS_Testee */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D52624F208583D300D287BA /* Build configuration list for PBXNativeTarget "Anna_iOS_Testee" */;
+			buildPhases = (
+				3D52623A208583D100D287BA /* Sources */,
+				3D52623B208583D100D287BA /* Frameworks */,
+				3D52623C208583D100D287BA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Anna_iOS_Testee;
+			productName = Anna_iOS_Testee;
+			productReference = 3D52623E208583D100D287BA /* Anna_iOS_Testee.app */;
+			productType = "com.apple.product-type.application";
+		};
 		BE87DA7F1EAB608700DA81EB /* Anna_iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE87DA861EAB608700DA81EB /* Build configuration list for PBXNativeTarget "Anna_iOS" */;
 			buildPhases = (
+				35790FEF3145FC7015C60CA4 /* [CP] Check Pods Manifest.lock */,
 				BE87DA7B1EAB608700DA81EB /* Sources */,
 				BE87DA7C1EAB608700DA81EB /* Frameworks */,
 				BE87DA7D1EAB608700DA81EB /* Headers */,
@@ -369,12 +496,13 @@
 				BE87DA891EAB615C00DA81EB /* Sources */,
 				BE87DA8A1EAB615C00DA81EB /* Frameworks */,
 				BE87DA8B1EAB615C00DA81EB /* Resources */,
-				9249D5954B2E3FE0BB9D4FAD /* [CP] Embed Pods Frameworks */,
-				CB5ECD57CE02264F2B4584FA /* [CP] Copy Pods Resources */,
+				BEC3203E2096F47900206AD1 /* CopyFiles */,
+				BEC320432096F65100206AD1 /* Copy Files */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3D10FE5D2086F96E00AE10D3 /* PBXTargetDependency */,
 				BE87DA941EAB615D00DA81EB /* PBXTargetDependency */,
 			);
 			name = Anna_iOS_Tests;
@@ -388,12 +516,17 @@
 		BE87DA751EAB606A00DA81EB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0820;
+				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0820;
 				TargetAttributes = {
+					3D52623D208583D100D287BA = {
+						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 0930;
+						ProvisioningStyle = Manual;
+					};
 					BE87DA7F1EAB608700DA81EB = {
 						CreatedOnToolsVersion = 8.2.1;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 					};
 					BE87DA8C1EAB615C00DA81EB = {
@@ -409,6 +542,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = BE87DA741EAB606A00DA81EB;
 			productRefGroup = BE87DA811EAB608700DA81EB /* Products */;
@@ -417,11 +551,19 @@
 			targets = (
 				BE87DA7F1EAB608700DA81EB /* Anna_iOS */,
 				BE87DA8C1EAB615C00DA81EB /* Anna_iOS_Tests */,
+				3D52623D208583D100D287BA /* Anna_iOS_Testee */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3D52623C208583D100D287BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BE87DA7E1EAB608700DA81EB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -439,85 +581,87 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		35790FEF3145FC7015C60CA4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Anna_iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6610C4B070587EE079603EE4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Anna_iOS_Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		9249D5954B2E3FE0BB9D4FAD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CB5ECD57CE02264F2B4584FA /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3D52623A208583D100D287BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D10FE7D208708F700AE10D3 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BE87DA7B1EAB608700DA81EB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE22D37C1F078692007AEE40 /* ANAManager.swift in Sources */,
-				BE22D37E1F0789EE007AEE40 /* ANATracker.swift in Sources */,
-				BE97E6BA1F18322C00BF1EF8 /* ANAPoint.swift in Sources */,
-				3D646E071EF20A3B00D39AF7 /* Manager.swift in Sources */,
-				BE80F35F1EEBF486000B0E15 /* Predicate.swift in Sources */,
-				BEC00D981F07B0A40060DCDF /* ANAPrefix.swift in Sources */,
-				BE80F35C1EEBF486000B0E15 /* Method.swift in Sources */,
-				BE80F3591EEBF486000B0E15 /* Event.swift in Sources */,
-				BE042E631F0EEB8E00E0B44A /* ANARegister.swift in Sources */,
-				BE67454E1F2C11A400751E3E /* ANAAnalyzable.m in Sources */,
-				BE80F35D1EEBF486000B0E15 /* Point.swift in Sources */,
-				3D646DE31EF0BDCE00D39AF7 /* Base.swift in Sources */,
-				BE80F3571EEBF486000B0E15 /* Builder.swift in Sources */,
-				BE80F3631EEBF486000B0E15 /* Tracker.swift in Sources */,
-				BE80F3621EEBF486000B0E15 /* Analyzable.swift in Sources */,
-				BEEB15BA1F10CC1700871F74 /* ANAMethod.swift in Sources */,
-				BE80F35E1EEBF486000B0E15 /* Root.swift in Sources */,
-				BE2B8DC11F19C1BD0071DDC4 /* ANAManager.m in Sources */,
-				BE042E6D1F0EF9C900E0B44A /* ANAClass.swift in Sources */,
-				BE3127D11EF5657100DA452A /* Selector.swift in Sources */,
-				BE80F3641EEBF486000B0E15 /* Type.swift in Sources */,
-				BEC00D9A1F07B3BA0060DCDF /* ANAEventSeed.swift in Sources */,
-				BE80F3611EEBF486000B0E15 /* Register.swift in Sources */,
-				BE80F35B1EEBF486000B0E15 /* Class.swift in Sources */,
-				BE80F3601EEBF486000B0E15 /* Prefix.swift in Sources */,
-				BE80F3581EEBF486000B0E15 /* Buildup.swift in Sources */,
-				BE22D3801F0794AA007AEE40 /* ANAEvent.swift in Sources */,
+				BE195B1A209D7D6A00111F15 /* Manager.swift in Sources */,
+				BE195B14209D7D6A00111F15 /* KVObserver.swift in Sources */,
+				3DF1817220A41490008E6B25 /* BaseAnalyzer.swift in Sources */,
+				3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */,
+				3DCF880320C68E1900F1DAAE /* ANAUITableView.m in Sources */,
+				3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */,
+				3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */,
+				BE89419620B945B2005D7EC9 /* UICollectionViewCell+Hookable.swift in Sources */,
+				BE89419320B93DFA005D7EC9 /* UICollectionView+Hookable.swift in Sources */,
+				3DB2E5EB209FEACE005F0572 /* UIView+Hookable.swift in Sources */,
+				3DB2E5F0209FEAF6005F0572 /* UIResponder+Hookable.swift in Sources */,
+				3DF1813420A28BAD008E6B25 /* ANAUITableViewCell.m in Sources */,
+				3DB2E5E7209FEACE005F0572 /* UITableViewCell+Hookable.swift in Sources */,
+				3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */,
+				BE195B15209D7D6A00111F15 /* UIResponder+PathConstituting.swift in Sources */,
+				3DCF87FF20C6595200F1DAAE /* ForwardingAnalyzer.swift in Sources */,
+				BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */,
+				3DF1817020A41479008E6B25 /* Analyzer.swift in Sources */,
+				3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */,
+				3DF1817420A41499008E6B25 /* RootAnalyzer.swift in Sources */,
+				3D9B18B820C4C5E00094D835 /* SectionAnalyzable.swift in Sources */,
+				3DB2E5E8209FEACE005F0572 /* UITableView+Hookable.swift in Sources */,
+				BE195B43209D844F00111F15 /* Analyzable.swift in Sources */,
+				BE7ED60920CD4236001E6E6E /* SubAnalyzableObserver.swift in Sources */,
+				3D2CDFD320AFC35C00294037 /* Focus.swift in Sources */,
+				3DB2E5ED209FEACE005F0572 /* UIViewController+Hookable.swift in Sources */,
+				BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */,
+				3DCF880720C68FFC00F1DAAE /* ANAUICollectionView.m in Sources */,
+				BE4010E020A9909E0056BF29 /* FocusPath.swift in Sources */,
+				BE89419A20B94654005D7EC9 /* ANAUICollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,27 +669,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEF71B1C1F23454E00B20F4A /* SampleCodeTests.swift in Sources */,
-				BE237AFB1F19D907002EB52B /* ANATInheritanceTests.m in Sources */,
-				BE55D4FF1EFE354A0006665A /* ClosureTracker.swift in Sources */,
-				BE55D4FD1EFE32650006665A /* TrackerTests.swift in Sources */,
-				BE3127CF1EF55D0A00DA452A /* SelectorMatchingTests.swift in Sources */,
-				BE237AFD1F19DFE9002EB52B /* ANATTrackerTests.m in Sources */,
-				BEF96EF61EFE25BA004C2967 /* InheritanceTests.swift in Sources */,
-				BE80F32A1EEBBF86000B0E15 /* AnnaTestCase.swift in Sources */,
-				BE237B001F19E2B4002EB52B /* ANATBlockTracker.m in Sources */,
-				BE98B1431EC274A000978728 /* PointMatchingTests.swift in Sources */,
-				BE22D35C1F076263007AEE40 /* ANATPointMatchingTests.m in Sources */,
-				BEF96EF41EFE23FD004C2967 /* NameCollisionTests.swift in Sources */,
-				BE55D5031EFE66060006665A /* ConvenienceTests.swift in Sources */,
-				BEF71B1E1F2345C700B20F4A /* ANATSampleCodeTests.m in Sources */,
-				BE22D35F1F0766F2007AEE40 /* ANATAnnaTestCase.m in Sources */,
+				3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */,
+				BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */,
+				BE7ED60720CD2814001E6E6E /* AnalyzableComponentTests.swift in Sources */,
+				BE4F088520C27A970034F578 /* ReuseTests.swift in Sources */,
+				3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */,
+				3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */,
+				BE89419C20B9505A005D7EC9 /* CollectionViewTests.swift in Sources */,
+				3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3D10FE5D2086F96E00AE10D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D52623D208583D100D287BA /* Anna_iOS_Testee */;
+			targetProxy = 3D10FE5C2086F96E00AE10D3 /* PBXContainerItemProxy */;
+		};
 		BE87DA941EAB615D00DA81EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BE87DA7F1EAB608700DA81EB /* Anna_iOS */;
@@ -554,6 +696,139 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		3D52624D208583D300D287BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Anna_iOS_Testee/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.coppercash.Anna-iOS-Testee";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3D52624E208583D300D287BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Anna_iOS_Testee/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.coppercash.Anna-iOS-Testee";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		BE87DA791EAB606A00DA81EB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -568,6 +843,7 @@
 		};
 		BE87DA871EAB608700DA81EB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1EB556A53781E87D9189AEB8 /* Pods-Anna_iOS.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -625,7 +901,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -634,6 +910,7 @@
 		};
 		BE87DA881EAB608700DA81EB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CAFE46CD992D8A38286245EA /* Pods-Anna_iOS.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -683,7 +960,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -717,7 +994,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -745,7 +1022,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "Anna_iOS_Tests/Anna_iOS_Tests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anna_iOS_Testee.app/Anna_iOS_Testee";
 			};
 			name = Debug;
 		};
@@ -775,7 +1053,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -795,7 +1073,8 @@
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Anna_iOS_Tests/Anna_iOS_Tests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anna_iOS_Testee.app/Anna_iOS_Testee";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -803,6 +1082,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3D52624F208583D300D287BA /* Build configuration list for PBXNativeTarget "Anna_iOS_Testee" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D52624D208583D300D287BA /* Debug */,
+				3D52624E208583D300D287BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BE87DA781EAB606A00DA81EB /* Build configuration list for PBXProject "Anna" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

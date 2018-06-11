@@ -9,28 +9,15 @@
 import UIKit
 import Anna
 
-class FirstViewController: UIViewController {
+class FirstViewController: UIViewController, Analyzable {
 
+    lazy var analyzer: Analyzing = { Analyzer.analyzer(with: self) }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        self.ana.analyze()
+        self.analyzer.enable(with: "first_view_controller")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
-}
-
-extension FirstViewController : EasyAnalyzable {
-    static func registerAnalyticsPoints(with registrar: EasyRegistering.Registrar) {
-        registrar
-        .point { $0
-            .selector(#selector(viewDidLoad))
-            .set("from", String(describing: self))
-        }
     }
 }

@@ -1,0 +1,28 @@
+{
+  "name": "anna",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/chai": "^4.0.0",
+    "@types/mocha": "^2.2.41",
+    "browserify": "^14.1.0",
+    "chai": "^4.0.2",
+    "gulp": "^3.9.1",
+    "gulp-cached": "^1.1.0",
+    "gulp-typescript": "^3.1.5",
+    "gulp-util": "^3.0.8",
+    "mocha": "^3.4.2",
+    "ramda": "^0.25.0",
+    "ts-node": "^3.1.0",
+    "tsify": "^3.0.1",
+    "typescript": "^2.8.3",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "scripts": {
+    "test": "mocha --full-trace --reporter spec --compilers ts:ts-node/register 'src/**/*.spec.ts'"
+  },
+  "author": "william",
+  "license": "ISC",
+  "dependencies": {}
+}

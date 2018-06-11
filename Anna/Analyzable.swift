@@ -1,33 +1,86 @@
 //
-//  Sender.swift
-//  Anna
+//  Analyzable.swift
+//  Anna_iOS
 //
-//  Created by William on 10/06/2017.
-//
+//  Created by William on 2018/5/5.
 //
 
 import Foundation
 
+@objc(ANAAnalyzable)
 public protocol
-EasyAnalyzable : class, EasyRegistering {
-    typealias
-        Manager = EasyManager
-    var
-    analyticsManager :Manager { get }
-    typealias
-        Prefix = EasyPrefix
-    var
-    ana :Prefix { get }
+    Analyzable : AnalyzerReadable, Hookable
+{
 }
 
-public extension
-EasyAnalyzable {
+@objc(ANAAnalyzing)
+public protocol
+    Analyzing
+{
+    @objc(hookObject:)
+    func
+        hook(_ hookee :Hookable)
+    @objc(observeObject:forKeyPath:)
+    func
+        observe(
+        _ observee :NSObject,
+        for keyPath :String
+    )
+    @objc(observeOwner:forKeyPath:)
+    func
+        observe(
+        owner :NSObject,
+        for keyPath :String
+    )
+    @objc(detach)
+    func
+        detach()
+    @objc(markFocused)
+    func
+        markFocused()
+    @objc(updateValue:forKeyPath:)
+    func
+        update(
+        _ value :Any?,
+        for keyPath :String
+    )
+    @objc(recordEvent:)
+    func
+        record(
+        _ event :String
+    )
+    
+    @objc(enableWithName:)
+    func
+        enable(with name :String)
+    @objc(setSubAnalyzer:forKey:)
+    func
+        setSubAnalyzer(
+        _ sub :Analyzing,
+        for key:String
+    )
+    @objc(setSubAnalyzers:forKey:)
+    func
+        setSubAnalyzers(
+        _ subs :[Analyzing],
+        for key:String
+    )
+}
+
+@objc(ANAAnalyzerReadable)
+public protocol
+    AnalyzerReadable
+{
+    @objc(ana_analyzer)
     var
-    ana :Prefix {
-        return EasyPrefix(target: self)
-    }
+    analyzer :Analyzing { get }
+}
+
+@objc(ANAAnalyzerWritable)
+public protocol
+    AnalyzerWritable : AnalyzerReadable
+{
+    @objc(ana_analyzer)
     var
-    analyticsManager :Manager {
-       return EasyManager.shared
-    }
+    analyzer :Analyzing { get set }
 }

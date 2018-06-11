@@ -16,13 +16,9 @@ FOUNDATION_EXPORT const unsigned char AnnaVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Anna/PublicHeader.h>
 
-#import <Anna/ANAAnalyzable.h>
-#import <Anna/ANAManager.h>
-#import <Anna/ANARegister.h>
-#import <Anna/ANAPrefix.h>
-#import <Anna/ANAEvent.h>
-#import <Anna/ANAEventSeed.h>
-#import <Anna/ANATracker.h>
-#import <Anna/ANAClass.h>
-#import <Anna/ANAMethod.h>
-#import <Anna/ANAPoint.h>
+#import <Anna/ANAUIView.h>
+#import <Anna/ANAUIViewController.h>
+#import <Anna/ANAUITableViewCell.h>
+#import <Anna/ANAUICollectionViewCell.h>
+#import <Anna/ANAUITableView.h>
+#import <Anna/ANAUICollectionView.h>

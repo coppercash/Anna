@@ -7,18 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE195B45209D8F2C00111F15 /* analytics.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BE195B44209D8F2C00111F15 /* analytics.bundle */; };
+		BE195B48209D983D00111F15 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = BE195B47209D983D00111F15 /* Tracker.m */; };
 		BE5EEE031F2AA42D000C9015 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5EEE021F2AA42D000C9015 /* AppDelegate.swift */; };
 		BE5EEE051F2AA42D000C9015 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5EEE041F2AA42D000C9015 /* FirstViewController.swift */; };
 		BE5EEE0A1F2AA42D000C9015 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE5EEE081F2AA42D000C9015 /* Main.storyboard */; };
 		BE5EEE0C1F2AA42D000C9015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE5EEE0B1F2AA42D000C9015 /* Assets.xcassets */; };
 		BE5EEE0F1F2AA42D000C9015 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE5EEE0D1F2AA42D000C9015 /* LaunchScreen.storyboard */; };
 		BE5EEE1B1F2AA5A4000C9015 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5EEE1A1F2AA5A4000C9015 /* SecondViewController.m */; };
-		F4C5EA45D1B27C414C281135 /* Pods_CocoapodsDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A7D268F1C4D5C7590C0B33 /* Pods_CocoapodsDemo.framework */; };
+		CAE4FDEEA29D7A66246A4C05 /* Pods_CocoapodsDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D42C20F2F83A430CBAE3E8F /* Pods_CocoapodsDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4D42C20F2F83A430CBAE3E8F /* Pods_CocoapodsDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoapodsDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F282CAD044A8ECA93C9363A /* Pods-CocoapodsDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoapodsDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-CocoapodsDemo/Pods-CocoapodsDemo.release.xcconfig"; sourceTree = "<group>"; };
-		96A7D268F1C4D5C7590C0B33 /* Pods_CocoapodsDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoapodsDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE195B44209D8F2C00111F15 /* analytics.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = analytics.bundle; sourceTree = "<group>"; };
+		BE195B46209D983D00111F15 /* Tracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
+		BE195B47209D983D00111F15 /* Tracker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tracker.m; sourceTree = "<group>"; };
 		BE5EEDFF1F2AA42D000C9015 /* CocoapodsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoapodsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5EEE021F2AA42D000C9015 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BE5EEE041F2AA42D000C9015 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -37,7 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4C5EA45D1B27C414C281135 /* Pods_CocoapodsDemo.framework in Frameworks */,
+				CAE4FDEEA29D7A66246A4C05 /* Pods_CocoapodsDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,7 +52,7 @@
 		80A33A3F603710FDE30CF6B1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				96A7D268F1C4D5C7590C0B33 /* Pods_CocoapodsDemo.framework */,
+				4D42C20F2F83A430CBAE3E8F /* Pods_CocoapodsDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -73,7 +78,10 @@
 		BE5EEE011F2AA42D000C9015 /* CocoapodsDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BE195B44209D8F2C00111F15 /* analytics.bundle */,
 				BE5EEE021F2AA42D000C9015 /* AppDelegate.swift */,
+				BE195B46209D983D00111F15 /* Tracker.h */,
+				BE195B47209D983D00111F15 /* Tracker.m */,
 				BE5EEE041F2AA42D000C9015 /* FirstViewController.swift */,
 				BE5EEE191F2AA5A4000C9015 /* SecondViewController.h */,
 				BE5EEE1A1F2AA5A4000C9015 /* SecondViewController.m */,
@@ -106,8 +114,7 @@
 				BE5EEDFB1F2AA42D000C9015 /* Sources */,
 				BE5EEDFC1F2AA42D000C9015 /* Frameworks */,
 				BE5EEDFD1F2AA42D000C9015 /* Resources */,
-				BA9109288E7A7B0D635BB1AA /* [CP] Embed Pods Frameworks */,
-				37D2517F205F6EBB78B6ADD3 /* [CP] Copy Pods Resources */,
+				D17833485A0807EA9541D11D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -158,6 +165,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE195B45209D8F2C00111F15 /* analytics.bundle in Resources */,
 				BE5EEE0F1F2AA42D000C9015 /* LaunchScreen.storyboard in Resources */,
 				BE5EEE0C1F2AA42D000C9015 /* Assets.xcassets in Resources */,
 				BE5EEE0A1F2AA42D000C9015 /* Main.storyboard in Resources */,
@@ -167,49 +175,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		37D2517F205F6EBB78B6ADD3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CocoapodsDemo/Pods-CocoapodsDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BA9109288E7A7B0D635BB1AA /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CocoapodsDemo/Pods-CocoapodsDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C64CF9B9618AC2FA184CD66F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CocoapodsDemo-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D17833485A0807EA9541D11D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CocoapodsDemo/Pods-CocoapodsDemo-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Anna/anna.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Anna/corejs.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/anna.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/corejs.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CocoapodsDemo/Pods-CocoapodsDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -219,6 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE195B48209D983D00111F15 /* Tracker.m in Sources */,
 				BE5EEE1B1F2AA5A4000C9015 /* SecondViewController.m in Sources */,
 				BE5EEE031F2AA42D000C9015 /* AppDelegate.swift in Sources */,
 				BE5EEE051F2AA42D000C9015 /* FirstViewController.swift in Sources */,
@@ -347,14 +349,15 @@
 			baseConfigurationReference = E5CE06A7871696A2516BB26D /* Pods-CocoapodsDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				INFOPLIST_FILE = CocoapodsDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.coppercash.CocoapodsDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "CocoapodsDemo/CocoapodsDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -363,13 +366,14 @@
 			baseConfigurationReference = 7F282CAD044A8ECA93C9363A /* Pods-CocoapodsDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				INFOPLIST_FILE = CocoapodsDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.coppercash.CocoapodsDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "CocoapodsDemo/CocoapodsDemo-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
