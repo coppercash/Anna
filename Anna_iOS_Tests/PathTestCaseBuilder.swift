@@ -148,8 +148,8 @@ PathTestCaseBuilder : Anna.Tracking
             self.currentExpectationIndex += 1
         }
     }
-    
-    func receive(
+    func
+        receive(
         analyticsError :Error,
         dispatchedBy manager :Manager
         ) {

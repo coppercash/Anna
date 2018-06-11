@@ -45,16 +45,14 @@ class AnalyzableComponentTests: XCTestCase {
                     button.sendActions(for: .touchUpInside)
                 }
             }
-            class func
-                subAnalyzableKeys() -> Set<String> {
-                return Set([#keyPath(view)])
-            }
+            static let
+            subAnalyzableKeys = Set([#keyPath(view)])
             class
                 View : UIView, AnalyzableObject
             {
                 lazy var
                 analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
-                lazy var
+                @objc lazy var
                 buttons :[Button] = {
                     let
                     buttons = [
@@ -77,10 +75,8 @@ class AnalyzableComponentTests: XCTestCase {
                         }
                     }
                 }
-                class func
-                    subAnalyzableKeys() -> Set<String> {
-                    return Set([#keyPath(buttons)])
-                }
+                static let
+                subAnalyzableKeys = Set([#keyPath(buttons)])
                 class
                     Button : UIButton, Analyzable
                 {

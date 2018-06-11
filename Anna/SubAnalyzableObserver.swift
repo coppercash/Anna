@@ -11,8 +11,8 @@ import Foundation
 public protocol
     AnalyzableObject : Analyzable
 {
-    static func
-        subAnalyzableKeys() -> Set<String>
+    static var
+    subAnalyzableKeys : Set<String> { get }
 }
 
 class
@@ -28,7 +28,7 @@ class
         object :Object
         ) {
         self.object = object
-        self.keys = type(of: object).subAnalyzableKeys()
+        self.keys = type(of: object).subAnalyzableKeys
         super.init()
         self.observe()
     }
