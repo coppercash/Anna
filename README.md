@@ -69,9 +69,32 @@ class MyTracker : Tracker {
 }
 ```
 
-### Analyzer & Root
+### Responder Chain & Focus Path
 
-### Manager & Config
+```
+MyAppDelegate/
+├── Anna.Analyzer("app")/
+└── UIWindow/
+    └── UINavigationController/
+        ├── MyHomeViewController/
+        │   ├── Anna.Analyzer("home")/
+        │   └── MyTableView/
+        │       ├── Anna.Analyzer("table")/
+        │       └── MyDetailTableViewCell/
+        │           └── Anna.Analyzer("detail", #)/
+        └── MyDetailViewController/
+            ├── Anna.Analyzer("detail")/
+            └── MyButton/
+                └── Anna.Analyzer("button")/
+```
+
+#### Manager
+
+#### Root Analyzer
+
+### Analyzer 
+
+### Responder Chain
 
 ### Task & Node
 
