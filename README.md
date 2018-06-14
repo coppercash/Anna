@@ -71,6 +71,8 @@ class MyTracker : Tracker {
 
 ### Responder Chain & Focus Path
 
+A classic application structure, which contains master & detail view controller navigated within a navigation controller, may look like this:
+
 ```
 MyAppDelegate/
 ├── Anna.Analyzer("app")/
@@ -81,22 +83,43 @@ MyAppDelegate/
         │   └── MyTableView/
         │       ├── Anna.Analyzer("table")/
         │       └── MyDetailTableViewCell/
-        │           └── Anna.Analyzer("detail", #)/
+        │           └── Anna.Analyzer("cell", #)/
         └── MyDetailViewController/
             ├── Anna.Analyzer("detail")/
             └── MyButton/
                 └── Anna.Analyzer("button")/
 ```
 
-#### Manager
+We can notice that some nodes in the tree above have a `Anna.Analyzer` as instance member. With the names given to the analyzers, in **Anna.Core**, this tree results in another tree which is slightly different:
 
-#### Root Analyzer
+```
+app/
+└── home/
+    └── table/
+        └── cell/
+            └── delail/
+                └── button/
+```
 
-### Analyzer 
+The major different starts from node **detail** which belongs to the `MyDetailViewController`. In the **Responder Chain** provided by `UIKit`, the next responder (parent in the tree) of `MyDetailViewController`, is the `UINavigationController`. However, in **Anna.Core**, the parent of **detail** is **cell**, which means that user's focus moves from the **cell** to the **detail**. This behavior is because, from the aspect of analytics, the useful information for every single view usually belongs to the views user paid attention on before. Thus, in **Anna.Core** every path from the root to a node is actually a **Focus Path**.
 
-### Responder Chain
+#### Root Analyzer & Manager
 
-### Task & Node
+`UIView`s, `UIViewController`s, `UIControl`s and all the other objects in Responder Chain may own a `Anna.Analyzer` if they are supposed to be analyzed, including the root responder - `UIApplicaiontDelegate`.
+However, the analyzer of `UIApplicaiontDelegate` is slightly different. It is initialized with a `Anna.Manager`.
+Manager acts like port between `Anna.iOS` and `Anna.Core`. It receives events from `Anna.iOS` and returns calculated results into delegate methods.
+
+Config
+
+### Super & Sub Analyzer 
+
+Owner of a super analyzer can add sub analyzers to it by confirming protocol `Anna.AnalyzableObject` and implementing method `subAnalyzableKeys`. In this way, sub analyzers create sub nodes in focus path.
+
+If a analyzer is not added by any other analyzer as sub analyzer, it looks up the responder chain for a super analyzer. In the looking up process, `Anna.FocusPathConstituting.parentConstitutor()` and `Anna.FocusPathConstitutionRedirecting.redirectedConstitutor()` are called to have detailed information about how the super-sub relationship is like. `UIResponder` and most of its subclasses have default implementation for these methods, but they can be override to support custom behavior.
+
+### Task Registration
+
+register
 
 ### Available Events
 
