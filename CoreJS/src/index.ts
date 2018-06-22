@@ -6,7 +6,7 @@ interface Native
   resolvedPath(id :Module.ID, parent :Module.ID, main :Module.ID) : string;
   load(path :string, exports :Module.Exports, require :Module.Require, module :Module) :void;
   log(message :string) : void;
-  injectGlobal(key :string, value :any) : void;
+  global :{ [key :string] : any };
 }
 
 namespace Module
@@ -48,15 +48,11 @@ class Module
     }
 
     let
-    resolve = (identifier :Module.ID) => {
-      return native.resolvedPath(
-        identifier, 
-        (parent ? parent.id : null), 
-        (main ? main.id : null)
-      );
-    }
-    let
-    path = resolve(id);
+    path = native.resolvedPath(
+      id, 
+      (parent ? parent.id : null), 
+      (main ? main.id : null)
+    );
     if (!(path)) {
       throw new Error(`Cannot resolve path for '${ id }' required by '${ parent ? parent.id : 'main' }'.`);
     }
@@ -75,19 +71,19 @@ class Module
     threw = true;
     try {
       module.exports = {};
-      let
-      require = (identifier :Module.ID) => {
-        return Module.load(
-          identifier, 
+      let 
+      require = Module.makeRequire(
           module, 
-          (main || module), 
+          main, 
           native, 
           cache
-        )
-      }
-      (require as any).cache = cache;
-      (require as any).resolve = resolve;
-      native.load(path, module.exports, require, module);
+      );
+      native.load(
+        path, 
+        module.exports, 
+        require, 
+        module
+      );
       threw = false;
     }
     finally {
@@ -98,6 +94,33 @@ class Module
 
     return module.exports;
   }
+  static
+  makeRequire(
+    parent :Module, 
+    main :Module, 
+    native :Native, 
+    cache :Module.Cache
+  ) : Module.Require {
+    let
+    require = (identifier :Module.ID) => {
+      return Module.load(
+        identifier, 
+        parent, 
+        (main || parent), 
+        native, 
+        cache
+      )
+    }
+    (require as any).cache = cache;
+    (require as any).resolve = (identifier :Module.ID) => {
+      return native.resolvedPath(
+        identifier, 
+        (parent ? parent.id : null), 
+        (main ? main.id : null)
+      );
+    }
+    return require;
+  }
 }
 
 class Core {
@@ -107,27 +130,39 @@ class Core {
     native :Native
   ) {
     this.native = native;
+    this.makeRequire();
     this.makeConsole();
+  }
+
+  makeRequire() {
+    let
+    native = this.native,
+      global = this.native.global;
+    global.require = Module.makeRequire(
+        null,
+        null,
+        this.native,
+        Module.cache
+    );
   }
 
   makeConsole() {
     let
-    native = this.native;
-    let
-    console = { log: (message :string) => { native.log(message); } };
-    native.injectGlobal('console', console);
+    native = this.native, 
+      global = this.native.global;
+    global.console = { 
+      log: (message :string) => { 
+        native.log(message); 
+      } 
+    };
   }
 
   require(
     main :string
   ) :Module.Exports {
-    return Module.load(
-      main,
-      null,
-      null,
-      this.native,
-      Module.cache
-    ) 
+    let
+    require = this.native.global.require;
+    return require(main);
   }
 }
 

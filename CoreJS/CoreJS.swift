@@ -216,24 +216,14 @@ class
                 ])
     }
     func
-        injectGlobal(
-        _ key :String,
-        _ value :JSValue
-        ) {
-        guard let global = self.context?.globalObject
-            else { return }
-        if value.isUndefined {
-            global.deleteProperty(key)
-        }
-        else {
-            global.setValue(value, forProperty: key)
-        }
-    }
-    func
         log(
         _ string :String
         ) {
         self.logger?.log(string)
+    }
+    var
+    global :JSValue! {
+        return self.context?.globalObject
     }
     
     func
@@ -281,14 +271,11 @@ class
         _ module :JSValue
     )
     func
-        injectGlobal(
-        _ key :String,
-        _ value :JSValue
-    )
-    func
         log(
         _ string :String
     )
+    var
+    global :JSValue! { get }
 }
 
 extension
@@ -303,6 +290,10 @@ extension
         context = self
         context.name = "CoreJS"
         context.exceptionHandler = dependency.handleException
+        context.globalObject.setValue(
+            context.globalObject,
+            forProperty: "global"
+        )
         let
         fileManager = dependency.resolvedFileManager(),
         mainScriptURL = try dependency.resolvedCoreModuleURL().appendingPathComponent("index.js")

@@ -202,28 +202,13 @@ public class
             task = self.dependency.taskModuleURL
             else { throw ScriptError.taskModuleURLNotSpecified }
         let
-        context = self.resolvedScriptContext()
-        let
         receive : @convention(block) (Any) -> Void = {
             [weak self] (result :Any) in
             self?.handle(scriptResult: result)
-        },
-        inject : @convention(block) (JSValue, JSValue) -> Void = {
-            [weak context] (key :JSValue, value :JSValue) in
-            guard let
-                global = context?.globalObject
-                else { return }
-            if (value.isUndefined) {
-                global.deleteProperty(key.toString())
-            }
-            else {
-                global.setValue(value, forProperty: key.toString())
-            }
         }
         var
         dependency :[NSString : Any] = [
             "taskModulePath": task.path,
-            "inject": unsafeBitCast(inject, to: AnyObject.self),
             "receive": unsafeBitCast(receive, to: AnyObject.self),
         ]
         if let

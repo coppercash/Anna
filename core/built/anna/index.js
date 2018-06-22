@@ -460,6 +460,7 @@ var Value = (function () {
 }());
 
 },{"./compatibility":1,"./markup":5,"./match":6,"./trie":9}],3:[function(require,module,exports){
+(function (global){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Identity = require("./identity");
@@ -479,13 +480,8 @@ var Manager = (function () {
         }
     }
     Manager.run = function (dependency) {
-        var taskModulePath = dependency.taskModulePath, inject = dependency.inject, require = dependency.require, receive = dependency.receive, config = dependency.config;
-        var _require = (config && config.debug) ?
-            function (identifier) {
-                delete require.cache[require.resolve(identifier)];
-                return require(identifier);
-            } : require;
-        var manager = new Manager(new Load.RequiringLoader(taskModulePath, inject, _require), config);
+        var taskModulePath = dependency.taskModulePath, receive = dependency.receive, config = dependency.config, _global = (dependency.global || global);
+        var manager = new Manager(new Load.RequiringLoader(taskModulePath, _global, config), config);
         manager.tracker = new Track.InPlaceTracker(receive);
         return manager;
     };
@@ -600,18 +596,20 @@ var RecordingError = (function () {
     return RecordingError;
 }());
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./compatibility":1,"./identity":2,"./load":4,"./task":7,"./track":8}],4:[function(require,module,exports){
+(function (global){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Match = require("./match");
 var RequiringLoader = (function () {
-    function RequiringLoader(taskModulePath, inject, require) {
+    function RequiringLoader(taskModulePath, gloabl, config) {
         this.taskModulePath = taskModulePath;
-        this.inject = inject;
-        this.require = require;
+        this.global = global;
+        this.config = config;
     }
     RequiringLoader.prototype.matchTasks = function (namePath) {
-        var taskModulePath = this.taskModulePath, require = this.require;
+        var taskModulePath = this.taskModulePath;
         var path = taskModulePath + "/" + namePath.join('/') + ".js";
         var builder = new Match.Builder();
         var match = function (path, map) {
@@ -629,20 +627,41 @@ var RequiringLoader = (function () {
         };
         try {
             this.preRequire(match);
-            require(path);
+            this.require(path);
         }
-        catch (_a) { }
         finally {
             this.postRequire();
         }
         return builder.build();
     };
     RequiringLoader.prototype.preRequire = function (match) {
-        var inject = this.inject;
-        inject('match', match);
+        this.inject('match', match);
     };
     RequiringLoader.prototype.postRequire = function () {
         this.inject('match', undefined);
+    };
+    RequiringLoader.prototype.inject = function (key, value) {
+        var global = this.global;
+        if (value === undefined) {
+            delete global[key];
+        }
+        else {
+            global[key] = value;
+        }
+    };
+    RequiringLoader.prototype.require = function (name) {
+        var require = this.global.require, config = this.config, debug = config ? config['debug'] : undefined;
+        if (debug === true) {
+            delete require.cache[require.resolve(name)];
+        }
+        var exports = undefined;
+        try {
+            exports = require(name);
+        }
+        catch (_a) {
+            exports = undefined;
+        }
+        return exports;
     };
     return RequiringLoader;
 }());
@@ -664,6 +683,7 @@ var InPlaceLoader = (function () {
 }());
 exports.InPlaceLoader = InPlaceLoader;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./match":6}],5:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {

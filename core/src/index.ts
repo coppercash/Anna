@@ -5,13 +5,12 @@ import * as Task from './task';
 import * as C from './compatibility';
 
 namespace Manager {
-  export type Config = { [key :string]: any };
+  export type Config = { [key :string] : any };
   export interface Dependency {
     taskModulePath :string;
-    inject :Load.RequiringLoader.Inject;
-    require :Load.RequiringLoader.Require;
     receive :Track.InPlaceTracker.Receive;
-    config? :Manager.Config
+    config? :Manager.Config;
+    global :any;
   }
 }
 export class Manager
@@ -38,23 +37,15 @@ export class Manager
   ) : Manager {
     let
     taskModulePath = dependency.taskModulePath,
-      inject = dependency.inject, 
-      require = dependency.require,
       receive = dependency.receive, 
-      config = dependency.config;
-
-    let
-    _require = (config && config.debug) ? 
-      (identifier :string) => {
-        delete (require as any).cache[(require as any).resolve(identifier)];
-        return require(identifier);
-      } : require;
+      config = dependency.config,
+      _global = (dependency.global || global) as any;
     let
     manager = new Manager(
       new Load.RequiringLoader(
-        taskModulePath, 
-        inject,
-        _require
+        taskModulePath,
+        _global,
+        config
       ),
       config
     );
