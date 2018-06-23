@@ -468,6 +468,15 @@ var Track = require("./track");
 var Load = require("./load");
 var Task = require("./task");
 var C = require("./compatibility");
+function configured(config) {
+    var task = config.task;
+    return function (receive, config) {
+        var manager = new Manager(new Load.RequiringLoader(task, global, config), config);
+        manager.tracker = new Track.InPlaceTracker(receive);
+        return manager;
+    };
+}
+exports.configured = configured;
 var Manager = (function () {
     function Manager(loader, config) {
         this.identities = new Identity.Tree();
@@ -479,12 +488,6 @@ var Manager = (function () {
             this.config = config;
         }
     }
-    Manager.run = function (dependency) {
-        var taskModulePath = dependency.taskModulePath, receive = dependency.receive, config = dependency.config, _global = (dependency.global || global);
-        var manager = new Manager(new Load.RequiringLoader(taskModulePath, _global, config), config);
-        manager.tracker = new Track.InPlaceTracker(receive);
-        return manager;
-    };
     Manager.prototype.nodeID = function (id) {
         if (id instanceof Identity.NodeID) {
             return id;

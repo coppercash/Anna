@@ -8,11 +8,6 @@
 import Foundation
 import JavaScriptCore
 
-enum FileError : Error
-{
-    case coreNotFound
-}
-
 public struct
     CoreJS
 {
@@ -27,39 +22,17 @@ public struct
     public class
         Dependency : NSObject
     {
+        public typealias
+        ExceptionHandler = (JSContext?, Error?) -> Void
         public var
-        coreModuleURL :URL? = nil,
+        moduleURL :URL? = nil,
         fileManager :FileManaging? = nil,
         logger :Logging? = nil,
-        handleException : ((JSContext?, JSValue?) -> Void)? = nil,
-        nodePathURLs :[URL]? = nil
-        
-        func
-            resolvedCoreModuleURL() throws -> URL {
-            if let
-                url = self.coreModuleURL
-            { return url }
-            let
-            bundle = Bundle(for: type(of: self))
-            guard let
-                url = bundle.url(
-                    forResource: "corejs",
-                    withExtension: "bundle"
-                )
-                else { throw FileError.coreNotFound }
-            return url
-        }
-        
-        func
-            resolvedFileManager() -> FileManaging {
-            return self.fileManager ?? FileManager.default
-        }
+        exceptionHandler :ExceptionHandler? = nil,
+        nodePathURLs :Set<URL>? = nil,
+        globalModules :Dictionary<String, URL>? = nil
     }
 }
-
-extension
-    FileManager : CoreJS.FileManaging
-{ }
 
 @objc(CJSFileManaging)
 public protocol
@@ -70,6 +43,7 @@ public protocol
     func
         fileExists(atPath path: String) -> Bool
 }
+extension FileManager : CoreJS.FileManaging {}
 
 @objc(CJSLogging)
 public protocol
@@ -86,16 +60,19 @@ class
     context :JSContext?
     let
     fileManager :FileManaging,
-    paths :[String]
+    globalModules :[String : URL],
+    paths :Set<URL>
     var
     logger :Logging? = nil
     init(
         context :JSContext,
         fileManager :FileManaging,
-        paths :[String]
+        globalModules :[String : URL],
+        paths :Set<URL>
         ) {
         self.context = context
         self.fileManager = fileManager
+        self.globalModules = globalModules
         self.paths = paths
     }
     func
@@ -117,7 +94,9 @@ class
         _ js_main :JSValue
         ) -> String! {
         let
-        fileManager = self.fileManager
+        fileManager = self.fileManager,
+        globalModules = self.globalModules
+        
         guard
             js_id.isString,
             let
@@ -128,6 +107,13 @@ class
         
         if id.hasPrefix("/") {
             return id
+        }
+        
+        if let url = globalModules[id] {
+            return url
+                .appendingPathComponent("index")
+                .appendingPathExtension("js")
+                .path
         }
         
         guard let
@@ -197,23 +183,28 @@ class
             return
         }
         let
-        decorated =
-        """
-        (function () {
-        return (function (exports, require, module) {
-        \(script)
-        });
-        })();
-        """
+        url = URL(fileURLWithPath: path),
+        decorated = String(format: ("""
+(function () { return (
+  function (exports, require, module, __filename, __dirname) {
+    %@
+  }
+); })();
+"""), script)
         let
-        _ = context.evaluateScript(
-            decorated,
-            withSourceURL: URL(fileURLWithPath: path)
-            ).call(withArguments: [
+        _ = context
+            .evaluateScript(
+                decorated,
+                withSourceURL: url
+            )
+            .call(withArguments: [
                 exports,
                 require,
-                module
-                ])
+                module,
+                url.path,
+                url.deletingLastPathComponent().path
+                ]
+        )
     }
     func
         log(
@@ -221,11 +212,7 @@ class
         ) {
         self.logger?.log(string)
     }
-    var
-    global :JSValue! {
-        return self.context?.globalObject
-    }
-    
+
     func
         __lookupPaths(
         for identifier :String,
@@ -234,7 +221,7 @@ class
         var
         result = [] as [String]
         let
-        paths = self.paths + [directory]
+        paths = self.paths.map { $0.path } + [directory]
         for path in paths {
             result.append(
                 (((path as NSString)
@@ -274,86 +261,110 @@ class
         log(
         _ string :String
     )
-    var
-    global :JSValue! { get }
 }
 
 extension
     JSContext
 {
     func
-        run(
-        _ moduleURL :URL,
-        with dependency :CoreJS.Dependency = Dependency()
-        ) throws ->JSValue! {
+        setup(
+        with dependency :CoreJS.Dependency? = nil
+        ) throws {
         let
         context = self
         context.name = "CoreJS"
-        context.exceptionHandler = dependency.handleException
+        if let handle = dependency?.exceptionHandler {
+            context.exceptionHandler = { handle( $0, $1?.error()) }
+        }
         context.globalObject.setValue(
             context.globalObject,
             forProperty: "global"
         )
+
         let
-        fileManager = dependency.resolvedFileManager(),
-        mainScriptURL = try dependency.resolvedCoreModuleURL().appendingPathComponent("index.js")
-        let
+        fileManager = dependency?.fileManager ?? FileManager.default,
+        moduleURL = dependency?.moduleURL ??
+            Bundle.main
+                .bundleURL
+                .appendingPathComponent("corejs")
+                .appendingPathExtension("bundle"),
+        globalModules = dependency?.globalModules ?? [:],
+        paths = dependency?.nodePathURLs ?? Set(),
         native = Native(
             context: context,
             fileManager: fileManager,
-            paths: dependency.nodePathURLs?.map { $0.path } ?? []
+            globalModules: globalModules,
+            paths: paths
         )
-        native.logger = dependency.logger
+        native.logger = dependency?.logger
+
         let
-        data = fileManager.contents(atPath: mainScriptURL.path)!,
+        mainScriptURL = moduleURL
+            .appendingPathComponent("index")
+            .appendingPathExtension("js")
+        guard let
+            data = fileManager.contents(atPath: mainScriptURL.path)
+            else { throw FileError.coreModuleNotFound }
+        let
         script = String(data: data, encoding: .utf8)
-        context.evaluateScript(
-            """
-const module = { exports: {} };
-const exports = module.exports;
-"""
-        )
+        
+        context.evaluateScript("""
+var module = { exports: {} };
+var exports = module.exports;
+""")
         context.evaluateScript(
             script,
             withSourceURL: mainScriptURL
         )
-        let
-        index = (moduleURL.path as NSString)
-            .appendingPathComponent("index.js")
-        let
-        exports = context
-            .evaluateScript("module.exports.run")
-            .call(withArguments: [
-                index,
-                native
-                ])
-        context.evaluateScript(
-            """
+        context
+            .globalObject
+            .forProperty("exports")
+            .forProperty("setup")
+            .call(withArguments: [native])
+        context.evaluateScript("""
 delete exports;
 delete module;
-"""
-)
-        return exports
+""")
+    }
+    func
+        require(
+        _ identifier :String
+        ) -> JSValue! {
+        return self
+            .globalObject
+            .forProperty("require")
+            .call(withArguments: [identifier])
     }
 }
 
 extension
-    NSError
+    JSValue
 {
-    convenience
-    init(with jsValue :JSValue) {
-        var
-        userInfo = [String : String]()
-        if let message = jsValue.forProperty("message").toString() {
-            userInfo[NSLocalizedDescriptionKey] = message
-        }
-        if let stack = jsValue.forProperty("stack").toString() {
-            userInfo[NSLocalizedFailureReasonErrorKey] = stack
-        }
-        self.init(
-            domain: jsValue.forProperty("name").toString(),
+    func
+        error() -> Error? {
+        let
+        jsValue = self
+        guard
+            let
+            name = jsValue.forProperty("name").toString(),
+            let
+            message = jsValue.forProperty("message").toString(),
+            let
+            stack = jsValue.forProperty("stack").toString()
+            else { return nil }
+        return NSError(
+            domain: name,
             code: -1,
-            userInfo: userInfo
+            userInfo: [
+                NSLocalizedDescriptionKey: message,
+                NSLocalizedFailureReasonErrorKey: stack,
+            ]
         )
     }
 }
+enum
+    FileError : Error
+{
+    case coreModuleNotFound
+}
+

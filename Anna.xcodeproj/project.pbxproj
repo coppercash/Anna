@@ -27,7 +27,6 @@
 		3DB2E5EE209FEACE005F0572 /* ANAUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DB2E5F0209FEAF6005F0572 /* UIResponder+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */; };
 		3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E79C20A26734005F0572 /* TableViewTests.swift */; };
-		3DB8B860209C3548003B671B /* tool.js in Copy Files */ = {isa = PBXBuildFile; fileRef = 3DB8B85E209C3517003B671B /* tool.js */; };
 		3DCF87FF20C6595200F1DAAE /* ForwardingAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCF87FE20C6595200F1DAAE /* ForwardingAnalyzer.swift */; };
 		3DCF880220C68E1900F1DAAE /* ANAUITableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DCF880020C68E1900F1DAAE /* ANAUITableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DCF880320C68E1900F1DAAE /* ANAUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCF880120C68E1900F1DAAE /* ANAUITableView.m */; };
@@ -45,10 +44,8 @@
 		BE195B1B209D7D6A00111F15 /* Hook.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B0B209D7D6900111F15 /* Hook.swift */; };
 		BE195B25209D7E8B00111F15 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B24209D7E8A00111F15 /* Tracker.swift */; };
 		BE195B43209D844F00111F15 /* Analyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE195B42209D844F00111F15 /* Analyzable.swift */; };
-		BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */; };
 		BE4010E020A9909E0056BF29 /* FocusPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4010DF20A9909E0056BF29 /* FocusPath.swift */; };
 		BE4F088520C27A970034F578 /* ReuseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4F088420C27A970034F578 /* ReuseTests.swift */; };
-		BE520DAA20ADD2D900A5625D /* ramda.js in Copy Files */ = {isa = PBXBuildFile; fileRef = BE520DA820ADD1DD00A5625D /* ramda.js */; };
 		BE7ED60720CD2814001E6E6E /* AnalyzableComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7ED60620CD2814001E6E6E /* AnalyzableComponentTests.swift */; };
 		BE7ED60920CD4236001E6E6E /* SubAnalyzableObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7ED60820CD4236001E6E6E /* SubAnalyzableObserver.swift */; };
 		BE87DA851EAB608700DA81EB /* Anna.h in Headers */ = {isa = PBXBuildFile; fileRef = BE87DA831EAB608700DA81EB /* Anna.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -58,10 +55,8 @@
 		BE89419920B94654005D7EC9 /* ANAUICollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BE89419720B94654005D7EC9 /* ANAUICollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE89419A20B94654005D7EC9 /* ANAUICollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE89419820B94654005D7EC9 /* ANAUICollectionViewCell.m */; };
 		BE89419C20B9505A005D7EC9 /* CollectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE89419B20B9505A005D7EC9 /* CollectionViewTests.swift */; };
-		BEC320402096F4EA00206AD1 /* anna in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC3203F2096F4E900206AD1 /* anna */; };
-		BEC320422096F51100206AD1 /* core in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEC320412096F51100206AD1 /* core */; };
-		BEC320442096F66300206AD1 /* index.js in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320342096C72400206AD1 /* index.js */; };
-		BEC320472096F6A800206AD1 /* task in Copy Files */ = {isa = PBXBuildFile; fileRef = BEC320462096F6A700206AD1 /* task */; };
+		BEF6DAD620DDF5680039D141 /* analytics.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BEF6DAD520DDF5680039D141 /* analytics.bundle */; };
+		BEF6DAD920DDF58B0039D141 /* PathTestCaseBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF6DAD820DDF58B0039D141 /* PathTestCaseBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,8 +83,6 @@
 			dstPath = anna_test/node_modules;
 			dstSubfolderSpec = 7;
 			files = (
-				BEC320422096F51100206AD1 /* core in CopyFiles */,
-				BEC320402096F4EA00206AD1 /* anna in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,10 +92,6 @@
 			dstPath = anna_test;
 			dstSubfolderSpec = 7;
 			files = (
-				BE520DAA20ADD2D900A5625D /* ramda.js in Copy Files */,
-				3DB8B860209C3548003B671B /* tool.js in Copy Files */,
-				BEC320472096F6A800206AD1 /* task in Copy Files */,
-				BEC320442096F66300206AD1 /* index.js in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,7 +122,6 @@
 		3DB2E5E5209FEACE005F0572 /* ANAUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANAUIViewController.h; sourceTree = "<group>"; };
 		3DB2E5EF209FEAF6005F0572 /* UIResponder+Hookable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Hookable.swift"; sourceTree = "<group>"; };
 		3DB2E79C20A26734005F0572 /* TableViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTests.swift; sourceTree = "<group>"; };
-		3DB8B85E209C3517003B671B /* tool.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tool.js; sourceTree = "<group>"; };
 		3DCF87FE20C6595200F1DAAE /* ForwardingAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardingAnalyzer.swift; sourceTree = "<group>"; };
 		3DCF880020C68E1900F1DAAE /* ANAUITableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUITableView.h; sourceTree = "<group>"; };
 		3DCF880120C68E1900F1DAAE /* ANAUITableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUITableView.m; sourceTree = "<group>"; };
@@ -155,10 +143,8 @@
 		BE195B42209D844F00111F15 /* Analyzable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analyzable.swift; sourceTree = "<group>"; };
 		BE3D83BC2081E33200A1D17D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		BE3D83BE2081E33C00A1D17D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTestCaseBuilder.swift; sourceTree = "<group>"; };
 		BE4010DF20A9909E0056BF29 /* FocusPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusPath.swift; sourceTree = "<group>"; };
 		BE4F088420C27A970034F578 /* ReuseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseTests.swift; sourceTree = "<group>"; };
-		BE520DA820ADD1DD00A5625D /* ramda.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ramda.js; sourceTree = "<group>"; };
 		BE7ED60620CD2814001E6E6E /* AnalyzableComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzableComponentTests.swift; sourceTree = "<group>"; };
 		BE7ED60820CD4236001E6E6E /* SubAnalyzableObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubAnalyzableObserver.swift; sourceTree = "<group>"; };
 		BE87DA801EAB608700DA81EB /* Anna.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Anna.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,10 +158,8 @@
 		BE89419720B94654005D7EC9 /* ANAUICollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANAUICollectionViewCell.h; sourceTree = "<group>"; };
 		BE89419820B94654005D7EC9 /* ANAUICollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANAUICollectionViewCell.m; sourceTree = "<group>"; };
 		BE89419B20B9505A005D7EC9 /* CollectionViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewTests.swift; sourceTree = "<group>"; };
-		BEC320342096C72400206AD1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
-		BEC3203F2096F4E900206AD1 /* anna */ = {isa = PBXFileReference; lastKnownFileType = folder; name = anna; path = ../core/built/anna; sourceTree = "<group>"; };
-		BEC320412096F51100206AD1 /* core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = core; path = ../CoreJS/built/core; sourceTree = "<group>"; };
-		BEC320462096F6A700206AD1 /* task */ = {isa = PBXFileReference; lastKnownFileType = folder; path = task; sourceTree = "<group>"; };
+		BEF6DAD520DDF5680039D141 /* analytics.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = analytics.bundle; sourceTree = "<group>"; };
+		BEF6DAD820DDF58B0039D141 /* PathTestCaseBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathTestCaseBuilder.swift; sourceTree = "<group>"; };
 		CAFE46CD992D8A38286245EA /* Pods-Anna_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anna_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anna_iOS/Pods-Anna_iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -373,12 +357,8 @@
 		BE87DA8E1EAB615D00DA81EB /* Anna_iOS_Tests */ = {
 			isa = PBXGroup;
 			children = (
-				BEC320412096F51100206AD1 /* core */,
-				BEC3203F2096F4E900206AD1 /* anna */,
-				BEC320462096F6A700206AD1 /* task */,
-				BEC320342096C72400206AD1 /* index.js */,
-				3DB8B85E209C3517003B671B /* tool.js */,
-				BE520DA820ADD1DD00A5625D /* ramda.js */,
+				BEF6DAD720DDF58B0039D141 /* CaseBuilder */,
+				BEF6DAD520DDF5680039D141 /* analytics.bundle */,
 				BE87DA911EAB615D00DA81EB /* Info.plist */,
 				BE87DA991EAB6C3800DA81EB /* Anna_iOS_Tests-Bridging-Header.h */,
 				3D10FE5A2086EE4400AE10D3 /* PathTests.swift */,
@@ -387,7 +367,6 @@
 				BE89419B20B9505A005D7EC9 /* CollectionViewTests.swift */,
 				3D2CDFCD20AFBC9200294037 /* FocusTests.swift */,
 				BE4F088420C27A970034F578 /* ReuseTests.swift */,
-				BE3D83C12081F8BD00A1D17D /* PathTestCaseBuilder.swift */,
 				BE7ED60620CD2814001E6E6E /* AnalyzableComponentTests.swift */,
 			);
 			path = Anna_iOS_Tests;
@@ -430,6 +409,14 @@
 				BE89419820B94654005D7EC9 /* ANAUICollectionViewCell.m */,
 			);
 			path = UICollectionViewCell;
+			sourceTree = "<group>";
+		};
+		BEF6DAD720DDF58B0039D141 /* CaseBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				BEF6DAD820DDF58B0039D141 /* PathTestCaseBuilder.swift */,
+			);
+			path = CaseBuilder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -498,6 +485,7 @@
 				BE87DA8B1EAB615C00DA81EB /* Resources */,
 				BEC3203E2096F47900206AD1 /* CopyFiles */,
 				BEC320432096F65100206AD1 /* Copy Files */,
+				A6E63311BE6D469807A6A662 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -575,6 +563,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEF6DAD620DDF5680039D141 /* analytics.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +604,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6E63311BE6D469807A6A662 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Anna/anna.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Anna/corejs.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/anna.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/corejs.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anna_iOS_Tests/Pods-Anna_iOS_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -670,10 +679,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D10FE5B2086EE4400AE10D3 /* PathTests.swift in Sources */,
-				BE3D83C22081F8BD00A1D17D /* PathTestCaseBuilder.swift in Sources */,
 				BE7ED60720CD2814001E6E6E /* AnalyzableComponentTests.swift in Sources */,
 				BE4F088520C27A970034F578 /* ReuseTests.swift in Sources */,
 				3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */,
+				BEF6DAD920DDF58B0039D141 /* PathTestCaseBuilder.swift in Sources */,
 				3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */,
 				BE89419C20B9505A005D7EC9 /* CollectionViewTests.swift in Sources */,
 				3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */,
@@ -972,7 +981,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 592B56476776FAC19934C9AD /* Pods-Anna_iOS_Tests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1031,7 +1039,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 780E1755609EA36CEDA212D6 /* Pods-Anna_iOS_Tests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";

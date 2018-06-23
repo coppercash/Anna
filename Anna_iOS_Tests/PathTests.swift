@@ -98,7 +98,7 @@ class PathTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         test.task =
         """
-        const T = require('../tool');
+        const T = require('tool');
         match(
         ['vw/ana-updated', 'vw/ana-appeared'],
         function(n) {
@@ -161,7 +161,7 @@ class PathTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         test.task =
         """
-        const T = require('../tool');
+        const T = require('tool');
         match(
         ['vc/ana-updated', 'vc/ana-appeared'],
         function(n) { return T.first_displayed(n, 'text'); }

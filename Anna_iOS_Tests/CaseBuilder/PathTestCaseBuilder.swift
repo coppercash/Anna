@@ -20,21 +20,35 @@ MockFileManager : NSObject, CoreJS.FileManaging
     func
         contents(atPath path: String) -> Data?
     {
-        if
-            path.hasSuffix("/anna_test/task/index.js")
-        {
+        if path.hasSuffix("task/index.js") {
             return self.task?.data(using: .utf8)
         }
-        return fileManager.contents(atPath: path)
+        else if path.hasSuffix("analytics.bundle/index.js") {
+            return ("""
+module.exports = require('anna').configured({
+  task: (__dirname + '/task')
+});
+""").data(using: .utf8)
+        }
+        else {
+            return self.fileManager.contents(atPath: path)
+        }
     }
     func
         fileExists(
         atPath path: String
         ) -> Bool {
-        return fileManager.fileExists(atPath: path)
+        if path.hasSuffix("task/index.js") {
+            return true
+        }
+        else if path.hasSuffix("index.js") {
+            return true
+        }
+        else {
+            return fileManager.fileExists(atPath: path)
+        }
     }
 }
-
 class
 Logger : NSObject, CoreJS.Logging
 {
@@ -51,21 +65,6 @@ PathTestCaseBuilder : NSObject
     xcTestCase :XCTestCase
     let
     fileManager = MockFileManager()
-    lazy var
-    dependency :Dependency = {
-        let
-        dep = Dependency()
-        dep.fileManager = self.fileManager
-        let
-        bundle = Bundle(for: type(of: self)),
-        anna = Bundle(path: bundle.path(forResource: "anna_test", ofType: nil)!)!,
-        node_modules = Bundle(path: anna.path(forResource: "node_modules", ofType: nil)!)!
-        dep.moduleURL = anna.bundleURL
-        dep.taskModuleURL = anna.bundleURL.appendingPathComponent("task")
-        dep.coreModuleURL = node_modules.url(forResource: "core", withExtension: nil)
-        dep.logger = Logger()
-        return dep;
-    }()
     @objc(initWithXCTestCase:)
     init(with xcTestCase :XCTestCase) {
         self.xcTestCase = xcTestCase
@@ -92,11 +91,33 @@ PathTestCaseBuilder : NSObject
     func
         launch() {
         let
+        bundle = Bundle(for: type(of: self)),
+        dep = Dependency()
+        dep.exceptionHandler = { (_, e) in print(e!) }
+        dep.fileManager = self.fileManager
+        dep.logger = Logger()
+        dep.coreModuleURL = bundle.url(
+            forResource: "anna",
+            withExtension: "bundle"
+        )
+        dep.coreJSModuleURL = bundle.url(
+            forResource: "corejs",
+            withExtension: "bundle"
+        )
+        let
+        manager = Manager(
+            moduleURL: bundle.url(
+                forResource: "analytics",
+                withExtension: "bundle"
+            )!,
+            config: [:],
+            dependency: dep
+        )
+        manager.delegate = self
+        manager.delegateQueue = DispatchQueue.main
+        let
         delegate = PathTestingAppDelegate()
         delegate.rootViewController = self.rootViewController
-        let
-        manager = Manager(self.dependency)
-        manager.tracker = self
         delegate.manager = manager
         self.application.delegate = delegate
         self.delegate = delegate
@@ -132,28 +153,19 @@ PathTestCaseBuilder : NSObject
 }
     
 extension
-PathTestCaseBuilder : Anna.Tracking
+PathTestCaseBuilder : Anna.Delegate
 {
     func
-        receive(
-        analyticsResult :Any,
-        dispatchedBy manager :Manager
+        manager(
+        _ manager: Manager,
+        didSend result: Any
         ) {
-        DispatchQueue.main.async {
-            self.results.insert(analyticsResult, at: self.currentResultIndex)
-            self.currentResultIndex += 1
-            guard self.currentExpectationIndex < self.expectations.count
-                else { return }
-            self.expectations[self.currentExpectationIndex].fulfill()
-            self.currentExpectationIndex += 1
-        }
-    }
-    func
-        receive(
-        analyticsError :Error,
-        dispatchedBy manager :Manager
-        ) {
-        print(analyticsError)
+        self.results.insert(result, at: self.currentResultIndex)
+        self.currentResultIndex += 1
+        guard self.currentExpectationIndex < self.expectations.count
+            else { return }
+        self.expectations[self.currentExpectationIndex].fulfill()
+        self.currentExpectationIndex += 1
     }
 }
 

@@ -4,14 +4,35 @@ import * as Load from './load';
 import * as Task from './task';
 import * as C from './compatibility';
 
+interface Config {
+  task :string
+}
+
+export function configured(
+  config :Config
+) {
+  let
+  task = config.task;
+  return (
+    receive: Track.InPlaceTracker.Receive,
+    config :Manager.Config
+  ) : Manager => {
+    let
+    manager = new Manager(
+      new Load.RequiringLoader(
+        task,
+        global,
+        config
+      ),
+      config
+    );
+    manager.tracker = new Track.InPlaceTracker(receive);
+    return manager
+  }
+}
+
 namespace Manager {
   export type Config = { [key :string] : any };
-  export interface Dependency {
-    taskModulePath :string;
-    receive :Track.InPlaceTracker.Receive;
-    config? :Manager.Config;
-    global :any;
-  }
 }
 export class Manager
 {
@@ -29,28 +50,6 @@ export class Manager
     if (config) {
       this.config = config;
     }
-  }
-
-  static
-  run(
-    dependency :Manager.Dependency
-  ) : Manager {
-    let
-    taskModulePath = dependency.taskModulePath,
-      receive = dependency.receive, 
-      config = dependency.config,
-      _global = (dependency.global || global) as any;
-    let
-    manager = new Manager(
-      new Load.RequiringLoader(
-        taskModulePath,
-        _global,
-        config
-      ),
-      config
-    );
-    manager.tracker = new Track.InPlaceTracker(receive);
-    return manager
   }
 
   nodeID(

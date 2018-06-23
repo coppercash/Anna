@@ -15,7 +15,7 @@ class TableViewTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         
         test.task = ("""
-        var T = require('../tool');
+        var T = require('tool');
         match(
           ['tb/sc_0/rw/ana-appeared', 'tb/sc_3/rw/ana-appeared'],
           function(n) {
@@ -153,7 +153,7 @@ class TableViewTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         
         test.task = ("""
-        var T = require('../tool');
+        var T = require('tool');
         match(
           ['tb/sc_0/rw/ana-appeared', 'tb/sc_19/rw/ana-appeared'],
           function(node) {

@@ -12,16 +12,10 @@ import Foundation
 public protocol
     Tracking
 {
-    @objc(receiveAnalyticsResult:dispatchedByManager:)
+    @objc(manager:didSendResult:)
     func
-        receive(
-        analyticsResult :Any,
-        dispatchedBy manager :Manager
-    )
-    @objc(receiveAnalyticsError:dispatchedByManager:)
-    func
-        receive(
-        analyticsError :Error,
-        dispatchedBy manager :Manager
+    manager(
+        _ manager :Manager,
+        didSend result :Any
     )
 }

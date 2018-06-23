@@ -1,3 +1,20 @@
-PODFILE CHECKSUM: 95355b245d08bd807f6fe6ee288dab472be2daf6
+PODS:
+  - Anna (0.3.0):
+    - Anna/core (= 0.3.0)
+    - Anna/corejs (= 0.3.0)
+  - Anna/core (0.3.0)
+  - Anna/corejs (0.3.0)
+
+DEPENDENCIES:
+  - Anna (from `.`)
+
+EXTERNAL SOURCES:
+  Anna:
+    :path: "."
+
+SPEC CHECKSUMS:
+  Anna: b776ad7a0d2b0d56f734e19ca8ff1f3ffae905ac
+
+PODFILE CHECKSUM: 988fd5ff366501fd00b7b158a52ac80e5b376d06
 
 COCOAPODS: 1.5.3

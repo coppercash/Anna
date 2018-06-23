@@ -23,8 +23,8 @@ var Module = (function () {
         var threw = true;
         try {
             module.exports = {};
-            var require = Module.makeRequire(module, main, native, cache);
-            native.load(path, module.exports, require, module);
+            var require_1 = Module.makeRequire(module, main, native, cache);
+            native.load(path, module.exports, require_1, module);
             threw = false;
         }
         finally {
@@ -47,33 +47,19 @@ var Module = (function () {
     Module.cache = {};
     return Module;
 }());
-var Core = (function () {
-    function Core(native) {
-        this.native = native;
-        this.makeRequire();
-        this.makeConsole();
-    }
-    Core.prototype.makeRequire = function () {
-        var native = this.native, global = this.native.global;
-        global.require = Module.makeRequire(null, null, this.native, Module.cache);
-    };
-    Core.prototype.makeConsole = function () {
-        var native = this.native, global = this.native.global;
-        global.console = {
-            log: function (message) {
-                native.log(message);
-            }
-        };
-    };
-    Core.prototype.require = function (main) {
-        var require = this.native.global.require;
-        return require(main);
-    };
-    return Core;
-}());
-function run(index, native) {
-    var core = new Core(native);
-    return core.require(index);
+function setup(native) {
+    makeRequire(native);
+    makeConsole(native);
 }
-exports.run = run;
+exports.setup = setup;
+function makeRequire(native) {
+    global.require = Module.makeRequire(null, null, native, Module.cache);
+}
+function makeConsole(native) {
+    global.console = {
+        log: function (message) {
+            native.log(message);
+        }
+    };
+}
 //# sourceMappingURL=index.js.map

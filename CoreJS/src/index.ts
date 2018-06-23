@@ -6,7 +6,6 @@ interface Native
   resolvedPath(id :Module.ID, parent :Module.ID, main :Module.ID) : string;
   load(path :string, exports :Module.Exports, require :Module.Require, module :Module) :void;
   log(message :string) : void;
-  global :{ [key :string] : any };
 }
 
 namespace Module
@@ -123,55 +122,30 @@ class Module
   }
 }
 
-class Core {
-  native :Native;
-
-  constructor(
-    native :Native
-  ) {
-    this.native = native;
-    this.makeRequire();
-    this.makeConsole();
-  }
-
-  makeRequire() {
-    let
-    native = this.native,
-      global = this.native.global;
-    global.require = Module.makeRequire(
-        null,
-        null,
-        this.native,
-        Module.cache
-    );
-  }
-
-  makeConsole() {
-    let
-    native = this.native, 
-      global = this.native.global;
-    global.console = { 
-      log: (message :string) => { 
-        native.log(message); 
-      } 
-    };
-  }
-
-  require(
-    main :string
-  ) :Module.Exports {
-    let
-    require = this.native.global.require;
-    return require(main);
-  }
-}
-
-export function run(
-  index :string, 
+export function setup(
   native :Native
 ) {
-  let
-  core = new Core(native);
-  return core.require(index);
+  makeRequire(native);
+  makeConsole(native);
 }
 
+function makeRequire(
+  native :Native
+) {
+  (global as any).require = Module.makeRequire(
+    null,
+    null,
+    native,
+    Module.cache
+  );
+}
+
+function makeConsole(
+  native :Native
+) {
+  (global as any).console = { 
+    log: (message :string) => { 
+      native.log(message); 
+    } 
+  };
+}
