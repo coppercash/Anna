@@ -456,11 +456,12 @@ extension
     }
     public func
         record(
-        _ event: String
+        _ event :String,
+        with attributes :Manager.Attributes?
         ) {
         self.recordEvent(
             named: event,
-            with: nil
+            with: attributes
         )
     }
     public func

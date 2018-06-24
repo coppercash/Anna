@@ -66,7 +66,7 @@ extension
     
     public func update(_ value: Any?, for keyPath: String) { }
     
-    public func record(_ event: String) { }
+    public func record(_ event: String, with attributes: Manager.Attributes?) { }
     
     public func enable(with key: String) { }
     

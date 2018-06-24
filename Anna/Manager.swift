@@ -260,7 +260,7 @@ public class
             )
         }
     }
-    typealias
+    public typealias
         Attributes = [String : Any]
     func
         recordEvent(
