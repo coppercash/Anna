@@ -46,7 +46,7 @@ class ReuseTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -79,7 +79,7 @@ class ReuseTests: XCTestCase {
                     withIdentifier: "r",
                     for: indexPath
                 ) as! PathTestingTableViewCell
-                cell.analyzer.enable(with: "rw")
+                cell.analyzer.enable(naming: "rw")
                 let
                 subview = PathTestingView(frame: cell.contentView.bounds)
                 cell.contentView.addSubview(subview)
@@ -159,7 +159,7 @@ class ReuseTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -184,7 +184,7 @@ class ReuseTests: XCTestCase {
                     withIdentifier: "r",
                     for: indexPath
                 ) as! PathTestingTableViewCell
-                cell.analyzer.enable(with: "rw")
+                cell.analyzer.enable(naming: "rw")
                 return cell
             }
             func
@@ -201,7 +201,7 @@ class ReuseTests: XCTestCase {
                 ) {
                 let
                 controller = PathTestingViewController()
-                controller.analyzer.enable(with: "vc")
+                controller.analyzer.enable(naming: "vc")
                 self.navigationController?.pushViewController(
                     controller,
                     animated: false
@@ -269,7 +269,7 @@ class ReuseTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -301,7 +301,7 @@ class ReuseTests: XCTestCase {
                     withIdentifier: "r",
                     for: indexPath
                     ) as! PathTestingTableViewCell
-                cell.analyzer.enable(with: "rw")
+                cell.analyzer.enable(naming: "rw")
                 return cell
             }
             func

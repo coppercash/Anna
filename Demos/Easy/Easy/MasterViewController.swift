@@ -7,13 +7,20 @@
 //
 
 import UIKit
+import Anna
 
-class MasterViewController: UITableViewController {
+class MasterViewController: UITableViewController, AnalyzableObject {
 
     var detailViewController: DetailViewController? = nil
     var objects = [Any]()
+    lazy var analyzer: Analyzing = { Analyzer.analyzer(with: self) }()
+    static let subAnalyzableKeys: Set<String> = [#keyPath(tableView)]
 
 
+    deinit {
+        self.analyzer.detach()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -25,6 +32,8 @@ class MasterViewController: UITableViewController {
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        
+        self.analyzer.enable(naming: "master")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -69,10 +78,12 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! AnalyzableTableViewCell
+        cell.analyzer.enable(naming: "cell")
 
         let object = objects[indexPath.row] as! NSDate
         cell.textLabel!.text = object.description
+        cell.analyzer.update(object.description, for: "text")
         return cell
     }
 

@@ -13,6 +13,13 @@
 @end
 
 @implementation DetailViewController
+@synthesize ana_analyzer = _ana_analyzer;
+
+- (id<ANAAnalyzing>)ana_analyzer { return _ana_analyzer ?: (_ana_analyzer = [ANAAnalyzer analyzerWithDelegate:self]); }
+
+- (void)dealloc {
+    [_ana_analyzer detach];
+}
 
 - (void)configureView {
     // Update the user interface for the detail item.
@@ -26,6 +33,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
+    [self.ana_analyzer observeObject:self.detailDescriptionLabel
+                          forKeyPath:@"text"];
+    [self.ana_analyzer enableNaming:@"detail"];
 }
 
 

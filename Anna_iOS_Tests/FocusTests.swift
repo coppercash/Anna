@@ -28,7 +28,7 @@ class FocusTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "master")
+                self.analyzer.enable(naming: "master")
 
                 self.button = {
                     let
@@ -55,7 +55,7 @@ class FocusTests: XCTestCase {
                 handleControlEvent() {
                 let
                 detail = PathTestingViewController()
-                detail.analyzer.enable(with: "detail")
+                detail.analyzer.enable(naming: "detail")
                 self.navigationController?.pushViewController(
                     detail,
                     animated: false
@@ -64,7 +64,7 @@ class FocusTests: XCTestCase {
         }
         let
         navigation = PathTestingNavigationController(rootViewController: Controller())
-        navigation.analyzer.enable(with: "nv")
+        navigation.analyzer.enable(naming: "nv")
         test.rootViewController = navigation
         
         test.expect()
@@ -103,7 +103,7 @@ class FocusTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "master")
+                self.analyzer.enable(naming: "master")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -143,7 +143,7 @@ class FocusTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.analyzer.enable(with: "row")
+                        cell.analyzer.enable(naming: "row")
                         return cell
                     }()
                 return cell
@@ -168,7 +168,7 @@ class FocusTests: XCTestCase {
                 ) {
                 let
                 detail = PathTestingViewController()
-                detail.analyzer.enable(with: "detail")
+                detail.analyzer.enable(naming: "detail")
                 self.navigationController?.pushViewController(
                     detail,
                     animated: false
@@ -184,7 +184,7 @@ class FocusTests: XCTestCase {
         }
         let
         navigation = PathTestingNavigationController(rootViewController: Controller())
-        navigation.analyzer.enable(with: "nv")
+        navigation.analyzer.enable(naming: "nv")
         test.rootViewController = navigation
         
         test.expect()

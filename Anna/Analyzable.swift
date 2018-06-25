@@ -49,9 +49,9 @@ public protocol
         _ event :String,
         with attributes :Manager.Attributes?
     )
-    @objc(enableWithName:)
+    @objc(enableNaming:)
     func
-        enable(with name :String)
+        enable(naming :String)
     @objc(setSubAnalyzer:forKey:)
     func
         setSubAnalyzer(

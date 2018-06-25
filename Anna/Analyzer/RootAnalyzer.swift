@@ -11,18 +11,17 @@ import Foundation
 public class
     RootAnalyzer : BaseAnalyzer
 {
+    static let
+    name :String = "__root__"
     public let
-    name :String,
     manager :Manager
-    @objc(initWithManager:name:)
+    @objc(initWithManager:)
     public
     init(
-        manager :Manager,
-        name :String
+        manager :Manager
         )
     {
         self.manager = manager
-        self.name = name
         super.init()
     }
 
@@ -43,7 +42,7 @@ public class
             manager: manager,
             nodeID: nodeID,
             parentID: nil,
-            name: self.name,
+            name: RootAnalyzer.name,
             index: nil
         )
         try self.bindNode(with: context)
@@ -68,7 +67,7 @@ extension
     
     public func record(_ event: String, with attributes: Manager.Attributes?) { }
     
-    public func enable(with key: String) { }
+    public func enable(naming key: String) { }
     
     public func setSubAnalyzer(_ sub: Analyzing, for key: String) { }
     

@@ -349,7 +349,7 @@ extension
 {
     public func
         enable(
-        with name :String
+        naming name :String
         ) {
         self.parentlessName = name
         do {

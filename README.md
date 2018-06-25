@@ -43,7 +43,7 @@ class MyHomeViewController : UIViewController, AnalyzableObject {
     func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.bottomButton)
-        self.analyzer.enable(with: "home")
+        self.analyzer.enable(naming: "home")
     }
     lazy var analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
     static let subAnalyzableKeys = Set([#keyPath(bottomButton)])
@@ -158,7 +158,7 @@ Available methods on `Analyzing`:
 
 | Method | Description |
 | --- | --- |
-| `enable(with name)` | Enable the `Analyzer` to hook its delegate and start recording events with a standalone name. |
+| `enable(naming name)` | Enable the `Analyzer` to hook its delegate and start recording events with a standalone name. |
 | `setSubAnalyzer(_ sub, for key)` | Establish a keyed relationship with another `Analyzer`. The sub `Analyzer` is automatically enabled when the current `Analyzer` enabled. |
 | `setSubAnalyzers(_ subs, for key)` | Establish indexed relationships with other `Analyzer`s. The sub `Analyzer`s are automatically enabled when the current `Analyzer` enabled. |
 | `record(_ event)` | Record event with a name on the `Analyzer`. |

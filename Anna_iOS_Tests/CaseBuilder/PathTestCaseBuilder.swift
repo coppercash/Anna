@@ -189,7 +189,7 @@ PathTestingAppDelegate: UIResponder, UIApplicationDelegate, Analyzable
     manager :Manager?
     lazy var
     analyzer :Analyzing = {
-        RootAnalyzer(manager: self.manager!, name: "root")
+        RootAnalyzer(manager: self.manager!)
     }()
     func
         application(

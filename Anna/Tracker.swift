@@ -14,7 +14,7 @@ public protocol
 {
     @objc(manager:didSendResult:)
     func
-    manager(
+        manager(
         _ manager :Manager,
         didSend result :Any
     )

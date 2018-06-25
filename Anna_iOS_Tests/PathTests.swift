@@ -65,7 +65,7 @@ class PathTests: XCTestCase {
                 self.gamma = button
                 superview.addSubview(button)
                 
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -119,7 +119,7 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
 
                 let
                 superview = self.view as! PathTestingView
@@ -175,7 +175,7 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
 
                 let
                 superview = self.view!
@@ -222,18 +222,18 @@ class PathTests: XCTestCase {
         {
             override func
                 viewDidLoad() {
-                self.analyzer.enable(with: "nv")
+                self.analyzer.enable(naming: "nv")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
                 super.viewDidAppear(animated)
                 let
                 master = PathTestingViewController()
-                master.analyzer.enable(with: "ms")
+                master.analyzer.enable(naming: "ms")
                 self.pushViewController(master, animated: false)
                 let
                 detail = PathTestingViewController()
-                detail.analyzer.enable(with: "dt")
+                detail.analyzer.enable(naming: "dt")
                 self.pushViewController(detail, animated: false)
             }
         }
@@ -276,7 +276,7 @@ class PathTests: XCTestCase {
                     return controller
                 }
                 self.viewControllers = controllers
-                self.analyzer.enable(with: "tb")
+                self.analyzer.enable(naming: "tb")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -323,7 +323,7 @@ class PathTests: XCTestCase {
                     return controller
                 }
                 self.viewControllers = controllers
-                self.analyzer.enable(with: "home")
+                self.analyzer.enable(naming: "home")
             }
             override func
                 viewDidAppear(_ animated: Bool) {
@@ -331,7 +331,7 @@ class PathTests: XCTestCase {
                 self.selectedIndex = 1
                 let
                 detail = PathTestingViewController()
-                detail.analyzer.enable(with: "detail")
+                detail.analyzer.enable(naming: "detail")
                 self.navigationController?.pushViewController(
                     detail,
                     animated: false
@@ -368,7 +368,7 @@ class PathTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "nv")
+                self.analyzer.enable(naming: "nv")
             }
         }
         test.rootViewController = Navigation(rootViewController: Home())

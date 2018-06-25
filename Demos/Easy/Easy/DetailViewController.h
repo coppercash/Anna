@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Anna/Anna-Swift.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController <ANAAnalyzable>
 
 @property (strong, nonatomic) NSDate *detailItem;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;

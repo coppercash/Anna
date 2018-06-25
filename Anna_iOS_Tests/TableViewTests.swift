@@ -54,7 +54,7 @@ class TableViewTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -83,7 +83,7 @@ class TableViewTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.analyzer.enable(with: "rw")
+                        cell.analyzer.enable(naming: "rw")
                         cell.analyzer.observe(
                             owner: cell,
                             for: #keyPath(UITableViewCell.textLabel.text)
@@ -186,7 +186,7 @@ class TableViewTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -215,7 +215,7 @@ class TableViewTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.analyzer.enable(with: "rw")
+                        cell.analyzer.enable(naming: "rw")
                         let
                         view = PathTestingView(frame: cell.contentView.bounds)
                         cell.analyzer.setSubAnalyzer(
@@ -322,7 +322,7 @@ class TableViewTests: XCTestCase {
                 viewDidLoad() {
                 super.viewDidLoad()
                 self.view.addSubview(self.table)
-                self.table.analyzer.enable(with: "tb")
+                self.table.analyzer.enable(naming: "tb")
             }
             override func
                 viewDidAppear(_ animated: Bool) {

@@ -28,7 +28,7 @@ class ControlTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 
                 self.button = {
                     let
@@ -81,7 +81,7 @@ class ControlTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.button)
                 self.analyzer.hook(self.button)
             }
