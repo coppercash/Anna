@@ -25,12 +25,6 @@ public protocol
         _ observee :NSObject,
         for keyPath :String
     )
-    @objc(observeOwner:forKeyPath:)
-    func
-        observe(
-        owner :NSObject,
-        for keyPath :String
-    )
     @objc(detach)
     func
         detach()

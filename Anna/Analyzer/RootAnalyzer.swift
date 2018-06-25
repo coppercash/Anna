@@ -55,8 +55,6 @@ extension
 {
     public func markFocused() { }
     
-    public func observe(owner :NSObject, for keyPath :String) { }
-    
     public func observe(_ observee: NSObject, for keyPath: String) { }
     
     public func hook(_ hookee: Hookable) { }

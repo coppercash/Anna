@@ -13,19 +13,14 @@ class
 {
     let
     keyPaths :[String: NSKeyValueObservingOptions]
-    var
-    owner :NSValue?
     weak var
     observee :Observee?
     init(
         keyPaths :[String: NSKeyValueObservingOptions],
-        observee :Observee,
-        owned :Bool 
+        observee :Observee
         ) {
         self.keyPaths = keyPaths
         self.observee = observee
-//        self.owner = owned ? NSValue.init(nonretainedObject: observee) : nil
-        self.owner = NSValue.init(nonretainedObject: observee)
     }
     deinit {
         self.detach()
@@ -55,17 +50,11 @@ class
         if let observee = self.observeeBeingDeobserved() {
             self.deobserve(observee)
             self.observee = nil
-            self.owner = nil
         }
     }
     func
         observeeBeingDeobserved() -> Observee? {
-        if let owner = self.owner {
-            return owner.nonretainedObjectValue as? Observee
-        }
-        else {
-            return self.observee
-        }
+        return self.observee
     }
     
     override func
@@ -109,13 +98,11 @@ class
 {
     init(
         keyPath :String,
-        observee :Observee,
-        owned :Bool
+        observee :Observee
         ) {
         super.init(
             keyPaths: [keyPath: [.initial, .new, .old]],
-            observee: observee,
-            owned: owned
+            observee: observee
         )
     }
     override func

@@ -12,11 +12,7 @@ extension
 {
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UICollectionViewObserver(observee: self, owned: false)
-    }
-    public override func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UICollectionViewObserver(observee: self, owned: true)
+        return UICollectionViewObserver(observee: self)
     }
 }
 

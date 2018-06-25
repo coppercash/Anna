@@ -11,11 +11,7 @@ extension
 UIResponder : Hookable {
     public func
         tokenByAddingObserver() -> Reporting {
-        return UIResponderObserver(observee: self, owned: false)
-    }
-    public func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UIResponderObserver(observee: self, owned: true)
+        return UIResponderObserver(observee: self)
     }
 }
 

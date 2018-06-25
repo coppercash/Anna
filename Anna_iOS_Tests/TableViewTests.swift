@@ -85,7 +85,7 @@ class TableViewTests: XCTestCase {
                         )
                         cell.analyzer.enable(naming: "rw")
                         cell.analyzer.observe(
-                            owner: cell,
+                            cell,
                             for: #keyPath(UITableViewCell.textLabel.text)
                         )
                         return cell

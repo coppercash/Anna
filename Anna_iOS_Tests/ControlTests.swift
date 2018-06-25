@@ -59,7 +59,9 @@ class ControlTests: XCTestCase {
         XCTAssertEqual(test[0] as? Int, 42)
     }
     
-    func test_unownedButtonShouldReportNoAppearingEvent() {
+    // TODO: Turn on when nameless implementated
+    //
+    func off_test_unownedButtonShouldReportNoAppearingEvent() {
         let
         test = PathTestCaseBuilder(with: self)
         test.task =

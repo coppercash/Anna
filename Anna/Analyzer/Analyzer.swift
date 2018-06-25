@@ -137,7 +137,7 @@ public class
         if let
             delegate = self.delegate as? Hookable
         {
-            self.hook(owner: delegate)
+            self.hook(delegate)
         }
     }
     func
@@ -401,13 +401,6 @@ extension
         token.recorder = self
         self.tokens.append(token)
     }
-    func
-        hook(owner :Hookable) {
-        let
-        token = owner.tokenByAddingOwnedObserver()
-        token.recorder = self
-        self.tokens.append(token)
-    }
     public func
         observe(
         _ observee :NSObject,
@@ -416,22 +409,7 @@ extension
         let
         token = KVObserver(
             keyPath: keyPath,
-            observee: observee,
-            owned: false
-        )
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    public func
-        observe(
-        owner :NSObject,
-        for keyPath :String
-        ) {
-        let
-        token = KVObserver(
-            keyPath: keyPath,
-            observee: owner,
-            owned: true
+            observee: observee
         )
         token.recorder = self
         self.tokens.append(token)

@@ -12,11 +12,7 @@ extension
 {
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UITableViewCellObserver(observee: self, owned: false)
-    }
-    public override func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UITableViewCellObserver(observee: self, owned: true)
+        return UITableViewCellObserver(observee: self)
     }
     func
         tableViewDelegateByLookingUp() -> (UITableViewDelegate & NSObject)? {
