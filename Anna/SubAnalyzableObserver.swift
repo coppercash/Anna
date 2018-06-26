@@ -74,14 +74,14 @@ class
         let
         isPrior = (change[.notificationIsPriorKey] as? Bool) ?? false,
         value = isPrior ? change[.oldKey] : change[.newKey],
-        _update : (Analyzer, Analyzer, String, Int?) throws -> Void = (
+        _update : (Analyzer, Analyzer, String, Int?) -> Void = (
             isPrior
                 ? { (sub, _, _, _) in
-                    try sub.deactivate()
+                    sub.deactivate()
                     sub.detach()
                     }
                 : { (sub, parent, keyPath, index) in
-                    try sub.enable(
+                    sub.enable(
                         under: analyzer,
                         key: keyPath,
                         index: index
@@ -92,11 +92,7 @@ class
             (analyzable, analyzer, keyPath, index) in
             guard let sub = analyzable.analyzer as? Analyzer
                 else { return }
-            do {
-                try _update(sub, analyzer, keyPath, index)
-            } catch let error {
-                assertionFailure(error.localizedDescription)
-            }
+            _update(sub, analyzer, keyPath, index)
         }
         if let analyzable = value as? AnalyzerReadable {
             update(analyzable, analyzer, keyPath, nil)

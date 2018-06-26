@@ -11,11 +11,9 @@ import Anna
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate, Analyzable, Delegate, Logging {
-
     var window: UIWindow?
     lazy var analyzer :Analyzing = {
         let dependency = Dependency()
-        dependency.exceptionHandler = { (_, e) in print(e!) }
         dependency.logger = self
         let
         manager = Manager(
@@ -62,7 +60,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         ) {
         print(result)
     }
-    
+    func
+        manager(
+        _ manager: Manager,
+        didCatch error: Error
+        ) {
+        print(error)
+    }
     func
         log(_ string: String) {
         print(string)

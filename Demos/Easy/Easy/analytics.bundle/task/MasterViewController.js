@@ -1,8 +1,8 @@
 match(
   '/master/ana-appeared',
-  function (node) { return node.path; }
+  function (node) { return { action: 'appeared', id: node.path }; }
 );
 match(
   'master/tableView/cell/did-select',
-  function (node) { return 'Selected ' + node.latestValue('text'); }
+  function (node) { return { action: 'selected', id: node.path }; }
 );

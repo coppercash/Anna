@@ -49,11 +49,11 @@ protocol
     IdentityResolving : class
 {
     typealias
-        Callback = (Identity) throws -> Void
+        Callback = (Identity) -> Void
     func
         resolveIdentity(
         then callback : @escaping Callback
-    ) throws -> Void
+    ) -> Void
     var
     identity :Identity? { get }
     typealias
@@ -78,7 +78,7 @@ public class
     var
     namespace :String? = nil
     deinit {
-        try? self.unbindNode()
+        self.unbindNode()
     }
 
     // MARK: - Node Identity
@@ -86,13 +86,13 @@ public class
     func
         resolveIdentity(
         then callback: @escaping IdentityResolving.Callback
-        ) throws {
+        ) {
         fatalError("Overidding needed.")
     }
     func
         bindNode(
         with context :IdentityContext
-        ) throws {
+        ) {
         guard self.identity == nil
             else { return }
         self.identity = Identity(
@@ -101,7 +101,7 @@ public class
         )
         let
         namespace = self.namespace
-        try context.manager.registerNode(
+        context.manager.registerNode(
             by: context.nodeID,
             under: context.parentID,
             name: context.name,
@@ -111,7 +111,7 @@ public class
         )
     }
     func
-        unbindNode() throws {
+        unbindNode() {
         guard let
             identity = self.identity
             else { return }
@@ -119,7 +119,7 @@ public class
         manager = identity.manager,
         nodeID = identity.nodeID
         if nodeID.isOwned(by: self) {
-            try manager.deregisterNodes(by: nodeID)
+            manager.deregisterNodes(by: nodeID)
         }
         self.identity = nil
     }
@@ -173,14 +173,14 @@ public class
         recordEventOnPath(
         named name :String,
         with attributes :Manager.Attributes? = nil
-        ) throws {
+        ) {
         let
         identityResolver = self
-        try identityResolver.resolveIdentity {
+        identityResolver.resolveIdentity {
             let
             manager = $0.manager,
             nodeID = $0.nodeID
-            try manager.recordEvent(
+            manager.recordEvent(
                 named: name,
                 with: attributes,
                 onNodeBy: nodeID
@@ -197,65 +197,9 @@ extension
         named name: String,
         with attributes: Recording.Attributes?
         ) {
-        do {
-            try self.recordEventOnPath(
-                named: name,
-                with: attributes
-            )
-        } catch let error {
-            assertionFailure(error.localizedDescription)
-        }
-    }
-}
-
-enum
-    ContextError : Error
-{
-    case unresolvedManager
-    case unsetupAnalysisObject(description :String)
-    case unresolvedName
-}
-extension
-    ContextError : LocalizedError
-{
-    public var
-    errorDescription: String? {
-        switch self {
-        case .unresolvedManager:
-            return "Cannot find a resolved manager in context."
-        case .unresolvedName:
-            return "Enable analyzer before analyzing."
-        case .unsetupAnalysisObject(description: let description):
-            return "Unsetup analysis object \(description)."
-        }
-    }
-}
-
-enum
-    ParentError : Error
-{
-    case abstractMethod(name :String)
-    case noDelegate(name :String)
-    case brokenChain(breaking :String)
-    case tooManyDeferredContextRequirings(node :String)
-    case unresolvedParenthood
-}
-extension
-    ParentError : LocalizedError
-{
-    public var
-    errorDescription: String? {
-        switch self {
-        case .abstractMethod(name: let name):
-            return "Must not call abstract method '\(name)'."
-        case .noDelegate(name: let name):
-            return "Analyzer '\(name)' has no delegate to resolve a parent."
-        case .brokenChain(breaking: let breaking):
-            return "Path chain is broken, because node '\(breaking)' has no parent."
-        case .tooManyDeferredContextRequirings(node: let node):
-            return "Too many deferred node context requirings on node '\(node)'."
-        case .unresolvedParenthood:
-            return "Unexpected unresolved parenthood."
-        }
+        self.recordEventOnPath(
+            named: name,
+            with: attributes
+        )
     }
 }

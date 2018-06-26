@@ -88,7 +88,6 @@ public class
     public var
     fileManager :CoreJS.FileManaging? = nil,
     logger :CoreJS.Logging? = nil,
-    exceptionHandler :CoreJS.Dependency.ExceptionHandler? = nil,
     coreModuleURL :URL? = nil,
     coreJSModuleURL :URL? = nil
     
@@ -99,7 +98,6 @@ public class
         dep = CoreJS.Dependency()
         dep.fileManager = dependency.fileManager
         dep.logger = dependency.logger
-        dep.exceptionHandler = dependency.exceptionHandler
         dep.moduleURL = dependency.coreJSModuleURL
         return dep
     }
@@ -108,7 +106,14 @@ public class
 @objc(ANADelegate)
 public protocol
     Delegate : Tracking
-{}
+{
+    @objc(manager:didCatchError:)
+    func
+        manager(
+        _ manager :Manager,
+        didCatch error :Error
+    )
+}
 
 @objc(ANAManager) @objcMembers
 public class
@@ -134,25 +139,27 @@ public class
     delegate :Delegate? = nil,
     delegateQueue :DispatchQueue = .main
 
+    // MARK: - Callback
+    
     let
     scriptQ = DispatchQueue(label: "anna.script")
     lazy var
     scriptContext :JSContext = JSContext()
     func
-        handle(scriptResult :Any)
-    {
+        delegateAsync(_ action : @escaping (Manager, Delegate) -> Void) {
         guard let
-            tracker = self.delegate
+            delegate = self.delegate
             else { return }
         let
+        manager = self,
         callbackQ = self.delegateQueue
         callbackQ.async {
-            tracker.manager(
-                self,
-                didSend: scriptResult
-            )
+            action(manager, delegate)
         }
     }
+
+    // MARK: - Core
+    
     var
     scriptManager :JSValue? = nil
     func
@@ -200,23 +207,56 @@ public class
         dep.globalModules = [
             "anna" : annaURL
         ]
+        let
+        manager = self
+        dep.exceptionHandler = {
+            [weak manager] (_, error) in
+            guard let error = error else { return }
+            manager?.delegateAsync { (manager, delegate) in
+                delegate.manager(manager, didCatch: error)
+            }
+        }
         return dep
     }
     func
         resolvedManagerArguments() -> [Any] {
         let
+        manager = self,
         receive : @convention(block) (Any) -> Void = {
-            [weak self] (result :Any) in
-            self?.handle(scriptResult: result)
+            [weak manager] (result :Any) in
+            manager?.delegateAsync { (manager, delegate) in
+                delegate.manager(manager, didSend: result)
+            }
         },
-        config = self.config ?? [:]
-        let
+        config = self.config ?? [:],
         arguments = [
             unsafeBitCast(receive, to: AnyObject.self),
             config
         ] as [Any]
         return arguments
     }
+    func
+        async(_ action : @escaping (JSValue) -> Void) {
+        let
+        queue = self.scriptQ,
+        manager = self
+        queue.async {
+            do {
+                let
+                core = try manager.resolvedScriptManager()
+                action(core)
+            }
+            catch let error {
+                manager.delegate?.manager(
+                    manager,
+                    didCatch: error
+                )
+            }
+        }
+    }
+    
+    // MARK: - Wrapper
+    
     func
         registerNode(
         by identifier :NodeID,
@@ -225,10 +265,8 @@ public class
         index :Int?,
         namespace :String? = nil,
         attributes :Attributes? = nil
-        ) throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
+        ) {
+        self.async { (manager) in
             let
             null = NSNull(),
             arguments :[Any] = [
@@ -248,10 +286,8 @@ public class
     func
         deregisterNodes(
         by identifier :NodeID
-        ) throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
+        ) {
+        self.async { (manager) in
             manager.invokeMethod(
                 "deregisterNodes",
                 withArguments: [
@@ -267,10 +303,8 @@ public class
         named name :String,
         with properties :Attributes?,
         onNodeBy identifier :NodeID
-        ) throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
+        ) {
+        self.async { (manager) in
             let
             null = NSNull(),
             arguments :[Any] = [
@@ -286,10 +320,8 @@ public class
     }
     @objc
     public func
-        logSnapshot() throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
+        logSnapshot() {
+        self.async { (manager) in
             manager.invokeMethod(
                 "logSnapshot",
                 withArguments: []

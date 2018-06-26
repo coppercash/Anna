@@ -77,11 +77,7 @@ extension
         guard let
             analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
             else { return }
-        do {
-            try analyzer.deactivate()
-        } catch let error {
-            assertionFailure(error.localizedDescription)
-        }
+        analyzer.deactivate()
     }
     open override func
         parentConstitutor(

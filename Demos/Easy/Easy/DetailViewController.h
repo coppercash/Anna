@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <Anna/Anna-Swift.h>
 
-@interface DetailViewController : UIViewController <ANAAnalyzable>
+@class AnalyzableButton;
+@interface DetailViewController : UIViewController <ANAAnalyzableObject>
 
 @property (strong, nonatomic) NSDate *detailItem;
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (weak, nonatomic) IBOutlet AnalyzableButton *detailDescriptionButton;
 
 @end
 

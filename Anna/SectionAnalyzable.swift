@@ -26,7 +26,7 @@ _configure(
     cell :AnalyzerReadable,
     in view :AnalyzerReadable & SectionAnalyzable,
     at indexPath :IndexPath
-    ) throws {
+    ) {
     guard
         let
         table = view.analyzer as? Analyzer,
@@ -43,7 +43,7 @@ _configure(
             analyzer = Analyzer(
                 delegate: table
             )
-            try analyzer.activate(
+            analyzer.activate(
                 under: table,
                 key: secName,
                 index: indexPath.section
@@ -67,7 +67,7 @@ _configure(
         guard let
             key = row.parentlessName
             else { return }
-        try row.activate(under: section!) {
+        row.activate(under: section!) {
             let
             manager = $0.manager,
             parentID = $0.nodeID
@@ -95,7 +95,7 @@ _configure(
         }
         let
         sectionID :NodeID = section!.owningID
-        try row.activate(under: section) {
+        row.activate(under: section) {
             let
             manager = $0.manager,
             parentID = $0.nodeID

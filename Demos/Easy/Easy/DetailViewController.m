@@ -7,6 +7,7 @@
 //
 
 #import "DetailViewController.h"
+#import <Easy/Easy-Swift.h>
 
 @interface DetailViewController ()
 
@@ -17,6 +18,10 @@
 
 - (id<ANAAnalyzing>)ana_analyzer { return _ana_analyzer ?: (_ana_analyzer = [ANAAnalyzer analyzerWithDelegate:self]); }
 
++ (NSSet<NSString *> *)subAnalyzableKeys {
+    return [NSSet setWithObjects:@"detailDescriptionButton", nil];
+}
+
 - (void)dealloc {
     [_ana_analyzer detach];
 }
@@ -24,7 +29,8 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
+        [self.detailDescriptionButton setTitle:self.detailItem.description
+                                      forState:UIControlStateNormal];
     }
 }
 
@@ -33,8 +39,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
-    [self.ana_analyzer observeObject:self.detailDescriptionLabel
-                          forKeyPath:@"text"];
+    [self.ana_analyzer observeObject:self.detailDescriptionButton
+                          forKeyPath:@"titleLabel.text"];
     [self.ana_analyzer enableNaming:@"detail"];
 }
 
@@ -55,6 +61,5 @@
         [self configureView];
     }
 }
-
 
 @end

@@ -1,4 +1,8 @@
 match(
-  'detail/ana-updated',
-  function (node) { return 'Displayed detail of ' + node.latestEvent().attributes.value; }
+  'detail/detailDescriptionButton/touch-up-inside',
+  function (node) { return {
+    action: 'tapped',
+    id: node.path,
+    content: node.parentNode.latestValue('titleLabel.text')
+  }; }
 );

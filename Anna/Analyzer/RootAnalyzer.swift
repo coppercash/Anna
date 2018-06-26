@@ -30,12 +30,12 @@ public class
     override func
         resolveIdentity(
         then callback: @escaping IdentityResolving.Callback
-        ) throws {
+        ) {
         let
         manager = self.manager
         if let
             identity = self.identity
-        { return try callback(identity) }
+        { return callback(identity) }
         let
         nodeID = NodeID.owned(by: self),
         context = IdentityContext(
@@ -45,8 +45,8 @@ public class
             name: RootAnalyzer.name,
             index: nil
         )
-        try self.bindNode(with: context)
-        return try callback(self.identity!)
+        self.bindNode(with: context)
+        return callback(self.identity!)
     }
 }
 

@@ -93,7 +93,6 @@ PathTestCaseBuilder : NSObject
         let
         bundle = Bundle(for: type(of: self)),
         dep = Dependency()
-        dep.exceptionHandler = { (_, e) in print(e!) }
         dep.fileManager = self.fileManager
         dep.logger = Logger()
         dep.coreModuleURL = bundle.url(
@@ -166,6 +165,13 @@ PathTestCaseBuilder : Anna.Delegate
             else { return }
         self.expectations[self.currentExpectationIndex].fulfill()
         self.currentExpectationIndex += 1
+    }
+    func
+        manager(
+        _ manager: Manager,
+        didCatch error: Error
+        ) {
+        print(error)
     }
 }
 

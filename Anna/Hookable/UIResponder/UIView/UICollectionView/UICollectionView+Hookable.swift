@@ -214,15 +214,11 @@ class
             let
             table = collectionView as? AnalyzerReadable & SectionAnalyzable
         {
-            do {
-                try _configure(
-                    cell: row,
-                    in: table,
-                    at: indexPath
-                )
-            } catch let error {
-                assertionFailure(error.localizedDescription)
-            }
+            _configure(
+                cell: row,
+                in: table,
+                at: indexPath
+            )
         }
         return cell
     }
