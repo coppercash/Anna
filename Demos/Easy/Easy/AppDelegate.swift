@@ -10,19 +10,15 @@ import UIKit
 import Anna
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate, Analyzable, Delegate, Logging {
+class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate, Analyzable, Delegate {
     var window: UIWindow?
     lazy var analyzer :Analyzing = {
-        let dependency = Dependency()
-        dependency.logger = self
         let
         manager = Manager(
             moduleURL: Bundle.main.url(
                 forResource: "analytics",
                 withExtension: "bundle"
-                )!,
-            config: ["debug" : false],
-            dependency: dependency
+                )!
         )
         manager.delegate = self
         return RootAnalyzer(

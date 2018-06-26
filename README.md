@@ -22,46 +22,54 @@ Finally results are sent back to **Anna.iOS**, where the results could be upload
 
 ### Basic Usage
 
-For example, if we want to track the **touch-up-inside** event from a button on the bottom of our home view controller, we need to register such a task:
+For example, if we want to track **did-select** event from a cell in a table view controller, we need to register such a task:
 
 ```javascript
-/* in task/MyHomeViewController.js */
+/* in MasterViewController.js */
 
 match(
-  'home/bottomButton/touch-up-inside',
-  (node) => {action: 'click', id: node.path}
+  'master/tableView/cell/did-select',
+  (node) => { return { action: 'selected', id: node.path }; }
 );
 ```
 
-Expose `MyHomeViewController` and its bottom button to Anna.Core:
+Expose `MasterViewController` and its table view to **Anna.Core**:
 
 ```swift
 import Anna
 
-class MyHomeViewController : UIViewController, AnalyzableObject {
-    lazy let bottomButton :MyButton = MyButton()
-    func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.addSubview(self.bottomButton)
-        self.analyzer.enable(naming: "home")
+class MasterViewController: UITableViewController, AnalyzableObject {
+    lazy var analyzer: Analyzing = { Analyzer.analyzer(with: self) }()
+    static let subAnalyzableKeys: Set<String> = [#keyPath(tableView)]
+    deinit {
+        self.analyzer.detach()
     }
-    lazy var analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
-    static let subAnalyzableKeys = Set([#keyPath(bottomButton)])
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.analyzer.enable(naming: "master")
+    }
 }
 
-class MyButton : UIButton, Analyzable {
-    lazy var analyzer :Analyzing = { Analyzer.analyzer(with: self) }()
+class AnalyzableTableView : UITableView, Analyzable {
+    lazy var analyzer: Analyzing = { Analyzer.analyzer(with: self) }()
+    deinit { 
+        self.analyzer.detach() 
+    }
 }
 ```
 
 Receive the result:
 
 ```swift
-class MyTracker : Tracker {
-    func receive(analyticsResult :Any, dispatchedBy manager :Manager) {
-        print(analyticsResult)
+class AppDelegate: UIResponder, UIApplicationDelegate, Delegate {
+    func manager(_ manager :Manager, didSend result :Any) {
+        print(result)
         //
-        // Supposed to output {'action' : 'click', 'id' : '/myApp/home/bottomButton'}
+        // Supposed to output
+        // {
+        //     action = selected;
+        //     id = "/master/tableView/cell";
+        // }
     }
 }
 ```
@@ -71,47 +79,47 @@ class MyTracker : Tracker {
 A classic application structure, which contains master & detail view controller navigated within a navigation controller, may look like this:
 
 ```
-MyAppDelegate/
-├── Anna.Analyzer("app")/
+AppDelegate/
+├── Anna.RootAnalyzer/
 └── UIWindow/
     └── UINavigationController/
-        ├── MyHomeViewController/
-        │   ├── Anna.Analyzer("home")/
-        │   └── MyTableView/
+        ├── MasterViewController/
+        │   ├── Anna.Analyzer("master")/
+        │   └── UITableView/
         │       ├── Anna.Analyzer("table")/
-        │       └── MyDetailTableViewCell/
+        │       └── TableViewCell/
         │           └── Anna.Analyzer("cell", #)/
-        └── MyDetailViewController/
+        └── DetailViewController/
             ├── Anna.Analyzer("detail")/
-            └── MyButton/
+            └── UIButton/
                 └── Anna.Analyzer("button")/
 ```
 
 We can notice that some `Node`s in the tree above have a `Analyzer` as instance member. 
-With the names given to the analyzers, in **Anna.Core**, this tree results in another tree which is slightly different:
+With the names given to the `Analyzer`s, in **Anna.Core**, this tree results in another tree which is slightly different:
 
 ```
-app/
-└── home/
+/
+└── master/
     └── table/
         └── cell/
             └── delail/
                 └── button/
 ```
 
-The major different starts from `Node` **detail** which belongs to the `MyDetailViewController`. 
-In the **Responder Chain** provided by `UIKit`, the next responder (parent in the tree) of `MyDetailViewController`, is the `UINavigationController`. 
+The major different starts from `Node` **detail** which belongs to the `DetailViewController`. 
+In the **Responder Chain** provided by `UIKit`, the next responder (parent in the tree) of `DetailViewController`, is the `UINavigationController`. 
 However, in **Anna.Core**, the parent of **detail** is **cell**, which means that user's focus moves from the **cell** to the **detail**. 
-This behavior is because, from the aspect of analytics, the useful information for every single view usually belongs to the views user paid attention on before. 
+This behavior is because, from the aspect of analytics, the useful information for every single view usually belongs to the views that user paid attention on before. 
 Thus, in **Anna.Core** every path from the root to a `Node` is actually a **Focus Path**.
 
 ### Analyzer
 
-`Analyzer`s are interface for objects to record events on and perform other interactions `Node`s in **Anna.Core**.
+`Analyzer`s are interface for objects to record events on and perform other interactions with `Node`s in **Anna.Core**.
 
 #### Super-Sub Analyzer & Parent-Child Node
 
-In most cases, an `Analyzer` has a name to identify a keyed relationship between the `Node` it binds and the `Node`'s parent. The name is usually given by its super `Analyzer`. However, sometimes, a super `Analyzer` doesn't have direct access to its sub `Analyzer`s, in this case a **standalone** name works as well.
+In most cases, an `Analyzer` has a name to identify a keyed relationship between the `Node` it binds and the `Node`'s parent. The name is usually given by its super `Analyzer`. However, sometimes, a `Analyzer`'s super `Analyzer` doesn't have direct access to it, in this case a **standalone** name works as well.
 
 An array of sub `Analyzer`s are given indexes respectively to represent indexed relationships.
 
@@ -124,8 +132,10 @@ In the looking up process, `Anna.FocusPathConstituting.parentConstitutor()` and 
 #### Root Analyzer & Manager
 
 `UIView`s, `UIViewController`s, `UIControl`s and all the other objects in Responder Chain may own a `Analyzer` if they are supposed to be analyzed, including the root responder - `UIApplicaiontDelegate`.
-However, the `Analyzer` of `UIApplicaiontDelegate` is slightly different. It is initialized with a `Manager`.
+However, the `Analyzer` of `UIApplicaiontDelegate` is slightly different. It is of class `RootAnalyzer` and initialized with a `Manager`.
 `Manager` acts like port between **Anna.iOS** and **Anna.Core**. It receives events from **Anna.iOS** and returns calculated results into delegate methods.
+
+`Manager` starts by running the module which the first parameter of its initializer points to.
 
 `Manager`'s behavior can be configured via attributes of `Dependency`:
 

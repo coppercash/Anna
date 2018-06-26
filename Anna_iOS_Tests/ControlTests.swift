@@ -13,13 +13,12 @@ class ControlTests: XCTestCase {
     func test_button() {
         let
         test = PathTestCaseBuilder(with: self)
-        test.task =
-        """
+        test.task = ("""
         match(
-        'vc/bt/touch-up-inside',
-        function() { return 42; }
+          'vc/bt/touch-up-inside',
+          function() { return 42; }
         );
-        """
+        """)
         class
             Controller : PathTestingViewController
         {

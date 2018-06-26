@@ -49,14 +49,6 @@ module.exports = require('anna').configured({
         }
     }
 }
-class
-Logger : NSObject, CoreJS.Logging
-{
-    func
-        log(_ string: String) {
-        print(string)
-    }
-}
 
 @objc(ANAPathTestCaseBuilder) class
 PathTestCaseBuilder : NSObject
@@ -94,7 +86,6 @@ PathTestCaseBuilder : NSObject
         bundle = Bundle(for: type(of: self)),
         dep = Dependency()
         dep.fileManager = self.fileManager
-        dep.logger = Logger()
         dep.coreModuleURL = bundle.url(
             forResource: "anna",
             withExtension: "bundle"

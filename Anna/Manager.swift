@@ -87,7 +87,7 @@ public class
 {
     public var
     fileManager :CoreJS.FileManaging? = nil,
-    logger :CoreJS.Logging? = nil,
+    standardOutput :CoreJS.FileHandling? = nil,
     coreModuleURL :URL? = nil,
     coreJSModuleURL :URL? = nil
     
@@ -97,7 +97,7 @@ public class
         dependency = self,
         dep = CoreJS.Dependency()
         dep.fileManager = dependency.fileManager
-        dep.logger = dependency.logger
+        dep.standardOutput = dependency.standardOutput
         dep.moduleURL = dependency.coreJSModuleURL
         return dep
     }
@@ -236,25 +236,29 @@ public class
         return arguments
     }
     func
+        perform(_ action : (JSValue) -> Void) {
+        let
+        manager = self
+        do {
+            let
+            core = try manager.resolvedScriptManager()
+            action(core)
+        }
+        catch let error {
+            manager.delegate?.manager(
+                manager,
+                didCatch: error
+            )
+        }
+    }
+    func
         async(_ action : @escaping (JSValue) -> Void) {
         let
         queue = self.scriptQ,
         manager = self
-        queue.async {
-            do {
-                let
-                core = try manager.resolvedScriptManager()
-                action(core)
-            }
-            catch let error {
-                manager.delegate?.manager(
-                    manager,
-                    didCatch: error
-                )
-            }
-        }
+        queue.async { manager.perform(action) }
     }
-    
+
     // MARK: - Wrapper
     
     func
@@ -318,14 +322,15 @@ public class
             )
         }
     }
-    @objc
     public func
         logSnapshot() {
-        self.async { (manager) in
-            manager.invokeMethod(
-                "logSnapshot",
-                withArguments: []
-            )
+        self.scriptQ.sync {
+            self.perform { (manager) in
+                manager.invokeMethod(
+                    "logSnapshot",
+                    withArguments: []
+                )
+            }
         }
     }
 }

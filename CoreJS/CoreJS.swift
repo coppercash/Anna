@@ -16,7 +16,7 @@ public struct
     public typealias
         FileManaging = Anna.FileManaging
     public typealias
-        Logging = Anna.Logging
+        FileHandling = Anna.FileHandling
 
     @objc(CJSDependency) @objcMembers
     public class
@@ -27,7 +27,7 @@ public struct
         public var
         moduleURL :URL? = nil,
         fileManager :FileManaging? = nil,
-        logger :Logging? = nil,
+        standardOutput :FileHandling? = nil,
         exceptionHandler :ExceptionHandler? = nil,
         nodePathURLs :Set<URL>? = nil,
         globalModules :Dictionary<String, URL>? = nil
@@ -38,20 +38,24 @@ public struct
 public protocol
     FileManaging
 {
+    @objc(contentsAtPath:)
     func
         contents(atPath path: String) -> Data?
+    @objc(fileExistsAtPath:)
     func
         fileExists(atPath path: String) -> Bool
 }
 extension FileManager : CoreJS.FileManaging {}
 
-@objc(CJSLogging)
+@objc(CJSFileHandling)
 public protocol
-    Logging
+    FileHandling
 {
+    @objc(writeData:)
     func
-        log(_ string :String)
+        write(_ data: Data) -> Void
 }
+extension FileHandle : CoreJS.FileHandling {}
 
 class
     Native : NSObject, NativeJSExport
@@ -60,18 +64,19 @@ class
     context :JSContext?
     let
     fileManager :FileManaging,
+    standardOutput :FileHandling,
     globalModules :[String : URL],
     paths :Set<URL>
-    var
-    logger :Logging? = nil
     init(
         context :JSContext,
         fileManager :FileManaging,
+        standardOutput :FileHandling,
         globalModules :[String : URL],
         paths :Set<URL>
         ) {
         self.context = context
         self.fileManager = fileManager
+        self.standardOutput = standardOutput
         self.globalModules = globalModules
         self.paths = paths
     }
@@ -210,7 +215,8 @@ class
         log(
         _ string :String
         ) {
-        self.logger?.log(string)
+        guard let data = (string + "\n").data(using: .utf8) else { return }
+        self.standardOutput.write(data)
     }
 
     func
@@ -283,6 +289,7 @@ extension
 
         let
         fileManager = dependency?.fileManager ?? FileManager.default,
+        standardOutput = dependency?.standardOutput ?? FileHandle.standardOutput,
         moduleURL = dependency?.moduleURL ??
             Bundle.main
                 .bundleURL
@@ -293,10 +300,10 @@ extension
         native = Native(
             context: context,
             fileManager: fileManager,
+            standardOutput: standardOutput,
             globalModules: globalModules,
             paths: paths
         )
-        native.logger = dependency?.logger
 
         let
         mainScriptURL = moduleURL
