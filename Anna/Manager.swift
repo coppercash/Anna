@@ -88,7 +88,6 @@ public class
     public var
     fileManager :CoreJS.FileManaging? = nil,
     standardOutput :CoreJS.FileHandling? = nil,
-    coreModuleURL :URL? = nil,
     coreJSModuleURL :URL? = nil
     
     internal func
@@ -177,12 +176,7 @@ public class
         try context.setup(with: dependency)
         guard
             let
-            construct = context.require(
-                moduleURL
-                    .appendingPathComponent("index")
-                    .appendingPathExtension("js")
-                    .path
-            ),
+            construct = context.require(moduleURL.path),
             let
             manager = construct.call(
                 withArguments: arguments
@@ -197,16 +191,8 @@ public class
         let
         moduleURL = self.moduleURL,
         dependency = self.dependency,
-        annaURL = dependency?.coreModuleURL ??
-            Bundle.main
-                .bundleURL
-                .appendingPathComponent("anna")
-                .appendingPathExtension("bundle"),
         dep = dependency?.coreDependency() ?? CoreJS.Dependency()
         dep.nodePathURLs = [moduleURL]
-        dep.globalModules = [
-            "anna" : annaURL
-        ]
         let
         manager = self
         dep.exceptionHandler = {

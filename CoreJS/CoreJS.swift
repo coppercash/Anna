@@ -29,8 +29,7 @@ public struct
         fileManager :FileManaging? = nil,
         standardOutput :FileHandling? = nil,
         exceptionHandler :ExceptionHandler? = nil,
-        nodePathURLs :Set<URL>? = nil,
-        globalModules :Dictionary<String, URL>? = nil
+        nodePathURLs :Set<URL>? = nil
     }
 }
 
@@ -44,6 +43,9 @@ public protocol
     @objc(fileExistsAtPath:)
     func
         fileExists(atPath path: String) -> Bool
+    @objc(fileExistsAtPath:isDirectory:)
+    func
+        fileExists(atPath path: String, isDirectory: UnsafeMutablePointer<ObjCBool>?) -> Bool
 }
 extension FileManager : CoreJS.FileManaging {}
 
@@ -63,22 +65,23 @@ class
     weak var
     context :JSContext?
     let
+    module :Module,
     fileManager :FileManaging,
-    standardOutput :FileHandling,
-    globalModules :[String : URL],
-    paths :Set<URL>
+    standardOutput :FileHandling
     init(
         context :JSContext,
         fileManager :FileManaging,
         standardOutput :FileHandling,
-        globalModules :[String : URL],
         paths :Set<URL>
         ) {
+        self.module = Module(
+            fileManager: fileManager,
+            core: [],
+            global: paths
+        )
         self.context = context
         self.fileManager = fileManager
         self.standardOutput = standardOutput
-        self.globalModules = globalModules
-        self.paths = paths
     }
     func
         contains(
@@ -94,72 +97,17 @@ class
     }
     func
         resolvedPath(
-        _ js_id :JSValue,
-        _ js_parent :JSValue,
-        _ js_main :JSValue
+        _ id :JSValue,
+        _ parent :JSValue,
+        _ main :JSValue
         ) -> String! {
+        guard let id = id.string() else { return nil }
         let
-        fileManager = self.fileManager,
-        globalModules = self.globalModules
-        
-        guard
-            js_id.isString,
-            let
-            id = js_id.toString(),
-            (js_parent.isString || js_parent.isNull),
-            (js_main.isString || js_main.isNull)
-            else { return nil }
-        
-        if id.hasPrefix("/") {
-            return id
-        }
-        
-        if let url = globalModules[id] {
-            return url
-                .appendingPathComponent("index")
-                .appendingPathExtension("js")
-                .path
-        }
-        
-        guard let
-            parent = js_parent.isString ? js_parent.toString() : nil
-            else { return nil }
-        let
-        cd = (parent as NSString).deletingLastPathComponent
-        //
-        // cd is a folder
-        // id is kind of './name', '../name.js' or 'name'
-        
-        if
-            id.hasPrefix("../") ||
-                id.hasPrefix("./")
-        {
-            var
-            absolute = (cd as NSString).appendingPathComponent(id)
-            if (id as NSString).pathExtension == "" {
-                absolute = (absolute as NSString).appendingPathExtension("js")!
-            }
-            return (absolute as NSString).standardizingPath
-        }
-        
-        guard
-            (id as NSString).pathExtension == ""
-            else { return nil }
-        //
-        // id is a folder
-
-        let
-        lookup = self.__lookupPaths(
-            for: id,
-            under: cd
+        module = (parent.url() ?? main.url())?.deletingLastPathComponent()
+        return try? self.module.resolve(
+            x: id, from:
+            module
         )
-        for path in lookup {
-            if fileManager.fileExists(atPath: path) {
-                return (path as NSString).standardizingPath
-            }
-        }
-        
-        return nil
     }
     func
         load(
@@ -218,26 +166,6 @@ class
         guard let data = (string + "\n").data(using: .utf8) else { return }
         self.standardOutput.write(data)
     }
-
-    func
-        __lookupPaths(
-        for identifier :String,
-        under directory :String
-        ) -> [String] {
-        var
-        result = [] as [String]
-        let
-        paths = self.paths.map { $0.path } + [directory]
-        for path in paths {
-            result.append(
-                (((path as NSString)
-                    .appendingPathComponent("node_modules") as NSString)
-                    .appendingPathComponent(identifier) as NSString)
-                    .appendingPathComponent("index.js")
-            )
-        }
-        return result;
-    }
 }
 @objc protocol
     NativeJSExport : JSExport
@@ -295,22 +223,22 @@ extension
                 .bundleURL
                 .appendingPathComponent("corejs")
                 .appendingPathExtension("bundle"),
-        globalModules = dependency?.globalModules ?? [:],
         paths = dependency?.nodePathURLs ?? Set(),
         native = Native(
             context: context,
             fileManager: fileManager,
             standardOutput: standardOutput,
-            globalModules: globalModules,
             paths: paths
         )
-
-        let
-        mainScriptURL = moduleURL
-            .appendingPathComponent("index")
-            .appendingPathExtension("js")
-        guard let
-            data = fileManager.contents(atPath: mainScriptURL.path)
+        
+        guard
+            let
+            mainScriptPath = try? native.module.resolve(
+                x: moduleURL.path,
+                from: nil
+            ),
+            let
+            data = fileManager.contents(atPath: mainScriptPath)
             else { throw FileError.coreModuleNotFound }
         let
         script = String(data: data, encoding: .utf8)
@@ -321,7 +249,7 @@ var exports = module.exports;
 """)
         context.evaluateScript(
             script,
-            withSourceURL: mainScriptURL
+            withSourceURL: URL(fileURLWithPath: mainScriptPath)
         )
         context
             .globalObject
@@ -367,6 +295,20 @@ extension
                 NSLocalizedFailureReasonErrorKey: stack,
             ]
         )
+    }
+    func
+        string() -> String? {
+        let
+        value = self
+        guard value.isString else { return nil }
+        return value.toString()
+    }
+    func
+        url() -> URL? {
+        let
+        value = self
+        guard value.isString else { return nil }
+        return URL(fileURLWithPath: value.toString())
     }
 }
 enum

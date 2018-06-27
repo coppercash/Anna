@@ -25,7 +25,7 @@ MockFileManager : NSObject, CoreJS.FileManaging
         }
         else if path.hasSuffix("analytics.bundle/index.js") {
             return ("""
-module.exports = require('anna').configured({
+module.exports = require('../anna.bundle').configured({
   task: (__dirname + '/task')
 });
 """).data(using: .utf8)
@@ -38,14 +38,29 @@ module.exports = require('anna').configured({
         fileExists(
         atPath path: String
         ) -> Bool {
+        var
+        isDirectory = false as ObjCBool
+        return self.fileExists(
+            atPath: path,
+            isDirectory: &isDirectory
+        )
+    }
+    func
+        fileExists(
+        atPath path: String,
+        isDirectory: UnsafeMutablePointer<ObjCBool>?
+        ) -> Bool {
         if path.hasSuffix("task/index.js") {
             return true
         }
-        else if path.hasSuffix("index.js") {
+        else if path.hasSuffix("analytics.bundle/index.js") {
             return true
         }
         else {
-            return fileManager.fileExists(atPath: path)
+            return self.fileManager.fileExists(
+                atPath: path,
+                isDirectory: isDirectory
+            )
         }
     }
 }
@@ -86,10 +101,6 @@ PathTestCaseBuilder : NSObject
         bundle = Bundle(for: type(of: self)),
         dep = Dependency()
         dep.fileManager = self.fileManager
-        dep.coreModuleURL = bundle.url(
-            forResource: "anna",
-            withExtension: "bundle"
-        )
         dep.coreJSModuleURL = bundle.url(
             forResource: "corejs",
             withExtension: "bundle"
