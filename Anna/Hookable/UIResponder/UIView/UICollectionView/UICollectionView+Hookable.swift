@@ -203,11 +203,11 @@ class
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
         ) -> UICollectionViewCell {
-        let
-        cell = self.target!.collectionView(
+        guard let cell = self.target?.collectionView(
             collectionView,
             cellForItemAt: indexPath
-        )
+            )
+            else { return UICollectionViewCell(frame: CGRect.zero) }
         if
             let
             row = cell as? AnalyzerReadable,

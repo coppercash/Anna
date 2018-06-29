@@ -222,11 +222,11 @@ class
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
-        let
-        cell = self.target!.tableView(
+        guard let cell = self.target?.tableView(
             tableView,
             cellForRowAt: indexPath
-        )
+            )
+            else { return UITableViewCell(frame: CGRect.zero) }
         if
             let
             row = cell as? AnalyzerReadable,

@@ -116,47 +116,18 @@ class
         _ require :JSValue,
         _ module :JSValue
         ) {
-        guard let
-            context = context
-            else { return }
         guard
             let
-            path = jspath.toString(),
+            context = self.context,
             let
-            data = self.fileManager.contents(atPath: path),
-            let
-            script = String(data: data, encoding: .utf8)
-            else
-        {
-            context.exception = JSValue(
-                newErrorFromMessage:
-                "Cannot read file at path \(jspath.toString()!).",
-                in: context
-            )
-            return
-        }
-        let
-        url = URL(fileURLWithPath: path),
-        decorated = String(format: ("""
-(function () { return (
-  function (exports, require, module, __filename, __dirname) {
-    %@
-  }
-); })();
-"""), script)
-        let
-        _ = context
-            .evaluateScript(
-                decorated,
-                withSourceURL: url
-            )
-            .call(withArguments: [
-                exports,
-                require,
-                module,
-                url.path,
-                url.deletingLastPathComponent().path
-                ]
+            url = jspath.url()
+            else { return }
+        self.module.loadScript(
+            at: url,
+            to: context,
+            exports: exports,
+            require: require,
+            module: module
         )
     }
     func
@@ -231,35 +202,28 @@ extension
             paths: paths
         )
         
-        guard
-            let
-            mainScriptPath = try? native.module.resolve(
-                x: moduleURL.path,
-                from: nil
-            ),
-            let
-            data = fileManager.contents(atPath: mainScriptPath)
-            else { throw FileError.coreModuleNotFound }
         let
-        script = String(data: data, encoding: .utf8)
-        
-        context.evaluateScript("""
-var module = { exports: {} };
-var exports = module.exports;
-""")
-        context.evaluateScript(
-            script,
-            withSourceURL: URL(fileURLWithPath: mainScriptPath)
+        mainScriptPath = try native.module.resolve(
+            x: moduleURL.path,
+            from: nil
+        ),
+        require = context.evaluateScript("""
+(function() { return function () {}; })();
+""") as JSValue,
+        module = context.evaluateScript("""
+(function() { return { exports: {} }; })();
+""") as JSValue,
+        exports = module.forProperty("exports") as JSValue
+        native.module.loadScript(
+            at: URL(fileURLWithPath: mainScriptPath),
+            to: context,
+            exports: exports,
+            require: require,
+            module: module
         )
-        context
-            .globalObject
-            .forProperty("exports")
+        exports
             .forProperty("setup")
             .call(withArguments: [native])
-        context.evaluateScript("""
-delete exports;
-delete module;
-""")
     }
     func
         require(
@@ -311,9 +275,3 @@ extension
         return URL(fileURLWithPath: value.toString())
     }
 }
-enum
-    FileError : Error
-{
-    case coreModuleNotFound
-}
-

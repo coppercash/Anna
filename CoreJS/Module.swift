@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JavaScriptCore
 
 class
 Module
@@ -180,6 +181,54 @@ Module
         }
         _backtrack(start, &paths)
         return paths
+    }
+    func
+        loadScript(
+        at url :URL,
+        to context :JSContext,
+        exports :JSValue,
+        require :JSValue,
+        module :JSValue
+        ) {
+        let
+        fs = self.fileManager,
+        path = url.path
+        guard
+            let
+            data = fs.contents(atPath: path),
+            let
+            script = String(data: data, encoding: .utf8)
+            else
+        {
+            context.exception = JSValue(
+                newErrorFromMessage:
+                "Cannot read file at path \(path)!).",
+                in: context
+            )
+            return
+        }
+        let
+        decorated = String(format: ("""
+(function () { return (
+  function (exports, require, module, __filename, __dirname) {
+    %@
+  }
+); })();
+"""), script)
+        let
+        _ = context
+            .evaluateScript(
+                decorated,
+                withSourceURL: url
+            )
+            .call(withArguments: [
+                exports,
+                require,
+                module,
+                path,
+                url.deletingLastPathComponent().path
+                ]
+        )
     }
 }
 
