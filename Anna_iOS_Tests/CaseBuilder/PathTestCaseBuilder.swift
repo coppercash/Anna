@@ -111,7 +111,6 @@ PathTestCaseBuilder : NSObject
                 forResource: "analytics",
                 withExtension: "bundle"
             )!,
-            config: [:],
             dependency: dep
         )
         manager.delegate = self

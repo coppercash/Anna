@@ -86,6 +86,7 @@ public class
     Dependency : NSObject
 {
     public var
+    debug :Bool? = nil,
     fileManager :CoreJS.FileManaging? = nil,
     standardOutput :CoreJS.FileHandling? = nil,
     coreJSModuleURL :URL? = nil
@@ -120,17 +121,14 @@ public class
 {
     public let
     moduleURL: URL,
-    config :Dictionary<String, Any>?,
     dependency :Dependency?
-    @objc(initWithModuleURL:config:dependency:)
+    @objc(initWithModuleURL:dependency:)
     public init
         (
         moduleURL: URL,
-        config :Dictionary<String, Any>? = nil,
         dependency :Dependency? = nil
         ) {
         self.moduleURL = moduleURL
-        self.config = config
         self.dependency = dependency
     }
     
@@ -205,6 +203,15 @@ public class
         return dep
     }
     func
+        resolvedConfiguration() -> [String : Any] {
+        var
+        config = [:] as [String : Any]
+        if let debug = self.dependency?.debug {
+            config["debug"] = debug
+        }
+        return config
+    }
+    func
         resolvedManagerArguments() -> [Any] {
         let
         manager = self,
@@ -214,7 +221,7 @@ public class
                 delegate.manager(manager, didSend: result)
             }
         },
-        config = self.config ?? [:],
+        config = self.resolvedConfiguration(),
         arguments = [
             unsafeBitCast(receive, to: AnyObject.self),
             config

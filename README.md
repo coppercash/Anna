@@ -66,8 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Delegate {
         print(result)
         //
         // Supposed to output
-        // {
-        //     action = selected;
+        // { //     action = selected;
         //     id = "/master/tableView/cell";
         // }
     }
@@ -135,22 +134,23 @@ In the looking up process, `Anna.FocusPathConstituting.parentConstitutor()` and 
 However, the `Analyzer` of `UIApplicaiontDelegate` is slightly different. It is of class `RootAnalyzer` and initialized with a `Manager`.
 `Manager` acts like port between **Anna.iOS** and **Anna.Core**. It receives events from **Anna.iOS** and returns calculated results into delegate methods.
 
-`Manager` starts by running the module which the first parameter of its initializer points to.
+`Manager` starts by running the module which the first parameter `moduleURL` of its initializer points to. 
+Its behavior can be altered via attributes of `dependency` (the second parameter).
 
-`Manager`'s behavior can be configured via attributes of `Dependency`:
-
-| Attributes | Description |
-| --- | --- |
-| `moduleURL` | Where the entrance module is located. |
-| `taskModuleURL` | Where the tasks to be registered located. Defaults to `moduleURL/task` |
-| `config` | A dictionary to configure **Anna.Core**'s behavior. |
-| `callbackQueue` | On which the methods of `Manager.Delegate` are called. |
-
-`config` to **Anna.Core**:
-
-| Attributes | Description |
+| Attribute | Description |
 | --- | --- |
 | `debug` | Set to `true` to automatically reload tasks. |
+| `coreJSModuleURL` | Where the CoreJS node module locates. |
+| `fileManager` | With which, the CoreJS is able to access the file system. This is convenient to inject a mocked value for this when writing test cases.  |
+| `standardOutput` | With which, the CoreJS is able to access the standard output. |
+
+And the results returned by `Manager` can be received in `Manager.delegate`.
+The methods in `Manager.delegate` are called asynchronously, so if they are not expected to be called on main thread, configure that via `Manager.delegateQueue`:
+
+| Method | Description |
+| --- | --- |
+| `manager(_, didSend result)` | Called when a result is calculated out. |
+| `manager(_, didCatch error)` | Called when an error that is not handled happens. |
 
 #### Focus Marking
 
@@ -177,10 +177,26 @@ Available methods on `Analyzing`:
 | `detach()` | Terminate all hooking and observing. Usually called in `deinit`. |
 | `markFocused()` | Mark the `Analyzer` to be focused, such that the newly enabled `Analyzer`s can be on proper focus path. |
 
-### Task Registration
+### Analytics Module
 
-The tasks to be registered are in the module pointed to by `Manager.dependency.taskModuleURL`. 
-The file `index.js` is guaranteed to be `require`-ed before any `Node`s of focus path created. 
+The parameter `moduleURL` in `Manager.init` points to entrance (a node module) of our analytic module. 
+It finds where the **Anna.Core** module, passes in the location of the **task** module, and returns a configured constructor to **Anna.iOS**.
+A classic implementation of an analytic module looks like this:
+
+```javascript
+/* In
+ * analytic.bundle/
+ * └── index.js
+ */
+module.exports = require('../anna.bundle').configured({
+  task: (__dirname + '/task')
+});
+```
+
+#### Task Registration
+
+The tasks to be registered are in the module where the parameter `task` points to. 
+The file `index.js` in the module is guaranteed to be `require`-ed before any `Node`s of focus path created. 
 Other files are `require`-ed according to the name space of the object create the focus path `Node`. 
 For example, when `DetailViewController` creates a focus path `Node`, `DetailViewController.js` will be `require`-ed. 
 Hence all the tasks contained in `DetailViewController.js` will be registered.
@@ -194,13 +210,20 @@ match(
 );
 ```
 
-`match` is a global function injected by `Anna.Core` before tasks loading process.
-The first parameter contains two part. The components before the last identifies the kind of `Node`s we care about. The last component refer to the event we want to hook.
-The **digging** function returns the result dug out from the `Node`.
+`match` is a global function injected by **Anna.Core** before tasks loading process.
+The first parameter contains two part. The components before the last one identify the kind of `Node`s we care about. The last component refers to the event we care about.
+The **digging** function (the second parameter) returns the result dug out from the `Node`.
+
+#### CoreJS
+
+Inside `Anna.Manager` there is a tiny NodeJS environment called CoreJS.
+It is so tiny that only the basic `require` function (includes cache) is implemented. 
+CoreJS starts by `requrie`-ing the entrance module, of which the URL is passed in via the first parameter of `Manager.init`.
+**Anna.Core** is just a normal module `require`-ed in the entrance module, of which the constructor is assigned to the `exports` and finally returned to **Anna.iOS**.
 
 ### Focus Path Node
 
-A `Node` (in `Anna.Core`) keeps references to get its context, mainly speaking its parent `Node` and all other ancestor `Node`s, so it is easy to know from where the user move focus to the current `Node`.
+A `Node` (in **Anna.Core**) keeps references to get its context, mainly speaking its parent `Node` and all other ancestor `Node`s, so it is easy to know from where the user move focus to the current `Node`.
 
 From a more abstract aspect, focus paths represent user's interaction with the application in the **past**. And **past** itself is the object of analytics.
 
@@ -223,7 +246,7 @@ Available attributes and functions on `Node`:
 
 #### Visibility
 
-`Anna.Core` records every `Node`'s visibility be receiving event **appeared** and **disappeared**.
+**Anna.Core** records every `Node`'s visibility be receiving event **appeared** and **disappeared**.
 These two events are generated by hooking `UIKit` objects. 
 For example,
 
@@ -239,22 +262,38 @@ Value changes on a `Node` can be tracked by calling `update(_ value, for keyPath
 
 If we want to keep tracking an attribute whenever its value changes, we can call `observe(_ observee, for keyPath)`.
 
-### CoreJS
-
-Inside `Anna.Manager` there is a tiny NodeJS environment called CoreJS.
-It is so tiny that only the basic `require` function (includes cache) is implemented. 
-CoreJS starts running by `requrie`-ing the entrance module, of which the URL is passed in via the first parameter of method `run`, and returns the `exports`.
-`Anna.Core` is just a normal module `require`-ed in the entrance module, of which the constructor is assigned to the `exports` and finally called by `Anna.Manager`.
-
-CoreJS's behavior can be configured via following attributes of `CoreJS.Dependency`:
-
-| Attribute | Description |
-| --- | --- |
-| `handleException` | The closure to receive uncaught exception. |
-| `logger` | The delegate to receive message passed to `console.log`. |
-| `nodePathURLs` | Same with `NODE_PATH`. CoreJS will search those URLs for modules if they are not found elsewhere. |
-| `fileManager` | Base on this `fs` is implemented. Defaults to `FileManager.defaultManager` if not set. |
-| `coreModuleURL` | Where the JavaScript part of CoreJS is located. Defaults to `main/bundle/corejs.bundle` |
-
 ### Debug
+
+Sometimes it gets frustrated when **Anna** doesn't behave as expected, even thought everything is believed to be properly configured.
+In this case, we can call `Manager.logSnapshot` to log out a marked up text to the `Manager.dependency.standardOutput` to have all the details of the underlying state.
+The **snapshot** contains:
+
++ all the currently registered focus path `Node`
++ the tasks registered on the `Nodes`
++ the most recent ten events happened on the `Nodes`
+
+An sample of **snapshot**:
+
+```
+<__root__ id="105553117049152" class="ana-node" createdAt="1530341056867">
+  <master id="105827995931584" class="ana-node" createdAt="1530341056870">
+    <ana-appeared class="ana-event" time="1530341056875" />
+    <ana-disappeared class="ana-event" time="1530341063401" />
+    <tableView id="105827995931808" class="ana-node" createdAt="1530341056872">
+      <cell id="105553117261952/0" class="ana-node" createdAt="1530341062226" index="0">
+        <match>
+          <branches length="1">
+            <did-select />
+          </branches>
+        </match>
+        <ana-updated key-path="text" value="2018-06-30 06:44:22 +0000" class="ana-event" time="1530341062227" />
+        <ana-appeared class="ana-event" time="1530341062227" />
+        <did-select class="ana-event" time="1530341062861" />
+```
+
+To call `Manager.logSnapshot` without inserting extra lines into the code base, pause the application and type in **lldb** command:
+
+```lldb
+e -l swift -- import MyApp; ((UIApplication.shared.delegate as! AppDelegate).analyzer as! RootAnalyzer).manager.logSnapshot()
+```
 
