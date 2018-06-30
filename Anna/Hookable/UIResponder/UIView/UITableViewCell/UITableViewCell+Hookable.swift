@@ -12,11 +12,7 @@ extension
 {
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UITableViewCellObserver(observee: self, owned: false)
-    }
-    public override func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UITableViewCellObserver(observee: self, owned: true)
+        return UITableViewCellObserver(observee: self)
     }
     func
         tableViewDelegateByLookingUp() -> (UITableViewDelegate & NSObject)? {
@@ -95,11 +91,7 @@ extension
         guard let
             analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
             else { return }
-        do {
-            try analyzer.deactivate()
-        } catch let error {
-            assertionFailure(error.localizedDescription)
-        }
+        analyzer.deactivate()
     }
     open override func
         parentConstitutor(

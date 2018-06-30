@@ -83,83 +83,79 @@ struct NodeID : Equatable
 
 @objc(ANADependency) @objcMembers
 public class
-    Dependency : CoreJS.Dependency
+    Dependency : NSObject
 {
     public var
-    moduleURL :URL? = nil,
-    taskModuleURL :URL? = nil,
-    config :[NSObject : AnyObject]? = nil,
-    callbackQueue :DispatchQueue? = nil
+    debug :Bool? = nil,
+    fileManager :CoreJS.FileManaging? = nil,
+    standardOutput :CoreJS.FileHandling? = nil,
+    coreJSModuleURL :URL? = nil
+    
+    internal func
+        coreDependency() -> CoreJS.Dependency {
+        let
+        dependency = self,
+        dep = CoreJS.Dependency()
+        dep.fileManager = dependency.fileManager
+        dep.standardOutput = dependency.standardOutput
+        dep.moduleURL = dependency.coreJSModuleURL
+        return dep
+    }
+}
+
+@objc(ANADelegate)
+public protocol
+    Delegate : Tracking
+{
+    @objc(manager:didCatchError:)
+    func
+        manager(
+        _ manager :Manager,
+        didCatch error :Error
+    )
 }
 
 @objc(ANAManager) @objcMembers
 public class
     Manager : NSObject
 {
-    public var
-    tracker :Tracking? = nil
-    lazy var
-    callbackQ = {
-        return self.dependency.callbackQueue ?? DispatchQueue.main
-    }()
     public let
-    dependency :Dependency
-    @objc(initWithDependency:)
+    moduleURL: URL,
+    dependency :Dependency?
+    @objc(initWithModuleURL:dependency:)
     public init
         (
-        _ dependency :Dependency
+        moduleURL: URL,
+        dependency :Dependency? = nil
         ) {
+        self.moduleURL = moduleURL
         self.dependency = dependency
     }
     
+    public var
+    delegate :Delegate? = nil,
+    delegateQueue :DispatchQueue = .main
+
+    // MARK: - Callback
+    
     let
     scriptQ = DispatchQueue(label: "anna.script")
-    var
-    scriptContext :JSContext? = nil
+    lazy var
+    scriptContext :JSContext = JSContext()
     func
-        resolvedScriptContext()
-        -> JSContext
-    {
-        if let context = self.scriptContext {
-            return context
-        }
-        let
-        context = JSContext()!
-        self.scriptContext = context
-        return context
-    }
-    
-    func
-        handle(scriptResult :Any)
-    {
+        delegateAsync(_ action : @escaping (Manager, Delegate) -> Void) {
         guard let
-            tracker = self.tracker
+            delegate = self.delegate
             else { return }
         let
-        callbackQ = self.callbackQ
+        manager = self,
+        callbackQ = self.delegateQueue
         callbackQ.async {
-            tracker.receive(
-                analyticsResult: scriptResult,
-                dispatchedBy: self
-            )
+            action(manager, delegate)
         }
     }
-    
-    func
-        handle(scriptError :JSValue)
-    {
-        guard let
-            tracker = self.tracker
-            else { return }
-        let
-        callbackQ = self.callbackQ
-        callbackQ.async {
-           tracker.receive(
-                analyticsError: NSError(with: scriptError),
-                dispatchedBy: self
-            )
-        }
-    }
+
+    // MARK: - Core
     
     var
     scriptManager :JSValue? = nil
@@ -171,68 +167,93 @@ public class
             return manager
         }
         let
-        context = self.resolvedScriptContext();
-        guard let
-            module = self.dependency.moduleURL
-            else { throw ScriptError.mainModuleURLNotSpecified }
-        let
-        dependency = self.dependency
-        dependency.handleException =
-            { [weak self] (context, error) in
-                guard let error = error else { return }
-                self?.handle(scriptError: error)
-        }
-        let
-        construct = try context.run(
-            module,
-            with: dependency
+        context = self.scriptContext,
+        moduleURL = self.moduleURL,
+        dependency = self.resolvedCoreDependency(),
+        arguments = self.resolvedManagerArguments()
+        try context.setup(with: dependency)
+        guard
+            let
+            construct = context.require(moduleURL.path),
+            let
+            manager = construct.call(
+                withArguments: arguments
             )
-        let
-        managerDependency = try self.resolvedManagerDependency()
-        guard let
-            manager = construct?.call(withArguments: [managerDependency])
             else { throw ScriptError.managerUnconstructable }
         
         self.scriptManager = manager
         return manager
     }
     func
-        resolvedManagerDependency() throws -> [NSString : Any] {
-        guard let
-            task = self.dependency.taskModuleURL
-            else { throw ScriptError.taskModuleURLNotSpecified }
+        resolvedCoreDependency() -> CoreJS.Dependency {
         let
-        context = self.resolvedScriptContext()
+        moduleURL = self.moduleURL,
+        dependency = self.dependency,
+        dep = dependency?.coreDependency() ?? CoreJS.Dependency()
+        dep.nodePathURLs = [moduleURL]
         let
-        receive : @convention(block) (Any) -> Void = {
-            [weak self] (result :Any) in
-            self?.handle(scriptResult: result)
-        },
-        inject : @convention(block) (JSValue, JSValue) -> Void = {
-            [weak context] (key :JSValue, value :JSValue) in
-            guard let
-                global = context?.globalObject
-                else { return }
-            if (value.isUndefined) {
-                global.deleteProperty(key.toString())
-            }
-            else {
-                global.setValue(value, forProperty: key.toString())
+        manager = self
+        dep.exceptionHandler = {
+            [weak manager] (_, error) in
+            guard let error = error else { return }
+            manager?.delegateAsync { (manager, delegate) in
+                delegate.manager(manager, didCatch: error)
             }
         }
-        var
-        dependency :[NSString : Any] = [
-            "taskModulePath": task.path,
-            "inject": unsafeBitCast(inject, to: AnyObject.self),
-            "receive": unsafeBitCast(receive, to: AnyObject.self),
-        ]
-        if let
-            config = self.dependency.config
-        {
-            dependency["config"] = config
-        }
-        return dependency
+        return dep
     }
+    func
+        resolvedConfiguration() -> [String : Any] {
+        var
+        config = [:] as [String : Any]
+        if let debug = self.dependency?.debug {
+            config["debug"] = debug
+        }
+        return config
+    }
+    func
+        resolvedManagerArguments() -> [Any] {
+        let
+        manager = self,
+        receive : @convention(block) (Any) -> Void = {
+            [weak manager] (result :Any) in
+            manager?.delegateAsync { (manager, delegate) in
+                delegate.manager(manager, didSend: result)
+            }
+        },
+        config = self.resolvedConfiguration(),
+        arguments = [
+            unsafeBitCast(receive, to: AnyObject.self),
+            config
+        ] as [Any]
+        return arguments
+    }
+    func
+        perform(_ action : (JSValue) -> Void) {
+        let
+        manager = self
+        do {
+            let
+            core = try manager.resolvedScriptManager()
+            action(core)
+        }
+        catch let error {
+            manager.delegate?.manager(
+                manager,
+                didCatch: error
+            )
+        }
+    }
+    func
+        async(_ action : @escaping (JSValue) -> Void) {
+        let
+        queue = self.scriptQ,
+        manager = self
+        queue.async { manager.perform(action) }
+    }
+
+    // MARK: - Wrapper
+    
     func
         registerNode(
         by identifier :NodeID,
@@ -241,10 +262,8 @@ public class
         index :Int?,
         namespace :String? = nil,
         attributes :Attributes? = nil
-        ) throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
+        ) {
+        self.async { (manager) in
             let
             null = NSNull(),
             arguments :[Any] = [
@@ -264,10 +283,8 @@ public class
     func
         deregisterNodes(
         by identifier :NodeID
-        ) throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
+        ) {
+        self.async { (manager) in
             manager.invokeMethod(
                 "deregisterNodes",
                 withArguments: [
@@ -276,17 +293,15 @@ public class
             )
         }
     }
-    typealias
+    public typealias
         Attributes = [String : Any]
     func
         recordEvent(
         named name :String,
         with properties :Attributes?,
         onNodeBy identifier :NodeID
-        ) throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
+        ) {
+        self.async { (manager) in
             let
             null = NSNull(),
             arguments :[Any] = [
@@ -300,16 +315,15 @@ public class
             )
         }
     }
-    @objc
     public func
-        logSnapshot() throws {
-        let
-        manager = try self.resolvedScriptManager()
-        self.scriptQ.async {
-            manager.invokeMethod(
-                "logSnapshot",
-                withArguments: []
-            )
+        logSnapshot() {
+        self.scriptQ.sync {
+            self.perform { (manager) in
+                manager.invokeMethod(
+                    "logSnapshot",
+                    withArguments: []
+                )
+            }
         }
     }
 }
@@ -317,7 +331,5 @@ public class
 enum
     ScriptError : Error
 {
-    case taskModuleURLNotSpecified
-    case mainModuleURLNotSpecified
     case managerUnconstructable
 }

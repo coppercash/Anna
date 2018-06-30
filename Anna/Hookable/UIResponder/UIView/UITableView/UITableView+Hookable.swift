@@ -12,11 +12,7 @@ extension
 {
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UITableViewObserver(observee: self, owned: false)
-    }
-    public override func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UITableViewObserver(observee: self, owned: true)
+        return UITableViewObserver(observee: self)
     }
 }
 
@@ -226,26 +222,22 @@ class
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
-        let
-        cell = self.target!.tableView(
+        guard let cell = self.target?.tableView(
             tableView,
             cellForRowAt: indexPath
-        )
+            )
+            else { return UITableViewCell(frame: CGRect.zero) }
         if
             let
             row = cell as? AnalyzerReadable,
             let
             table = tableView as? AnalyzerReadable & SectionAnalyzable
         {
-            do {
-                try _configure(
-                    cell: row,
-                    in: table,
-                    at: indexPath
-                )
-            } catch let error {
-                assertionFailure(error.localizedDescription)
-            }
+            _configure(
+                cell: row,
+                in: table,
+                at: indexPath
+            )
         }
         return cell
     }

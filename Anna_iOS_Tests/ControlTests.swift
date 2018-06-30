@@ -13,13 +13,12 @@ class ControlTests: XCTestCase {
     func test_button() {
         let
         test = PathTestCaseBuilder(with: self)
-        test.task =
-        """
+        test.task = ("""
         match(
-        'vc/bt/touch-up-inside',
-        function() { return 42; }
+          'vc/bt/touch-up-inside',
+          function() { return 42; }
         );
-        """
+        """)
         class
             Controller : PathTestingViewController
         {
@@ -28,7 +27,7 @@ class ControlTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 
                 self.button = {
                     let
@@ -59,7 +58,9 @@ class ControlTests: XCTestCase {
         XCTAssertEqual(test[0] as? Int, 42)
     }
     
-    func test_unownedButtonShouldReportNoAppearingEvent() {
+    // TODO: Turn on when nameless implementated
+    //
+    func off_test_unownedButtonShouldReportNoAppearingEvent() {
         let
         test = PathTestCaseBuilder(with: self)
         test.task =
@@ -81,7 +82,7 @@ class ControlTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.button)
                 self.analyzer.hook(self.button)
             }

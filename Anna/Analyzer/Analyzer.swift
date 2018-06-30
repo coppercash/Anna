@@ -32,7 +32,7 @@ public class
     }
     deinit {
         self.detach()
-        try? self.deactivate()
+        self.deactivate()
         //
         // The observation to parent.nodeID is removed.
     }
@@ -42,14 +42,14 @@ public class
     override func
         resolveIdentity(
         then callback: @escaping IdentityResolving.Callback
-        ) throws {
+        ) {
         
         // Cache hit
         //
         self.deferResolution(callback)
         if let
             identity = self.identity
-        { return try self.flushResolutions(with: identity) }
+        { return self.flushResolutions(with: identity) }
         
         guard
             let
@@ -57,17 +57,17 @@ public class
             let
             parent = self.parent ?? self.parentByLookingUp()
             else { return }
-        try parent.resolveIdentity {
+        parent.resolveIdentity {
             [weak self] (identity) in
             guard let
                 analyzer = self
                 else { return }
             let
             context = makeContext(identity)
-            try analyzer.bindNode(
+            analyzer.bindNode(
                 with: context
             )
-            try analyzer.flushResolutions(with: analyzer.identity!)
+            analyzer.flushResolutions(with: analyzer.identity!)
         }
     }
     var
@@ -81,11 +81,11 @@ public class
     func
         flushResolutions(
         with identity :Identity
-        ) throws {
+        ) {
         for
             callback in self.deferred
         {
-            try callback(identity)
+            callback(identity)
         }
         self.deferred.removeAll()
     }
@@ -106,7 +106,7 @@ public class
         under parent :BaseAnalyzer?,
         key :String,
         index :Int?
-        ) throws {
+        ) {
         guard self.isEnabled == false
             else { return }
         self.isEnabled = true
@@ -121,7 +121,7 @@ public class
         if let
             parent = parent
         {
-            try self.activate(
+            self.activate(
                 under: parent,
                 key: key,
                 index: index
@@ -129,7 +129,7 @@ public class
         }
         else {
             self.parentlessName = key
-            try self.activate(
+            self.activate(
                 with: key
             )
         }
@@ -137,7 +137,7 @@ public class
         if let
             delegate = self.delegate as? Hookable
         {
-            self.hook(owner: delegate)
+            self.hook(delegate)
         }
     }
     func
@@ -145,26 +145,26 @@ public class
         _ sub :Analyzing,
         for key :String,
         index :Int?
-        ) throws {
+        ) {
         guard let
             sub = sub as? Analyzer
             else { return }
         if self.isEnabled {
-            try sub.enable(
+            sub.enable(
                 under: self,
                 key: key,
                 index: index
             )
             return
         }
-        try self.resolveIdentity {
+        self.resolveIdentity {
             [weak self, weak sub] (_) in
             guard let
                 analyzer = self,
                 let
                 sub = sub
                 else { return }
-            try sub.enable(
+            sub.enable(
                 under: analyzer,
                 key: key,
                 index: index
@@ -209,18 +209,18 @@ public class
         activate(
         under parent :Parent?,
         contextMaker : @escaping ContextMaker
-        ) throws {
+        ) {
         self.parent = parent
         self.makeContext = contextMaker
-        try self.resolveIdentity { (_) in }
+        self.resolveIdentity { (_) in }
     }
     func
         activate(
         with name :String
-        ) throws {
+        ) {
         let
         nodeID = NodeID.owned(by: self)
-        try self.activate(under: nil) {
+        self.activate(under: nil) {
             let
             manager = $0.manager,
             parentID = $0.nodeID
@@ -238,10 +238,10 @@ public class
         under parent :Parent,
         key :String,
         index :Int?
-        ) throws {
+        ) {
         let
         atonomicID = NodeID.owned(by: self)
-        try self.activate(under: parent) {
+        self.activate(under: parent) {
             let
             manager = $0.manager,
             parentID = $0.nodeID,
@@ -258,10 +258,10 @@ public class
         }
     }
     func
-        deactivate() throws {
+        deactivate() {
         self.parent = nil
         self.makeContext = nil
-        try self.unbindNode()
+        self.unbindNode()
         //
         // Every event happen after, will go into deferred buffer
     }
@@ -349,62 +349,43 @@ extension
 {
     public func
         enable(
-        with name :String
+        naming name :String
         ) {
         self.parentlessName = name
-        do {
-            try self.enable(
-                under: nil,
-                key: name,
-                index: nil
-            )
-        } catch let error {
-            assertionFailure(error.localizedDescription)
-        }
+        self.enable(
+            under: nil,
+            key: name,
+            index: nil
+        )
     }
     public func
         setSubAnalyzer(
         _ sub :Analyzing,
         for key:String
         ) {
-        do {
-            try self.setSubAnalyzer(
-                sub,
-                for: key,
-                index: nil
-            )
-        } catch let error {
-            assertionFailure(error.localizedDescription)
-        }
+        self.setSubAnalyzer(
+            sub,
+            for: key,
+            index: nil
+        )
     }
     public func
         setSubAnalyzers(
         _ subs: [Analyzing],
         for key: String
         ) {
-        do {
-            for (i, sub) in subs.enumerated() {
-                try self.setSubAnalyzer(
-                    sub,
-                    for: key,
-                    index: i
-                )
-            }
-        } catch let error {
-            assertionFailure(error.localizedDescription)
+        for (i, sub) in subs.enumerated() {
+            self.setSubAnalyzer(
+                sub,
+                for: key,
+                index: i
+            )
         }
     }
     public func
         hook(_ hookee :Hookable) {
         let
         token = hookee.tokenByAddingObserver()
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    func
-        hook(owner :Hookable) {
-        let
-        token = owner.tokenByAddingOwnedObserver()
         token.recorder = self
         self.tokens.append(token)
     }
@@ -416,22 +397,7 @@ extension
         let
         token = KVObserver(
             keyPath: keyPath,
-            observee: observee,
-            owned: false
-        )
-        token.recorder = self
-        self.tokens.append(token)
-    }
-    public func
-        observe(
-        owner :NSObject,
-        for keyPath :String
-        ) {
-        let
-        token = KVObserver(
-            keyPath: keyPath,
-            observee: owner,
-            owned: true
+            observee: observee
         )
         token.recorder = self
         self.tokens.append(token)
@@ -456,11 +422,12 @@ extension
     }
     public func
         record(
-        _ event: String
+        _ event :String,
+        with attributes :Manager.Attributes?
         ) {
         self.recordEvent(
             named: event,
-            with: nil
+            with: attributes
         )
     }
     public func

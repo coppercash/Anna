@@ -12,11 +12,7 @@ extension
 {
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UICollectionViewCellObserver(observee: self, owned: false)
-    }
-    public override func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UICollectionViewCellObserver(observee: self, owned: true)
+        return UICollectionViewCellObserver(observee: self)
     }
 }
 
@@ -81,11 +77,7 @@ extension
         guard let
             analyzer = (self as? AnalyzerReadable)?.analyzer as? Analyzer
             else { return }
-        do {
-            try analyzer.deactivate()
-        } catch let error {
-            assertionFailure(error.localizedDescription)
-        }
+        analyzer.deactivate()
     }
     open override func
         parentConstitutor(

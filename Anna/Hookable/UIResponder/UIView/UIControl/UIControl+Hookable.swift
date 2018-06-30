@@ -12,11 +12,7 @@ extension
 {
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UIControlObserver(observee: self, owned: false)
-    }
-    public override func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UIControlObserver(observee: self, owned: true)
+        return UIControlObserver(observee: self)
     }
 }
 
@@ -26,18 +22,11 @@ class
 {
     required
     init(
-        observee: Observee,
-        owned: Bool
+        observee: Observee
         ) {
         super.init(
-            observee: observee,
-            owned: owned
+            observee: observee
         )
-        if owned == false {
-            self.visibilityRecorder = VisibilityRecorder(
-                activeEvents: []
-            )
-        }
     }
     override func
         observe(_ observee: Observee) {

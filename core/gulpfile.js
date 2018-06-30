@@ -10,8 +10,7 @@ gulp.task("bundle", function () {
     entries: ['src/index.ts'],
     standalone: "Anna",
     debug: false,
-    cache: {},
-    packageCache: {}
+    node: true,
   })
     .plugin(tsify)
     .bundle()

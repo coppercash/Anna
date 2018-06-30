@@ -3,8 +3,7 @@ import * as Task from './task'
 
 export namespace RequiringLoader 
 {
-  export type Inject = (key :string, value :any) => void;
-  export type Require = (name :string) => any;
+  export type Config = { [key :string] : any };
   export type Match = (
       path :string | string[], 
       map :Match.Task.Map
@@ -13,23 +12,22 @@ export namespace RequiringLoader
 export class RequiringLoader implements Task.Loading
 {
   taskModulePath :string;
-  inject :RequiringLoader.Inject;
-  require :RequiringLoader.Require;
+  global :{ [key :string] : any };
+  config :RequiringLoader.Config
   constructor(
     taskModulePath :string,
-    inject :RequiringLoader.Inject,
-    require :RequiringLoader.Require
+    gloabl :{ [key :string] : any },
+    config :RequiringLoader.Config
   ) {
     this.taskModulePath = taskModulePath;
-    this.inject = inject;
-    this.require = require;
+    this.global = global;
+    this.config = config;
   }
-
   matchTasks(
     namePath :string[]
   ) :Task.Loading.Tasks {
     let
-    taskModulePath = this.taskModulePath, require = this.require;
+    taskModulePath = this.taskModulePath;
     let
     path = `${ taskModulePath }/${ namePath.join('/') }.js`;
     let
@@ -50,23 +48,53 @@ export class RequiringLoader implements Task.Loading
     }
     try {
       this.preRequire(match);
-      require(path);
+      this.require(path);
     }
-    catch {}
     finally {
       this.postRequire();
     }
     return builder.build();
   }
-
-  preRequire(match :RequiringLoader.Match) {
-    let 
-    inject = this.inject;
-    inject('match', match);
+  preRequire(
+    match :RequiringLoader.Match
+  ) {
+    this.inject('match', match);
   }
-
   postRequire() {
     this.inject('match', undefined);
+  }
+  inject(
+    key :string, 
+    value :RequiringLoader.Match
+  ) {
+    let
+    global = this.global;
+    if (value === undefined) {
+      delete global[key];
+    }
+    else {
+      global[key] = value;
+    }
+  }
+  require(
+    name :string
+  ) : any {
+    let
+    require = this.global.require as any,
+      config = this.config,
+      debug = config ? config['debug'] : undefined;
+    if (debug === true) {
+      delete require.cache[require.resolve(name)];
+    }
+    var
+    exports = undefined;
+    try {
+      exports = require(name);
+    }
+    catch {
+      exports = undefined;
+    }
+    return exports;
   }
 }
 

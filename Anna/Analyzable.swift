@@ -10,8 +10,7 @@ import Foundation
 @objc(ANAAnalyzable)
 public protocol
     Analyzable : AnalyzerReadable, Hookable
-{
-}
+{}
 
 @objc(ANAAnalyzing)
 public protocol
@@ -26,12 +25,6 @@ public protocol
         _ observee :NSObject,
         for keyPath :String
     )
-    @objc(observeOwner:forKeyPath:)
-    func
-        observe(
-        owner :NSObject,
-        for keyPath :String
-    )
     @objc(detach)
     func
         detach()
@@ -44,26 +37,26 @@ public protocol
         _ value :Any?,
         for keyPath :String
     )
-    @objc(recordEvent:)
+    @objc(recordEvent:withAttributes:)
     func
         record(
-        _ event :String
+        _ event :String,
+        with attributes :Manager.Attributes?
     )
-    
-    @objc(enableWithName:)
+    @objc(enableNaming:)
     func
-        enable(with name :String)
+        enable(naming :String)
     @objc(setSubAnalyzer:forKey:)
     func
         setSubAnalyzer(
         _ sub :Analyzing,
-        for key:String
+        for key :String
     )
     @objc(setSubAnalyzers:forKey:)
     func
         setSubAnalyzers(
         _ subs :[Analyzing],
-        for key:String
+        for key :String
     )
 }
 
