@@ -12,21 +12,28 @@ class
     where Observee : NSObject
 {
     let
-    keyPaths :[String: NSKeyValueObservingOptions]
-    weak var
-    observee :Observee?
+    keyPaths :[String: NSKeyValueObservingOptions],
+    observeeRef :NSValue
+    var
+    isObserving = false
+    var
+    observee :Observee {
+        return self.observeeRef.nonretainedObjectValue as! Observee
+    }
     init(
         keyPaths :[String: NSKeyValueObservingOptions],
         observee :Observee
         ) {
         self.keyPaths = keyPaths
-        self.observee = observee
+        self.observeeRef = NSValue(nonretainedObject: observee)
     }
     deinit {
         self.detach()
     }
     func
         observe(_ observee :Observee) {
+        guard self.isObserving == false else { return }
+        self.isObserving = true
         for (keyPath, options) in self.keyPaths {
             observee.addObserver(
                 self,
@@ -38,25 +45,21 @@ class
     }
     func
         deobserve(_ observee :Observee) {
+        guard self.isObserving else { return }
         for (keyPath, _) in self.keyPaths {
             observee.removeObserver(
                 self,
                 forKeyPath: keyPath
             )
         }
+        self.isObserving = false
     }
     func
         detach() {
-        if let observee = self.observeeBeingDeobserved() {
-            self.deobserve(observee)
-            self.observee = nil
-        }
+        let observee = self.observee
+        self.deobserve(observee)
     }
-    func
-        observeeBeingDeobserved() -> Observee? {
-        return self.observee
-    }
-    
+
     override func
         observeValue(
         forKeyPath keyPath: String?,
@@ -73,13 +76,13 @@ class
     weak var
     recorder: Reporting.Recorder? {
         willSet {
-            guard let observee = self.observee else { return }
+            let observee = self.observee
             if let _ = self.recorder {
                 self.deobserve(observee)
             }
         }
         didSet {
-            guard let observee = self.observee else { return }
+            let observee = self.observee 
             if let _ = self.recorder {
                 self.observe(observee)
             }
