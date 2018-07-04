@@ -48,7 +48,7 @@ class CollectionViewTests: XCTestCase {
                 viewDidLoad() {
                 super.viewDidLoad()
                 self.view.addSubview(self.collection)
-                self.collection.analyzer.enable(with: "tb")
+                self.collection.analyzer.enable(naming: "tb")
             }
             override func
                 viewDidAppear(_ animated: Bool) {

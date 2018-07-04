@@ -34,7 +34,7 @@ class AnalyzableComponentTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
             }
             override func
                 viewDidAppear(_ animated: Bool) {

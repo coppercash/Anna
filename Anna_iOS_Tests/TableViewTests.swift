@@ -15,7 +15,7 @@ class TableViewTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         
         test.task = ("""
-        var T = require('../tool');
+        var T = require('tool');
         match(
           ['tb/sc_0/rw/ana-appeared', 'tb/sc_3/rw/ana-appeared'],
           function(n) {
@@ -54,7 +54,7 @@ class TableViewTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -83,9 +83,9 @@ class TableViewTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.analyzer.enable(with: "rw")
+                        cell.analyzer.enable(naming: "rw")
                         cell.analyzer.observe(
-                            owner: cell,
+                            cell,
                             for: #keyPath(UITableViewCell.textLabel.text)
                         )
                         return cell
@@ -153,7 +153,7 @@ class TableViewTests: XCTestCase {
         test = PathTestCaseBuilder(with: self)
         
         test.task = ("""
-        var T = require('../tool');
+        var T = require('tool');
         match(
           ['tb/sc_0/rw/ana-appeared', 'tb/sc_19/rw/ana-appeared'],
           function(node) {
@@ -186,7 +186,7 @@ class TableViewTests: XCTestCase {
             override func
                 viewDidLoad() {
                 super.viewDidLoad()
-                self.analyzer.enable(with: "vc")
+                self.analyzer.enable(naming: "vc")
                 self.view.addSubview(self.table)
                 self.analyzer.setSubAnalyzer(
                     self.table.analyzer,
@@ -215,7 +215,7 @@ class TableViewTests: XCTestCase {
                             style: .default,
                             reuseIdentifier: "r"
                         )
-                        cell.analyzer.enable(with: "rw")
+                        cell.analyzer.enable(naming: "rw")
                         let
                         view = PathTestingView(frame: cell.contentView.bounds)
                         cell.analyzer.setSubAnalyzer(
@@ -322,7 +322,7 @@ class TableViewTests: XCTestCase {
                 viewDidLoad() {
                 super.viewDidLoad()
                 self.view.addSubview(self.table)
-                self.table.analyzer.enable(with: "tb")
+                self.table.analyzer.enable(naming: "tb")
             }
             override func
                 viewDidAppear(_ animated: Bool) {

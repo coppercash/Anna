@@ -1,0 +1,26 @@
+PODS:
+  - Anna (0.3.0):
+    - Anna/core (= 0.3.0)
+    - Anna/corejs (= 0.3.0)
+  - Anna/core (0.3.0)
+  - Anna/corejs (0.3.0)
+  - Easy (0.1.0):
+    - Anna
+
+DEPENDENCIES:
+  - Anna (from `../..`)
+  - Easy (from `../Easy`)
+
+EXTERNAL SOURCES:
+  Anna:
+    :path: "../.."
+  Easy:
+    :path: "../Easy"
+
+SPEC CHECKSUMS:
+  Anna: b776ad7a0d2b0d56f734e19ca8ff1f3ffae905ac
+  Easy: ac592a9d1d89e584a2f2956f1063551289bbef6b
+
+PODFILE CHECKSUM: 9e5909922e6007b99cc7c41d33babc9c5feca1e8
+
+COCOAPODS: 1.5.3

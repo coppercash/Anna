@@ -41,9 +41,6 @@ public protocol
     @objc(ana_tokenByAddingObserver)
     func
         tokenByAddingObserver() -> Reporting
-    @objc(ana_tokenByAddingOwnedObserver)
-    func
-        tokenByAddingOwnedObserver() -> Reporting
 }
 
 extension
@@ -170,14 +167,12 @@ class
     init(
         decorators :[AnyClass],
         keyPaths :[String: NSKeyValueObservingOptions],
-        observee :Observee,
-        owned :Bool = false
+        observee :Observee
         ) {
         self.decorators = decorators
         super.init(
             keyPaths: keyPaths,
-            observee: observee,
-            owned: owned
+            observee: observee
         )
     }
     override func
@@ -215,16 +210,14 @@ class
 {
     required
     init(
-        observee :Observee,
-        owned :Bool
+        observee :Observee
         ) {
         let
         clazz = type(of: self)
         super.init(
             decorators: clazz.decorators,
             keyPaths: clazz.keyPaths,
-            observee: observee,
-            owned: owned
+            observee: observee
         )
     }
     class var

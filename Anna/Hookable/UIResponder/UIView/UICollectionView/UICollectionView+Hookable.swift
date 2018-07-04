@@ -12,11 +12,7 @@ extension
 {
     public override func
         tokenByAddingObserver() -> Reporting {
-        return UICollectionViewObserver(observee: self, owned: false)
-    }
-    public override func
-        tokenByAddingOwnedObserver() -> Reporting {
-        return UICollectionViewObserver(observee: self, owned: true)
+        return UICollectionViewObserver(observee: self)
     }
 }
 
@@ -207,26 +203,22 @@ class
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
         ) -> UICollectionViewCell {
-        let
-        cell = self.target!.collectionView(
+        guard let cell = self.target?.collectionView(
             collectionView,
             cellForItemAt: indexPath
-        )
+            )
+            else { return UICollectionViewCell(frame: CGRect.zero) }
         if
             let
             row = cell as? AnalyzerReadable,
             let
             table = collectionView as? AnalyzerReadable & SectionAnalyzable
         {
-            do {
-                try _configure(
-                    cell: row,
-                    in: table,
-                    at: indexPath
-                )
-            } catch let error {
-                assertionFailure(error.localizedDescription)
-            }
+            _configure(
+                cell: row,
+                in: table,
+                at: indexPath
+            )
         }
         return cell
     }

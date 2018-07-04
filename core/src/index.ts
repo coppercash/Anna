@@ -4,15 +4,35 @@ import * as Load from './load';
 import * as Task from './task';
 import * as C from './compatibility';
 
-namespace Manager {
-  export type Config = { [key :string]: any };
-  export interface Dependency {
-    taskModulePath :string;
-    inject :Load.RequiringLoader.Inject;
-    require :Load.RequiringLoader.Require;
-    receive :Track.InPlaceTracker.Receive;
-    config? :Manager.Config
+interface Config {
+  task :string
+}
+
+export function configured(
+  config :Config
+) {
+  let
+  task = config.task;
+  return (
+    receive: Track.InPlaceTracker.Receive,
+    config :Manager.Config
+  ) : Manager => {
+    let
+    manager = new Manager(
+      new Load.RequiringLoader(
+        task,
+        global,
+        config
+      ),
+      config
+    );
+    manager.tracker = new Track.InPlaceTracker(receive);
+    return manager
   }
+}
+
+namespace Manager {
+  export type Config = { [key :string] : any };
 }
 export class Manager
 {
@@ -30,36 +50,6 @@ export class Manager
     if (config) {
       this.config = config;
     }
-  }
-
-  static
-  run(
-    dependency :Manager.Dependency
-  ) : Manager {
-    let
-    taskModulePath = dependency.taskModulePath,
-      inject = dependency.inject, 
-      require = dependency.require,
-      receive = dependency.receive, 
-      config = dependency.config;
-
-    let
-    _require = (config && config.debug) ? 
-      (identifier :string) => {
-        delete (require as any).cache[(require as any).resolve(identifier)];
-        return require(identifier);
-      } : require;
-    let
-    manager = new Manager(
-      new Load.RequiringLoader(
-        taskModulePath, 
-        inject,
-        _require
-      ),
-      config
-    );
-    manager.tracker = new Track.InPlaceTracker(receive);
-    return manager
   }
 
   nodeID(

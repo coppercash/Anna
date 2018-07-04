@@ -11,18 +11,17 @@ import Foundation
 public class
     RootAnalyzer : BaseAnalyzer
 {
+    static let
+    name :String = "__root__"
     public let
-    name :String,
     manager :Manager
-    @objc(initWithManager:name:)
+    @objc(initWithManager:)
     public
     init(
-        manager :Manager,
-        name :String
+        manager :Manager
         )
     {
         self.manager = manager
-        self.name = name
         super.init()
     }
 
@@ -31,23 +30,23 @@ public class
     override func
         resolveIdentity(
         then callback: @escaping IdentityResolving.Callback
-        ) throws {
+        ) {
         let
         manager = self.manager
         if let
             identity = self.identity
-        { return try callback(identity) }
+        { return callback(identity) }
         let
         nodeID = NodeID.owned(by: self),
         context = IdentityContext(
             manager: manager,
             nodeID: nodeID,
             parentID: nil,
-            name: self.name,
+            name: RootAnalyzer.name,
             index: nil
         )
-        try self.bindNode(with: context)
-        return try callback(self.identity!)
+        self.bindNode(with: context)
+        return callback(self.identity!)
     }
 }
 
@@ -55,8 +54,6 @@ extension
     RootAnalyzer : Analyzing
 {
     public func markFocused() { }
-    
-    public func observe(owner :NSObject, for keyPath :String) { }
     
     public func observe(_ observee: NSObject, for keyPath: String) { }
     
@@ -66,9 +63,9 @@ extension
     
     public func update(_ value: Any?, for keyPath: String) { }
     
-    public func record(_ event: String) { }
+    public func record(_ event: String, with attributes: Manager.Attributes?) { }
     
-    public func enable(with key: String) { }
+    public func enable(naming key: String) { }
     
     public func setSubAnalyzer(_ sub: Analyzing, for key: String) { }
     

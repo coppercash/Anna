@@ -10,10 +10,7 @@ var Module = (function () {
         if (native.contains(id)) {
             return native.moduleExports(id);
         }
-        var resolve = function (identifier) {
-            return native.resolvedPath(identifier, (parent ? parent.id : null), (main ? main.id : null));
-        };
-        var path = resolve(id);
+        var path = native.resolvedPath(id, (parent ? parent.id : null), (main ? main.id : null));
         if (!(path)) {
             throw new Error("Cannot resolve path for '" + id + "' required by '" + (parent ? parent.id : 'main') + "'.");
         }
@@ -26,12 +23,8 @@ var Module = (function () {
         var threw = true;
         try {
             module.exports = {};
-            var require = function (identifier) {
-                return Module.load(identifier, module, (main || module), native, cache);
-            };
-            require.cache = cache;
-            require.resolve = resolve;
-            native.load(path, module.exports, require, module);
+            var require_1 = Module.makeRequire(module, main, native, cache);
+            native.load(path, module.exports, require_1, module);
             threw = false;
         }
         finally {
@@ -41,27 +34,32 @@ var Module = (function () {
         }
         return module.exports;
     };
+    Module.makeRequire = function (parent, main, native, cache) {
+        var require = function (identifier) {
+            return Module.load(identifier, parent, (main || parent), native, cache);
+        };
+        require.cache = cache;
+        require.resolve = function (identifier) {
+            return native.resolvedPath(identifier, (parent ? parent.id : null), (main ? main.id : null));
+        };
+        return require;
+    };
     Module.cache = {};
     return Module;
 }());
-var Core = (function () {
-    function Core(native) {
-        this.native = native;
-        this.makeConsole();
-    }
-    Core.prototype.makeConsole = function () {
-        var native = this.native;
-        var console = { log: function (message) { native.log(message); } };
-        native.injectGlobal('console', console);
-    };
-    Core.prototype.require = function (main) {
-        return Module.load(main, null, null, this.native, Module.cache);
-    };
-    return Core;
-}());
-function run(index, native) {
-    var core = new Core(native);
-    return core.require(index);
+function setup(native) {
+    makeRequire(native);
+    makeConsole(native);
 }
-exports.run = run;
+exports.setup = setup;
+function makeRequire(native) {
+    global.require = Module.makeRequire(null, null, native, Module.cache);
+}
+function makeConsole(native) {
+    global.console = {
+        log: function (message) {
+            native.log(message);
+        }
+    };
+}
 //# sourceMappingURL=index.js.map

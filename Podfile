@@ -10,6 +10,7 @@ target 'Anna_iOS' do
   target 'Anna_iOS_Tests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'Anna', :path => '.'
   end
 
 end

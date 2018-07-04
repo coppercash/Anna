@@ -27,31 +27,31 @@ class
     override func
         resolveIdentity(
         then callback: @escaping IdentityResolving.Callback
-        ) throws {
+        ) {
         
         if let
             identity = self.identity
-        { return try callback(identity) }
+        { return callback(identity) }
         
-        try self.target?.resolveIdentity {
+        self.target?.resolveIdentity {
             [weak self] (identity) in
             guard let
                 analyzer = self
                 else { return }
-            try analyzer.bindNode(with: IdentityContext(
+            analyzer.bindNode(with: IdentityContext(
                 manager: identity.manager,
                 nodeID: identity.nodeID,
                 parentID: nil,
                 name: "forwarding",
                 index: nil
             ))
-            try callback(identity)
+            callback(identity)
         }
     }
     override func
         bindNode(
         with context: IdentityContext
-        ) throws {
+        ) {
         guard self.identity == nil
             else { return }
         self.identity = Identity(
@@ -60,13 +60,13 @@ class
         )
     }
     override func
-        unbindNode() throws {
+        unbindNode() {
         guard let
             identity = self.identity
             else { return }
         let
         manager = identity.manager
-        try manager.deregisterNodes(by: self.owningID)
+        manager.deregisterNodes(by: self.owningID)
         self.identity = nil
     }
     func
