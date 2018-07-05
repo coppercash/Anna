@@ -16,6 +16,7 @@
 		3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8701AB20883D1E0014E312 /* CoreJS.swift */; };
 		3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D95C33320B39FD600781DB6 /* ControlTests.swift */; };
 		3D9B18B820C4C5E00094D835 /* SectionAnalyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9B18B720C4C5E00094D835 /* SectionAnalyzable.swift */; };
+		3D9D87F720EF7E2F0045EC33 /* CollectionViewObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D87F620EF7E2E0045EC33 /* CollectionViewObserver.swift */; };
 		3DB2E5E6209FEACE005F0572 /* ANAUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5D9209FEACE005F0572 /* ANAUIView.m */; };
 		3DB2E5E7209FEACE005F0572 /* UITableViewCell+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */; };
 		3DB2E5E8209FEACE005F0572 /* UITableView+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */; };
@@ -112,6 +113,7 @@
 		3D8701AB20883D1E0014E312 /* CoreJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreJS.swift; sourceTree = "<group>"; };
 		3D95C33320B39FD600781DB6 /* ControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlTests.swift; sourceTree = "<group>"; };
 		3D9B18B720C4C5E00094D835 /* SectionAnalyzable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionAnalyzable.swift; sourceTree = "<group>"; };
+		3D9D87F620EF7E2E0045EC33 /* CollectionViewObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewObserver.swift; sourceTree = "<group>"; };
 		3DB2E5D9209FEACE005F0572 /* ANAUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANAUIView.m; sourceTree = "<group>"; };
 		3DB2E5DB209FEACE005F0572 /* UITableViewCell+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Hookable.swift"; sourceTree = "<group>"; };
 		3DB2E5DD209FEACE005F0572 /* UITableView+Hookable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Hookable.swift"; sourceTree = "<group>"; };
@@ -397,6 +399,7 @@
 		BE89419120B93DD5005D7EC9 /* UICollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				3D9D87F620EF7E2E0045EC33 /* CollectionViewObserver.swift */,
 				BE89419220B93DFA005D7EC9 /* UICollectionView+Hookable.swift */,
 				3DCF880420C68FFC00F1DAAE /* ANAUICollectionView.h */,
 				3DCF880520C68FFC00F1DAAE /* ANAUICollectionView.m */,
@@ -650,6 +653,7 @@
 				3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */,
 				3DCF880320C68E1900F1DAAE /* ANAUITableView.m in Sources */,
 				3DB2E5E9209FEACE005F0572 /* UIControl+Hookable.swift in Sources */,
+				3D9D87F720EF7E2F0045EC33 /* CollectionViewObserver.swift in Sources */,
 				3DB2E5EC209FEACE005F0572 /* ANAUIViewController.m in Sources */,
 				BE89419620B945B2005D7EC9 /* UICollectionViewCell+Hookable.swift in Sources */,
 				BE89419320B93DFA005D7EC9 /* UICollectionView+Hookable.swift in Sources */,
