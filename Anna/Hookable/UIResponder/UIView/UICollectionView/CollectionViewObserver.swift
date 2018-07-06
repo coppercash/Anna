@@ -10,11 +10,11 @@ import UIKit
 protocol
 OutSourcingView : class {
     associatedtype
-    DataSource
+    DataSource : NSObjectProtocol
     var
     dataSource :DataSource? { get set }
     associatedtype
-    Delegate
+    Delegate : NSObjectProtocol
     var
     delegate :Delegate? { get set }
 }
@@ -79,9 +79,13 @@ class
     override func
         deobserve(_ observee: Observee) {
         super.deobserve(observee)
-        if let delegateProxy = observee.delegate as? DelegateProxy {
+        if
             let
-            delegate = delegateProxy.target,
+            delegateProxy = observee.delegate as? DelegateProxy,
+            let
+            delegate = delegateProxy.safeTarget
+        {
+            let
             key = Keys.delegateSourceKey
             objc_setAssociatedObject(
                 delegate,
@@ -91,9 +95,13 @@ class
             )
             observee.delegate = delegate
         }
-        if let dataSourceProxy = observee.dataSource as? DataSourceProxy {
+        if
             let
-            dataSource = dataSourceProxy.target,
+            dataSourceProxy = observee.dataSource as? DataSourceProxy,
+            let
+            dataSource = dataSourceProxy.safeTarget
+        {
+            let
             key = Keys.dataSourceKey
             objc_setAssociatedObject(
                 dataSource,
@@ -113,23 +121,24 @@ class
 class
     Proxy<Target : NSObjectProtocol> : NSObject
 {
-    let
-    target :Target
+    private weak var
+    _target :Target?
+    var
+    target :Target { return self._target! }
+    var
+    safeTarget :Target? { return self._target }
     required
     init(_ target :Target) {
-        self.target = target
+        self._target = target
     }
-    
     override func
         conforms(to aProtocol: Protocol) -> Bool {
         return self.target.conforms(to: aProtocol)
     }
-    
     override func
         forwardingTarget(for aSelector: Selector!) -> Any? {
         return self.target
     }
-    
     override func
         responds(to aSelector: Selector!) -> Bool {
         return type(of: self).instancesRespond(to: aSelector) ||

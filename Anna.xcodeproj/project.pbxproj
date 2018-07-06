@@ -13,6 +13,7 @@
 		3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFCD20AFBC9200294037 /* FocusTests.swift */; };
 		3D2CDFD120AFC0E200294037 /* UIButton+Hookable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD020AFC0E200294037 /* UIButton+Hookable.swift */; };
 		3D2CDFD320AFC35C00294037 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2CDFD220AFC35C00294037 /* Focus.swift */; };
+		3D6FD83D20F324C500792DC0 /* MemoryManagementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FD83C20F324C500792DC0 /* MemoryManagementTests.m */; };
 		3D8701AC20883D1E0014E312 /* CoreJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8701AB20883D1E0014E312 /* CoreJS.swift */; };
 		3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D95C33320B39FD600781DB6 /* ControlTests.swift */; };
 		3D9B18B820C4C5E00094D835 /* SectionAnalyzable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9B18B720C4C5E00094D835 /* SectionAnalyzable.swift */; };
@@ -110,6 +111,7 @@
 		3D2CDFD220AFC35C00294037 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
 		3D52623E208583D100D287BA /* Anna_iOS_Testee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anna_iOS_Testee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D52624C208583D300D287BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D6FD83C20F324C500792DC0 /* MemoryManagementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemoryManagementTests.m; sourceTree = "<group>"; };
 		3D8701AB20883D1E0014E312 /* CoreJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreJS.swift; sourceTree = "<group>"; };
 		3D95C33320B39FD600781DB6 /* ControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlTests.swift; sourceTree = "<group>"; };
 		3D9B18B720C4C5E00094D835 /* SectionAnalyzable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionAnalyzable.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				3D2CDFCD20AFBC9200294037 /* FocusTests.swift */,
 				BE4F088420C27A970034F578 /* ReuseTests.swift */,
 				BE7ED60620CD2814001E6E6E /* AnalyzableComponentTests.swift */,
+				3D6FD83C20F324C500792DC0 /* MemoryManagementTests.m */,
 			);
 			path = Anna_iOS_Tests;
 			sourceTree = "<group>";
@@ -691,6 +694,7 @@
 				BE4F088520C27A970034F578 /* ReuseTests.swift in Sources */,
 				3D95C33420B39FD600781DB6 /* ControlTests.swift in Sources */,
 				BEF6DAD920DDF58B0039D141 /* PathTestCaseBuilder.swift in Sources */,
+				3D6FD83D20F324C500792DC0 /* MemoryManagementTests.m in Sources */,
 				3D2CDFCE20AFBC9200294037 /* FocusTests.swift in Sources */,
 				BE89419C20B9505A005D7EC9 /* CollectionViewTests.swift in Sources */,
 				3DB2E79D20A26734005F0572 /* TableViewTests.swift in Sources */,
