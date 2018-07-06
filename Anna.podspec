@@ -1,9 +1,10 @@
 Pod::Spec.new do |s|
     s.name             = 'Anna'
-    s.version          = '0.3.0'
-    s.summary          = 'Separate the analytics from your main business logic.'
+    s.version          = '0.3.1'
+    s.swift_version    = '4.1'
+    s.summary          = 'Separate the analytic code from other code.'
     s.description      = <<-DESC
-  Anna is an analytics abstraction library which helps separate the analyzing part of code from the main business logic. Although inspired by AOP, Anna doesn't require method-swizzling, which consumes considerable runtime. Instead, it needs a tiny piece of code to be inserted into the analyzed method. And then all the magic starts.
+Anna offers an abstraction layer which helps separate the analytic code from other code.
     DESC
 
     s.homepage         = 'https://github.com/coppercash/Anna'
