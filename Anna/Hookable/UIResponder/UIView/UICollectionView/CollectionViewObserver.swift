@@ -24,7 +24,7 @@ OutSourcingKeys {
     static var
     dataSourceKey :UnsafeRawPointer { get }
     static var
-    delegateSourceKey :UnsafeRawPointer { get }
+    delegateKey :UnsafeRawPointer { get }
 }
 
 // Why reseting flags
@@ -46,34 +46,60 @@ class
     Keys : OutSourcingKeys,
     Decorator : NSObject
 {
+    func
+        resolvedDataSourceProxy(
+        _ dataSource :Observee.DataSource
+        ) -> DataSourceProxy {
+        let
+        key = Keys.dataSourceKey
+        if
+            let
+            proxy = objc_getAssociatedObject(
+                dataSource,
+                key
+                ) as? DataSourceProxy
+        { return proxy }
+        let
+        proxy = DataSourceProxy.init(dataSource)
+        objc_setAssociatedObject(
+            dataSource,
+            key,
+            proxy,
+            .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+        )
+        return proxy
+    }
+    func
+        resolvedDelegateProxy(
+        _ delegate :Observee.Delegate
+        ) -> DelegateProxy {
+        let
+        key = Keys.delegateKey
+        if
+            let
+            proxy = objc_getAssociatedObject(
+                delegate,
+                key
+                ) as? DelegateProxy
+        { return proxy }
+        let
+        proxy = DelegateProxy.init(delegate)
+        objc_setAssociatedObject(
+            delegate,
+            key,
+            proxy,
+            .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+        )
+        return proxy
+    }
     override func
         observe(_ observee: Observee) {
         super.observe(observee)
         if let dataSource = observee.dataSource {
-            let
-            dataSourceProxy = DataSourceProxy.init(dataSource)
-            observee.dataSource = dataSourceProxy as? Observee.DataSource
-            let
-            key = Keys.dataSourceKey
-            objc_setAssociatedObject(
-                dataSource,
-                key,
-                dataSourceProxy,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            observee.dataSource = self.resolvedDataSourceProxy(dataSource) as? Observee.DataSource
         }
         if let delegate = observee.delegate {
-            let
-            delegateProxy = DelegateProxy.init(delegate)
-            observee.delegate = delegateProxy as? Observee.Delegate
-            let
-            key = Keys.delegateSourceKey
-            objc_setAssociatedObject(
-                delegate,
-                key,
-                delegateProxy,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            observee.delegate = self.resolvedDelegateProxy(delegate) as? Observee.Delegate
         }
     }
     override func
@@ -85,14 +111,6 @@ class
             let
             delegate = delegateProxy.safeTarget
         {
-            let
-            key = Keys.delegateSourceKey
-            objc_setAssociatedObject(
-                delegate,
-                key,
-                nil,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
             observee.delegate = delegate
         }
         if
@@ -101,14 +119,6 @@ class
             let
             dataSource = dataSourceProxy.safeTarget
         {
-            let
-            key = Keys.dataSourceKey
-            objc_setAssociatedObject(
-                dataSource,
-                key,
-                nil,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
             observee.dataSource = dataSource
         }
     }

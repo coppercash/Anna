@@ -57,7 +57,7 @@ struct
     static var
     dataSourceKey :UnsafeRawPointer { return withUnsafePointer(to: &_dataSource) { UnsafeRawPointer($0) } }
     static var
-    delegateSourceKey :UnsafeRawPointer { return withUnsafePointer(to: &_delegate) { UnsafeRawPointer($0) } }
+    delegateKey :UnsafeRawPointer { return withUnsafePointer(to: &_delegate) { UnsafeRawPointer($0) } }
 }
 
 extension
