@@ -46,6 +46,17 @@ class
     Keys : OutSourcingKeys,
     Decorator : NSObject
 {
+    weak var
+    safeObservee :Observee?
+    required
+    init(
+        observee: Observee
+        ) {
+        super.init(
+            observee: observee
+        )
+        self.safeObservee = observee
+    }
     func
         resolvedDataSourceProxy(
         _ dataSource :Observee.DataSource
@@ -93,8 +104,12 @@ class
         return proxy
     }
     override func
-        observe(_ observee: Observee) {
+        observe(_ observee :Observee) {
         super.observe(observee)
+        self.setProxies(on: observee)
+    }
+    func
+        setProxies(on observee :Observee) {
         if let dataSource = observee.dataSource {
             observee.dataSource = self.resolvedDataSourceProxy(dataSource) as? Observee.DataSource
         }
@@ -103,8 +118,14 @@ class
         }
     }
     override func
-        deobserve(_ observee: Observee) {
+        deobserve(_ observee :Observee) {
         super.deobserve(observee)
+        if let observee = self.safeObservee {
+            self.cleanProxies(on: observee)
+        }
+    }
+    func
+        cleanProxies(on observee :Observee) {
         if
             let
             delegateProxy = observee.delegate as? DelegateProxy,

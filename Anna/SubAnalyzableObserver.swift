@@ -20,14 +20,17 @@ class
 {
     typealias
         Object = NSObject & AnalyzableObject
-    unowned let
-    object :Object
+    var
+    object :Object {
+        return self.objectRef.nonretainedObjectValue as! Object
+    }
     let
-    keys :Set<String>
+    keys :Set<String>,
+    objectRef :NSValue
     init(
         object :Object
         ) {
-        self.object = object
+        self.objectRef = NSValue(nonretainedObject: object)
         self.keys = type(of: object).subAnalyzableKeys
         super.init()
         self.observe()
