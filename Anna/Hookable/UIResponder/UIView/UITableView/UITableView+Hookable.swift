@@ -62,7 +62,12 @@ struct
 
 extension
     UITableView : OutSourcingView
-{}
+{
+    typealias
+        DataSource = UITableViewDataSource
+    typealias
+        Delegate = UITableViewDelegate
+}
 
 class
     UITableViewObserver<Observee> : BaseCollectionViewObserver<

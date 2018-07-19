@@ -61,7 +61,12 @@ UICollectionViewOutSourceKeys : OutSourcingKeys
 
 extension
 UICollectionView : OutSourcingView
-{}
+{
+    typealias
+        DataSource = UICollectionViewDataSource
+    typealias
+        Delegate = UICollectionViewDelegate
+}
 
 class
     UICollectionViewObserver<Observee> : BaseCollectionViewObserver<
