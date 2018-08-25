@@ -1,9 +1,9 @@
 PODS:
-  - Anna (0.3.0):
-    - Anna/core (= 0.3.0)
-    - Anna/corejs (= 0.3.0)
-  - Anna/core (0.3.0)
-  - Anna/corejs (0.3.0)
+  - Anna (0.3.1):
+    - Anna/core (= 0.3.1)
+    - Anna/corejs (= 0.3.1)
+  - Anna/core (0.3.1)
+  - Anna/corejs (0.3.1)
   - Easy (0.1.0):
     - Anna
 
@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
     :path: "../Easy"
 
 SPEC CHECKSUMS:
-  Anna: b776ad7a0d2b0d56f734e19ca8ff1f3ffae905ac
+  Anna: 4ebfd59afd57fc4dfebe2a78fb5dc085e0d41e44
   Easy: ac592a9d1d89e584a2f2956f1063551289bbef6b
 
 PODFILE CHECKSUM: 9e5909922e6007b99cc7c41d33babc9c5feca1e8
