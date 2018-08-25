@@ -55,7 +55,7 @@ public class
             let
             makeContext = self.makeContext,
             let
-            parent = self.parent ?? self.parentByLookingUp()
+            parent = self.resolvedParent()
             else { return }
         parent.resolveIdentity {
             [weak self] (identity) in
@@ -200,6 +200,16 @@ public class
                 }
             }
         }
+    }
+    func
+        resolvedParent() -> Parent? {
+        if let parent = self.parent {
+            return parent
+        }
+        let
+        parent = self.parentByLookingUp()
+        self.parent = parent
+        return parent
     }
     typealias
     ContextMaker = (Identity) -> IdentityContext

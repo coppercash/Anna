@@ -47,43 +47,69 @@ extension
     }
 }
 
-class
-    UICollectionViewObserver<Observee> : UIViewObserver<Observee>
-    where Observee : UICollectionView
+struct
+UICollectionViewOutSourceKeys : OutSourcingKeys
 {
-    var
-    dataSource :UICollectionViewDataSourceProxy? = nil,
-    delegate :UICollectionViewDelegateProxy? = nil
-    override func
-        observe(_ observee: Observee) {
-        super.observe(observee)
-        let
-        dataSource = observee.dataSource as! (UICollectionViewDataSource & NSObject)
-        self.dataSource = UICollectionViewDataSourceProxy(dataSource)
-        observee.dataSource = self.dataSource
-        
-        let
-        delegate = observee.delegate as! (UICollectionViewDelegate & NSObject)
-        self.delegate = UICollectionViewDelegateProxy(delegate)
-        observee.delegate = self.delegate
+    static var
+    _dataSource :UInt8 = 0,
+    _delegate :UInt8 = 0
+    static var
+    dataSourceKey :UnsafeRawPointer { return withUnsafePointer(to: &_dataSource) { UnsafeRawPointer($0) } }
+    static var
+    delegateSourceKey :UnsafeRawPointer { return withUnsafePointer(to: &_delegate) { UnsafeRawPointer($0) } }
+}
+
+extension
+UICollectionView : OutSourcingView
+{}
+
+class
+    UICollectionViewObserver<Observee> : BaseCollectionViewObserver<
+    Observee,
+    UICollectionViewDataSourceProxy,
+    UICollectionViewDelegateProxy,
+    UICollectionViewOutSourceKeys,
+    ANAUICollectionView
+    >
+    where Observee : UICollectionView
+{}
+
+class
+    UICollectionViewDataSourceProxy : Proxy<UICollectionViewDataSource>, UICollectionViewDataSource
+{
+    func
+        collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+        ) -> Int {
+        return self.target.collectionView(
+            collectionView,
+            numberOfItemsInSection: section
+        )
     }
-    override func
-        deobserve(_ observee: Observee) {
-        super.deobserve(observee)
-        if let delegate = self.delegate?.target {
-            // Reset `UICollectionView._delegateHas`
-            //
-            observee.delegate = delegate
+    func
+        collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+        ) -> UICollectionViewCell {
+        let
+        cell = self.target.collectionView(
+            collectionView,
+            cellForItemAt: indexPath
+        )
+        if
+            let
+            row = cell as? AnalyzerReadable,
+            let
+            table = collectionView as? AnalyzerReadable & SectionAnalyzable
+        {
+            _configure(
+                cell: row,
+                in: table,
+                at: indexPath
+            )
         }
-        if let dataSource = self.dataSource?.target {
-            // Reset `UICollectionView._dataSourceHas`
-            //
-            observee.dataSource = dataSource
-        }
-    }
-    class override var
-    decorators :[AnyClass] {
-        return super.decorators + [ANAUICollectionView.self]
+        return cell
     }
 }
 
@@ -103,7 +129,7 @@ class
                 )
             )
         )
-        self.target?.collectionView?(
+        self.target.collectionView?(
             collectionView,
             willDisplay: cell,
             forItemAt: indexPath
@@ -122,7 +148,7 @@ class
                 )
             )
         )
-        self.target?.collectionView?(
+        self.target.collectionView?(
             collectionView,
             didEndDisplaying: cell,
             forItemAt: indexPath
@@ -145,7 +171,7 @@ class
                 analyzer.handleFocused(cell)
             }
         }
-        self.target?.collectionView?(
+        self.target.collectionView?(
             collectionView,
             didSelectItemAt: indexPath
         )
@@ -182,45 +208,6 @@ extension
             didCreate: analyzer,
             for: section
         )
-    }
-}
-
-class
-    UICollectionViewDataSourceProxy : Proxy<UICollectionViewDataSource>, UICollectionViewDataSource
-{
-    func
-        collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-        ) -> Int {
-        return self.target?.collectionView(
-            collectionView,
-            numberOfItemsInSection: section
-        ) ?? 0
-    }
-    func
-        collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-        ) -> UICollectionViewCell {
-        guard let cell = self.target?.collectionView(
-            collectionView,
-            cellForItemAt: indexPath
-            )
-            else { return UICollectionViewCell(frame: CGRect.zero) }
-        if
-            let
-            row = cell as? AnalyzerReadable,
-            let
-            table = collectionView as? AnalyzerReadable & SectionAnalyzable
-        {
-            _configure(
-                cell: row,
-                in: table,
-                at: indexPath
-            )
-        }
-        return cell
     }
 }
 
