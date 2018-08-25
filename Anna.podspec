@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'Anna'
-    s.version          = '0.3.1'
+    s.version          = '0.3.2'
     s.swift_version    = '4.1'
     s.summary          = 'Separate the analytic code from other code.'
     s.description      = <<-DESC
